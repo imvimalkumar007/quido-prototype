@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#1a56db;--blue-dark:#0d3b9e;
+  --green:#00b865;--green-dark:#007e3f;
+  --bg:#eef2fa;--surface:#fff;--border:#e2e8f5;
+  --text:#0f1828;--muted:#64748b;--dim:#94a3b8;
+  --warn-bg:#fffbeb;--warn-border:#fde68a;--warn-text:#92400e;
+  --ok-bg:#ecfdf5;--ok-text:#065f46;--err:#dc2626;
+  --r:12px;--r-lg:16px;--r-xl:20px
+}
+body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-start;padding:28px 16px;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif}
+.iphone{width:393px;height:852px;border-radius:54px;overflow:hidden;position:relative;background:var(--bg);box-shadow:0 0 0 2px #b0b3b8,0 0 0 4px #8a8d91,0 0 0 6px #6e7175,0 0 0 8px #555,0 28px 80px rgba(0,0,0,0.6)}
+.iphone::before{content:'';position:absolute;left:-10px;top:120px;width:4px;height:36px;background:#6e7175;border-radius:2px 0 0 2px;box-shadow:0 48px 0 #6e7175,0 90px 0 #6e7175;z-index:20}
+.iphone::after{content:'';position:absolute;right:-10px;top:160px;width:4px;height:64px;background:#6e7175;border-radius:0 2px 2px 0;z-index:20}
+.di{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#000;border-radius:20px;z-index:30}
+.sb{position:absolute;top:0;left:0;right:0;height:54px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 8px;z-index:25;pointer-events:none}
+.sb-t{font-size:15px;font-weight:700;color:var(--text)}
+.sb-i{display:flex;align-items:center;gap:6px}
+.screen{position:absolute;top:0;left:0;right:0;bottom:0;display:none;flex-direction:column;background:var(--bg)}
+.screen.active{display:flex}
+.si{display:flex;flex-direction:column;flex:1;overflow:hidden;margin-top:54px;height:calc(100% - 54px)}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.scroll::-webkit-scrollbar{display:none}
+.hb{height:34px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hi{width:134px;height:5px;background:#1a1a2e;border-radius:3px;opacity:.18}
+.wb{background:var(--warn-bg);border-bottom:1px solid var(--warn-border);padding:10px 16px;font-size:10.5px;color:var(--warn-text);line-height:1.5;flex-shrink:0;text-align:center}
+.wb a{color:var(--blue);font-weight:500}
+.hdr{background:var(--surface);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
+.logo{display:flex;align-items:center;gap:9px}
+.lm{width:36px;height:36px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:10px;display:flex;align-items:center;justify-content:center}
+.lt{font-size:19px;font-weight:800;color:var(--blue);letter-spacing:-.3px}
+.mbtn{width:36px;height:36px;background:var(--bg);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;border:1px solid var(--border)}
+.mbtn span{width:16px;height:1.8px;background:var(--muted);border-radius:2px;display:block}
+.hero{background:linear-gradient(160deg,#1a56db 0%,#0d3b9e 55%,#07235e 100%);padding:20px 20px 28px;position:relative;overflow:hidden;flex-shrink:0}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,0.05)}
+.hero::after{content:'';position:absolute;bottom:-40px;left:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.04)}
+.hm{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;position:relative}
+.hmi{font-size:12px;color:rgba(255,255,255,0.6)}
+.hmi strong{color:#fff;font-weight:600}
+.sp{background:rgba(0,184,101,0.2);border:1px solid rgba(0,184,101,0.4);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:#4ade80;display:flex;align-items:center;gap:4px}
+.sd{width:6px;height:6px;background:#4ade80;border-radius:50%}
+.hl{font-size:11px;color:rgba(255,255,255,0.6);text-align:center;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;position:relative}
+.ha{font-size:42px;font-weight:800;text-align:center;color:#fff;margin-bottom:20px;letter-spacing:-1px;position:relative}
+.dr{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative}
+.db{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r);padding:12px 14px}
+.dbl{font-size:10px;color:rgba(255,255,255,0.6);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+.dbv{font-size:17px;font-weight:700;color:#fff}
+.cta{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 20px;flex-shrink:0}
+.bp{background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;border:none;border-radius:var(--r-lg);padding:14px 10px;font-size:14px;font-weight:700;cursor:pointer;width:100%}
+.bo{background:var(--surface);color:var(--blue);border:1.5px solid var(--blue);border-radius:var(--r-lg);padding:13px 10px;font-size:14px;font-weight:700;cursor:pointer;width:100%}
+.card{background:var(--surface);margin:0 16px 12px;border-radius:var(--r-lg);box-shadow:0 1px 4px rgba(15,24,40,0.06),0 4px 16px rgba(15,24,40,0.04);overflow:hidden}
+.ch{padding:14px 16px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.ct{font-size:14px;font-weight:700;color:var(--text)}
+.cb{font-size:10px;font-weight:600;background:#eff6ff;color:var(--blue);padding:3px 9px;border-radius:20px}
+.ai{border-bottom:1px solid var(--border)}
+.ai:last-child{border-bottom:none}
+.at{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;background:var(--surface);user-select:none}
+.at:hover{background:#f8faff}
+.at.cur{background:#f0f5ff}
+.ii{width:32px;height:32px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ii.paid{background:linear-gradient(135deg,#10b981,#059669)}
+.ii.warn{background:linear-gradient(135deg,#f59e0b,#d97706)}
+.ii.ph{background:linear-gradient(135deg,#f59e0b,#d97706)}
+.aif{flex:1}
+.ait{font-size:13px;font-weight:600;color:var(--text)}
+.ais{font-size:11px;color:var(--muted);margin-top:1px}
+.ar{display:flex;align-items:center;gap:8px}
+.sc{font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px}
+.sc-p{background:var(--ok-bg);color:var(--ok-text)}
+.sc-d{background:#fffbeb;color:#92400e}
+.sc-ph{background:#fff3cd;color:#92400e}
+.sc-u{background:var(--bg);color:var(--muted)}
+.chev{transition:transform .22s;color:var(--dim);flex-shrink:0}
+.chev.open{transform:rotate(180deg)}
+.ab{display:none;padding:12px 16px 14px;background:#fafbff;border-top:1px solid var(--border)}
+.ab.open{display:block}
+.abt{width:100%;border-collapse:collapse}
+.abt td{padding:4px 0;font-size:12px;vertical-align:top}
+.abt td:first-child{color:var(--muted);width:50%}
+.abt td:last-child{font-weight:600;color:var(--text);text-align:right}
+.abt .dvr td{border-top:1px solid var(--border);padding-top:6px;padding-bottom:2px}
+.abt .tot td{font-size:13px;font-weight:700;color:var(--text)}
+.stab{background:var(--surface);border:none;width:calc(100% - 32px);padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer;border-radius:var(--r-lg);margin:0 16px 10px;box-shadow:0 1px 4px rgba(15,24,40,0.06),0 4px 16px rgba(15,24,40,0.04)}
+.stab.bl{background:linear-gradient(135deg,var(--blue),var(--blue-dark));box-shadow:0 4px 16px rgba(26,86,219,0.25)}
+.si-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#eff6ff}
+.bl .si-ic{background:rgba(255,255,255,0.18)}
+.st{display:flex;flex-direction:column;justify-content:center;flex:1;min-width:0;text-align:left}
+.sl{font-size:13px;font-weight:600;color:var(--text);margin:0;padding:0}
+.ss{font-size:11px;color:var(--muted);margin:2px 0 0 0;padding:0}
+.bl .sl{color:#fff}
+.bl .ss{color:rgba(255,255,255,0.7)}
+.ph2{background:linear-gradient(135deg,var(--blue),var(--blue-dark));padding:14px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.bb{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:9px;padding:7px 12px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.pt{color:#fff;font-size:15px;font-weight:700}
+.steps{display:flex;align-items:center;padding:14px 20px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+.stp{display:flex;align-items:center;gap:5px}
+.sn{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;border:2px solid var(--border);color:var(--dim);background:var(--bg)}
+.sn.done{background:var(--green);border-color:var(--green);color:#fff}
+.sn.cur{background:var(--blue);border-color:var(--blue);color:#fff}
+.sl2{font-size:10px;color:var(--dim)}
+.sl2.cur{color:var(--blue);font-weight:600}
+.sline{flex:1;height:1px;background:var(--border);margin:0 6px}
+.pb{padding:20px}
+.fl{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.fi{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;color:var(--text);outline:none;background:var(--surface);margin-bottom:14px}
+.fi:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,219,0.1)}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ca{background:linear-gradient(135deg,#1a56db,#5b21b6);border-radius:18px;padding:22px;color:#fff;margin-bottom:18px;position:relative;overflow:hidden;min-height:120px}
+.ca::after{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.07)}
+.chip{width:32px;height:24px;background:rgba(255,255,255,0.28);border-radius:5px;margin-bottom:14px}
+.cn{font-size:15px;letter-spacing:2.5px;font-family:'Courier New',monospace;margin-bottom:12px;position:relative}
+.cbot{display:flex;justify-content:space-between;font-size:11px;opacity:.85;position:relative}
+.vt{font-size:16px;font-weight:800;font-style:italic;letter-spacing:1px}
+.mt{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+.mo{border:1.5px solid var(--border);border-radius:var(--r);padding:12px 8px;text-align:center;cursor:pointer;background:var(--surface)}
+.mo.sel{border-color:var(--blue);background:#eff6ff}
+.mol{font-size:10px;color:var(--muted);margin-top:4px;font-weight:500}
+.mo.sel .mol{color:var(--blue)}
+.bf{width:100%;padding:14px;border-radius:var(--r-lg);font-size:14px;font-weight:700;cursor:pointer;border:none;margin-bottom:10px}
+.bf:active{transform:scale(.98)}
+.bbl{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff}
+.bbg{background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff}
+.bgh{background:var(--surface);color:var(--blue);border:1.5px solid var(--blue) !important}
+.bap{background:#000;color:#fff}
+.dor{display:flex;align-items:center;gap:10px;margin:12px 0;font-size:11px;color:var(--dim)}
+.dor::before,.dor::after{content:'';flex:1;height:1px;background:var(--border)}
+.sn2{display:flex;align-items:center;gap:5px;justify-content:center;margin-bottom:14px}
+.sn2 span{font-size:10px;color:var(--dim)}
+.ah{background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:var(--r-lg);padding:16px 18px;color:#fff;margin-bottom:18px}
+.ahl{font-size:11px;opacity:.7;margin-bottom:3px}
+.ahv{font-size:28px;font-weight:800;margin-bottom:2px}
+.ahs{font-size:11px;opacity:.65}
+.sb2{background:#f8faff;border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;margin-bottom:16px}
+.sr{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;color:var(--muted);border-bottom:1px solid var(--border)}
+.sr:last-child{border-bottom:none;font-weight:700;font-size:14px;color:var(--text);padding-top:10px}
+.nt{background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:var(--r);padding:11px 13px;font-size:11px;color:var(--warn-text);margin-bottom:14px;display:flex;gap:8px;align-items:flex-start;line-height:1.5}
+.ss2{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center}
+.sr2{width:76px;height:76px;background:linear-gradient(135deg,var(--green),var(--green-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+.sam{font-size:30px;font-weight:800;color:var(--blue);margin-bottom:6px}
+.spin{width:60px;height:60px;border:4px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.fi2{background:var(--surface);border-radius:var(--r-lg);margin-bottom:8px;overflow:hidden;box-shadow:0 1px 4px rgba(15,24,40,0.06)}
+.fq{padding:14px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.fqt{font-size:13px;font-weight:600;color:var(--text);flex:1}
+.fa{display:none;padding:12px 16px 14px;font-size:12px;color:var(--muted);line-height:1.65;border-top:1px solid var(--border)}
+.fa.open{display:block}
+.ob{width:100%;padding:14px;border-radius:var(--r-lg);font-size:13px;font-weight:600;cursor:pointer;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:3px;margin-bottom:8px;border:1.5px solid var(--border);background:var(--surface);color:var(--text)}
+.ob.go{background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;border-color:transparent}
+.ob.blo{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border-color:transparent}
+.hc{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);margin-bottom:10px;overflow:hidden}
+.hct{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;user-select:none}
+.hct:hover{background:#f8faff}
+.hcic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.htx{flex:1;min-width:0}
+.htit{font-size:13px;font-weight:600;color:var(--text)}
+.hsu{font-size:11px;color:var(--muted);margin-top:1px}
+.hbd{display:none;padding:0 16px 16px;border-top:1px solid var(--border)}
+.hbd.open{display:block}
+.hde{font-size:12px;color:var(--muted);line-height:1.6;margin:12px 0 10px}
+.hn{display:flex;gap:8px;align-items:flex-start;border-radius:var(--r);padding:10px 12px;font-size:11px;line-height:1.5;margin-bottom:12px}
+.hn.wn{background:var(--warn-bg);border:1px solid var(--warn-border);color:var(--warn-text)}
+.hn.bn{background:#eff6ff;border:1px solid #dbeafe;color:#1e40af}
+.hbtn{width:100%;padding:12px;border-radius:var(--r-lg);font-size:13px;font-weight:600;cursor:pointer;border:none;margin-top:4px}
+.hbtn.am{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff}
+.hbtn.bm{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff}
+.hbtn:disabled{opacity:.5;cursor:not-allowed}
+.hcf{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:var(--r);padding:10px 12px;font-size:11px;color:#065f46;display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;line-height:1.5}
+.do{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.do:last-child{border-bottom:none}
+.doi{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.don{font-size:12px;font-weight:600;color:var(--text)}
+.dos{font-size:10px;color:var(--muted);margin-top:1px}
+.moverlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0);z-index:60;display:none}
+.moverlay.open{display:block;background:rgba(0,0,0,0.45)}
+.mdrawer{position:absolute;top:0;right:0;bottom:0;width:300px;background:var(--surface);transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;overflow:hidden}
+.moverlay.open .mdrawer{transform:translateX(0)}
+.mhdr{background:linear-gradient(135deg,var(--blue),var(--blue-dark));padding:54px 20px 20px;display:flex;align-items:flex-end;justify-content:space-between}
+.mun{font-size:16px;font-weight:700;color:#fff}
+.mul{font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px}
+.mcl{width:32px;height:32px;background:rgba(255,255,255,0.15);border:none;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.mitems{flex:1;overflow-y:auto;padding:8px 0}
+.mitem{display:flex;align-items:center;gap:14px;padding:14px 20px;cursor:pointer;border-bottom:1px solid var(--border)}
+.mitem:hover{background:var(--bg)}
+.mitem:last-child{border-bottom:none}
+.mii{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mit{font-size:13px;font-weight:600;color:var(--text)}
+.mis{font-size:11px;color:var(--muted);margin-top:1px}
+.em{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);z-index:90;display:none;align-items:flex-end}
+.em.open{display:flex}
+.emb{background:var(--surface);border-radius:var(--r-xl) var(--r-xl) 0 0;padding:20px;width:100%;max-height:80%;overflow-y:auto}
+.emt{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px}
+.emi{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;color:var(--text);outline:none;background:var(--bg);margin-bottom:0}
+.emi:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,219,0.1)}
+.ems{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;color:var(--text);outline:none;background:var(--bg);cursor:pointer;margin-bottom:0}
+.emr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.ihdr{background:var(--surface);padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);flex-shrink:0}
+.itl{font-size:15px;font-weight:700;color:var(--text);flex:1}
+.bd{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:6px 11px;color:var(--blue);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.pav{width:64px;height:64px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fff;margin:0 auto 8px}
+.pnm{font-size:16px;font-weight:700;color:var(--text);text-align:center}
+.plo{font-size:12px;color:var(--muted);text-align:center;margin-bottom:20px}
+.sh{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:0 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.dc{background:var(--surface);margin:0 16px 16px;border-radius:var(--r-lg);box-shadow:0 1px 4px rgba(15,24,40,0.06);overflow:hidden}
+.drow{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border)}
+.drow:last-child{border-bottom:none}
+.dl{font-size:11px;color:var(--muted);margin-bottom:2px}
+.dv{font-size:13px;font-weight:600;color:var(--text)}
+.sec-edit-btn{background:#eff6ff;border:1px solid #dbeafe;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:600;color:var(--blue);cursor:pointer;display:flex;align-items:center;gap:4px;flex-shrink:0}
+.sec-edit-btn:hover{background:#dbeafe}
+.pcv{background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:16px;padding:18px;color:#fff;margin:0 16px 6px;position:relative;overflow:hidden}
+.pcv::after{content:'';position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.07)}
+.bac{background:var(--surface);margin:0 16px 12px;border-radius:var(--r-lg);box-shadow:0 1px 4px rgba(15,24,40,0.06);overflow:hidden}
+.shc{background:linear-gradient(135deg,var(--blue),var(--blue-dark));margin:16px;border-radius:var(--r-lg);padding:16px;color:#fff}
+.stlbl{font-size:11px;opacity:.7;margin-bottom:3px}
+.stval{font-size:26px;font-weight:800;margin-bottom:12px}
+.smr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sml{font-size:10px;opacity:.65}
+.smv{font-size:13px;font-weight:600}
+.strow{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--border)}
+.strow:last-child{border-bottom:none}
+.stic{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.docitem{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer}
+.docitem:last-child{border-bottom:none}
+.docitem:hover{background:var(--bg)}
+.doci{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.doct{font-size:13px;font-weight:600;color:var(--text)}
+.docs{font-size:11px;color:var(--muted);margin-top:1px}
+.docbdg{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;margin-top:3px;display:inline-block}
+.dv2{position:absolute;top:0;left:0;right:0;bottom:0;background:var(--surface);z-index:5;display:none;flex-direction:column}
+.dv2.open{display:flex}
+.dcon{flex:1;overflow-y:auto;padding:20px}
+.dcon h3{font-size:15px;font-weight:700;color:var(--text);margin-bottom:12px}
+.dcon p{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:10px}
+.dtbl{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:11px}
+.dtbl td{padding:7px 10px;border:1px solid var(--border)}
+.dtbl td:first-child{color:var(--muted);width:50%}
+.dtbl td:last-child{font-weight:600;color:var(--text)}
+.ft{background:var(--surface);padding:20px 0 0}
+.ftg{font-size:16px;font-weight:800;color:var(--blue);text-align:center;margin-bottom:28px;line-height:1.3;padding:8px 20px 0}
+.fgrid{width:100%;border-collapse:collapse;margin-bottom:16px}
+.fgrid td{font-size:11px;padding:3px 0;vertical-align:top;width:50%}
+.fgrid td:first-child{padding-right:16px}
+.fgrid td:last-child{padding-left:16px}
+.fgrid td a{color:var(--blue);text-decoration:none;display:block}
+.fleg{font-size:9.5px;color:var(--dim);line-height:1.6;border-top:1px solid var(--border);padding:14px 20px 20px}
+.cfab{position:absolute;bottom:52px;right:20px;width:50px;height:50px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:50;border:none}
+.cnb{position:absolute;top:-2px;right:-2px;width:18px;height:18px;background:#ef4444;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff}
+.cpanel{position:absolute;bottom:112px;right:12px;width:312px;background:var(--surface);border-radius:var(--r-xl);box-shadow:0 12px 40px rgba(0,0,0,0.18);z-index:49;overflow:hidden;display:none;flex-direction:column;height:380px}
+.cpanel.open{display:flex}
+.ctop{background:linear-gradient(135deg,var(--blue),var(--blue-dark));padding:12px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.cav{width:34px;height:34px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.can{font-size:13px;font-weight:700;color:#fff}
+.col{font-size:10px;color:rgba(255,255,255,0.7);display:flex;align-items:center;gap:4px;margin-top:1px}
+.cold{width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.ccl{margin-left:auto;background:rgba(255,255,255,0.15);border:none;border-radius:8px;padding:5px 8px;color:#fff;cursor:pointer;font-size:11px}
+.cmsgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px;background:#f8faff}
+.cmsgs::-webkit-scrollbar{display:none}
+.msg{max-width:84%;padding:8px 11px;border-radius:11px;font-size:11.5px;line-height:1.55}
+.msg.agent{background:#fff;border:1px solid var(--border);color:var(--text);align-self:flex-start;border-bottom-left-radius:3px}
+.msg.user{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
+.mtime{font-size:9px;color:var(--dim);margin-top:2px}
+.mtime.r{text-align:right}
+.cqk{padding:7px 8px;display:flex;gap:5px;overflow-x:auto;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.cqk::-webkit-scrollbar{display:none}
+.qp{flex-shrink:0;padding:5px 9px;background:#eff6ff;border:1px solid #dbeafe;border-radius:20px;font-size:10px;color:var(--blue);font-weight:500;cursor:pointer;white-space:nowrap}
+.cir{display:flex;gap:7px;padding:8px 10px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.cinp{flex:1;padding:8px 11px;border:1.5px solid var(--border);border-radius:20px;font-size:11px;outline:none;background:var(--bg);color:var(--text)}
+.cinp:focus{border-color:var(--blue)}
+.csend{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.iesh{padding:0 16px 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;justify-content:space-between}
+.inc-h{color:var(--ok-text)}
+.exp-h{color:var(--muted)}
+.tot-row{background:#f0fdf4}
+/* Loan engine panel styles removed for customer-facing build */
+</style>
+</head>
+<body>
+<div class="iphone" id="app">
+  <div class="di"></div>
+  <div class="sb">
+    <span class="sb-t">9:41</span>
+    <div class="sb-i">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><rect x="0" y="4" width="3" height="8" rx="1" fill="#0f1828"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1" fill="#0f1828"/><rect x="9" y="0.5" width="3" height="11.5" rx="1" fill="#0f1828"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" fill="#0f1828" opacity=".3"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 2.5C10.2 2.5 12.2 3.4 13.6 4.9L15 3.4C13.2 1.3 10.7 0 8 0S2.8 1.3 1 3.4L2.4 4.9C3.8 3.4 5.8 2.5 8 2.5z" fill="#0f1828"/><path d="M8 5.5C9.4 5.5 10.7 6.1 11.6 7L13 5.5C11.7 4.1 9.9 3.2 8 3.2S4.3 4.1 3 5.5L4.4 7C5.3 6.1 6.6 5.5 8 5.5z" fill="#0f1828"/><circle cx="8" cy="10" r="2" fill="#0f1828"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#0f1828" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#0f1828"/><path d="M23 4v4a2 2 0 000-4z" fill="#0f1828" opacity=".4"/></svg>
+    </div>
+  </div>
+
+  <!-- CHAT FAB -->
+  <button class="cfab" id="cfab"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 4a1 1 0 011-1h14a1 1 0 011 1v10a1 1 0 01-1 1H12.5l-4 3.5V15H4a1 1 0 01-1-1V4z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7.5" cy="9.5" r="1" fill="#fff"/><circle cx="11" cy="9.5" r="1" fill="#fff"/><circle cx="14.5" cy="9.5" r="1" fill="#fff"/></svg><div class="cnb" id="cnb">1</div></button>
+  <div class="cpanel" id="cpanel">
+    <div class="ctop"><div class="cav">NP</div><div><div class="can">Nova — Support</div><div class="col"><div class="cold"></div>Online · &lt;1 min</div></div><button class="ccl" id="cclose">✕</button></div>
+    <div class="cmsgs" id="cmsgs"><div><div class="msg agent">Hi there 👋 I'm Nova. How can I help you today?</div><div class="mtime">9:41 AM</div></div></div>
+    <div class="cqk">
+      <div class="qp" data-msg="What is my outstanding balance?">Outstanding balance</div>
+      <div class="qp" data-msg="When is my next payment due?">Next payment</div>
+      <div class="qp" data-msg="I am struggling to make a payment">Need more time</div>
+      <div class="qp" data-msg="Can I repay early?">Early repayment</div>
+    </div>
+    <div class="cir"><input class="cinp" id="cinp" type="text" placeholder="Type a message…"><button class="csend" id="csend"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M12.5 7L1.5 2l2 5-2 5 11-5z" fill="#fff"/></svg></button></div>
+  </div>
+
+  <!-- MENU -->
+  <div class="moverlay" id="moverlay">
+    <div class="mdrawer">
+      <div class="mhdr"><div><div class="mun">Sarah Mitchell</div><div class="mul">Loan #28796 · Active</div></div><button class="mcl" id="mclose"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
+      <div class="mitems">
+        <div class="mitem" data-goto="s-profile"><div class="mii" style="background:#eff6ff"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3" stroke="#1a56db" stroke-width="1.4"/><path d="M3 15c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#1a56db" stroke-width="1.4" stroke-linecap="round"/></svg></div><div><div class="mit">Profile</div><div class="mis">Personal details &amp; contact info</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:auto;flex-shrink:0"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="mitem" data-goto="s-payment-details"><div class="mii" style="background:#ecfdf5"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="14" height="11" rx="2" stroke="#059669" stroke-width="1.4"/><path d="M2 8h14M5 12h3" stroke="#059669" stroke-width="1.4" stroke-linecap="round"/></svg></div><div><div class="mit">Payment Details</div><div class="mis">Cards &amp; bank account</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:auto;flex-shrink:0"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="mitem" data-goto="s-statement"><div class="mii" style="background:#fffbeb"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h7l4 4v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#d97706" stroke-width="1.3"/><path d="M11 2v4h4M6 10h6M6 13h4" stroke="#d97706" stroke-width="1.3" stroke-linecap="round"/></svg></div><div><div class="mit">Statement of Account</div><div class="mis">Full payment history</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:auto;flex-shrink:0"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="mitem" data-goto="s-documents"><div class="mii" style="background:#f3e5f5"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h7l4 4v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#7b1fa2" stroke-width="1.3"/><path d="M11 2v4h4" stroke="#7b1fa2" stroke-width="1.3"/></svg></div><div><div class="mit">Documents</div><div class="mis">Agreements, notices &amp; SECCI</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:auto;flex-shrink:0"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT MODAL -->
+  <div class="em" id="em">
+    <div class="emb">
+      <div class="emt" id="em-title">Edit</div>
+      <div id="em-body"></div>
+      <div class="emr">
+        <button class="bf bgh" id="em-cancel" style="margin-bottom:0">Cancel</button>
+        <button class="bf bbl" id="em-save" style="margin-bottom:0">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ DASHBOARD ══ -->
+  <div id="s-home" class="screen active">
+    <div class="si">
+      <div class="wb">⚠ Warning: Late repayments can cause serious money problems. For help, visit <a href="#">moneyhelper.org.uk</a>. You can compare our loans at <a href="#">All the Lenders</a>.</div>
+      <div class="hdr"><div class="logo"><div class="lm"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4.5 4.5 7.5-9" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="lt">NovaPay</span></div><div class="mbtn" id="menu-open"><span></span><span></span><span></span></div></div>
+      <div class="scroll">
+        <div class="hero">
+          <div class="hm"><div class="hmi"><span>Loan ID: </span><strong>28796</strong></div><div class="sp"><div class="sd"></div>Active</div></div>
+          <div class="hl">Current Outstanding Balance</div>
+          <div class="ha" id="dash-balance">£0.00</div>
+          <div class="dr">
+            <div class="db"><div class="dbl">Next Due Amount</div><div class="dbv" id="dash-emi">£0.00</div></div>
+            <div class="db"><div class="dbl">Next Due Date</div><div class="dbv" id="dash-due-date">—</div></div>
+          </div>
+        </div>
+        <div class="cta"><button class="bp" data-goto="s-pay-method">Pay Now</button><button class="bo" data-goto="s-options">Other Options</button></div>
+        <div class="card"><div class="ch"><span class="ct">Loan Summary</span><span class="cb" id="emi-badge">— instalments</span></div><div id="emi-list"></div></div>
+        <button class="stab bl" data-goto="s-faq"><div class="si-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#fff" stroke-width="1.5"/><path d="M9 6.5a1.5 1.5 0 011 2.6c-.5.5-.8.9-.8 1.3v.4M9 12v.5" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="st"><div class="sl">Frequently Asked Questions</div><div class="ss">Find answers to common queries</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="stab bl"><div class="si-ic"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4a1 1 0 011-1h2.5l1.2 3.5-1.8 1.8a10 10 0 005.3 5.3l1.8-1.8L17 14v2.5a1 1 0 01-1 1C8.2 17.5 2 11.8 4 4z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="st"><div class="sl">Call Us (Mon–Fri)</div><div class="ss">0800 123 4567 · 9:00–17:00</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="stab bl"><div class="si-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 4a1 1 0 011-1h10a1 1 0 011 1v7a1 1 0 01-1 1H5l-3 2.5V4z" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg></div><div class="st"><div class="sl">Write to us</div><div class="ss">info@novapay.co.uk</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="stab bl" style="margin-bottom:16px"><div class="si-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#fff" stroke-width="1.4"/><path d="M9 5.5v4M9 11.5v.5" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="st"><div class="sl">Make a complaint</div><div class="ss">complaints@novapay.co.uk</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="ft"><div class="ftg">Flexible loans.<br>Straightforward repayments.</div><div style="padding:0 20px"><table class="fgrid"><tr><td><a href="#">Loan</a></td><td><a href="#">About Us</a></td></tr><tr><td><a href="#">FAQs</a></td><td><a href="#">Careers</a></td></tr><tr><td><a href="#">Beware of Loan Sharks</a></td><td><a href="#">Terms of Use</a></td></tr><tr><td><a href="#">Contact Us</a></td><td><a href="#">Privacy Policy</a></td></tr><tr><td><a href="#">File a Complaint</a></td><td><a href="#">Fraud Disclaimer</a></td></tr><tr><td><a href="#">Insights</a></td><td><a href="#">Cookies Policy</a></td></tr></table></div><div class="fleg">We are a lender and may pay commissions to credit brokers or other intermediaries. This commission does not affect the total cost of your loan.<br><br><strong>Responsible Lending:</strong> Take a moment to decide if NovaPay is right for you. Short term loans are an expensive form of borrowing.<br><br>NovaPay Ltd. Authorised and Regulated by the Financial Conduct Authority. Registration Number 900001.</div></div>
+      </div>
+      <div class="hb"><div class="hi"></div></div>
+    </div>
+  </div>
+
+  <!-- ══ OTHER OPTIONS ══ -->
+  <div id="s-options" class="screen">
+    <div class="si" style="overflow:hidden">
+      <div class="wb">⚠ Warning: Late repayments can cause serious money problems. For help, visit <a href="#">moneyhelper.org.uk</a>.</div>
+      <div class="hdr"><div class="logo"><div class="lm"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4.5 4.5 7.5-9" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="lt">NovaPay</span></div><div class="mbtn" id="menu-open-opts"><span></span><span></span><span></span></div></div>
+      <div class="scroll" style="flex:1;overflow-y:auto">
+        <div class="hero">
+          <div class="hm"><div class="hmi"><span>Loan ID: </span><strong>28796</strong></div><div class="sp"><div class="sd"></div>Active</div></div>
+          <div class="hl">Current Outstanding Balance</div>
+          <div class="ha" id="opts-balance">£0.00</div>
+          <div class="dr"><div class="db"><div class="dbl">Next Due Amount</div><div class="dbv" id="opts-emi">£0.00</div></div><div class="db"><div class="dbl">Next Due Date</div><div class="dbv" id="opts-due-date">—</div></div></div>
+        </div>
+        <div style="padding:16px">
+          <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Payment options</div>
+          <button class="ob go" id="pay-next-btn"><div style="display:flex;justify-content:space-between;width:100%;align-items:center"><span>Pay next instalment</span><span>→</span></div><div style="font-size:11px;font-weight:400;opacity:.85" id="pay-next-sub">—</div></button>
+          <button class="ob blo" id="pay-full-btn"><div style="display:flex;justify-content:space-between;width:100%;align-items:center"><span>Pay in full</span><span>→</span></div><div style="font-size:11px;font-weight:400;opacity:.85" id="pay-full-sub">—</div></button>
+          <div id="custom-amount-wrap" style="margin-bottom:8px">
+            <button class="ob" id="custom-amt-toggle"><div style="display:flex;justify-content:space-between;width:100%;align-items:center"><span style="color:var(--text)">Custom amount</span><span style="color:var(--muted)" id="custom-arrow">↓</span></div><div style="font-size:11px;font-weight:400;color:var(--muted)">Enter any amount you'd like to pay</div></button>
+            <div id="custom-amt-input" style="display:none;background:var(--surface);border:1.5px solid var(--blue);border-top:none;border-radius:0 0 var(--r-lg) var(--r-lg);padding:14px">
+              <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em" id="custom-range-label">Enter amount</div>
+              <div style="display:flex;gap:8px;align-items:center"><div style="font-size:18px;font-weight:700;color:var(--text)">£</div><input id="custom-amt-val" type="number" min="1" step="0.01" placeholder="0.00" style="flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:16px;font-weight:600;color:var(--text);outline:none;background:var(--bg)"></div>
+              <button class="bf bbl" id="custom-amt-pay" style="margin-top:12px;margin-bottom:0">Continue with this amount →</button>
+            </div>
+          </div>
+          <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:16px 0 10px">Need more time?</div>
+          <div class="hc"><div class="hct" data-help="ph"><div class="hcic" style="background:rgba(245,158,11,0.12)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#d97706" stroke-width="1.4"/><path d="M9 5v4l2.5 2.5" stroke="#d97706" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="htx">              <div class="htit">Payment holiday</div><div class="hsu">Pause up to 3 months · eligible from 1 day before due date</div></div><svg class="chev" id="ph-chev" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hbd" id="ph-body">              <p class="hde">A payment holiday lets you pause your payments for 1–3 months if you're experiencing short-term financial difficulty. Interest continues to accrue and deferred instalments are added to the end of your loan.</p><div class="hn wn"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#92400e" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#92400e" stroke-width="1.2" stroke-linecap="round"/></svg>Interest will continue to accrue during a payment holiday. This may increase the total amount you repay.</div><div id="ph-status"></div><button class="hbtn am" id="ph-btn">Apply payment holiday</button></div></div>
+          <div class="hc"><div class="hct" data-help="pa"><div class="hcic" style="background:rgba(26,86,219,0.1)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="12" rx="2" stroke="#1a56db" stroke-width="1.4"/><path d="M2 7h14M6 2v2M12 2v2M5 11h4M5 13.5h2" stroke="#1a56db" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="htx"><div class="htit">Payment arrangement</div><div class="hsu" id="pa-sub-label">Repay your balance interest-free</div></div><svg class="chev" id="pa-chev" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hbd" id="pa-body"><p class="hde" id="pa-desc">We'll freeze interest immediately and spread your outstanding balance over 18 months. No further interest will accrue.</p><div class="hn bn"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#1a56db" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#1a56db" stroke-width="1.2" stroke-linecap="round"/></svg><span id="pa-notice">Interest stops accruing immediately. New monthly payment will be calculated on confirmation.</span></div><div id="pa-status"></div><button class="hbtn bm" id="pa-btn">Set up payment arrangement</button></div></div>
+          <div class="hc"><div class="hct" data-help="dh"><div class="hcic" style="background:rgba(16,185,129,0.1)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#059669" stroke-width="1.4"/><path d="M9 6.5a1.5 1.5 0 011 2.6c-.5.5-.8.9-.8 1.3v.4M9 12v.5" stroke="#059669" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="htx"><div class="htit">Free debt advice</div><div class="hsu">Independent support from specialist organisations</div></div><svg class="chev" id="dh-chev" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hbd" id="dh-body"><p class="hde">Free and confidential advice from organisations completely independent of NovaPay.</p><div class="do"><div class="doi" style="background:#e8f5e9;color:#2e7d32">CA</div><div><div class="don">Citizens Advice</div><div class="dos">Free, confidential advice on debt and money</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:auto;flex-shrink:0"><path d="M3 7h8M7.5 3.5L11 7l-3.5 3.5" stroke="#94a3b8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="do"><div class="doi" style="background:#e3f2fd;color:#1565c0">SC</div><div><div class="don">StepChange</div><div class="dos">Free debt management plans and support</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:auto;flex-shrink:0"><path d="M3 7h8M7.5 3.5L11 7l-3.5 3.5" stroke="#94a3b8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="do"><div class="doi" style="background:#fce4ec;color:#c62828">ND</div><div><div class="don">National Debtline</div><div class="dos">Free helpline and online debt advice</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:auto;flex-shrink:0"><path d="M3 7h8M7.5 3.5L11 7l-3.5 3.5" stroke="#94a3b8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="do"><div class="doi" style="background:#f3e5f5;color:#6a1b9a">MH</div><div><div class="don">MoneyHelper</div><div class="dos">Government-backed money and debt guidance</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:auto;flex-shrink:0"><path d="M3 7h8M7.5 3.5L11 7l-3.5 3.5" stroke="#94a3b8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></div>
+        </div>
+      </div>
+      <div style="padding:12px 16px;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0"><button class="bf bgh" data-goto="s-home">← Back to dashboard</button></div>
+      <div class="hb"><div class="hi"></div></div>
+    </div>
+  </div>
+
+  <!-- ══ PAY METHOD ══ -->
+  <div id="s-pay-method" class="screen">
+    <div class="si">
+      <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
+      <div class="ph2"><button class="bb" data-goto="s-home"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="pt">Make a Payment</span></div>
+      <div class="steps"><div class="stp"><div class="sn cur">1</div><div class="sl2 cur">Method</div></div><div class="sline"></div><div class="stp"><div class="sn">2</div><div class="sl2">Details</div></div><div class="sline"></div><div class="stp"><div class="sn">3</div><div class="sl2">Review</div></div><div class="sline"></div><div class="stp"><div class="sn">4</div><div class="sl2">Done</div></div></div>
+      <div class="scroll"><div class="pb">
+        <div class="ah"><div class="ahl">Payment amount</div><div class="ahv" id="pm-amount">£0.00</div><div class="ahs" id="pm-desc">Monthly instalment</div></div>
+        <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Choose payment method</div>
+        <div class="mt"><div class="mo sel"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="5" width="18" height="13" rx="2" stroke="#1a56db" stroke-width="1.5"/><path d="M2 9h18" stroke="#1a56db" stroke-width="1.5"/></svg><div class="mol">Debit card</div></div><div class="mo"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="5" width="18" height="13" rx="2" stroke="#94a3b8" stroke-width="1.5"/><path d="M2 9h18M5 13h4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/></svg><div class="mol">Credit card</div></div></div>
+        <button class="bf bap" data-goto="s-apple-confirm"><span style="display:flex;align-items:center;justify-content:center;gap:8px"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M11.5 2c-1 0-1.8.6-2.3 1.2-.5-.6-1.3-1.2-2.3-1.2C5.5 2 4.2 3.4 4.2 5c0 3.2 3.8 7 4 7s4-3.8 4-7c0-1.6-1.2-3-2.7-3z" fill="#fff"/></svg>Pay with Apple Pay</span></button>
+        <div class="dor">or pay by card</div>
+        <button class="bf bbl" data-goto="s-card-entry">Enter card details</button>
+        <div class="sn2"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x="2" y="5" width="7" height="5" rx="1" stroke="#94a3b8" stroke-width="1"/><path d="M3.5 5V3.5a2 2 0 114 0V5" stroke="#94a3b8" stroke-width="1" stroke-linecap="round"/></svg><span>256-bit SSL encrypted · PCI DSS compliant</span></div>
+      </div></div>
+      <div class="hb"><div class="hi"></div></div>
+    </div>
+  </div>
+
+  <!-- ══ CARD ENTRY ══ -->
+  <div id="s-card-entry" class="screen">
+    <div class="si">
+      <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
+      <div class="ph2"><button class="bb" data-goto="s-pay-method"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="pt">Card details</span></div>
+      <div class="steps"><div class="stp"><div class="sn done">✓</div><div class="sl2">Method</div></div><div class="sline"></div><div class="stp"><div class="sn cur">2</div><div class="sl2 cur">Details</div></div><div class="sline"></div><div class="stp"><div class="sn">3</div><div class="sl2">Review</div></div><div class="sline"></div><div class="stp"><div class="sn">4</div><div class="sl2">Done</div></div></div>
+      <div class="scroll"><div class="pb">
+        <div class="ca"><div class="chip"></div><div class="cn" id="prev-num">XXXX  XXXX  XXXX  0000</div><div class="cbot"><span id="prev-name">CARDHOLDER NAME</span><span class="vt">VISA</span></div></div>
+        <div class="fl">Card number</div><input class="fi" id="card-num-inp" type="tel" maxlength="19" placeholder="1234 5678 9012 3456">
+        <div class="fl">Name on card</div><input class="fi" id="card-name-inp" type="text" placeholder="As it appears on card">
+        <div class="fr"><div><div class="fl">Expiry date</div><input class="fi" id="card-exp-inp" type="tel" maxlength="5" placeholder="MM / YY"></div><div><div class="fl">CVV</div><input class="fi" type="tel" maxlength="3" placeholder="•••"></div></div>
+        <div class="sn2" style="margin-bottom:16px"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x="2" y="5" width="7" height="5" rx="1" stroke="#94a3b8" stroke-width="1"/><path d="M3.5 5V3.5a2 2 0 114 0V5" stroke="#94a3b8" stroke-width="1" stroke-linecap="round"/></svg><span>Your card details are encrypted and secure</span></div>
+        <button class="bf bbl" data-goto="s-review">Continue to review →</button>
+      </div></div>
+      <div class="hb"><div class="hi"></div></div>
+    </div>
+  </div>
+
+  <!-- ══ APPLE PAY ══ -->
+  <div id="s-apple-confirm" class="screen">
+    <div class="si">
+      <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
+      <div class="ph2"><button class="bb" data-goto="s-pay-method"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="pt">Apple Pay</span></div>
+      <div class="scroll" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px">
+        <div style="width:72px;height:72px;background:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:18px"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M22 6c-2 0-3.5 1.2-4.5 2.4C16.5 7.2 15 6 13 6c-3 0-5.5 2.6-5.5 5.8 0 6.4 8.5 16.2 8.5 16.2s8.5-9.8 8.5-16.2C24.5 8.6 22.3 6 22 6z" fill="#fff"/></svg></div>
+        <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:6px">Confirm with Apple Pay</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:24px;text-align:center;line-height:1.6">Use Face ID or Touch ID<br>to authorise your payment</div>
+        <div class="sb2" style="width:100%;margin-bottom:20px">
+          <div class="sr"><span>Loan</span><span>#28796</span></div>
+          <div class="sr"><span>Amount</span><span id="ap-amount">£0.00</span></div>
+          <div class="sr"><span>Description</span><span id="ap-desc">—</span></div>
+        </div>
+        <button class="bf bap" data-goto="s-processing"><span style="display:flex;align-items:center;justify-content:center;gap:8px"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M11.5 2c-1 0-1.8.6-2.3 1.2-.5-.6-1.3-1.2-2.3-1.2C5.5 2 4.2 3.4 4.2 5c0 3.2 3.8 7 4 7s4-3.8 4-7c0-1.6-1.2-3-2.7-3z" fill="#fff"/></svg>Confirm with Face ID</span></button>
+      </div>
+      <div class="hb"><div class="hi"></div></div>
+    </div>
+  </div>
+
+  <!-- ══ REVIEW ══ -->
+  <div id="s-review" class="screen">
+    <div class="si">
+      <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
+      <div class="ph2"><button class="bb" data-goto="s-card-entry"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="pt">Review payment</span></div>
+      <div class="steps"><div class="stp"><div class="sn done">✓</div><div class="sl2">Method</div></div><div class="sline"></div><div class="stp"><div class="sn done">✓</div><div class="sl2">Details</div></div><div class="sline"></div><div class="stp"><div class="sn cur">3</div><div class="sl2 cur">Review</div></div><div class="sline"></div><div class="stp"><div class="sn">4</div><div class="sl2">Done</div></div></div>
+      <div class="scroll"><div class="pb">
+        <div class="sb2">
+          <div class="sr"><span>Loan ID</span><span>#28796</span></div>
+          <div class="sr"><span>Payment type</span><span id="rev-type">—</span></div>
+          <div class="sr"><span>Card</span><span>Visa ••••0000</span></div>
+          <div class="sr"><span>Processing date</span><span id="rev-date">—</span></div>
+          <div class="sr"><span>Total</span><span id="rev-total">£0.00</span></div>
+        </div>
+        <div class="nt"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="7" cy="7" r="5.5" stroke="#92400e" stroke-width="1.2"/><path d="M7 4.5v3M7 9v.5" stroke="#92400e" stroke-width="1.2" stroke-linecap="round"/></svg>By confirming you authorise NovaPay to charge <span id="rev-auth-amt">£0.00</span> to your card. This cannot be reversed.</div>
+        <button class="bf bbg" data-goto="s-processing">Confirm &amp; Pay <span id="rev-btn-amt">£0.00</span></button>
+        <button class="bf bgh" data-goto="s-pay-method">Cancel</button>
+      </div></div>
+      <div class="hb"><div class="hi"></div></div>
+    </div>
+  </div>
+
+  <!-- ══ PROCESSING ══ -->
+  <div id="s-processing" class="screen">
+    <div class="si">
+      <div class="ph2"><span class="pt" style="margin:0 auto">Processing payment</span></div>
+      <div class="scroll" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center"><div class="spin"></div><div style="font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px">Please wait…</div><div style="font-size:13px;color:var(--muted);line-height:1.6">We're processing your payment.<br>Please don't close this screen.</div></div>
+      <div class="hb"><div class="hi"></div></div>
+    </div>
+  </div>
+
+  <!-- ══ SUCCESS ══ -->
+  <div id="s-success" class="screen">
+    <div class="si">
+      <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
+      <div class="ph2"><span class="pt" style="margin:0 auto">Payment confirmed</span></div>
+      <div class="steps"><div class="stp"><div class="sn done">✓</div><div class="sl2">Method</div></div><div class="sline"></div><div class="stp"><div class="sn done">✓</div><div class="sl2">Details</div></div><div class="sline"></div><div class="stp"><div class="sn done">✓</div><div class="sl2">Review</div></div><div class="sline"></div><div class="stp"><div class="sn done">✓</div><div class="sl2">Done</div></div></div>
+      <div class="scroll"><div class="ss2">
+        <div class="sr2"><svg width="34" height="34" viewBox="0 0 34 34" fill="none"><path d="M8 17l6.5 6.5 11.5-13" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:4px">Payment successful!</div>
+        <div class="sam" id="suc-amount">£0.00</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:24px" id="suc-desc">—</div>
+        <div class="sb2" style="width:100%;margin-bottom:20px;text-align:left">
+          <div class="sr"><span>Reference</span><span id="suc-ref">NP-0000-00000</span></div>
+          <div class="sr"><span>Date &amp; time</span><span id="suc-date">—</span></div>
+          <div class="sr"><span>New balance</span><span id="suc-balance" style="color:var(--green);font-weight:700">£0.00</span></div>
+          <div class="sr"><span>Next due</span><span id="suc-next">—</span></div>
+        </div>
+        <button class="bf bbl" data-goto="s-home">Back to my loan</button>
+        <button class="bf bgh">Download receipt</button>
+      </div></div>
+      <div class="hb"><div class="hi"></div></div>
+    </div>
+  </div>
+
+  <!-- ══ FAQ ══ -->
+  <div id="s-faq" class="screen">
+    <div class="si">
+      <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
+      <div class="hdr"><div class="logo"><div class="lm"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4.5 4.5 7.5-9" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="lt">NovaPay</span></div><button class="bd" data-goto="s-home">← Back</button></div>
+      <div class="scroll" style="padding:16px"><div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px">FAQs</div><div style="font-size:12px;color:var(--muted);margin-bottom:16px">Common questions about your NovaPay loan</div><div id="faq-list"></div></div>
+      <div class="hb"><div class="hi"></div></div>
+    </div>
+  </div>
+
+  <!-- ══ PROFILE ══ -->
+  <div id="s-profile" class="screen">
+    <div class="si">
+      <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
+      <div class="ihdr"><button class="bd" data-goto="s-home"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="itl">Profile</span></div>
+      <div class="scroll" style="padding-top:20px">
+        <div class="pav">SM</div><div class="pnm">Sarah Mitchell</div><div class="plo">Loan #28796 · Customer since Apr 2024</div>
+
+        <div class="sh">Personal details<button class="sec-edit-btn" data-section="personal"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#1a56db" stroke-width="1.3" stroke-linejoin="round"/></svg> Edit</button></div>
+        <div class="dc">
+          <div class="drow"><div><div class="dl">Title</div><div class="dv" id="val-title">Ms</div></div></div>
+          <div class="drow"><div><div class="dl">First name</div><div class="dv">Sarah</div></div></div>
+          <div class="drow"><div><div class="dl">Last name</div><div class="dv" id="val-lastname">Mitchell</div></div></div>
+          <div class="drow"><div><div class="dl">Date of birth</div><div class="dv">14 March 1989</div></div></div>
+        </div>
+        <div class="sh">Contact information<button class="sec-edit-btn" data-section="contact"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#1a56db" stroke-width="1.3" stroke-linejoin="round"/></svg> Edit</button></div>
+        <div class="dc">
+          <div class="drow"><div><div class="dl">Mobile number</div><div class="dv" id="val-mobile">+44 7700 900 7821</div></div></div>
+          <div class="drow"><div><div class="dl">Email address</div><div class="dv" id="val-email">sarah.mitchell@email.co.uk</div></div></div>
+        </div>
+        <div class="sh">Address<button class="sec-edit-btn" data-section="address"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#1a56db" stroke-width="1.3" stroke-linejoin="round"/></svg> Edit</button></div>
+        <div class="dc">
+          <div class="drow"><div><div class="dl">Current address</div><div class="dv" id="val-address">42 Elm Grove, Brighton, BN2 3FA</div></div></div>
+          <div class="drow"><div><div class="dl">Resident since</div><div class="dv" id="val-since">January 2020</div></div></div>
+        </div>
+        <div class="sh">Employment details<button class="sec-edit-btn" data-section="employment"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#1a56db" stroke-width="1.3" stroke-linejoin="round"/></svg> Edit</button></div>
+        <div class="dc">
+          <div class="drow"><div><div class="dl">Employment status</div><div class="dv" id="val-empstatus">Full-time employed</div></div></div>
+          <div class="drow"><div><div class="dl">Employer name</div><div class="dv" id="val-employer">Mitchell &amp; Co Ltd</div></div></div>
+          <div class="drow"><div><div class="dl">Job title</div><div class="dv" id="val-jobtitle">Senior Analyst</div></div></div>
+          <div class="drow"><div><div class="dl">Employment start date</div><div class="dv" id="val-empstart">March 2019</div></div></div>
+          <div class="drow"><div><div class="dl">Annual income</div><div class="dv" id="val-income">£42,000</div></div></div>
+          <div class="drow"><div><div class="dl">Pay frequency</div><div class="dv" id="val-payfreq">Monthly</div></div></div>
+          <div class="drow"><div><div class="dl">Next pay date</div><div class="dv" id="val-payday">28 Mar 2026</div></div></div>
+        </div>
+        <div class="sh" style="margin-top:8px">Income &amp; expenditure</div>
+        <div style="background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:var(--r);padding:10px 13px;margin:0 16px 10px;font-size:11px;color:var(--warn-text);display:flex;gap:8px;line-height:1.5"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#92400e" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#92400e" stroke-width="1.2" stroke-linecap="round"/></svg>Under Consumer Duty, we are required to ensure this loan remains affordable. Please keep these details up to date.</div>
+        <div class="iesh inc-h">Monthly income<button class="sec-edit-btn" data-section="inc-income"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#1a56db" stroke-width="1.3" stroke-linejoin="round"/></svg> Edit</button></div>
+        <div class="dc">
+          <div class="drow"><div><div class="dl">Primary income (net)</div><div class="dv" id="val-inc-salary">£3,200</div></div></div>
+          <div class="drow"><div><div class="dl">Secondary income</div><div class="dv" id="val-inc-secondary">£0</div></div></div>
+          <div class="drow"><div><div class="dl">Benefits / Universal Credit</div><div class="dv" id="val-inc-benefits">£0</div></div></div>
+          <div class="drow"><div><div class="dl">Other income</div><div class="dv" id="val-inc-other">£150</div></div></div>
+          <div class="drow tot-row"><div><div class="dl" style="color:var(--ok-text)">Total monthly income</div><div class="dv" id="val-inc-total" style="color:var(--ok-text)">£3,350</div></div></div>
+        </div>
+        <div class="iesh exp-h">Housing costs<button class="sec-edit-btn" data-section="inc-housing"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#1a56db" stroke-width="1.3" stroke-linejoin="round"/></svg> Edit</button></div>
+        <div class="dc">
+          <div class="drow"><div><div class="dl">Rent / mortgage</div><div class="dv" id="val-exp-rent">£950</div></div></div>
+          <div class="drow"><div><div class="dl">Council tax</div><div class="dv" id="val-exp-council">£120</div></div></div>
+          <div class="drow"><div><div class="dl">Utilities</div><div class="dv" id="val-exp-utilities">£180</div></div></div>
+        </div>
+        <div class="iesh exp-h">Living costs<button class="sec-edit-btn" data-section="inc-living"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#1a56db" stroke-width="1.3" stroke-linejoin="round"/></svg> Edit</button></div>
+        <div class="dc">
+          <div class="drow"><div><div class="dl">Food &amp; groceries</div><div class="dv" id="val-exp-food">£300</div></div></div>
+          <div class="drow"><div><div class="dl">Transport</div><div class="dv" id="val-exp-transport">£120</div></div></div>
+          <div class="drow"><div><div class="dl">Childcare / dependants</div><div class="dv" id="val-exp-childcare">£0</div></div></div>
+          <div class="drow"><div><div class="dl">Mobile phone</div><div class="dv" id="val-exp-mobile">£35</div></div></div>
+        </div>
+        <div class="iesh exp-h">Financial commitments<button class="sec-edit-btn" data-section="inc-financial"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#1a56db" stroke-width="1.3" stroke-linejoin="round"/></svg> Edit</button></div>
+        <div class="dc">
+          <div class="drow"><div><div class="dl">Other loan repayments</div><div class="dv" id="val-exp-loans">£0</div></div></div>
+          <div class="drow"><div><div class="dl">Credit card minimums</div><div class="dv" id="val-exp-cards">£50</div></div></div>
+          <div class="drow"><div><div class="dl">Buy now pay later</div><div class="dv" id="val-exp-bnpl">£0</div></div></div>
+          <div class="drow"><div><div class="dl">Insurance (all)</div><div class="dv" id="val-exp-insurance">£80</div></div></div>
+          <div class="drow"><div><div class="dl">Subscriptions</div><div class="dv" id="val-exp-subs">£40</div></div></div>
+        </div>
+        <div class="dc" style="margin-bottom:20px">
+          <div class="drow tot-row"><div><div class="dl" style="color:var(--ok-text)">Total monthly expenditure</div><div class="dv" id="val-exp-total">£1,875</div></div></div>
+          <div class="drow tot-row"><div><div class="dl" style="color:var(--ok-text)">Disposable income (surplus)</div><div class="dv" id="val-surplus" style="color:var(--ok-text);font-size:15px">£1,475</div></div></div>
+          <div class="drow"><div><div class="dl">NovaPay loan repayment</div><div class="dv" id="val-loan-repayment">£0.00</div></div></div>
+        </div>
+      </div>
+      <div class="hb"><div class="hi"></div></div>
+    </div>
+  </div>
+
+  <!-- ══ PAYMENT DETAILS ══ -->
+  <div id="s-payment-details" class="screen">
+    <div class="si">
+      <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
+      <div class="ihdr"><button class="bd" data-goto="s-home"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="itl">Payment Details</span></div>
+      <div class="scroll" style="padding-top:16px">
+        <div class="sh">Direct debit card<button class="sec-edit-btn" data-section="pd-card"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#1a56db" stroke-width="1.3" stroke-linejoin="round"/></svg> Edit</button></div>
+        <div class="pcv">
+          <div style="font-size:10px;opacity:.65;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Active direct debit</div>
+          <div class="chip" style="margin-bottom:12px"></div>
+          <div style="font-size:14px;letter-spacing:2px;font-family:'Courier New',monospace;margin-bottom:10px">•••• •••• •••• <span id="pd-card-last">4821</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;opacity:.85"><span id="pd-card-name">SARAH MITCHELL</span><span style="font-size:15px;font-weight:800;font-style:italic">VISA</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;opacity:.65;margin-top:6px"><span>Exp <span id="pd-card-exp">09/27</span></span><span style="background:rgba(0,184,101,0.25);border:1px solid rgba(0,184,101,0.4);border-radius:10px;padding:2px 8px;color:#4ade80;font-weight:600">Active</span></div>
+        </div>
+        <div class="dc" style="margin:0 16px 6px">
+          <div class="drow"><div><div class="dl">Card type</div><div class="dv" id="val-pd-cardtype">Visa Debit</div></div></div>
+          <div class="drow"><div><div class="dl">Last 4 digits</div><div class="dv" id="val-pd-cardlast">4821</div></div></div>
+          <div class="drow"><div><div class="dl">Expiry</div><div class="dv" id="val-pd-cardexp">09/27</div></div></div>
+          <div class="drow"><div><div class="dl">Collection date</div><div class="dv" id="val-pd-collection">22nd of each month</div></div></div>
+        </div>
+        <div style="margin:0 16px 16px;background:#eff6ff;border:1px solid #dbeafe;border-radius:var(--r);padding:10px 13px;font-size:11px;color:#1e40af;display:flex;gap:8px;line-height:1.5"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#1a56db" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#1a56db" stroke-width="1.2" stroke-linecap="round"/></svg>Updating card details requires a one-time passcode sent to your registered mobile.</div>
+        <div class="sh">Bank account (loan funded to)<button class="sec-edit-btn" data-section="pd-bank"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#1a56db" stroke-width="1.3" stroke-linejoin="round"/></svg> Edit</button></div>
+        <div class="bac">
+          <div style="padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)">
+            <div style="width:38px;height:38px;background:#eff6ff;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 7l7-4 7 4v1H2V7z" stroke="#1a56db" stroke-width="1.3" stroke-linejoin="round"/><rect x="3" y="8" width="2.5" height="5" stroke="#1a56db" stroke-width="1.3"/><rect x="7.75" y="8" width="2.5" height="5" stroke="#1a56db" stroke-width="1.3"/><rect x="12.5" y="8" width="2.5" height="5" stroke="#1a56db" stroke-width="1.3"/><path d="M1.5 13h15" stroke="#1a56db" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            <div><div style="font-size:13px;font-weight:600;color:var(--text)" id="val-pd-bank">Barclays Bank</div><div style="font-size:11px;color:var(--muted)">Current account</div></div>
+            <div style="margin-left:auto;background:var(--ok-bg);color:var(--ok-text);font-size:10px;font-weight:600;padding:3px 9px;border-radius:10px">Verified</div>
+          </div>
+          <div class="drow"><div><div class="dl">Account holder</div><div class="dv" id="val-pd-accholder">Sarah Mitchell</div></div></div>
+          <div class="drow"><div><div class="dl">Bank name</div><div class="dv" id="val-pd-bankname">Barclays Bank</div></div></div>
+          <div class="drow"><div><div class="dl">Sort code</div><div class="dv" id="val-pd-sort">20 ·· ·· ··</div></div></div>
+          <div class="drow"><div><div class="dl">Account number</div><div class="dv" id="val-pd-accnum">•••• 3847</div></div></div>
+          <div class="drow"><div><div class="dl">Loan disbursed</div><div class="dv" id="val-pd-disbursed">3 April 2024</div></div></div>
+        </div>
+        <div style="margin:0 16px 20px;background:#eff6ff;border:1px solid #dbeafe;border-radius:var(--r);padding:10px 13px;font-size:11px;color:#1e40af;display:flex;gap:8px;line-height:1.5"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#1a56db" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#1a56db" stroke-width="1.2" stroke-linecap="round"/></svg>Updating bank account details requires identity verification. Changes take effect within 3 working days.</div>
+      </div>
+      <div class="hb"><div class="hi"></div></div>
+    </div>
+  </div>
+
+  <!-- ══ STATEMENT ══ -->
+  <div id="s-statement" class="screen">
+    <div class="si">
+      <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
+      <div class="ihdr"><button class="bd" data-goto="s-home"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="itl">Statement of Account</span></div>
+      <div class="scroll">
+        <div class="shc">
+          <div class="stlbl">Total repaid to date</div>
+          <div class="stval" id="stmt-repaid">£0.00</div>
+          <div class="smr">
+            <div><div class="sml">Loan amount</div><div class="smv" id="stmt-principal">£0.00</div></div>
+            <div><div class="sml">Outstanding balance</div><div class="smv" id="stmt-balance">£0.00</div></div>
+            <div><div class="sml">Principal paid</div><div class="smv" id="stmt-principal-paid">£0.00</div></div>
+            <div><div class="sml">Interest paid</div><div class="smv" id="stmt-interest-paid">£0.00</div></div>
+          </div>
+        </div>
+        <div style="padding:0 16px 8px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Transaction history</div>
+        <div class="card" style="margin-bottom:20px"><div id="stmt-list"></div></div>
+      </div>
+      <div class="hb"><div class="hi"></div></div>
+    </div>
+  </div>
+
+  <!-- ══ DOCUMENTS ══ -->
+  <div id="s-documents" class="screen">
+    <div class="si" style="position:relative">
+      <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
+      <div class="ihdr"><button class="bd" data-goto="s-home"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="itl">Documents</span></div>
+      <div class="scroll">
+        <div style="padding:12px 16px 6px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Regulatory notices</div>
+        <div class="card" style="margin-bottom:12px">
+          <div class="docitem" data-doc="secci"><div class="doci" style="background:#f3e5f5"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h7l4 4v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#7b1fa2" stroke-width="1.3"/><path d="M11 2v4h4" stroke="#7b1fa2" stroke-width="1.3"/></svg></div><div style="flex:1"><div class="doct">SECCI</div><div class="docs" id="doc-secci-sub">Issued —</div><span class="docbdg" style="background:#f3e5f5;color:#7b1fa2">Regulatory</span></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="docitem" data-doc="adequate"><div class="doci" style="background:#eff6ff"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h7l4 4v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#1a56db" stroke-width="1.3"/><path d="M11 2v4h4" stroke="#1a56db" stroke-width="1.3"/></svg></div><div style="flex:1"><div class="doct">Adequate Explanation</div><div class="docs" id="doc-ade-sub">Issued —</div><span class="docbdg" style="background:#eff6ff;color:#1a56db">Regulatory</span></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="docitem" data-doc="notice"><div class="doci" style="background:#fffbeb"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h7l4 4v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#d97706" stroke-width="1.3"/><path d="M11 2v4h4" stroke="#d97706" stroke-width="1.3"/></svg></div><div style="flex:1"><div class="doct">Notice of Cancellation Rights</div><div class="docs" id="doc-notice-sub">Issued —</div><span class="docbdg" style="background:#fffbeb;color:#d97706">Regulatory</span></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div style="padding:0 16px 6px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Loan agreement</div>
+        <div class="card" style="margin-bottom:12px">
+          <div class="docitem" data-doc="agreement"><div class="doci" style="background:#ecfdf5"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h7l4 4v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#059669" stroke-width="1.3"/><path d="M11 2v4h4M6 10h6M6 13h4" stroke="#059669" stroke-width="1.3" stroke-linecap="round"/></svg></div><div style="flex:1"><div class="doct">Credit Agreement — Loan #28796</div><div class="docs" id="doc-agr-sub">Signed —</div><span class="docbdg" style="background:#ecfdf5;color:#059669">Signed</span></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div style="padding:0 16px 6px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Statements</div>
+        <div class="card" style="margin-bottom:20px">
+          <div class="docitem"><div class="doci" style="background:#fce4ec"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h7l4 4v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#c62828" stroke-width="1.3"/><path d="M11 2v4h4" stroke="#c62828" stroke-width="1.3"/></svg></div><div style="flex:1"><div class="doct">Annual Statement 2025</div><div class="docs">Generated 1 Jan 2026</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+      <div class="dv2" id="doc-viewer">
+        <div class="ihdr"><button class="bd" id="doc-back"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="itl" id="doc-viewer-title">Document</span></div>
+        <div class="dcon" id="doc-viewer-content"></div>
+        <div style="padding:12px 16px;border-top:1px solid var(--border)"><button class="bf bbl" style="margin-bottom:0">Download PDF</button></div>
+        <div class="hb"><div class="hi"></div></div>
+      </div>
+      <div class="hb"><div class="hi"></div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  // ═══════════════════════════════════════════════
+  // LOAN ENGINE — single source of truth
+  // ═══════════════════════════════════════════════
+  var LOAN = {
+    principal:    1000,
+    apr:          29.9,
+    termMonths:   12,
+    startDate:    new Date('2025-04-03'),
+    accountStatus: 'active', // 'active' | 'arrears' | 'default'
+    // Derived — calculated by calcLoan()
+    monthlyRate:  0,
+    emi:          0,
+    schedule:     [],   // full amortisation table
+    paidCount:    3,    // how many instalments have been paid
+    // Convenience accessors
+    fmt: function(n) { return '£' + n.toFixed(2); },
+    fmtDate: function(d) {
+      var mn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return d.getDate() + ' ' + mn[d.getMonth()] + ' ' + d.getFullYear();
+    },
+    shortDate: function(d) {
+      return ('0'+d.getDate()).slice(-2) + ' ' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()] + ' ' + d.getFullYear();
+    }
+  };
+
+  function calcLoan() {
+    var P = LOAN.principal;
+    var r = (LOAN.apr / 100) / 12;  // monthly rate
+    var n = LOAN.termMonths;
+    LOAN.monthlyRate = r;
+    // Standard reducing balance EMI formula
+    var emi;
+    if (r === 0) {
+      emi = P / n;
+    } else {
+      emi = P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+    }
+    LOAN.emi = emi;
+    // Build full amortisation schedule
+    var schedule = [];
+    var bal = P;
+    for (var i = 0; i < n; i++) {
+      var interest = bal * r;
+      var principal = emi - interest;
+      if (i === n - 1) { principal = bal; } // last payment clears remainder
+      bal = Math.max(0, bal - principal);
+      var dueDate = new Date(LOAN.startDate);
+      dueDate.setMonth(dueDate.getMonth() + i);
+      schedule.push({
+        n:         i + 1,
+        dueDate:   new Date(dueDate),
+        emi:       emi,
+        principal: principal,
+        interest:  interest,
+        balance:   bal,
+        status:    i < LOAN.paidCount ? 'paid' : i === LOAN.paidCount ? 'current' : 'upcoming',
+        ph:        false,
+        pa:        false
+      });
+    }
+    LOAN.schedule = schedule;
+    return schedule;
+  }
+
+  // Outstanding balance = sum of remaining principal
+  function outstandingBalance() {
+    var bal = 0;
+    for (var i = LOAN.paidCount; i < LOAN.schedule.length; i++) {
+      bal += LOAN.schedule[i].principal;
+    }
+    return bal;
+  }
+
+  // Total repaid so far
+  function totalRepaid() {
+    var t = 0;
+    for (var i = 0; i < LOAN.paidCount; i++) {
+      t += LOAN.schedule[i].emi;
+    }
+    return t;
+  }
+  function principalPaid() {
+    var t = 0;
+    for (var i = 0; i < LOAN.paidCount; i++) {
+      t += LOAN.schedule[i].principal;
+    }
+    return t;
+  }
+  function interestPaid() {
+    var t = 0;
+    for (var i = 0; i < LOAN.paidCount; i++) {
+      t += LOAN.schedule[i].interest;
+    }
+    return t;
+  }
+  function nextInstalment() {
+    if (LOAN.paidCount < LOAN.schedule.length) {
+      return LOAN.schedule[LOAN.paidCount];
+    }
+    return null;
+  }
+
+  // ═══════════════════════════════════════════════
+  // UPDATE ALL UI FROM ENGINE
+  // ═══════════════════════════════════════════════
+  function updateAllUI() {
+    var bal   = outstandingBalance();
+    var next  = nextInstalment();
+    var emi   = LOAN.emi;
+    var n     = LOAN.termMonths;
+    var total = emi * n;
+    var interest = total - LOAN.principal;
+    var dailyRate = (LOAN.apr / 100) / 365;
+    var startStr  = LOAN.fmtDate(LOAN.startDate);
+
+    // ── Engine panel preview
+    setText('eng-emi-out',   LOAN.fmt(emi));
+    setText('eng-total-out', LOAN.fmt(total));
+    setText('eng-interest-out', LOAN.fmt(interest));
+    setText('eng-daily-out', (dailyRate * 100).toFixed(4) + '%');
+
+    // ── Dashboard hero
+    setText('dash-balance',  LOAN.fmt(bal));
+    setText('dash-emi',      next ? LOAN.fmt(next.emi) : '—');
+    setText('dash-due-date', next ? LOAN.shortDate(next.dueDate) : 'Fully repaid');
+    setText('emi-badge', LOAN.schedule.length + ' instalments');
+
+    // ── Options hero
+    setText('opts-balance',  LOAN.fmt(bal));
+    setText('opts-emi',      next ? LOAN.fmt(next.emi) : '—');
+    setText('opts-due-date', next ? LOAN.shortDate(next.dueDate) : 'Fully repaid');
+
+    // ── Pay next/full sub-labels
+    if (next) {
+      setText('pay-next-sub', 'Due ' + LOAN.shortDate(next.dueDate) + ' · ' + LOAN.fmt(next.emi));
+    }
+    setText('pay-full-sub', 'Clear outstanding balance · ' + LOAN.fmt(bal));
+    setText('custom-range-label', 'Enter amount (min £1, max ' + LOAN.fmt(bal) + ')');
+    var custInput = document.getElementById('custom-amt-val');
+    if (custInput) { custInput.max = bal.toFixed(2); }
+
+    // ── PA sub-label
+    var paMonthly = bal / 18;
+    setText('pa-sub-label', 'Repay ' + LOAN.fmt(bal) + ' over 18 months interest-free');
+    setText('pa-desc', 'We\'ll freeze interest immediately and spread your outstanding balance of ' + LOAN.fmt(bal) + ' over 18 months. No further interest will accrue.');
+    setText('pa-notice', 'Interest stops accruing immediately. New monthly payment: ' + LOAN.fmt(paMonthly) + ' for 18 months.');
+
+    // ── Profile: loan repayment row
+    setText('val-loan-repayment', LOAN.fmt(emi));
+
+    // ── Statement screen
+    setText('stmt-repaid',       LOAN.fmt(totalRepaid()));
+    setText('stmt-principal',    LOAN.fmt(LOAN.principal));
+    setText('stmt-balance',      LOAN.fmt(bal));
+    setText('stmt-principal-paid', LOAN.fmt(principalPaid()));
+    setText('stmt-interest-paid', LOAN.fmt(interestPaid()));
+    buildStatementList();
+
+    // ── Documents dates
+    var docDate = 'Issued ' + startStr;
+    setText('doc-secci-sub',  docDate);
+    setText('doc-ade-sub',    docDate);
+    setText('doc-notice-sub', docDate);
+    setText('doc-agr-sub',    'Signed ' + startStr);
+    setText('val-pd-disbursed', startStr);
+
+    // ── EMI list
+    buildEmiList();
+  }
+
+  function setText(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
+
+  // ── Set payment context before navigating to pay screens
+  var payCtx = {amount: 0, desc: '', type: ''};
+  function setPayContext(amount, desc, type) {
+    payCtx.amount = amount;
+    payCtx.desc   = desc;
+    payCtx.type   = type;
+    var today = new Date();
+    var mn = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var dateStr = today.getDate() + ' ' + mn[today.getMonth()] + ' ' + today.getFullYear();
+    setText('pm-amount',    LOAN.fmt(amount));
+    setText('pm-desc',      desc);
+    setText('ap-amount',    LOAN.fmt(amount));
+    setText('ap-desc',      desc);
+    setText('rev-type',     type);
+    setText('rev-date',     dateStr);
+    setText('rev-total',    LOAN.fmt(amount));
+    setText('rev-auth-amt', LOAN.fmt(amount));
+    setText('rev-btn-amt',  LOAN.fmt(amount));
+  }
+
+  // ═══════════════════════════════════════════════
+  // BUILD EMI SCHEDULE LIST
+  // ═══════════════════════════════════════════════
+  function buildEmiList() {
+    var el = document.getElementById('emi-list');
+    if (!el) return;
+    el.innerHTML = '';
+    var s = LOAN.schedule;
+    for (var i = 0; i < s.length; i++) {
+      var e = s[i];
+      var chipCls, chipTxt, iconCls;
+      if (e.status === 'paid')    { chipCls='sc-p'; chipTxt='✓ Paid'; iconCls='ii paid'; }
+      else if (e.status === 'current') { chipCls='sc-d'; chipTxt='Due soon'; iconCls='ii warn'; }
+      else if (e.status === 'ph') { chipCls='sc-ph'; chipTxt='Holiday'; iconCls='ii ph'; }
+      else                        { chipCls='sc-u'; chipTxt='Upcoming'; iconCls='ii'; }
+      var openCls  = e.status === 'current' ? 'open' : '';
+      var chevCls  = e.status === 'current' ? 'chev open' : 'chev';
+      var isCur    = (e.status === 'current' || e.status === 'ph');
+      var phBadge  = e.ph ? '<span style="font-size:9px;background:#fff3cd;color:#92400e;border-radius:6px;padding:2px 6px;margin-left:6px;font-weight:600">Payment Holiday</span>' : '';
+      var paBadge  = e.pa ? '<span style="font-size:9px;background:#eff6ff;color:#1e40af;border-radius:6px;padding:2px 6px;margin-left:6px;font-weight:600">PA · 0% interest</span>' : '';
+      var paidTd   = e.status === 'paid'
+        ? '<td style="font-size:13px;font-weight:600;color:var(--ok-text);text-align:right;padding-bottom:10px">' + LOAN.shortDate(e.dueDate) + '</td>'
+        : '<td style="font-size:13px;font-weight:600;color:var(--dim);text-align:right;padding-bottom:10px">—</td>';
+      var iStyle   = e.pa ? ' style="color:var(--ok-text)"' : '';
+      var iVal     = e.pa ? '£0.00 (frozen)' : LOAN.fmt(e.interest);
+      el.insertAdjacentHTML('beforeend',
+        '<div class="ai">'
+        + '<div class="at' + (isCur ? ' cur' : '') + '">'
+        + '<div class="' + iconCls + '"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1.5" width="12" height="11" rx="1.5" stroke="#fff" stroke-width="1.2"/><path d="M1 5h12M4 1v2M10 1v2" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></svg></div>'
+        + '<div class="aif"><div class="ait" style="display:flex;align-items:center">Instalment ' + e.n + phBadge + paBadge + '</div><div class="ais">Due ' + LOAN.shortDate(e.dueDate) + '</div></div>'
+        + '<div class="ar"><span class="sc ' + chipCls + '">' + chipTxt + '</span>'
+        + '<svg class="' + chevCls + '" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        + '</div></div>'
+        + '<div class="ab ' + openCls + '">'
+        + '<table class="abt">'
+        + '<tr><td style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding-bottom:2px">Due Date</td>'
+        + '<td style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding-bottom:2px;text-align:right">Paid On</td></tr>'
+        + '<tr><td style="font-size:13px;font-weight:600;color:var(--text);padding-bottom:10px">' + LOAN.shortDate(e.dueDate) + '</td>' + paidTd + '</tr>'
+        + '<tr class="dvr"><td>Principal</td><td>' + LOAN.fmt(e.principal) + '</td></tr>'
+        + '<tr><td>Interest</td><td' + iStyle + '>' + iVal + '</td></tr>'
+        + '<tr class="dvr tot"><td>Total EMI</td><td>' + LOAN.fmt(e.emi) + '</td></tr>'
+        + '</table></div></div>'
+      );
+    }
+    // Wire accordion triggers
+    var triggers = el.querySelectorAll('.at');
+    for (var t = 0; t < triggers.length; t++) {
+      (function(tr) {
+        tr.addEventListener('click', function() {
+          var body = tr.nextElementSibling;
+          var chev = tr.querySelector('.chev');
+          var open = body.classList.toggle('open');
+          if (chev) chev.classList.toggle('open', open);
+        });
+      })(triggers[t]);
+    }
+  }
+
+  // ═══════════════════════════════════════════════
+  // BUILD STATEMENT LIST
+  // ═══════════════════════════════════════════════
+  function buildStatementList() {
+    var el = document.getElementById('stmt-list');
+    if (!el) return;
+    el.innerHTML = '';
+    // Paid instalments in reverse order
+    for (var i = LOAN.paidCount - 1; i >= 0; i--) {
+      var e = LOAN.schedule[i];
+      el.insertAdjacentHTML('beforeend',
+        '<div class="strow">'
+        + '<div class="stic" style="background:#ecfdf5"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l4 4 6-6" stroke="#059669" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'
+        + '<div><div style="font-size:12px;font-weight:600;color:var(--text)">Instalment ' + e.n + ' — paid</div>'
+        + '<div style="font-size:11px;color:var(--muted)">' + LOAN.shortDate(e.dueDate) + '</div>'
+        + '<div style="font-size:10px;color:var(--dim)">Ref: NP-' + (2024 + Math.floor(i/12)) + '-' + String(10000 + i * 317).slice(0,5) + '</div></div>'
+        + '<div style="font-size:13px;font-weight:700;margin-left:auto;color:var(--ok-text)">−' + LOAN.fmt(e.emi) + '</div>'
+        + '</div>'
+      );
+    }
+    // Original disbursement
+    el.insertAdjacentHTML('beforeend',
+      '<div class="strow">'
+      + '<div class="stic" style="background:#eff6ff"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="#1a56db" stroke-width="1.6" stroke-linecap="round"/></svg></div>'
+      + '<div><div style="font-size:12px;font-weight:600;color:var(--text)">Loan disbursed</div>'
+      + '<div style="font-size:11px;color:var(--muted)">' + LOAN.shortDate(LOAN.startDate) + '</div>'
+      + '<div style="font-size:10px;color:var(--dim)">Ref: NP-2024-00421</div></div>'
+      + '<div style="font-size:13px;font-weight:700;margin-left:auto;color:var(--blue)">+' + LOAN.fmt(LOAN.principal) + '</div>'
+      + '</div>'
+    );
+  }
+
+  // ═══════════════════════════════════════════════
+  // ENGINE PANEL — removed from customer-facing build
+  // Configuration is handled by the backend.
+  // Loan parameters are set here for the prototype.
+  // ═══════════════════════════════════════════════
+  function previewEngine() {} // stub — no UI panel
+
+  // ═══════════════════════════════════════════════
+  // NAVIGATION
+  // ═══════════════════════════════════════════════
+  var cur = 's-home';
+  function go(id) {
+    if (!id) return;
+    var prev = document.getElementById(cur);
+    var next = document.getElementById(id);
+    if (prev) prev.classList.remove('active');
+    if (next) next.classList.add('active');
+    closeMenu();
+    cur = id;
+    if (id === 's-processing') {
+      setTimeout(function() {
+        // Update balance after payment
+        var paid = payCtx.amount;
+        // Find current instalment and mark paid if EMI amount
+        var next2 = nextInstalment();
+        if (next2 && Math.abs(paid - next2.emi) < 0.01) {
+          LOAN.schedule[next2.n - 1].status = 'paid';
+          LOAN.paidCount = next2.n;
+          // Update next current
+          if (LOAN.paidCount < LOAN.schedule.length) {
+            LOAN.schedule[LOAN.paidCount].status = 'current';
+          }
+        }
+        updateAllUI();
+        // Success screen
+        var bal = outstandingBalance();
+        var nx  = nextInstalment();
+        setText('suc-amount',  LOAN.fmt(paid));
+        setText('suc-desc',    payCtx.desc);
+        setText('suc-ref',     'NP-' + new Date().getFullYear() + '-' + Math.floor(10000 + Math.random()*89999));
+        setText('suc-date',    LOAN.fmtDate(new Date()) + ', ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
+        setText('suc-balance', LOAN.fmt(bal));
+        setText('suc-next',    nx ? LOAN.shortDate(nx.dueDate) + ' · ' + LOAN.fmt(nx.emi) : 'Loan fully repaid');
+        go('s-success');
+      }, 2200);
+    }
+  }
+
+  function wireGoto() {
+    var els = document.querySelectorAll('[data-goto]');
+    for (var i = 0; i < els.length; i++) {
+      (function(el) {
+        el.addEventListener('click', function() { go(el.getAttribute('data-goto')); });
+      })(els[i]);
+    }
+  }
+
+  // ── Menu
+  var moverlay = document.getElementById('moverlay');
+  document.getElementById('menu-open').addEventListener('click', openMenu);
+  document.getElementById('menu-open-opts').addEventListener('click', openMenu);
+  document.getElementById('mclose').addEventListener('click', closeMenu);
+  moverlay.addEventListener('click', function(e) { if (e.target === moverlay) closeMenu(); });
+  var mitems = document.querySelectorAll('.mitem');
+  for (var mi = 0; mi < mitems.length; mi++) {
+    (function(el) {
+      el.addEventListener('click', function() { go(el.getAttribute('data-goto')); });
+    })(mitems[mi]);
+  }
+  function openMenu()  { moverlay.classList.add('open'); }
+  function closeMenu() { moverlay.classList.remove('open'); }
+
+  // ── Pay options CTAs
+  document.getElementById('pay-next-btn').addEventListener('click', function() {
+    var next = nextInstalment();
+    if (!next) return;
+    setPayContext(next.emi, 'Instalment ' + next.n + ' · Due ' + LOAN.shortDate(next.dueDate), 'Monthly instalment');
+    go('s-pay-method');
+  });
+  document.getElementById('pay-full-btn').addEventListener('click', function() {
+    var bal = outstandingBalance();
+    setPayContext(bal, 'Full outstanding balance', 'Full settlement');
+    go('s-pay-method');
+  });
+  var customToggle = document.getElementById('custom-amt-toggle');
+  var customInput  = document.getElementById('custom-amt-input');
+  var customArrow  = document.getElementById('custom-arrow');
+  customToggle.addEventListener('click', function() {
+    var open = customInput.style.display === 'none';
+    customInput.style.display = open ? 'block' : 'none';
+    customArrow.textContent = open ? '↑' : '↓';
+    customToggle.style.borderRadius = open ? 'var(--r-lg) var(--r-lg) 0 0' : 'var(--r-lg)';
+    customToggle.style.borderBottom = open ? 'none' : '';
+  });
+  document.getElementById('custom-amt-pay').addEventListener('click', function() {
+    var val = parseFloat(document.getElementById('custom-amt-val').value);
+    var bal = outstandingBalance();
+    var inp = document.getElementById('custom-amt-val');
+    if (isNaN(val) || val < 1 || val > bal) {
+      inp.style.borderColor = 'var(--err)';
+      return;
+    }
+    inp.style.borderColor = '';
+    setPayContext(val, 'Custom payment', 'Custom amount');
+    go('s-pay-method');
+  });
+
+  // ── Help cards
+  var helpOpen = {ph: false, pa: false, dh: false};
+  var hcts = document.querySelectorAll('.hct');
+  for (var h = 0; h < hcts.length; h++) {
+    (function(el) {
+      el.addEventListener('click', function() {
+        var key = el.getAttribute('data-help');
+        helpOpen[key] = !helpOpen[key];
+        var body = document.getElementById(key + '-body');
+        var chev = document.getElementById(key + '-chev');
+        if (body) body.classList.toggle('open', helpOpen[key]);
+        if (chev) chev.classList.toggle('open', helpOpen[key]);
+      });
+    })(hcts[h]);
+  }
+
+  // Payment Holiday
+  var phActive = false;
+  document.getElementById('ph-btn').addEventListener('click', function() {
+    if (phActive) return;
+    phActive = true;
+    var next = nextInstalment();
+    if (!next) return;
+    // Mark current as PH status
+    LOAN.schedule[next.n - 1].status = 'ph';
+    LOAN.schedule[next.n - 1].ph = true;
+    // Add a new instalment at the end
+    var lastDate = new Date(LOAN.schedule[LOAN.schedule.length - 1].dueDate);
+    lastDate.setMonth(lastDate.getMonth() + 1);
+    var lastBal = LOAN.schedule[LOAN.schedule.length - 1].balance;
+    var addInt = lastBal * LOAN.monthlyRate;
+    LOAN.schedule.push({
+      n: LOAN.schedule.length + 1,
+      dueDate: lastDate,
+      emi: LOAN.emi,
+      principal: LOAN.emi - addInt,
+      interest: addInt,
+      balance: 0,
+      status: 'upcoming',
+      ph: false, pa: false
+    });
+    setText('emi-badge', LOAN.schedule.length + ' instalments');
+    updateAllUI();
+    document.getElementById('ph-status').innerHTML = '<div class="hcf"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#059669" stroke-width="1.2"/><path d="M4 6.5l2 2 3-3" stroke="#059669" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Payment holiday applied. A new instalment has been added to the end of your loan.</div>';
+    this.textContent = 'Payment holiday active';
+    this.disabled = true;
+  });
+
+  // Payment Arrangement
+  var paActive = false;
+  document.getElementById('pa-btn').addEventListener('click', function() {
+    if (paActive) return;
+    paActive = true;
+    var bal = outstandingBalance();
+    var paMonthly = bal / 18;
+    // Rebuild remaining schedule with frozen interest
+    var paid = [];
+    for (var i = 0; i < LOAN.paidCount; i++) paid.push(LOAN.schedule[i]);
+    LOAN.schedule.length = 0;
+    for (var j = 0; j < paid.length; j++) LOAN.schedule.push(paid[j]);
+    for (var m = 0; m < 18; m++) {
+      var d = new Date(LOAN.startDate);
+      d.setMonth(d.getMonth() + LOAN.paidCount + m);
+      LOAN.schedule.push({
+        n: LOAN.paidCount + m + 1,
+        dueDate: d,
+        emi: paMonthly,
+        principal: paMonthly,
+        interest: 0,
+        balance: bal - paMonthly * (m + 1),
+        status: m === 0 ? 'current' : 'upcoming',
+        ph: false, pa: true
+      });
+    }
+    setText('emi-badge', LOAN.schedule.length + ' instalments');
+    updateAllUI();
+    document.getElementById('pa-status').innerHTML = '<div class="hcf"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#059669" stroke-width="1.2"/><path d="M4 6.5l2 2 3-3" stroke="#059669" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Arrangement confirmed. Interest frozen. New payment: ' + LOAN.fmt(paMonthly) + '/month for 18 months.</div>';
+    this.textContent = 'Arrangement active';
+    this.disabled = true;
+  });
+
+  // ═══════════════════════════════════════════════
+  // EDIT MODAL (section-based)
+  // ═══════════════════════════════════════════════
+  var emModal = document.getElementById('em');
+  var emTitle = document.getElementById('em-title');
+  var emBody  = document.getElementById('em-body');
+  var editKey = '';
+
+  var editSelectOpts = {
+    'title':      ['Mr','Ms','Mrs','Miss','Dr','Prof'],
+    'empstatus':  ['Full-time employed','Part-time employed','Self-employed','Unemployed','Retired','Student'],
+    'payfreq':    ['Weekly','Fortnightly','Monthly','Annually'],
+    'pd-cardtype':['Visa Debit','Mastercard Debit','Visa Credit','Mastercard Credit']
+  };
+
+  var sectionDefs = {
+    'personal':  { title:'Edit personal details', fields:[{key:'title',label:'Title',type:'select'},{key:'lastname',label:'Last name',type:'text'}] },
+    'contact':   { title:'Edit contact information', fields:[{key:'mobile',label:'Mobile number',type:'text'},{key:'email',label:'Email address',type:'text'}] },
+    'address':   { title:'Edit address', fields:[{key:'address',label:'Current address',type:'text'},{key:'since',label:'Resident since',type:'text'}] },
+    'employment':{ title:'Edit employment details', fields:[{key:'empstatus',label:'Employment status',type:'select'},{key:'employer',label:'Employer name',type:'text'},{key:'jobtitle',label:'Job title',type:'text'},{key:'empstart',label:'Employment start date',type:'text'},{key:'income',label:'Annual income',type:'text'},{key:'payfreq',label:'Pay frequency',type:'select'},{key:'payday',label:'Next pay date',type:'date'}] },
+    'inc-income':{ title:'Edit monthly income', fields:[{key:'inc-salary',label:'Primary income (net)',type:'text'},{key:'inc-secondary',label:'Secondary income',type:'text'},{key:'inc-benefits',label:'Benefits / Universal Credit',type:'text'},{key:'inc-other',label:'Other income',type:'text'}] },
+    'inc-housing':{ title:'Edit housing costs', fields:[{key:'exp-rent',label:'Rent / mortgage',type:'text'},{key:'exp-council',label:'Council tax',type:'text'},{key:'exp-utilities',label:'Utilities',type:'text'}] },
+    'inc-living':{ title:'Edit living costs', fields:[{key:'exp-food',label:'Food & groceries',type:'text'},{key:'exp-transport',label:'Transport',type:'text'},{key:'exp-childcare',label:'Childcare / dependants',type:'text'},{key:'exp-mobile',label:'Mobile phone',type:'text'}] },
+    'inc-financial':{ title:'Edit financial commitments', fields:[{key:'exp-loans',label:'Other loan repayments',type:'text'},{key:'exp-cards',label:'Credit card minimums',type:'text'},{key:'exp-bnpl',label:'Buy now pay later',type:'text'},{key:'exp-insurance',label:'Insurance',type:'text'},{key:'exp-subs',label:'Subscriptions',type:'text'}] },
+    'pd-card':   { title:'Edit card details', fields:[{key:'pd-cardtype',label:'Card type',type:'select'},{key:'pd-cardlast',label:'Last 4 digits',type:'text'},{key:'pd-cardexp',label:'Expiry (MM/YY)',type:'text'},{key:'pd-collection',label:'Collection date',type:'text'}] },
+    'pd-bank':   { title:'Edit bank account details', fields:[{key:'pd-accholder',label:'Account holder',type:'text'},{key:'pd-bankname',label:'Bank name',type:'text'},{key:'pd-sort',label:'Sort code',type:'text'},{key:'pd-accnum',label:'Account number',type:'text'}] }
+  };
+
+  var ieIncome  = ['inc-salary','inc-secondary','inc-benefits','inc-other'];
+  var ieExpense = ['exp-rent','exp-council','exp-utilities','exp-food','exp-transport','exp-childcare','exp-mobile','exp-loans','exp-cards','exp-bnpl','exp-insurance','exp-subs'];
+
+  function openSectionEdit(sectionKey) {
+    var def = sectionDefs[sectionKey];
+    if (!def) return;
+    editKey = sectionKey;
+    emTitle.textContent = def.title;
+    var html = '';
+    for (var i = 0; i < def.fields.length; i++) {
+      var f = def.fields[i];
+      var valEl = document.getElementById('val-' + f.key);
+      var current = valEl ? valEl.textContent.replace(/&amp;/g,'&') : '';
+      html += '<div style="margin-bottom:12px">';
+      html += '<div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em">' + f.label + '</div>';
+      if (f.type === 'select' && editSelectOpts[f.key]) {
+        html += '<select class="ems" data-field="' + f.key + '" style="margin-bottom:0">';
+        var opts = editSelectOpts[f.key];
+        for (var o = 0; o < opts.length; o++) {
+          html += '<option' + (opts[o] === current ? ' selected' : '') + '>' + opts[o] + '</option>';
+        }
+        html += '</select>';
+      } else if (f.type === 'date') {
+        html += '<input class="emi" data-field="' + f.key + '" type="date">';
+      } else {
+        html += '<input class="emi" data-field="' + f.key + '" type="text" value="' + current + '">';
+      }
+      html += '</div>';
+    }
+    emBody.innerHTML = html;
+    emModal.classList.add('open');
+    var first = emBody.querySelector('input');
+    if (first) { setTimeout(function(){ first.focus(); }, 60); }
+  }
+
+  // Wire section edit buttons via delegation
+  document.getElementById('app').addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-section]');
+    if (btn) {
+      e.stopPropagation();
+      openSectionEdit(btn.getAttribute('data-section'));
+    }
+  });
+
+  document.getElementById('em-save').addEventListener('click', function() {
+    var inputs = emBody.querySelectorAll('[data-field]');
+    var ieChanged = false;
+    for (var i = 0; i < inputs.length; i++) {
+      var inp = inputs[i];
+      var key = inp.getAttribute('data-field');
+      var val = inp.value.replace(/^\s+|\s+$/g,'');
+      if (!val) continue;
+      if (inp.type === 'date') {
+        var d = new Date(val);
+        if (!isNaN(d)) { val = LOAN.shortDate(d); }
+      }
+      var el = document.getElementById('val-' + key);
+      if (el) el.textContent = val;
+      if (key === 'pd-cardlast') { var cl = document.getElementById('pd-card-last'); if(cl) cl.textContent = val; }
+      if (key === 'pd-cardexp')  { var ce = document.getElementById('pd-card-exp');  if(ce) ce.textContent = val; }
+      if (key === 'pd-bankname') { var bk = document.getElementById('val-pd-bank');  if(bk) bk.textContent = val; }
+      if (key === 'pd-accholder'){ var cn = document.getElementById('pd-card-name'); if(cn) cn.textContent = val.toUpperCase(); }
+      for (var a = 0; a < ieIncome.length;  a++) { if (ieIncome[a]  === key) { ieChanged = true; } }
+      for (var b = 0; b < ieExpense.length; b++) { if (ieExpense[b] === key) { ieChanged = true; } }
+    }
+    if (ieChanged) recalcIE();
+    closeEdit();
+  });
+  document.getElementById('em-cancel').addEventListener('click', closeEdit);
+  function closeEdit() { emModal.classList.remove('open'); editKey = ''; }
+
+  function recalcIE() {
+    var totalInc = 0, totalExp = 0, i, el, v;
+    for (i = 0; i < ieIncome.length;  i++) { el = document.getElementById('val-'+ieIncome[i]);  if(el){ v=parseFloat(el.textContent.replace(/[^0-9.]/g,'')); if(!isNaN(v)) totalInc+=v; } }
+    for (i = 0; i < ieExpense.length; i++) { el = document.getElementById('val-'+ieExpense[i]); if(el){ v=parseFloat(el.textContent.replace(/[^0-9.]/g,'')); if(!isNaN(v)) totalExp+=v; } }
+    var surplus = totalInc - totalExp;
+    var it = document.getElementById('val-inc-total'); if(it) it.textContent = '£'+totalInc.toLocaleString();
+    var et = document.getElementById('val-exp-total'); if(et){ et.textContent='£'+totalExp.toLocaleString(); et.style.color=surplus<LOAN.emi?'var(--err)':'var(--text)'; }
+    var sv = document.getElementById('val-surplus');   if(sv){ sv.textContent='£'+surplus.toLocaleString(); sv.style.color=surplus<LOAN.emi?'var(--err)':'var(--ok-text)'; }
+  }
+
+  // ── Card entry inputs
+  document.getElementById('card-num-inp').addEventListener('input', function() {
+    var v = this.value.replace(/\D/g,'').substring(0,16);
+    this.value = v.replace(/(.{4})/g,'$1 ').trim();
+    var last = v.slice(-4)||'0000'; while(last.length<4) last='0'+last;
+    document.getElementById('prev-num').textContent = 'XXXX  XXXX  XXXX  '+last;
+  });
+  document.getElementById('card-name-inp').addEventListener('input', function() {
+    document.getElementById('prev-name').textContent = this.value.toUpperCase()||'CARDHOLDER NAME';
+  });
+  document.getElementById('card-exp-inp').addEventListener('input', function() {
+    var v = this.value.replace(/\D/g,'');
+    if (v.length >= 2) v = v.slice(0,2)+' / '+v.slice(2,4);
+    this.value = v;
+  });
+  var tiles = document.querySelectorAll('.mo');
+  for (var t = 0; t < tiles.length; t++) {
+    (function(el) {
+      el.addEventListener('click', function() {
+        var s = el.parentNode.querySelectorAll('.mo');
+        for (var x=0;x<s.length;x++) s[x].classList.remove('sel');
+        el.classList.add('sel');
+      });
+    })(tiles[t]);
+  }
+
+  // ── FAQ
+  var faqs = [
+    {q:'How do I make a payment?', a:'Click "Pay Now" on your dashboard. We accept debit cards, credit cards, and Apple Pay.'},
+    {q:'What happens if I miss a payment?', a:'Missing a payment can affect your credit score and result in late fees. Contact us immediately if you\'re struggling.'},
+    {q:'Can I repay my loan early?', a:'Yes, there are no early repayment charges. Contact us to get a settlement figure.'},
+    {q:'How do I update my bank details?', a:'Call us on 0800 123 4567 (Mon–Fri, 9:00–17:00) and our team will update your details securely.'},
+    {q:'Where can I find my loan agreement?', a:'Available in the Documents section — tap the menu icon and select Documents.'},
+    {q:'What if I\'m in financial difficulty?', a:'Please contact us as soon as possible. We\'ll work with you to find a solution. You can also visit moneyhelper.org.uk for free advice.'}
+  ];
+  var fl = document.getElementById('faq-list');
+  for (var fi = 0; fi < faqs.length; fi++) {
+    fl.insertAdjacentHTML('beforeend',
+      '<div class="fi2"><div class="fq"><span class="fqt">'+faqs[fi].q+'</span>'
+      +'<svg class="chev" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      +'</div><div class="fa">'+faqs[fi].a+'</div></div>'
+    );
+  }
+  var fqs = document.querySelectorAll('.fq');
+  for (var fqi = 0; fqi < fqs.length; fqi++) {
+    (function(el) {
+      el.addEventListener('click', function() {
+        var ans = el.nextElementSibling;
+        var chev = el.querySelector('.chev');
+        var open = ans.classList.toggle('open');
+        if (chev) chev.classList.toggle('open', open);
+      });
+    })(fqs[fqi]);
+  }
+
+  // ── Documents
+  var docContent = {
+    secci:    { title:'SECCI', html:'' },
+    adequate: { title:'Adequate Explanation', html:'' },
+    notice:   { title:'Notice of Cancellation Rights', html:'' },
+    agreement:{ title:'Credit Agreement', html:'' }
+  };
+  function buildDocContent() {
+    var P = LOAN.fmt(LOAN.principal);
+    var apr = LOAN.apr.toFixed(1);
+    var n = LOAN.termMonths;
+    var emi = LOAN.fmt(LOAN.emi);
+    var total = LOAN.fmt(LOAN.emi * n);
+    var interest = LOAN.fmt(LOAN.emi * n - LOAN.principal);
+    var sd = LOAN.fmtDate(LOAN.startDate);
+    docContent.secci.html = '<h3>Standard European Consumer Credit Information</h3><table class="dtbl"><tr><td>Creditor</td><td>NovaPay Ltd</td></tr><tr><td>Type of credit</td><td>Fixed-term personal loan</td></tr><tr><td>Total amount of credit</td><td>'+P+'</td></tr><tr><td>Duration</td><td>'+n+' months</td></tr><tr><td>Borrowing rate</td><td>'+apr+'% per annum (fixed)</td></tr><tr><td>APR</td><td>'+apr+'% APR</td></tr><tr><td>Monthly repayment</td><td>'+emi+'</td></tr><tr><td>Total amount repayable</td><td>'+total+'</td></tr><tr><td>Total cost of credit</td><td>'+interest+'</td></tr></table><p>You have the right to withdraw from this agreement within 14 days of signing without giving any reason.</p><p style="font-size:10px;color:var(--dim)">NovaPay Ltd · FCA Reg. 900001</p>';
+    docContent.adequate.html = '<h3>Adequate Explanation of Credit Agreement</h3><p>NovaPay is required under CONC 4.2 to provide you with an adequate explanation of this loan.</p><p>We explained the key features including the total amount of credit of '+P+', the duration of '+n+' months, the fixed interest rate of '+apr+'% APR, and the monthly repayment of '+emi+'.</p><p>We explained the cost implications of missing payments, including potential damage to your credit file and additional charges.</p><p style="font-size:10px;color:var(--dim)">Date: '+sd+' · NovaPay Ltd · FCA Reg. 900001</p>';
+    docContent.notice.html = '<h3>Your Right to Cancel</h3><p>You have the right to cancel this credit agreement within 14 days of the day after you receive this notice.</p><p>To cancel, notify NovaPay in writing: info@novapay.co.uk or NovaPay Ltd, Unit 15, Clacton Enterprise Centre.</p><p>If you cancel, you must repay the capital advanced plus interest accrued within 30 days.</p><p style="font-size:10px;color:var(--dim)">Issued: '+sd+' · Loan #28796 · FCA Reg. 900001</p>';
+    docContent.agreement.html = '<h3>Consumer Credit Agreement</h3><table class="dtbl"><tr><td>Agreement number</td><td>#28796</td></tr><tr><td>Borrower</td><td>Sarah Mitchell</td></tr><tr><td>Address</td><td>42 Elm Grove, Brighton, BN2 3FA</td></tr><tr><td>Loan amount</td><td>'+P+'</td></tr><tr><td>APR</td><td>'+apr+'%</td></tr><tr><td>Term</td><td>'+n+' months</td></tr><tr><td>Monthly payment</td><td>'+emi+'</td></tr><tr><td>Start date</td><td>'+sd+'</td></tr><tr><td>Total repayable</td><td>'+total+'</td></tr></table><p>Regulated by the Consumer Credit Act 1974. NovaPay Ltd authorised and regulated by the FCA (Reg. 900001).</p><p style="font-size:10px;color:var(--dim)">Electronically signed by Sarah Mitchell on '+sd+' at 14:32 GMT.</p>';
+  }
+  var docItems = document.querySelectorAll('.docitem');
+  for (var di = 0; di < docItems.length; di++) {
+    (function(el) {
+      el.addEventListener('click', function() {
+        var key = el.getAttribute('data-doc');
+        if (!key || !docContent[key]) return;
+        buildDocContent();
+        document.getElementById('doc-viewer-title').textContent = docContent[key].title;
+        document.getElementById('doc-viewer-content').innerHTML = docContent[key].html;
+        document.getElementById('doc-viewer').classList.add('open');
+      });
+    })(docItems[di]);
+  }
+  document.getElementById('doc-back').addEventListener('click', function() {
+    document.getElementById('doc-viewer').classList.remove('open');
+  });
+
+  // ── Chat
+  var cpanel = document.getElementById('cpanel');
+  var cnb    = document.getElementById('cnb');
+  document.getElementById('cfab').addEventListener('click', function() {
+    var open = cpanel.classList.toggle('open');
+    cnb.style.display = open ? 'none' : 'flex';
+  });
+  document.getElementById('cclose').addEventListener('click', function() {
+    cpanel.classList.remove('open'); cnb.style.display = 'flex';
+  });
+  var qps = document.querySelectorAll('.qp');
+  for (var qi = 0; qi < qps.length; qi++) {
+    (function(el) {
+      el.addEventListener('click', function() {
+        if (!cpanel.classList.contains('open')) { cpanel.classList.add('open'); cnb.style.display='none'; }
+        appendMsg(el.getAttribute('data-msg'), 'user');
+        setTimeout(function() { appendMsg(chatReply(el.getAttribute('data-msg')), 'agent'); }, 900);
+      });
+    })(qps[qi]);
+  }
+  document.getElementById('csend').addEventListener('click', sendMsg);
+  document.getElementById('cinp').addEventListener('keydown', function(e) { if(e.key==='Enter') sendMsg(); });
+  function sendMsg() {
+    var inp = document.getElementById('cinp');
+    var txt = inp.value.replace(/^\s+|\s+$/g,'');
+    if (!txt) return;
+    appendMsg(txt, 'user'); inp.value='';
+    setTimeout(function() { appendMsg(chatReply(txt), 'agent'); }, 900);
+  }
+  function chatReply(msg) {
+    var m = msg.toLowerCase();
+    var bal = outstandingBalance();
+    var next = nextInstalment();
+    if (m.indexOf('balance') > -1) return 'Your current outstanding balance is ' + LOAN.fmt(bal) + '.';
+    if (m.indexOf('next') > -1 || m.indexOf('due') > -1) return next ? 'Your next payment of ' + LOAN.fmt(next.emi) + ' is due on ' + LOAN.shortDate(next.dueDate) + '.' : 'Your loan is fully repaid — well done!';
+    if (m.indexOf('early') > -1 || m.indexOf('repay') > -1) return 'You can repay early with no charges. Your current settlement figure is ' + LOAN.fmt(bal) + '.';
+    if (m.indexOf('struggling') > -1 || m.indexOf('payment') > -1) return 'We understand. You can apply for a payment holiday or payment arrangement in Other Options. Or call us on 0800 123 4567.';
+    var replies = ['Got it — let me check your account.','Sure, I can help with that.','Thanks for reaching out. One moment please.','Is there anything else I can help you with today?'];
+    return replies[Math.floor(Math.random()*replies.length)];
+  }
+  function appendMsg(txt, type) {
+    var msgs = document.getElementById('cmsgs');
+    var now = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    var w = document.createElement('div');
+    w.innerHTML = '<div class="msg '+type+'">'+txt+'</div><div class="mtime'+(type==='user'?' r':'')+'">'+now+'</div>';
+    msgs.appendChild(w); msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  // ═══════════════════════════════════════════════
+  // INIT
+  // ═══════════════════════════════════════════════
+  wireGoto();
+  calcLoan();
+  updateAllUI();
+  previewEngine();
+
+})();
+</script>
+</body>
+</html>
