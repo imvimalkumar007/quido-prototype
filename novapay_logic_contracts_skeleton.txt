@@ -1,0 +1,462 @@
+/**
+ * NovaPay shared logic contracts
+ *
+ * This is not a drop-in replacement yet.
+ * It is the architectural skeleton Claude Code should implement against.
+ */
+
+export const CommandTypes = {
+  LOGIN_CUSTOMER: 'LOGIN_CUSTOMER',
+  SELECT_CUSTOMER: 'SELECT_CUSTOMER',
+  UPDATE_PROFILE: 'UPDATE_PROFILE',
+  UPDATE_CONTACT: 'UPDATE_CONTACT',
+  UPDATE_EMPLOYMENT: 'UPDATE_EMPLOYMENT',
+  UPDATE_AFFORDABILITY: 'UPDATE_AFFORDABILITY',
+  UPDATE_PAYMENT_METHODS: 'UPDATE_PAYMENT_METHODS',
+  RECALCULATE_LOAN: 'RECALCULATE_LOAN',
+  RECORD_PAYMENT: 'RECORD_PAYMENT',
+  APPLY_PAYMENT_HOLIDAY: 'APPLY_PAYMENT_HOLIDAY',
+  APPLY_PAYMENT_ARRANGEMENT: 'APPLY_PAYMENT_ARRANGEMENT',
+  CHANGE_ACCOUNT_STATUS: 'CHANGE_ACCOUNT_STATUS',
+  CHANGE_PAY_DATE: 'CHANGE_PAY_DATE',
+  EXTEND_TERM: 'EXTEND_TERM',
+  WAIVE_INTEREST: 'WAIVE_INTEREST',
+  ADD_OPS_NOTE: 'ADD_OPS_NOTE',
+  ADD_CONTACT_ATTEMPT: 'ADD_CONTACT_ATTEMPT',
+  FLAG_COLLECTIONS: 'FLAG_COLLECTIONS',
+  CLOSE_ACCOUNT: 'CLOSE_ACCOUNT'
+};
+
+export function createEmptyAccount() {
+  return {
+    schemaVersion: 1,
+    accountId: '',
+    storageKey: '',
+    identity: {
+      customerId: '',
+      loanId: '',
+      firstName: '',
+      lastName: '',
+      title: '',
+      initials: '',
+      memberSince: ''
+    },
+    contact: {
+      email: '',
+      phone: '',
+      address: '',
+      residentSince: ''
+    },
+    personal: { dob: '' },
+    employment: {
+      status: '',
+      employer: '',
+      jobTitle: '',
+      employmentStart: '',
+      annualIncome: 0,
+      payFrequency: '',
+      nextPayDate: ''
+    },
+    affordability: {
+      monthlyIncome: 0,
+      housingCosts: 0,
+      transportCosts: 0,
+      livingCosts: 0,
+      otherDebts: 0,
+      disposableIncome: 0
+    },
+    paymentMethods: {
+      card: {
+        type: '',
+        last4: '',
+        expiry: '',
+        collectionDayOfMonth: null,
+        active: false
+      },
+      bank: {
+        accountHolder: '',
+        bankName: '',
+        sortCodeMasked: '',
+        accountNumberMasked: '',
+        fundedToDate: ''
+      }
+    },
+    loan: {
+      contract: {
+        principal: 0,
+        apr: 0,
+        termMonths: 0,
+        startDate: ''
+      },
+      servicing: {
+        accountStatus: 'active',
+        paidCount: 0,
+        paymentHolidayCount: 0,
+        arrangementActive: false,
+        arrangementAmount: null,
+        arrangementMonths: null,
+        termExtensions: 0
+      },
+      snapshot: {
+        emi: 0,
+        totalRepayable: 0,
+        totalInterest: 0,
+        outstandingBalance: 0,
+        totalRepaid: 0,
+        principalPaid: 0,
+        interestPaid: 0,
+        instalmentsRemaining: 0,
+        nextInstalment: null,
+        schedule: []
+      }
+    },
+    documents: {
+      secci: { issuedAt: '' },
+      adequateExplanation: { issuedAt: '' },
+      cancellationNotice: { issuedAt: '' },
+      agreement: { signedAt: '' }
+    },
+    ops: {
+      notes: [],
+      contactLog: [],
+      collectionsFlagged: false
+    },
+    audit: {
+      createdAt: '',
+      updatedAt: '',
+      lastTouchedBy: ''
+    },
+    events: []
+  };
+}
+
+export function normalizeAccount(input) {
+  const base = createEmptyAccount();
+  const merged = structuredClone(base);
+
+  // shallow merge by domain area; extend as implementation matures
+  Object.assign(merged, input || {});
+  merged.identity = { ...base.identity, ...(input?.identity || {}) };
+  merged.contact = { ...base.contact, ...(input?.contact || {}) };
+  merged.personal = { ...base.personal, ...(input?.personal || {}) };
+  merged.employment = { ...base.employment, ...(input?.employment || {}) };
+  merged.affordability = { ...base.affordability, ...(input?.affordability || {}) };
+  merged.paymentMethods = {
+    card: { ...base.paymentMethods.card, ...(input?.paymentMethods?.card || {}) },
+    bank: { ...base.paymentMethods.bank, ...(input?.paymentMethods?.bank || {}) }
+  };
+  merged.loan = {
+    contract: { ...base.loan.contract, ...(input?.loan?.contract || {}) },
+    servicing: { ...base.loan.servicing, ...(input?.loan?.servicing || {}) },
+    snapshot: { ...base.loan.snapshot, ...(input?.loan?.snapshot || {}) }
+  };
+  merged.documents = { ...base.documents, ...(input?.documents || {}) };
+  merged.ops = {
+    notes: input?.ops?.notes || [],
+    contactLog: input?.ops?.contactLog || [],
+    collectionsFlagged: Boolean(input?.ops?.collectionsFlagged)
+  };
+  merged.audit = { ...base.audit, ...(input?.audit || {}) };
+  merged.events = Array.isArray(input?.events) ? input.events : [];
+
+  merged.affordability.disposableIncome =
+    Number(merged.affordability.monthlyIncome || 0)
+    - Number(merged.affordability.housingCosts || 0)
+    - Number(merged.affordability.transportCosts || 0)
+    - Number(merged.affordability.livingCosts || 0)
+    - Number(merged.affordability.otherDebts || 0);
+
+  return merged;
+}
+
+export class AccountRepository {
+  getByStorageKey(_storageKey) { throw new Error('Not implemented'); }
+  save(_account) { throw new Error('Not implemented'); }
+  createFromSeed(_seed) { throw new Error('Not implemented'); }
+  listSeeds() { throw new Error('Not implemented'); }
+}
+
+export class LocalStorageAccountRepository extends AccountRepository {
+  constructor({ storage = window.localStorage, normalizer = normalizeAccount } = {}) {
+    super();
+    this.storage = storage;
+    this.normalizer = normalizer;
+  }
+
+  getByStorageKey(storageKey) {
+    const raw = this.storage.getItem(storageKey);
+    return raw ? this.normalizer(JSON.parse(raw)) : null;
+  }
+
+  save(account) {
+    this.storage.setItem(account.storageKey, JSON.stringify(account));
+    return account;
+  }
+
+  createFromSeed(seed) {
+    const now = new Date().toISOString();
+    const account = this.normalizer({
+      schemaVersion: 1,
+      accountId: seed.id,
+      storageKey: seed.storageKey,
+      identity: {
+        customerId: seed.id,
+        loanId: seed.loanId,
+        firstName: seed.profile.firstName,
+        lastName: seed.profile.lastName,
+        title: seed.profile.title,
+        initials: seed.initials,
+        memberSince: seed.memberSince
+      },
+      contact: {
+        email: seed.profile.email,
+        phone: seed.profile.phone,
+        address: seed.profile.address,
+        residentSince: seed.profile.residentSince
+      },
+      personal: { dob: seed.profile.dob },
+      employment: {
+        status: seed.profile.employmentStatus,
+        employer: seed.profile.employer,
+        jobTitle: seed.profile.jobTitle,
+        employmentStart: seed.profile.employmentStart,
+        annualIncome: Number(String(seed.profile.annualIncome).replace(/[^0-9.]/g, '')) || 0,
+        payFrequency: seed.profile.payFrequency,
+        nextPayDate: seed.profile.nextPayDate
+      },
+      affordability: {
+        monthlyIncome: seed.incomeExpenditure.monthlyIncome,
+        housingCosts: seed.incomeExpenditure.housingCosts,
+        transportCosts: seed.incomeExpenditure.transportCosts,
+        livingCosts: seed.incomeExpenditure.livingCosts,
+        otherDebts: seed.incomeExpenditure.otherDebts
+      },
+      loan: {
+        contract: {
+          principal: seed.loan.principal,
+          apr: seed.loan.apr,
+          termMonths: seed.loan.term,
+          startDate: seed.loan.startDate
+        },
+        servicing: {
+          accountStatus: seed.loan.accountStatus,
+          paidCount: seed.loan.paidCount,
+          paymentHolidayCount: 0,
+          arrangementActive: false,
+          arrangementAmount: null,
+          arrangementMonths: null,
+          termExtensions: 0
+        }
+      },
+      audit: {
+        createdAt: now,
+        updatedAt: now,
+        lastTouchedBy: 'seed'
+      }
+    });
+
+    return this.save(account);
+  }
+}
+
+export class SyncBus {
+  publish(_event) {}
+  subscribe(_handler) { return () => {}; }
+}
+
+export class BroadcastSyncBus extends SyncBus {
+  constructor(channelName = 'proto_sync_v2') {
+    super();
+    this.channel = typeof BroadcastChannel !== 'undefined'
+      ? new BroadcastChannel(channelName)
+      : null;
+  }
+
+  publish(event) {
+    if (this.channel) this.channel.postMessage(event);
+  }
+
+  subscribe(handler) {
+    if (!this.channel) return () => {};
+    const wrapped = ({ data }) => handler(data);
+    this.channel.addEventListener('message', wrapped);
+    return () => this.channel.removeEventListener('message', wrapped);
+  }
+}
+
+export class LoanService {
+  constructor({ engineFactory }) {
+    this.engineFactory = engineFactory;
+  }
+
+  buildSnapshot(account) {
+    const { contract, servicing } = account.loan;
+    const engine = this.engineFactory({
+      principal: contract.principal,
+      apr: contract.apr,
+      termMonths: contract.termMonths,
+      startDate: contract.startDate,
+      paidCount: servicing.paidCount
+    });
+
+    engine.calc();
+
+    return {
+      ...engine.summary(),
+      nextInstalment: engine.nextInstalment(),
+      schedule: engine.schedule()
+    };
+  }
+}
+
+export class DocumentService {
+  buildDocuments(account) {
+    const name = `${account.identity.firstName} ${account.identity.lastName}`.trim();
+    const loanId = account.identity.loanId;
+    const address = account.contact.address;
+    const snapshot = account.loan.snapshot;
+
+    return {
+      agreement: {
+        title: `Credit Agreement — Loan #${loanId}`,
+        borrowerName: name,
+        borrowerAddress: address,
+        loanAmount: snapshot.principal,
+        apr: snapshot.apr,
+        termMonths: snapshot.termMonths,
+        totalRepayable: snapshot.totalRepayable
+      }
+    };
+  }
+}
+
+export function appendEvent(account, { type, payload = {}, actor = 'system' }) {
+  const now = new Date().toISOString();
+  account.events.push({
+    id: `${type}-${Date.now()}`,
+    type,
+    payload,
+    actor,
+    timestamp: now
+  });
+  account.audit.updatedAt = now;
+  account.audit.lastTouchedBy = actor;
+  return account;
+}
+
+export function createAccountStore({ repository, syncBus, loanService }) {
+  let state = null;
+  const listeners = new Set();
+
+  function emit() {
+    listeners.forEach((listener) => listener(state));
+  }
+
+  function persistAndBroadcast(type, actor, payload = {}) {
+    state = normalizeAccount(state);
+    state.loan.snapshot = loanService.buildSnapshot(state);
+    appendEvent(state, { type, payload, actor });
+    repository.save(state);
+    syncBus.publish({
+      accountId: state.accountId,
+      storageKey: state.storageKey,
+      type,
+      actor,
+      timestamp: state.audit.updatedAt
+    });
+    emit();
+  }
+
+  return {
+    load(storageKey, seed) {
+      state = repository.getByStorageKey(storageKey) || repository.createFromSeed(seed);
+      state.loan.snapshot = loanService.buildSnapshot(state);
+      repository.save(state);
+      emit();
+      return state;
+    },
+
+    getState() {
+      return state;
+    },
+
+    subscribe(listener) {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    },
+
+    dispatch(command) {
+      if (!state) throw new Error('Store not loaded');
+
+      switch (command.type) {
+        case CommandTypes.UPDATE_PROFILE:
+          state.identity = { ...state.identity, ...(command.payload.identity || {}) };
+          state.contact = { ...state.contact, ...(command.payload.contact || {}) };
+          state.personal = { ...state.personal, ...(command.payload.personal || {}) };
+          persistAndBroadcast(command.type, command.actor, command.payload);
+          break;
+
+        case CommandTypes.UPDATE_EMPLOYMENT:
+          state.employment = { ...state.employment, ...command.payload };
+          persistAndBroadcast(command.type, command.actor, command.payload);
+          break;
+
+        case CommandTypes.UPDATE_AFFORDABILITY:
+          state.affordability = {
+            ...state.affordability,
+            ...command.payload
+          };
+          state.affordability.disposableIncome =
+            Number(state.affordability.monthlyIncome || 0)
+            - Number(state.affordability.housingCosts || 0)
+            - Number(state.affordability.transportCosts || 0)
+            - Number(state.affordability.livingCosts || 0)
+            - Number(state.affordability.otherDebts || 0);
+          persistAndBroadcast(command.type, command.actor, command.payload);
+          break;
+
+        case CommandTypes.UPDATE_PAYMENT_METHODS:
+          state.paymentMethods = {
+            card: { ...state.paymentMethods.card, ...(command.payload.card || {}) },
+            bank: { ...state.paymentMethods.bank, ...(command.payload.bank || {}) }
+          };
+          persistAndBroadcast(command.type, command.actor, command.payload);
+          break;
+
+        case CommandTypes.RECALCULATE_LOAN:
+          state.loan.contract = { ...state.loan.contract, ...(command.payload.contract || {}) };
+          state.loan.servicing = { ...state.loan.servicing, ...(command.payload.servicing || {}) };
+          persistAndBroadcast(command.type, command.actor, command.payload);
+          break;
+
+        case CommandTypes.CHANGE_ACCOUNT_STATUS:
+        case CommandTypes.CLOSE_ACCOUNT:
+          state.loan.servicing.accountStatus =
+            command.type === CommandTypes.CLOSE_ACCOUNT ? 'terminated' : command.payload.status;
+          persistAndBroadcast(command.type, command.actor, command.payload);
+          break;
+
+        case CommandTypes.ADD_OPS_NOTE:
+          state.ops.notes.push({
+            text: command.payload.text,
+            agent: command.actor,
+            timestamp: new Date().toISOString()
+          });
+          persistAndBroadcast(command.type, command.actor, command.payload);
+          break;
+
+        case CommandTypes.ADD_CONTACT_ATTEMPT:
+          state.ops.contactLog.push({
+            ...command.payload,
+            agent: command.actor,
+            timestamp: new Date().toISOString()
+          });
+          persistAndBroadcast(command.type, command.actor, command.payload);
+          break;
+
+        default:
+          throw new Error(`Unsupported command: ${command.type}`);
+      }
+    }
+  };
+}

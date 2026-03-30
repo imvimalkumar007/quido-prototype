@@ -14,30 +14,25 @@
   --ok-bg:#ecfdf5;--ok-text:#065f46;--err:#dc2626;
   --r:12px;--r-lg:16px;--r-xl:20px
 }
-body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-start;padding:28px 16px;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif}
-.iphone{width:393px;height:852px;border-radius:54px;overflow:hidden;position:relative;background:var(--bg);box-shadow:0 0 0 2px #b0b3b8,0 0 0 4px #8a8d91,0 0 0 6px #6e7175,0 0 0 8px #555,0 28px 80px rgba(0,0,0,0.6)}
-.iphone::before{content:'';position:absolute;left:-10px;top:120px;width:4px;height:36px;background:#6e7175;border-radius:2px 0 0 2px;box-shadow:0 48px 0 #6e7175,0 90px 0 #6e7175;z-index:20}
-.iphone::after{content:'';position:absolute;right:-10px;top:160px;width:4px;height:64px;background:#6e7175;border-radius:0 2px 2px 0;z-index:20}
-.di{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#000;border-radius:20px;z-index:30}
-.sb{position:absolute;top:0;left:0;right:0;height:54px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 8px;z-index:25;pointer-events:none}
-.sb-t{font-size:15px;font-weight:700;color:var(--text)}
-.sb-i{display:flex;align-items:center;gap:6px}
-.screen{position:absolute;top:0;left:0;right:0;bottom:0;display:none;flex-direction:column;background:var(--bg)}
+html,body{height:100%;margin:0;padding:0}
+body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif}
+#app{height:100%;position:relative}
+.screen{height:100%;display:none;flex-direction:column;background:var(--bg)}
 .screen.active{display:flex}
-.si{display:flex;flex-direction:column;flex:1;overflow:hidden;margin-top:54px;height:calc(100% - 54px)}
-.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.si{display:flex;flex-direction:column;flex:1;overflow:hidden}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:8px}
 .scroll::-webkit-scrollbar{display:none}
-.hb{height:34px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.hi{width:134px;height:5px;background:#1a1a2e;border-radius:3px;opacity:.18}
-.wb{background:var(--warn-bg);border-bottom:1px solid var(--warn-border);padding:10px 16px;font-size:10.5px;color:var(--warn-text);line-height:1.5;flex-shrink:0;text-align:center}
+.wb{background:var(--warn-bg);border-bottom:1px solid var(--warn-border);padding:7px 16px;font-size:10.5px;color:var(--warn-text);line-height:1.5;flex-shrink:0;text-align:center}
 .wb a{color:var(--blue);font-weight:500}
-.hdr{background:var(--surface);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
+.hdr{background:var(--surface);padding:4px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
 .logo{display:flex;align-items:center;gap:9px}
 .lm{width:36px;height:36px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:10px;display:flex;align-items:center;justify-content:center}
 .lt{font-size:19px;font-weight:800;color:var(--blue);letter-spacing:-.3px}
 .mbtn{width:36px;height:36px;background:var(--bg);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;border:1px solid var(--border)}
 .mbtn span{width:16px;height:1.8px;background:var(--muted);border-radius:2px;display:block}
-.hero{background:linear-gradient(160deg,#1a56db 0%,#0d3b9e 55%,#07235e 100%);padding:20px 20px 28px;position:relative;overflow:hidden;flex-shrink:0}
+.mbtn-w{width:32px;height:32px;background:rgba(255,255,255,0.15);border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;border:1px solid rgba(255,255,255,0.25)}
+.mbtn-w span{width:14px;height:1.8px;background:#fff;border-radius:2px;display:block}
+.hero{background:linear-gradient(160deg,#1a56db 0%,#0d3b9e 55%,#07235e 100%);padding:20px 20px 28px;position:relative;overflow:hidden;flex-shrink:0;margin:0 16px 12px;border-radius:var(--r-lg)}
 .hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,0.05)}
 .hero::after{content:'';position:absolute;bottom:-40px;left:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.04)}
 .hm{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;position:relative}
@@ -95,7 +90,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
 .ss{font-size:11px;color:var(--muted);margin:2px 0 0 0;padding:0}
 .bl .sl{color:#fff}
 .bl .ss{color:rgba(255,255,255,0.7)}
-.ph2{background:linear-gradient(135deg,var(--blue),var(--blue-dark));padding:14px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.ph2{background:linear-gradient(135deg,var(--blue),var(--blue-dark));padding:6px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0}
 .bb{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:9px;padding:7px 12px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;flex-shrink:0}
 .pt{color:#fff;font-size:15px;font-weight:700}
 .steps{display:flex;align-items:center;padding:14px 20px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
@@ -106,7 +101,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
 .sl2{font-size:10px;color:var(--dim)}
 .sl2.cur{color:var(--blue);font-weight:600}
 .sline{flex:1;height:1px;background:var(--border);margin:0 6px}
-.pb{padding:20px}
+.pb{padding:16px}
 .fl{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
 .fi{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;color:var(--text);outline:none;background:var(--surface);margin-bottom:14px}
 .fi:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,219,0.1)}
@@ -176,11 +171,11 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
 .doi{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
 .don{font-size:12px;font-weight:600;color:var(--text)}
 .dos{font-size:10px;color:var(--muted);margin-top:1px}
-.moverlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0);z-index:60;display:none}
+.moverlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0);z-index:60;display:none}
 .moverlay.open{display:block;background:rgba(0,0,0,0.45)}
 .mdrawer{position:absolute;top:0;right:0;bottom:0;width:300px;background:var(--surface);transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;overflow:hidden}
 .moverlay.open .mdrawer{transform:translateX(0)}
-.mhdr{background:linear-gradient(135deg,var(--blue),var(--blue-dark));padding:54px 20px 20px;display:flex;align-items:flex-end;justify-content:space-between}
+.mhdr{background:linear-gradient(135deg,var(--blue),var(--blue-dark));padding:20px;display:flex;align-items:flex-end;justify-content:space-between}
 .mun{font-size:16px;font-weight:700;color:#fff}
 .mul{font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px}
 .mcl{width:32px;height:32px;background:rgba(255,255,255,0.15);border:none;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
@@ -191,15 +186,15 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
 .mii{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .mit{font-size:13px;font-weight:600;color:var(--text)}
 .mis{font-size:11px;color:var(--muted);margin-top:1px}
-.em{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);z-index:90;display:none;align-items:flex-end}
+.em{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);z-index:90;display:none;align-items:flex-end}
 .em.open{display:flex}
-.emb{background:var(--surface);border-radius:var(--r-xl) var(--r-xl) 0 0;padding:20px;width:100%;max-height:80%;overflow-y:auto}
+.emb{background:var(--surface);border-radius:var(--r-xl) var(--r-xl) 0 0;padding:20px;width:100%;max-width:600px;margin:0 auto;max-height:80%;overflow-y:auto}
 .emt{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px}
 .emi{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;color:var(--text);outline:none;background:var(--bg);margin-bottom:0}
 .emi:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,219,0.1)}
 .ems{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;color:var(--text);outline:none;background:var(--bg);cursor:pointer;margin-bottom:0}
 .emr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-.ihdr{background:var(--surface);padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);flex-shrink:0}
+.ihdr{background:var(--surface);padding:4px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);flex-shrink:0}
 .itl{font-size:15px;font-weight:700;color:var(--text);flex:1}
 .bd{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:6px 11px;color:var(--blue);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;flex-shrink:0}
 .pav{width:64px;height:64px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fff;margin:0 auto 8px}
@@ -232,7 +227,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
 .doct{font-size:13px;font-weight:600;color:var(--text)}
 .docs{font-size:11px;color:var(--muted);margin-top:1px}
 .docbdg{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;margin-top:3px;display:inline-block}
-.dv2{position:absolute;top:0;left:0;right:0;bottom:0;background:var(--surface);z-index:5;display:none;flex-direction:column}
+.dv2{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--surface);z-index:5;display:none;flex-direction:column}
 .dv2.open{display:flex}
 .dcon{flex:1;overflow-y:auto;padding:20px}
 .dcon h3{font-size:15px;font-weight:700;color:var(--text);margin-bottom:12px}
@@ -241,7 +236,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
 .dtbl td{padding:7px 10px;border:1px solid var(--border)}
 .dtbl td:first-child{color:var(--muted);width:50%}
 .dtbl td:last-child{font-weight:600;color:var(--text)}
-.ft{background:var(--surface);padding:20px 0 0}
+.ft{background:var(--surface);padding:20px 0 16px;margin:0 16px 16px;border-radius:var(--r-lg);overflow:hidden}
 .ftg{font-size:16px;font-weight:800;color:var(--blue);text-align:center;margin-bottom:28px;line-height:1.3;padding:8px 20px 0}
 .fgrid{width:100%;border-collapse:collapse;margin-bottom:16px}
 .fgrid td{font-size:11px;padding:3px 0;vertical-align:top;width:50%}
@@ -249,9 +244,9 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
 .fgrid td:last-child{padding-left:16px}
 .fgrid td a{color:var(--blue);text-decoration:none;display:block}
 .fleg{font-size:9.5px;color:var(--dim);line-height:1.6;border-top:1px solid var(--border);padding:14px 20px 20px}
-.cfab{position:absolute;bottom:52px;right:20px;width:50px;height:50px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:50;border:none}
+.cfab{position:fixed;bottom:20px;right:20px;width:50px;height:50px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:50;border:none}
 .cnb{position:absolute;top:-2px;right:-2px;width:18px;height:18px;background:#ef4444;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff}
-.cpanel{position:absolute;bottom:112px;right:12px;width:312px;background:var(--surface);border-radius:var(--r-xl);box-shadow:0 12px 40px rgba(0,0,0,0.18);z-index:49;overflow:hidden;display:none;flex-direction:column;height:380px}
+.cpanel{position:fixed;bottom:80px;right:12px;width:320px;background:var(--surface);border-radius:var(--r-xl);box-shadow:0 12px 40px rgba(0,0,0,0.18);z-index:49;overflow:hidden;display:none;flex-direction:column;height:420px}
 .cpanel.open{display:flex}
 .ctop{background:linear-gradient(135deg,var(--blue),var(--blue-dark));padding:12px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0}
 .cav{width:34px;height:34px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
@@ -279,19 +274,39 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
 .exp-h{color:var(--muted)}
 .tot-row{background:#f0fdf4}
 /* Loan engine panel styles removed for customer-facing build */
+
+/* ── Messages screen ────────────────────────────────── */
+.msg-thread{background:var(--surface);border-radius:var(--r-lg);margin-bottom:10px;overflow:hidden;box-shadow:0 1px 4px rgba(15,24,40,0.06),0 4px 16px rgba(15,24,40,0.04);cursor:pointer;transition:background .15s}
+.msg-thread:hover{background:#f8faff}
+.msg-thread-inner{padding:14px 16px;display:flex;align-items:flex-start;gap:12px}
+.msg-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.msg-body{flex:1;min-width:0}
+.msg-subj{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg-bold{font-weight:700}
+.msg-prev{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg-date{font-size:10px;color:var(--dim);margin-top:2px}
+.msg-dot{width:8px;height:8px;background:var(--blue);border-radius:50%;margin-top:3px}
+/* ── Responsive layout ───────────────────────────────── */
+@media (min-width: 768px) {
+  body{background:#dce3ef}
+  /* Centre scrollable content; nav (.hdr) and warning (.wb) remain full-width
+     as they are flex siblings above .scroll inside .si */
+  .scroll{max-width:600px;margin-left:auto;margin-right:auto;width:100%}
+  /* Wider menu drawer */
+  .mdrawer{width:380px}
+  /* Chat panel */
+  .cpanel{right:24px;width:360px}
+  .cfab{right:24px}
+}
+@media (min-width: 1024px) {
+  .scroll{max-width:540px}
+  .cpanel{right:32px;bottom:88px;width:380px;height:460px}
+  .cfab{right:32px;bottom:24px}
+}
 </style>
 </head>
 <body>
-<div class="iphone" id="app">
-  <div class="di"></div>
-  <div class="sb">
-    <span class="sb-t">9:41</span>
-    <div class="sb-i">
-      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><rect x="0" y="4" width="3" height="8" rx="1" fill="#0f1828"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1" fill="#0f1828"/><rect x="9" y="0.5" width="3" height="11.5" rx="1" fill="#0f1828"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" fill="#0f1828" opacity=".3"/></svg>
-      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 2.5C10.2 2.5 12.2 3.4 13.6 4.9L15 3.4C13.2 1.3 10.7 0 8 0S2.8 1.3 1 3.4L2.4 4.9C3.8 3.4 5.8 2.5 8 2.5z" fill="#0f1828"/><path d="M8 5.5C9.4 5.5 10.7 6.1 11.6 7L13 5.5C11.7 4.1 9.9 3.2 8 3.2S4.3 4.1 3 5.5L4.4 7C5.3 6.1 6.6 5.5 8 5.5z" fill="#0f1828"/><circle cx="8" cy="10" r="2" fill="#0f1828"/></svg>
-      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#0f1828" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#0f1828"/><path d="M23 4v4a2 2 0 000-4z" fill="#0f1828" opacity=".4"/></svg>
-    </div>
-  </div>
+<div id="app">
 
   <!-- CHAT FAB -->
   <button class="cfab" id="cfab"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 4a1 1 0 011-1h14a1 1 0 011 1v10a1 1 0 01-1 1H12.5l-4 3.5V15H4a1 1 0 01-1-1V4z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7.5" cy="9.5" r="1" fill="#fff"/><circle cx="11" cy="9.5" r="1" fill="#fff"/><circle cx="14.5" cy="9.5" r="1" fill="#fff"/></svg><div class="cnb" id="cnb">1</div></button>
@@ -310,12 +325,13 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
   <!-- MENU -->
   <div class="moverlay" id="moverlay">
     <div class="mdrawer">
-      <div class="mhdr"><div><div class="mun">Sarah Mitchell</div><div class="mul">Loan #28796 · Active</div></div><button class="mcl" id="mclose"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
+      <div class="mhdr"><div><div class="mun" id="cust-menu-name">Sarah Mitchell</div><div class="mul" id="cust-menu-loan">Loan #28796 · Active</div></div><button class="mcl" id="mclose"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
       <div class="mitems">
         <div class="mitem" data-goto="s-profile"><div class="mii" style="background:#eff6ff"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3" stroke="#1a56db" stroke-width="1.4"/><path d="M3 15c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#1a56db" stroke-width="1.4" stroke-linecap="round"/></svg></div><div><div class="mit">Profile</div><div class="mis">Personal details &amp; contact info</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:auto;flex-shrink:0"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="mitem" data-goto="s-payment-details"><div class="mii" style="background:#ecfdf5"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="14" height="11" rx="2" stroke="#059669" stroke-width="1.4"/><path d="M2 8h14M5 12h3" stroke="#059669" stroke-width="1.4" stroke-linecap="round"/></svg></div><div><div class="mit">Payment Details</div><div class="mis">Cards &amp; bank account</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:auto;flex-shrink:0"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="mitem" data-goto="s-statement"><div class="mii" style="background:#fffbeb"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h7l4 4v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#d97706" stroke-width="1.3"/><path d="M11 2v4h4M6 10h6M6 13h4" stroke="#d97706" stroke-width="1.3" stroke-linecap="round"/></svg></div><div><div class="mit">Statement of Account</div><div class="mis">Full payment history</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:auto;flex-shrink:0"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <div class="mitem" data-goto="s-documents"><div class="mii" style="background:#f3e5f5"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h7l4 4v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#7b1fa2" stroke-width="1.3"/><path d="M11 2v4h4" stroke="#7b1fa2" stroke-width="1.3"/></svg></div><div><div class="mit">Documents</div><div class="mis">Agreements, notices &amp; SECCI</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:auto;flex-shrink:0"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="mitem" id="menu-logout"><div class="mii" style="background:#fef2f2"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 9h8M12 6l3 3-3 3" stroke="#dc2626" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 4H4a1 1 0 00-1 1v8a1 1 0 001 1h6" stroke="#dc2626" stroke-width="1.4" stroke-linecap="round"/></svg></div><div><div class="mit" style="color:#dc2626">Log out</div><div class="mis">Switch to a different account</div></div></div>
       </div>
     </div>
   </div>
@@ -332,11 +348,53 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
     </div>
   </div>
 
+  <!-- ══ LOGIN ══ -->
+  <div id="s-login" class="screen active">
+    <div class="si" style="background:linear-gradient(180deg,#eef2fa 0%,#dde5f4 100%);justify-content:center">
+      <div class="scroll" style="padding:40px 20px 36px;display:flex;flex-direction:column;align-items:center">
+        <div style="text-align:center;margin-bottom:32px">
+          <div style="width:68px;height:68px;background:linear-gradient(135deg,#1a56db,#0d3b9e);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 8px 28px rgba(26,86,219,.35)">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6.5v11L12 22l8-4.5v-11L12 2z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 2v20M4 6.5l8 4.5 8-4.5" stroke="rgba(255,255,255,.45)" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          </div>
+          <div style="font-size:28px;font-weight:800;color:#1a56db;letter-spacing:-.5px">NovaPay</div>
+          <div style="font-size:13px;color:#64748b;margin-top:5px">Sign in to manage your loan</div>
+        </div>
+        <div style="background:#fff;border-radius:20px;padding:24px 20px;width:100%;box-shadow:0 4px 28px rgba(15,24,40,.1);border:1px solid #e2e8f5;margin-bottom:20px">
+          <div style="margin-bottom:14px">
+            <div style="font-size:10px;font-weight:700;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">Email address</div>
+            <input id="ln-email" type="email" placeholder="your@email.co.uk" autocomplete="email"
+              style="width:100%;padding:11px 13px;border:1.5px solid #e2e8f5;border-radius:10px;font-size:14px;background:#f8fafc;color:#0f1828;outline:none;transition:border-color .15s;-webkit-appearance:none"
+              onfocus="this.style.borderColor='#1a56db';this.style.background='#fff'" onblur="this.style.borderColor='#e2e8f5';this.style.background='#f8fafc'"
+              onkeydown="if(event.key==='Enter')document.getElementById('ln-pin').focus()">
+          </div>
+          <div style="margin-bottom:20px">
+            <div style="font-size:10px;font-weight:700;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">4-digit PIN</div>
+            <input id="ln-pin" type="password" placeholder="••••" maxlength="4" inputmode="numeric"
+              style="width:100%;padding:11px 13px;border:1.5px solid #e2e8f5;border-radius:10px;font-size:20px;letter-spacing:.4em;background:#f8fafc;color:#0f1828;outline:none;transition:border-color .15s;-webkit-appearance:none"
+              onfocus="this.style.borderColor='#1a56db';this.style.background='#fff'" onblur="this.style.borderColor='#e2e8f5';this.style.background='#f8fafc'"
+              onkeydown="if(event.key==='Enter')attemptLogin()">
+          </div>
+          <div id="ln-error" style="display:none;padding:9px 12px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;color:#dc2626;font-size:12px;margin-bottom:14px"></div>
+          <button onclick="attemptLogin()"
+            style="width:100%;background:linear-gradient(135deg,#1a56db,#0d3b9e);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(26,86,219,.35);transition:transform .1s"
+            onmousedown="this.style.transform='scale(.98)'" onmouseup="this.style.transform=''">Sign in</button>
+        </div>
+        <div style="width:100%">
+          <div style="font-size:10px;font-weight:700;color:#94a3b8;text-align:center;margin-bottom:11px;text-transform:uppercase;letter-spacing:.08em">Demo accounts — click to fill</div>
+          <div style="display:flex;flex-direction:column;gap:7px" id="ln-demos"></div>
+        </div>
+        <div style="margin-top:28px;font-size:10.5px;color:#94a3b8;text-align:center;line-height:1.7;padding:0 8px">
+          NovaPay Ltd · Authorised &amp; Regulated by the Financial Conduct Authority · FCA No. 900001
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ══ DASHBOARD ══ -->
-  <div id="s-home" class="screen active">
+  <div id="s-home" class="screen">
     <div class="si">
       <div class="wb">⚠ Warning: Late repayments can cause serious money problems. For help, visit <a href="#">moneyhelper.org.uk</a>. You can compare our loans at <a href="#">All the Lenders</a>.</div>
-      <div class="hdr"><div class="logo"><div class="lm"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4.5 4.5 7.5-9" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="lt">NovaPay</span></div><div class="mbtn" id="menu-open"><span></span><span></span><span></span></div></div>
+      <div class="hdr"><div class="logo"><div class="lm"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4.5 4.5 7.5-9" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="lt">NovaPay</span></div><div class="mbtn m-open" id="menu-open"><span></span><span></span><span></span></div></div>
       <div class="scroll">
         <div class="hero">
           <div class="hm"><div class="hmi"><span>Loan ID: </span><strong>28796</strong></div><div class="sp"><div class="sd"></div>Active</div></div>
@@ -355,7 +413,6 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
         <button class="stab bl" style="margin-bottom:16px"><div class="si-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#fff" stroke-width="1.4"/><path d="M9 5.5v4M9 11.5v.5" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="st"><div class="sl">Make a complaint</div><div class="ss">complaints@novapay.co.uk</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <div class="ft"><div class="ftg">Flexible loans.<br>Straightforward repayments.</div><div style="padding:0 20px"><table class="fgrid"><tr><td><a href="#">Loan</a></td><td><a href="#">About Us</a></td></tr><tr><td><a href="#">FAQs</a></td><td><a href="#">Careers</a></td></tr><tr><td><a href="#">Beware of Loan Sharks</a></td><td><a href="#">Terms of Use</a></td></tr><tr><td><a href="#">Contact Us</a></td><td><a href="#">Privacy Policy</a></td></tr><tr><td><a href="#">File a Complaint</a></td><td><a href="#">Fraud Disclaimer</a></td></tr><tr><td><a href="#">Insights</a></td><td><a href="#">Cookies Policy</a></td></tr></table></div><div class="fleg">We are a lender and may pay commissions to credit brokers or other intermediaries. This commission does not affect the total cost of your loan.<br><br><strong>Responsible Lending:</strong> Take a moment to decide if NovaPay is right for you. Short term loans are an expensive form of borrowing.<br><br>NovaPay Ltd. Authorised and Regulated by the Financial Conduct Authority. Registration Number 900001.</div></div>
       </div>
-      <div class="hb"><div class="hi"></div></div>
     </div>
   </div>
 
@@ -363,7 +420,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
   <div id="s-options" class="screen">
     <div class="si" style="overflow:hidden">
       <div class="wb">⚠ Warning: Late repayments can cause serious money problems. For help, visit <a href="#">moneyhelper.org.uk</a>.</div>
-      <div class="hdr"><div class="logo"><div class="lm"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4.5 4.5 7.5-9" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="lt">NovaPay</span></div><div class="mbtn" id="menu-open-opts"><span></span><span></span><span></span></div></div>
+      <div class="hdr"><div class="logo"><div class="lm"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4.5 4.5 7.5-9" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="lt">NovaPay</span></div><div style="display:flex;align-items:center;gap:8px"><button class="bd" data-goto="s-home">← Back</button><div class="mbtn m-open"><span></span><span></span><span></span></div></div></div>
       <div class="scroll" style="flex:1;overflow-y:auto">
         <div class="hero">
           <div class="hm"><div class="hmi"><span>Loan ID: </span><strong>28796</strong></div><div class="sp"><div class="sd"></div>Active</div></div>
@@ -384,13 +441,55 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
             </div>
           </div>
           <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:16px 0 10px">Need more time?</div>
-          <div class="hc"><div class="hct" data-help="ph"><div class="hcic" style="background:rgba(245,158,11,0.12)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#d97706" stroke-width="1.4"/><path d="M9 5v4l2.5 2.5" stroke="#d97706" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="htx">              <div class="htit">Payment holiday</div><div class="hsu">Pause up to 3 months · eligible from 1 day before due date</div></div><svg class="chev" id="ph-chev" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hbd" id="ph-body">              <p class="hde">A payment holiday lets you pause your payments for 1–3 months if you're experiencing short-term financial difficulty. Interest continues to accrue and deferred instalments are added to the end of your loan.</p><div class="hn wn"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#92400e" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#92400e" stroke-width="1.2" stroke-linecap="round"/></svg>Interest will continue to accrue during a payment holiday. This may increase the total amount you repay.</div><div id="ph-status"></div><button class="hbtn am" id="ph-btn">Apply payment holiday</button></div></div>
-          <div class="hc"><div class="hct" data-help="pa"><div class="hcic" style="background:rgba(26,86,219,0.1)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="12" rx="2" stroke="#1a56db" stroke-width="1.4"/><path d="M2 7h14M6 2v2M12 2v2M5 11h4M5 13.5h2" stroke="#1a56db" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="htx"><div class="htit">Payment arrangement</div><div class="hsu" id="pa-sub-label">Repay your balance interest-free</div></div><svg class="chev" id="pa-chev" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hbd" id="pa-body"><p class="hde" id="pa-desc">We'll freeze interest immediately and spread your outstanding balance over 18 months. No further interest will accrue.</p><div class="hn bn"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#1a56db" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#1a56db" stroke-width="1.2" stroke-linecap="round"/></svg><span id="pa-notice">Interest stops accruing immediately. New monthly payment will be calculated on confirmation.</span></div><div id="pa-status"></div><button class="hbtn bm" id="pa-btn">Set up payment arrangement</button></div></div>
-          <div class="hc"><div class="hct" data-help="dh"><div class="hcic" style="background:rgba(16,185,129,0.1)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#059669" stroke-width="1.4"/><path d="M9 6.5a1.5 1.5 0 011 2.6c-.5.5-.8.9-.8 1.3v.4M9 12v.5" stroke="#059669" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="htx"><div class="htit">Free debt advice</div><div class="hsu">Independent support from specialist organisations</div></div><svg class="chev" id="dh-chev" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hbd" id="dh-body"><p class="hde">Free and confidential advice from organisations completely independent of NovaPay.</p><div class="do"><div class="doi" style="background:#e8f5e9;color:#2e7d32">CA</div><div><div class="don">Citizens Advice</div><div class="dos">Free, confidential advice on debt and money</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:auto;flex-shrink:0"><path d="M3 7h8M7.5 3.5L11 7l-3.5 3.5" stroke="#94a3b8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="do"><div class="doi" style="background:#e3f2fd;color:#1565c0">SC</div><div><div class="don">StepChange</div><div class="dos">Free debt management plans and support</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:auto;flex-shrink:0"><path d="M3 7h8M7.5 3.5L11 7l-3.5 3.5" stroke="#94a3b8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="do"><div class="doi" style="background:#fce4ec;color:#c62828">ND</div><div><div class="don">National Debtline</div><div class="dos">Free helpline and online debt advice</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:auto;flex-shrink:0"><path d="M3 7h8M7.5 3.5L11 7l-3.5 3.5" stroke="#94a3b8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="do"><div class="doi" style="background:#f3e5f5;color:#6a1b9a">MH</div><div><div class="don">MoneyHelper</div><div class="dos">Government-backed money and debt guidance</div></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:auto;flex-shrink:0"><path d="M3 7h8M7.5 3.5L11 7l-3.5 3.5" stroke="#94a3b8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></div>
+          <div class="hc"><div class="hct" data-help="ph"><div class="hcic" style="background:rgba(245,158,11,0.12)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#d97706" stroke-width="1.4"/><path d="M9 5v4l2.5 2.5" stroke="#d97706" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="htx">              <div class="htit">Payment holiday</div><div class="hsu">Pause your payment for a month</div></div><svg class="chev" id="ph-chev" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hbd" id="ph-body">
+              <!-- ineligible -->
+              <div id="ph-step-ineligible" style="display:none"><div class="hn wn" style="align-items:flex-start"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#92400e" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#92400e" stroke-width="1.2" stroke-linecap="round"/></svg><span id="ph-ineligible-msg"></span></div></div>
+              <!-- triage -->
+              <div id="ph-step-triage" style="display:none">
+                <p class="hde">A payment holiday pauses your next payment. Interest continues to accrue and a new instalment is added to the end of your loan.</p>
+                <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px">Are you in short-term or long-term financial difficulty?</div>
+
+                <button class="hbtn am" id="ph-shortterm-btn">Short-term (up to 30 days)</button>
+                <button class="hbtn bm" id="ph-longterm-btn" style="margin-top:8px">Long-term (more than 30 days)</button>
+              </div>
+              <!-- reason for difficulty -->
+              <div id="ph-step-reason" style="display:none"></div>
+              <!-- credit report impact -->
+              <div id="ph-step-credit" style="display:none"></div>
+              <!-- long-term: redirect to contact -->
+              <div id="ph-step-longterm" style="display:none">
+                <p class="hde">Based on your situation, a payment holiday may not be enough. Our team can discuss a more tailored solution with you.</p>
+                <div class="hn bn" style="align-items:flex-start;margin-bottom:12px"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#1a56db" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#1a56db" stroke-width="1.2" stroke-linecap="round"/></svg><span>We recommend speaking with us so we can find the best option for your circumstances.</span></div>
+                <button class="hbtn bm" id="ph-chat-btn">Chat with Nova now</button>
+                <button class="hbtn am" style="margin-top:8px">Call us: 0800 123 4567</button>
+                <button class="hbtn" style="background:var(--surface);color:var(--blue);border:1.5px solid var(--blue);margin-top:8px">Write to us: info@novapay.co.uk</button>
+                <button class="hbtn" id="ph-back-from-longterm" style="background:var(--bg);color:var(--muted);border:1.5px solid var(--border);margin-top:8px">Back</button>
+              </div>
+              <!-- confirm -->
+              <div id="ph-step-confirm" style="display:none">
+                <p class="hde">Please review what will happen if you take a payment holiday:</p>
+                <div id="ph-confirm-summary"></div>
+                <div class="hn wn" style="align-items:flex-start;margin-bottom:12px"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#92400e" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#92400e" stroke-width="1.2" stroke-linecap="round"/></svg><span>Interest will continue to accrue during your holiday, increasing the total you repay.</span></div>
+                <button class="hbtn am" id="ph-confirm-btn">Confirm payment holiday</button>
+                <button class="hbtn" id="ph-back-from-confirm" style="background:var(--bg);color:var(--muted);border:1.5px solid var(--border);margin-top:8px">Back</button>
+              </div>
+              <!-- applied -->
+              <div id="ph-step-applied" style="display:none"></div>
+            </div></div>
+          <div class="hc"><div class="hct" data-help="pa"><div class="hcic" style="background:rgba(26,86,219,0.1)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="12" rx="2" stroke="#1a56db" stroke-width="1.4"/><path d="M2 7h14M6 2v2M12 2v2M5 11h4M5 13.5h2" stroke="#1a56db" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="htx"><div class="htit">Payment arrangement</div><div class="hsu" id="pa-sub-label">Repay your balance interest-free</div></div><svg class="chev" id="pa-chev" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hbd" id="pa-body">
+              <div id="pa-step-ineligible" style="display:none"><div class="hn wn" style="align-items:flex-start"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#92400e" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#92400e" stroke-width="1.2" stroke-linecap="round"/></svg><span id="pa-ineligible-msg"></span></div></div>
+              <div id="pa-step-reason"  style="display:none"></div>
+              <div id="pa-step-iae"     style="display:none"></div>
+              <div id="pa-step-amount"  style="display:none"></div>
+              <div id="pa-step-contact" style="display:none"></div>
+              <div id="pa-step-credit"  style="display:none"></div>
+              <div id="pa-step-review"  style="display:none"></div>
+              <div id="pa-step-applied" style="display:none"></div>
+            </div></div>
+          <div class="hc"><div class="hct" data-help="eds"><div class="hcic" style="background:rgba(124,58,237,0.1)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1.5L2.25 4.5V9c0 4.05 2.925 7.845 6.75 8.25C12.825 16.845 15.75 13.05 15.75 9V4.5L9 1.5z" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.75 9l1.5 1.5 3-3" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="htx"><div class="htit">Existing debt solution</div><div class="hsu">DMP, IVA, Trust Deed, Bankruptcy and more</div></div><svg class="chev" id="eds-chev" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hbd" id="eds-body"><p class="hde">If you have a formal or informal debt solution in place, please let us know. We will pause collection activity and liaise directly with your insolvency practitioner or debt management firm.</p><div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">This covers</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Debt Management Plan (DMP)</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Individual Voluntary Arrangement (IVA)</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Trust Deed (Scotland)</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Bankruptcy</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Debt Relief Order (DRO)</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Sequestration (Scotland)</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Administration Order</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Breathing Space</span></div><div class="hn bn" style="align-items:flex-start;margin-bottom:14px"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#1a56db" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#1a56db" stroke-width="1.2" stroke-linecap="round"/></svg><span>Once notified, we will pause collection activity and correspond with your insolvency practitioner or debt management firm. You do not need to manage both sides separately.</span></div><button class="hbtn bm" id="eds-chat-btn">Chat with Nova</button><button class="hbtn am" style="margin-top:8px">Call us: 0800 123 4567</button><button class="hbtn" style="background:var(--surface);color:var(--blue);border:1.5px solid var(--blue);margin-top:8px">Write to us: info@novapay.co.uk</button></div></div>
+          <div class="hc"><div class="hct" data-help="dh"><div class="hcic" style="background:rgba(16,185,129,0.1)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#059669" stroke-width="1.4"/><path d="M9 6.5a1.5 1.5 0 011 2.6c-.5.5-.8.9-.8 1.3v.4M9 12v.5" stroke="#059669" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="htx"><div class="htit">Free debt advice</div><div class="hsu">Independent support from specialist organisations</div></div><svg class="chev" id="dh-chev" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hbd" id="dh-body"><p class="hde">Free and confidential advice from organisations completely independent of NovaPay. All helplines are free to call.</p><div class="do" style="align-items:flex-start;padding:12px 0"><div class="doi" style="background:#e6f4ea;width:38px;height:38px;border-radius:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="#1a7332" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1;min-width:0"><div class="don">Citizens Advice</div><div class="dos">Confidential advice on debt, benefits and legal matters</div><div style="margin-top:5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#64748b" stroke-width="1.5"/></svg>0800 144 8848</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="#94a3b8" stroke-width="1.5"/></svg>citizensadvice.org.uk</div></div></div></div><div class="do" style="align-items:flex-start;padding:12px 0"><div class="doi" style="background:#e6eeff;width:38px;height:38px;border-radius:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><polyline points="1 4 1 10 7 10" stroke="#1251a3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="23 20 23 14 17 14" stroke="#1251a3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke="#1251a3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1;min-width:0"><div class="don">StepChange Debt Charity</div><div class="dos">Free debt management plans, IVAs and ongoing support</div><div style="margin-top:5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#64748b" stroke-width="1.5"/></svg>0800 138 1111</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="#94a3b8" stroke-width="1.5"/></svg>info@stepchange.org</div></div></div></div><div class="do" style="align-items:flex-start;padding:12px 0"><div class="doi" style="background:#fde8eb;width:38px;height:38px;border-radius:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#c0001a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1;min-width:0"><div class="don">National Debtline</div><div class="dos">Free specialist debt advice by phone and webchat</div><div style="margin-top:5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#64748b" stroke-width="1.5"/></svg>0808 808 4000</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="#94a3b8" stroke-width="1.5"/></svg>nationaldebtline.org</div></div></div></div><div class="do" style="align-items:flex-start;padding:12px 0"><div class="doi" style="background:#e0f4f2;width:38px;height:38px;border-radius:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#00695c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1;min-width:0"><div class="don">MoneyHelper</div><div class="dos">Government-backed guidance on money, debt and pensions</div><div style="margin-top:5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#64748b" stroke-width="1.5"/></svg>0800 138 7777</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="#94a3b8" stroke-width="1.5"/></svg>moneyhelper.org.uk</div></div></div></div><div class="do" style="align-items:flex-start;padding:12px 0"><div class="doi" style="background:#e0f3ec;width:38px;height:38px;border-radius:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="#007d5b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="14 2 14 8 20 8" stroke="#007d5b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9 15 11 17 15 13" stroke="#007d5b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1;min-width:0"><div class="don">PayPlan</div><div class="dos">Free debt management plans and individual voluntary arrangements</div><div style="margin-top:5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#64748b" stroke-width="1.5"/></svg>0800 280 2816</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="#94a3b8" stroke-width="1.5"/></svg>help@payplan.com</div></div></div></div><div class="do" style="align-items:flex-start;padding:12px 0"><div class="doi" style="background:#fff4e5;width:38px;height:38px;border-radius:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#cc5500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1;min-width:0"><div class="don">Christians Against Poverty (CAP)</div><div class="dos">Free debt help and practical support in your community</div><div style="margin-top:5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#64748b" stroke-width="1.5"/></svg>0800 328 0006</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="#94a3b8" stroke-width="1.5"/></svg>capuk.org</div></div></div></div><div class="do" style="align-items:flex-start;padding:12px 0"><div class="doi" style="background:#e8edf4;width:38px;height:38px;border-radius:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" stroke="#1a3559" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" stroke="#1a3559" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1;min-width:0"><div class="don">Debt Advice Foundation</div><div class="dos">Free, impartial debt advice with no referral needed</div><div style="margin-top:5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#64748b" stroke-width="1.5"/></svg>0800 622 611</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="#94a3b8" stroke-width="1.5"/></svg>advice@debtadvicefoundation.org</div></div></div></div><div class="do" style="align-items:flex-start;padding:12px 0;border-bottom:none"><div class="doi" style="background:#e0f6f3;width:38px;height:38px;border-radius:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#00796b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="#00796b" stroke-width="2"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="#00796b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1;min-width:0"><div class="don">Turn2us</div><div class="dos">Help finding grants, benefits and financial support</div><div style="margin-top:5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#64748b" stroke-width="1.5"/></svg>0808 802 2000</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="#94a3b8" stroke-width="1.5"/></svg>turn2us.org.uk</div></div></div></div></div></div>
         </div>
       </div>
-      <div style="padding:12px 16px;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0"><button class="bf bgh" data-goto="s-home">← Back to dashboard</button></div>
-      <div class="hb"><div class="hi"></div></div>
     </div>
   </div>
 
@@ -398,7 +497,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
   <div id="s-pay-method" class="screen">
     <div class="si">
       <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
-      <div class="ph2"><button class="bb" data-goto="s-home"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="pt">Make a Payment</span></div>
+      <div class="ph2"><span class="pt">Make a Payment</span><div style="display:flex;align-items:center;gap:8px"><button class="bb" data-goto="s-home"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><div class="mbtn-w m-open"><span></span><span></span><span></span></div></div></div>
       <div class="steps"><div class="stp"><div class="sn cur">1</div><div class="sl2 cur">Method</div></div><div class="sline"></div><div class="stp"><div class="sn">2</div><div class="sl2">Details</div></div><div class="sline"></div><div class="stp"><div class="sn">3</div><div class="sl2">Review</div></div><div class="sline"></div><div class="stp"><div class="sn">4</div><div class="sl2">Done</div></div></div>
       <div class="scroll"><div class="pb">
         <div class="ah"><div class="ahl">Payment amount</div><div class="ahv" id="pm-amount">£0.00</div><div class="ahs" id="pm-desc">Monthly instalment</div></div>
@@ -409,7 +508,6 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
         <button class="bf bbl" data-goto="s-card-entry">Enter card details</button>
         <div class="sn2"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x="2" y="5" width="7" height="5" rx="1" stroke="#94a3b8" stroke-width="1"/><path d="M3.5 5V3.5a2 2 0 114 0V5" stroke="#94a3b8" stroke-width="1" stroke-linecap="round"/></svg><span>256-bit SSL encrypted · PCI DSS compliant</span></div>
       </div></div>
-      <div class="hb"><div class="hi"></div></div>
     </div>
   </div>
 
@@ -417,7 +515,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
   <div id="s-card-entry" class="screen">
     <div class="si">
       <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
-      <div class="ph2"><button class="bb" data-goto="s-pay-method"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="pt">Card details</span></div>
+      <div class="ph2"><span class="pt">Card details</span><div style="display:flex;align-items:center;gap:8px"><button class="bb" data-goto="s-pay-method"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><div class="mbtn-w m-open"><span></span><span></span><span></span></div></div></div>
       <div class="steps"><div class="stp"><div class="sn done">✓</div><div class="sl2">Method</div></div><div class="sline"></div><div class="stp"><div class="sn cur">2</div><div class="sl2 cur">Details</div></div><div class="sline"></div><div class="stp"><div class="sn">3</div><div class="sl2">Review</div></div><div class="sline"></div><div class="stp"><div class="sn">4</div><div class="sl2">Done</div></div></div>
       <div class="scroll"><div class="pb">
         <div class="ca"><div class="chip"></div><div class="cn" id="prev-num">XXXX  XXXX  XXXX  0000</div><div class="cbot"><span id="prev-name">CARDHOLDER NAME</span><span class="vt">VISA</span></div></div>
@@ -427,7 +525,6 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
         <div class="sn2" style="margin-bottom:16px"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x="2" y="5" width="7" height="5" rx="1" stroke="#94a3b8" stroke-width="1"/><path d="M3.5 5V3.5a2 2 0 114 0V5" stroke="#94a3b8" stroke-width="1" stroke-linecap="round"/></svg><span>Your card details are encrypted and secure</span></div>
         <button class="bf bbl" data-goto="s-review">Continue to review →</button>
       </div></div>
-      <div class="hb"><div class="hi"></div></div>
     </div>
   </div>
 
@@ -435,7 +532,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
   <div id="s-apple-confirm" class="screen">
     <div class="si">
       <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
-      <div class="ph2"><button class="bb" data-goto="s-pay-method"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="pt">Apple Pay</span></div>
+      <div class="ph2"><span class="pt">Apple Pay</span><div style="display:flex;align-items:center;gap:8px"><button class="bb" data-goto="s-pay-method"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><div class="mbtn-w m-open"><span></span><span></span><span></span></div></div></div>
       <div class="scroll" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px">
         <div style="width:72px;height:72px;background:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:18px"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M22 6c-2 0-3.5 1.2-4.5 2.4C16.5 7.2 15 6 13 6c-3 0-5.5 2.6-5.5 5.8 0 6.4 8.5 16.2 8.5 16.2s8.5-9.8 8.5-16.2C24.5 8.6 22.3 6 22 6z" fill="#fff"/></svg></div>
         <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:6px">Confirm with Apple Pay</div>
@@ -447,7 +544,6 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
         </div>
         <button class="bf bap" data-goto="s-processing"><span style="display:flex;align-items:center;justify-content:center;gap:8px"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M11.5 2c-1 0-1.8.6-2.3 1.2-.5-.6-1.3-1.2-2.3-1.2C5.5 2 4.2 3.4 4.2 5c0 3.2 3.8 7 4 7s4-3.8 4-7c0-1.6-1.2-3-2.7-3z" fill="#fff"/></svg>Confirm with Face ID</span></button>
       </div>
-      <div class="hb"><div class="hi"></div></div>
     </div>
   </div>
 
@@ -455,7 +551,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
   <div id="s-review" class="screen">
     <div class="si">
       <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
-      <div class="ph2"><button class="bb" data-goto="s-card-entry"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="pt">Review payment</span></div>
+      <div class="ph2"><span class="pt">Review payment</span><div style="display:flex;align-items:center;gap:8px"><button class="bb" data-goto="s-card-entry"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><div class="mbtn-w m-open"><span></span><span></span><span></span></div></div></div>
       <div class="steps"><div class="stp"><div class="sn done">✓</div><div class="sl2">Method</div></div><div class="sline"></div><div class="stp"><div class="sn done">✓</div><div class="sl2">Details</div></div><div class="sline"></div><div class="stp"><div class="sn cur">3</div><div class="sl2 cur">Review</div></div><div class="sline"></div><div class="stp"><div class="sn">4</div><div class="sl2">Done</div></div></div>
       <div class="scroll"><div class="pb">
         <div class="sb2">
@@ -469,7 +565,6 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
         <button class="bf bbg" data-goto="s-processing">Confirm &amp; Pay <span id="rev-btn-amt">£0.00</span></button>
         <button class="bf bgh" data-goto="s-pay-method">Cancel</button>
       </div></div>
-      <div class="hb"><div class="hi"></div></div>
     </div>
   </div>
 
@@ -478,7 +573,6 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
     <div class="si">
       <div class="ph2"><span class="pt" style="margin:0 auto">Processing payment</span></div>
       <div class="scroll" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center"><div class="spin"></div><div style="font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px">Please wait…</div><div style="font-size:13px;color:var(--muted);line-height:1.6">We're processing your payment.<br>Please don't close this screen.</div></div>
-      <div class="hb"><div class="hi"></div></div>
     </div>
   </div>
 
@@ -502,7 +596,6 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
         <button class="bf bbl" data-goto="s-home">Back to my loan</button>
         <button class="bf bgh">Download receipt</button>
       </div></div>
-      <div class="hb"><div class="hi"></div></div>
     </div>
   </div>
 
@@ -510,9 +603,8 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
   <div id="s-faq" class="screen">
     <div class="si">
       <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
-      <div class="hdr"><div class="logo"><div class="lm"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4.5 4.5 7.5-9" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="lt">NovaPay</span></div><button class="bd" data-goto="s-home">← Back</button></div>
+      <div class="hdr"><div class="logo"><div class="lm"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4.5 4.5 7.5-9" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="lt">NovaPay</span></div><div style="display:flex;align-items:center;gap:8px"><button class="bd" data-goto="s-home">← Back</button><div class="mbtn m-open"><span></span><span></span><span></span></div></div></div>
       <div class="scroll" style="padding:16px"><div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px">FAQs</div><div style="font-size:12px;color:var(--muted);margin-bottom:16px">Common questions about your NovaPay loan</div><div id="faq-list"></div></div>
-      <div class="hb"><div class="hi"></div></div>
     </div>
   </div>
 
@@ -520,16 +612,16 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
   <div id="s-profile" class="screen">
     <div class="si">
       <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
-      <div class="ihdr"><button class="bd" data-goto="s-home"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="itl">Profile</span></div>
+      <div class="ihdr"><span class="itl">Profile</span><div style="display:flex;align-items:center;gap:8px"><button class="bd" data-goto="s-home"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><div class="mbtn m-open"><span></span><span></span><span></span></div></div></div>
       <div class="scroll" style="padding-top:20px">
-        <div class="pav">SM</div><div class="pnm">Sarah Mitchell</div><div class="plo">Loan #28796 · Customer since Apr 2024</div>
+        <div class="pav" id="cust-prof-initials">SM</div><div class="pnm" id="cust-prof-name">Sarah Mitchell</div><div class="plo" id="cust-prof-loan">Loan #28796 · Customer since Jan 2025</div>
 
         <div class="sh">Personal details<button class="sec-edit-btn" data-section="personal"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#1a56db" stroke-width="1.3" stroke-linejoin="round"/></svg> Edit</button></div>
         <div class="dc">
           <div class="drow"><div><div class="dl">Title</div><div class="dv" id="val-title">Ms</div></div></div>
-          <div class="drow"><div><div class="dl">First name</div><div class="dv">Sarah</div></div></div>
+          <div class="drow"><div><div class="dl">First name</div><div class="dv" id="val-firstname">Sarah</div></div></div>
           <div class="drow"><div><div class="dl">Last name</div><div class="dv" id="val-lastname">Mitchell</div></div></div>
-          <div class="drow"><div><div class="dl">Date of birth</div><div class="dv">14 March 1989</div></div></div>
+          <div class="drow"><div><div class="dl">Date of birth</div><div class="dv" id="val-dob">14 March 1989</div></div></div>
         </div>
         <div class="sh">Contact information<button class="sec-edit-btn" data-section="contact"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#1a56db" stroke-width="1.3" stroke-linejoin="round"/></svg> Edit</button></div>
         <div class="dc">
@@ -588,7 +680,6 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
           <div class="drow"><div><div class="dl">NovaPay loan repayment</div><div class="dv" id="val-loan-repayment">£0.00</div></div></div>
         </div>
       </div>
-      <div class="hb"><div class="hi"></div></div>
     </div>
   </div>
 
@@ -596,7 +687,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
   <div id="s-payment-details" class="screen">
     <div class="si">
       <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
-      <div class="ihdr"><button class="bd" data-goto="s-home"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="itl">Payment Details</span></div>
+      <div class="ihdr"><span class="itl">Payment Details</span><div style="display:flex;align-items:center;gap:8px"><button class="bd" data-goto="s-home"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><div class="mbtn m-open"><span></span><span></span><span></span></div></div></div>
       <div class="scroll" style="padding-top:16px">
         <div class="sh">Direct debit card<button class="sec-edit-btn" data-section="pd-card"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="#1a56db" stroke-width="1.3" stroke-linejoin="round"/></svg> Edit</button></div>
         <div class="pcv">
@@ -628,7 +719,6 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
         </div>
         <div style="margin:0 16px 20px;background:#eff6ff;border:1px solid #dbeafe;border-radius:var(--r);padding:10px 13px;font-size:11px;color:#1e40af;display:flex;gap:8px;line-height:1.5"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#1a56db" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#1a56db" stroke-width="1.2" stroke-linecap="round"/></svg>Updating bank account details requires identity verification. Changes take effect within 3 working days.</div>
       </div>
-      <div class="hb"><div class="hi"></div></div>
     </div>
   </div>
 
@@ -636,7 +726,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
   <div id="s-statement" class="screen">
     <div class="si">
       <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
-      <div class="ihdr"><button class="bd" data-goto="s-home"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="itl">Statement of Account</span></div>
+      <div class="ihdr"><span class="itl">Statement of Account</span><div style="display:flex;align-items:center;gap:8px"><button class="bd" data-goto="s-home"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><div class="mbtn m-open"><span></span><span></span><span></span></div></div></div>
       <div class="scroll">
         <div class="shc">
           <div class="stlbl">Total repaid to date</div>
@@ -651,7 +741,6 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
         <div style="padding:0 16px 8px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Transaction history</div>
         <div class="card" style="margin-bottom:20px"><div id="stmt-list"></div></div>
       </div>
-      <div class="hb"><div class="hi"></div></div>
     </div>
   </div>
 
@@ -659,7 +748,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
   <div id="s-documents" class="screen">
     <div class="si" style="position:relative">
       <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
-      <div class="ihdr"><button class="bd" data-goto="s-home"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="itl">Documents</span></div>
+      <div class="ihdr"><span class="itl">Documents</span><div style="display:flex;align-items:center;gap:8px"><button class="bd" data-goto="s-home"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><div class="mbtn m-open"><span></span><span></span><span></span></div></div></div>
       <div class="scroll">
         <div style="padding:12px 16px 6px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Regulatory notices</div>
         <div class="card" style="margin-bottom:12px">
@@ -677,17 +766,23 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
         </div>
       </div>
       <div class="dv2" id="doc-viewer">
-        <div class="ihdr"><button class="bd" id="doc-back"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><span class="itl" id="doc-viewer-title">Document</span></div>
+        <div class="ihdr"><span class="itl" id="doc-viewer-title">Document</span><div style="display:flex;align-items:center;gap:8px"><button class="bd" id="doc-back"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button><div class="mbtn m-open"><span></span><span></span><span></span></div></div></div>
         <div class="dcon" id="doc-viewer-content"></div>
         <div style="padding:12px 16px;border-top:1px solid var(--border)"><button class="bf bbl" style="margin-bottom:0">Download PDF</button></div>
-        <div class="hb"><div class="hi"></div></div>
-      </div>
-      <div class="hb"><div class="hi"></div></div>
+        </div>
     </div>
   </div>
 
+
+
 </div>
 
+<script src="shared/status-engine-config.js"></script>
+<script src="shared/loan-status-engine.js"></script>
+<script src="shared/servicing-policy-engine.js"></script>
+<script src="shared/account-state-resolver.js"></script>
+<script src="shared/novapay-core.js"></script>
+<script src="shared/api-account-store.js"></script>
 <script>
 (function() {
   // ═══════════════════════════════════════════════
@@ -697,13 +792,17 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
     principal:    1000,
     apr:          29.9,
     termMonths:   12,
-    startDate:    new Date('2025-04-03'),
+    startDate:    new Date('2026-01-24'),  // next due: 24 Mar 2026 (today)
     accountStatus: 'active', // 'active' | 'arrears' | 'default'
     // Derived — calculated by calcLoan()
     monthlyRate:  0,
     emi:          0,
     schedule:     [],   // full amortisation table
-    paidCount:    3,    // how many instalments have been paid
+    paidCount:    2,    // how many instalments have been paid
+    // Allowed / blocked servicing actions (populated from resolved state or local engine)
+    allowedActions: [],
+    blockedActions: [],
+    actionReasons:  {},
     // Convenience accessors
     fmt: function(n) { return '£' + n.toFixed(2); },
     fmtDate: function(d) {
@@ -832,10 +931,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
     if (custInput) { custInput.max = bal.toFixed(2); }
 
     // ── PA sub-label
-    var paMonthly = bal / 18;
-    setText('pa-sub-label', 'Repay ' + LOAN.fmt(bal) + ' over 18 months interest-free');
-    setText('pa-desc', 'We\'ll freeze interest immediately and spread your outstanding balance of ' + LOAN.fmt(bal) + ' over 18 months. No further interest will accrue.');
-    setText('pa-notice', 'Interest stops accruing immediately. New monthly payment: ' + LOAN.fmt(paMonthly) + ' for 18 months.');
+    setText('pa-sub-label', 'Interest-free repayment plan · ' + LOAN.fmt(bal) + ' outstanding');
 
     // ── Profile: loan repayment row
     setText('val-loan-repayment', LOAN.fmt(emi));
@@ -903,7 +999,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
       var openCls  = e.status === 'current' ? 'open' : '';
       var chevCls  = e.status === 'current' ? 'chev open' : 'chev';
       var isCur    = (e.status === 'current' || e.status === 'ph');
-      var phBadge  = e.ph ? '<span style="font-size:9px;background:#fff3cd;color:#92400e;border-radius:6px;padding:2px 6px;margin-left:6px;font-weight:600">Payment Holiday</span>' : '';
+      var phBadge  = e.ph ? '<span style="display:inline-block;width:7px;height:7px;background:#f59e0b;border-radius:50%;margin-left:7px;vertical-align:middle;flex-shrink:0"></span>' : '';
       var paBadge  = e.pa ? '<span style="font-size:9px;background:#eff6ff;color:#1e40af;border-radius:6px;padding:2px 6px;margin-left:6px;font-weight:600">PA · 0% interest</span>' : '';
       var paidTd   = e.status === 'paid'
         ? '<td style="font-size:13px;font-weight:600;color:var(--ok-text);text-align:right;padding-bottom:10px">' + LOAN.shortDate(e.dueDate) + '</td>'
@@ -985,7 +1081,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
   // ═══════════════════════════════════════════════
   // NAVIGATION
   // ═══════════════════════════════════════════════
-  var cur = 's-home';
+  var cur = 's-login';
   function go(id) {
     if (!id) return;
     var prev = document.getElementById(cur);
@@ -994,6 +1090,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
     if (next) next.classList.add('active');
     closeMenu();
     cur = id;
+    if (id === 's-profile') renderProfile();
     if (id === 's-processing') {
       setTimeout(function() {
         // Update balance after payment
@@ -1007,6 +1104,24 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
           if (LOAN.paidCount < LOAN.schedule.length) {
             LOAN.schedule[LOAN.paidCount].status = 'current';
           }
+        }
+        // Persist payment and updated schedule snapshot to canonical store
+        if (_store) {
+          _store.dispatch({
+            type: NovaPay.CommandTypes.RECORD_PAYMENT,
+            payload: {
+              paidCount: LOAN.paidCount,
+              amount:    paid,
+              date:      new Date().toISOString(),
+              scheduleSnapshot: LOAN.schedule.map(function (r) {
+                return { n: r.n,
+                  dueDate:   r.dueDate instanceof Date ? r.dueDate.toISOString() : r.dueDate,
+                  emi:       r.emi, principal: r.principal, interest: r.interest,
+                  balance:   r.balance, status: r.status, ph: r.ph||false, pa: r.pa||false };
+              })
+            },
+            actor: 'customer_ui'
+          });
         }
         updateAllUI();
         // Success screen
@@ -1034,8 +1149,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
 
   // ── Menu
   var moverlay = document.getElementById('moverlay');
-  document.getElementById('menu-open').addEventListener('click', openMenu);
-  document.getElementById('menu-open-opts').addEventListener('click', openMenu);
+  document.querySelectorAll('.m-open').forEach(function(btn){btn.addEventListener('click',openMenu)});
   document.getElementById('mclose').addEventListener('click', closeMenu);
   moverlay.addEventListener('click', function(e) { if (e.target === moverlay) closeMenu(); });
   var mitems = document.querySelectorAll('.mitem');
@@ -1046,6 +1160,18 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
   }
   function openMenu()  { moverlay.classList.add('open'); }
   function closeMenu() { moverlay.classList.remove('open'); }
+
+  document.getElementById('menu-logout').addEventListener('click', function() {
+    closeMenu();
+    try { localStorage.removeItem(LOANS_SESSION_KEY); } catch(e) {}
+    _store = null;
+    ACTIVE_CUSTOMER = null;
+    ACCT_KEY = null;
+    document.getElementById('ln-email').value = '';
+    document.getElementById('ln-pin').value = '';
+    document.getElementById('ln-error').style.display = 'none';
+    go('s-login');
+  });
 
   // ── Pay options CTAs
   document.getElementById('pay-next-btn').addEventListener('click', function() {
@@ -1083,7 +1209,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
   });
 
   // ── Help cards
-  var helpOpen = {ph: false, pa: false, dh: false};
+  var helpOpen = {ph: false, pa: false, eds: false, dh: false};
   var hcts = document.querySelectorAll('.hct');
   for (var h = 0; h < hcts.length; h++) {
     (function(el) {
@@ -1094,74 +1220,480 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
         var chev = document.getElementById(key + '-chev');
         if (body) body.classList.toggle('open', helpOpen[key]);
         if (chev) chev.classList.toggle('open', helpOpen[key]);
+        if (key === 'ph' && helpOpen[key]) initPHFlow();
+        if (key === 'pa' && helpOpen[key]) initPAFlow();
+        if (key === 'eds' && helpOpen[key]) document.getElementById('eds-chat-btn').addEventListener('click', function() { document.getElementById('cfab').click(); });
       });
     })(hcts[h]);
   }
 
-  // Payment Holiday
-  var phActive = false;
-  document.getElementById('ph-btn').addEventListener('click', function() {
-    if (phActive) return;
-    phActive = true;
+  // ═══════════════════════════════════════════════
+  // SHARED FORBEARANCE CONSTANTS
+  // ═══════════════════════════════════════════════
+
+  var FORBEARANCE_REASONS = [
+    'Loss of income',
+    'Job loss',
+    'Redundancy',
+    'Change of job / reduced hours',
+    'Illness or medical condition',
+    'Bereavement',
+    'Relationship breakdown',
+    'Unexpected essential expense',
+    'Other'
+  ];
+  var phReason = '';
+  var paReason = '';
+
+  // ═══════════════════════════════════════════════
+  // PAYMENT HOLIDAY
+  // ═══════════════════════════════════════════════
+
+  // Eligibility: active/arrears only, within window (before due or up to 5 days after),
+  // max 2 PHs per loan (1 if term ≤ 6 months)
+  function phEligibility() {
+    var next = nextInstalment();
+    if (!next) return { ok: false, reason: 'Your loan is fully repaid.' };
+    // Tier 1: use pre-computed allowedActions from resolved/local state engine
+    if (LOAN.blockedActions.indexOf('apply_payment_holiday') !== -1) {
+      return { ok: false, reason: LOAN.actionReasons['apply_payment_holiday'] || 'Payment holiday is not available on this account.' };
+    }
+    // Tier 2: delegate to the shared policy engine via store state
+    if (_store) {
+      var st   = _store.getState();
+      var loan = st && NovaPay.accountStateResolver.getActiveLoan(st);
+      if (loan) {
+        var se     = loan.statusEngineState || {};
+        var result = NovaPay.servicingPolicyEngine.checkPHEligibility(
+          loan, se.coreStatus || 'active', se.derivedFlags || {}, new Date()
+        );
+        return result.eligible
+          ? { ok: true, phUsed: result.phUsed, phMax: result.phMax }
+          : { ok: false, reason: result.reason };
+      }
+    }
+    return { ok: true };
+  }
+
+  var PH_STEPS = ['ineligible', 'triage', 'reason', 'credit', 'longterm', 'confirm', 'applied'];
+  function showPHStep(name) {
+    for (var i = 0; i < PH_STEPS.length; i++) {
+      var el = document.getElementById('ph-step-' + PH_STEPS[i]);
+      if (el) el.style.display = PH_STEPS[i] === name ? 'block' : 'none';
+    }
+  }
+
+  function initPHFlow() {
+    var elig = phEligibility();
+    if (!elig.ok) {
+      document.getElementById('ph-ineligible-msg').textContent = elig.reason;
+      showPHStep('ineligible');
+    } else {
+      showPHStep('triage');
+    }
+  }
+
+  function buildPHConfirmSummary() {
     var next = nextInstalment();
     if (!next) return;
-    // Mark current as PH status
-    LOAN.schedule[next.n - 1].status = 'ph';
-    LOAN.schedule[next.n - 1].ph = true;
-    // Add a new instalment at the end
-    var lastDate = new Date(LOAN.schedule[LOAN.schedule.length - 1].dueDate);
-    lastDate.setMonth(lastDate.getMonth() + 1);
-    var lastBal = LOAN.schedule[LOAN.schedule.length - 1].balance;
-    var addInt = lastBal * LOAN.monthlyRate;
-    LOAN.schedule.push({
-      n: LOAN.schedule.length + 1,
-      dueDate: lastDate,
-      emi: LOAN.emi,
-      principal: LOAN.emi - addInt,
-      interest: addInt,
-      balance: 0,
-      status: 'upcoming',
-      ph: false, pa: false
-    });
-    setText('emi-badge', LOAN.schedule.length + ' instalments');
-    updateAllUI();
-    document.getElementById('ph-status').innerHTML = '<div class="hcf"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#059669" stroke-width="1.2"/><path d="M4 6.5l2 2 3-3" stroke="#059669" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Payment holiday applied. A new instalment has been added to the end of your loan.</div>';
-    this.textContent = 'Payment holiday active';
-    this.disabled = true;
-  });
+    var balBefore = LOAN.paidCount > 0 ? LOAN.schedule[LOAN.paidCount - 1].balance : LOAN.principal;
+    var accrued = balBefore * LOAN.monthlyRate;
+    var phUsed = 0;
+    for (var i = 0; i < LOAN.schedule.length; i++) { if (LOAN.schedule[i].ph) phUsed++; }
+    var phMax = LOAN.termMonths <= 6 ? 1 : 2;
+    var remainingAfter = phMax - phUsed - 1;
+    // New end date: last instalment date shifts by 1 month
+    var newEnd = new Date(LOAN.schedule[LOAN.schedule.length - 1].dueDate);
+    newEnd.setMonth(newEnd.getMonth() + 1);
+    var html = '<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px">'
+      + '<table style="width:100%;border-collapse:collapse;font-size:12px">'
+      + '<tr><td style="padding:4px 0;color:var(--muted)">Instalment paused</td><td style="text-align:right;font-weight:600">' + LOAN.fmt(next.emi) + '</td></tr>'
+      + '<tr><td style="padding:4px 0;color:var(--muted)">Interest accruing during holiday</td><td style="text-align:right;font-weight:600;color:var(--warn-text)">' + LOAN.fmt(accrued) + '</td></tr>'
+      + '<tr><td style="padding:4px 0;color:var(--muted)">Estimated new loan end date</td><td style="text-align:right;font-weight:600">' + LOAN.shortDate(newEnd) + '</td></tr>'
+      + '<tr><td style="padding:4px 0;color:var(--muted)">Payment holidays remaining after this</td><td style="text-align:right;font-weight:600">' + remainingAfter + '</td></tr>'
+      + '</table></div>';
+    document.getElementById('ph-confirm-summary').innerHTML = html;
+  }
 
-  // Payment Arrangement
-  var paActive = false;
-  document.getElementById('pa-btn').addEventListener('click', function() {
-    if (paActive) return;
-    paActive = true;
-    var bal = outstandingBalance();
-    var paMonthly = bal / 18;
-    // Rebuild remaining schedule with frozen interest
-    var paid = [];
-    for (var i = 0; i < LOAN.paidCount; i++) paid.push(LOAN.schedule[i]);
-    LOAN.schedule.length = 0;
-    for (var j = 0; j < paid.length; j++) LOAN.schedule.push(paid[j]);
-    for (var m = 0; m < 18; m++) {
-      var d = new Date(LOAN.startDate);
-      d.setMonth(d.getMonth() + LOAN.paidCount + m);
-      LOAN.schedule.push({
-        n: LOAN.paidCount + m + 1,
-        dueDate: d,
-        emi: paMonthly,
-        principal: paMonthly,
-        interest: 0,
-        balance: bal - paMonthly * (m + 1),
-        status: m === 0 ? 'current' : 'upcoming',
-        ph: false, pa: true
+  // Apply PH: dispatch intent — the store builds and persists the schedule.
+  function applyPaymentHoliday() {
+    if (_store) {
+      _store.dispatch({
+        type:    NovaPay.CommandTypes.APPLY_PAYMENT_HOLIDAY,
+        payload: { instalmentN: LOAN.paidCount + 1, reason: phReason || '' },
+        actor:   'customer_ui'
       });
     }
-    setText('emi-badge', LOAN.schedule.length + ' instalments');
     updateAllUI();
-    document.getElementById('pa-status').innerHTML = '<div class="hcf"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#059669" stroke-width="1.2"/><path d="M4 6.5l2 2 3-3" stroke="#059669" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Arrangement confirmed. Interest frozen. New payment: ' + LOAN.fmt(paMonthly) + '/month for 18 months.</div>';
-    this.textContent = 'Arrangement active';
-    this.disabled = true;
+    var next2 = nextInstalment();
+    var appliedHtml = '<div class="hcf"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:2px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#059669" stroke-width="1.2"/><path d="M4 6.5l2 2 3-3" stroke="#059669" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      + '<div>Payment holiday confirmed. Your next payment of '
+      + (next2 ? LOAN.fmt(next2.emi) + ' is due ' + LOAN.shortDate(next2.dueDate) : 'has been updated')
+      + '.</div></div>';
+    document.getElementById('ph-step-applied').innerHTML = appliedHtml;
+    showPHStep('applied');
+  }
+
+  function buildPHReasonStep() {
+    var html = '<p class="hde">To help us support you, please tell us the main reason you need a payment holiday.</p>'
+      + '<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">';
+    for (var i = 0; i < FORBEARANCE_REASONS.length; i++) {
+      html += '<button class="ph-reason-btn hbtn" data-r="' + FORBEARANCE_REASONS[i] + '" style="text-align:left;background:var(--bg);border:1.5px solid var(--border);color:var(--text)">' + FORBEARANCE_REASONS[i] + '</button>';
+    }
+    html += '</div>'
+      + '<button class="hbtn" id="ph-reason-back" style="background:var(--bg);color:var(--muted);border:1.5px solid var(--border)">Back</button>';
+    document.getElementById('ph-step-reason').innerHTML = html;
+    var btns = document.getElementById('ph-step-reason').querySelectorAll('.ph-reason-btn');
+    for (var k = 0; k < btns.length; k++) {
+      btns[k].addEventListener('click', function() {
+        phReason = this.getAttribute('data-r');
+        buildPHCreditStep();
+        showPHStep('credit');
+      });
+    }
+    document.getElementById('ph-reason-back').addEventListener('click', function() { showPHStep('triage'); });
+  }
+
+  function buildPHCreditStep() {
+    var wSvg = '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#92400e" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#92400e" stroke-width="1.2" stroke-linecap="round"/></svg>';
+    var html = '<p class="hde">Before you proceed, please read how a payment holiday will be reported to credit reference agencies.</p>'
+      + '<div style="background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:var(--r);padding:12px;margin-bottom:12px">'
+      + '<div style="font-size:12px;font-weight:700;color:var(--warn-text);margin-bottom:8px">Credit file impact</div>'
+      + '<ul style="font-size:11px;color:var(--warn-text);padding-left:14px;line-height:1.8;margin:0">'
+      + '<li>NovaPay is legally required to report the accurate status of your account to credit reference agencies (Experian, Equifax and TransUnion).</li>'
+      + '<li>This payment holiday will be recorded as a <strong>Payment Holiday</strong> on your credit file.</li>'
+      + '<li>This marker remains on your credit file for <strong>6 years</strong> and may reduce your credit score.</li>'
+      + '<li>Future lenders may take this into account when you apply for credit.</li>'
+      + '</ul></div>'
+      + '<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--muted)">Reason recorded: <strong style="color:var(--text)">' + phReason + '</strong></div>'
+      + '<button class="hbtn am" id="ph-credit-next">I understand, continue</button>'
+      + '<button class="hbtn" id="ph-credit-back" style="background:var(--bg);color:var(--muted);border:1.5px solid var(--border);margin-top:8px">Back</button>';
+    document.getElementById('ph-step-credit').innerHTML = html;
+    document.getElementById('ph-credit-next').addEventListener('click', function() {
+      buildPHConfirmSummary();
+      showPHStep('confirm');
+    });
+    document.getElementById('ph-credit-back').addEventListener('click', function() { showPHStep('reason'); });
+  }
+
+  // PH button handlers
+  document.getElementById('ph-shortterm-btn').addEventListener('click', function() {
+    buildPHReasonStep();
+    showPHStep('reason');
   });
+  document.getElementById('ph-longterm-btn').addEventListener('click', function() {
+    showPHStep('longterm');
+  });
+  document.getElementById('ph-chat-btn').addEventListener('click', function() {
+    document.getElementById('cfab').click();
+  });
+  document.getElementById('ph-back-from-longterm').addEventListener('click', function() {
+    showPHStep('triage');
+  });
+  document.getElementById('ph-back-from-confirm').addEventListener('click', function() {
+    showPHStep('credit');
+  });
+  document.getElementById('ph-confirm-btn').addEventListener('click', function() {
+    applyPaymentHoliday();
+  });
+
+  // ═══════════════════════════════════════════════
+  // PAYMENT ARRANGEMENT
+  // Eligible: active, arrears, payment-holiday, default, terminated
+  // Blocked: pre-collection only
+  // Must pass I&E — max 50% disposable income, clears within 24 months
+  // Customer picks amount and start date (up to 1 month ahead)
+  // ═══════════════════════════════════════════════
+
+  var PA_INC_KEYS   = ['inc-salary','inc-secondary','inc-benefits','inc-other'];
+  var PA_INC_LABELS = ['Primary income (net)','Secondary income','Benefits / Universal Credit','Other income'];
+  var PA_EXP_KEYS   = ['exp-rent','exp-council','exp-utilities','exp-food','exp-transport','exp-childcare','exp-mobile','exp-loans','exp-cards','exp-bnpl','exp-insurance','exp-subs'];
+  var PA_EXP_LABELS = ['Rent / mortgage','Council tax','Utilities','Food & groceries','Transport','Childcare / dependants','Mobile phone','Other loan repayments','Credit card minimums','Buy now pay later','Insurance','Subscriptions'];
+
+  function parsePound(str) {
+    if (!str) return 0;
+    return parseFloat(str.replace(/[^0-9.]/g, '')) || 0;
+  }
+
+  function paEligibility() {
+    // Check resolved / locally-computed allowedActions first
+    if (LOAN.blockedActions && LOAN.blockedActions.indexOf('apply_payment_arrangement') !== -1) {
+      return { ok: false, reason: LOAN.actionReasons['apply_payment_arrangement'] || 'Payment arrangement is not available on this account.' };
+    }
+    if (LOAN.accountStatus === 'pre-collection') {
+      return { ok: false, reason: 'Your account is currently in pre-collection status. Please contact us to discuss your options.' };
+    }
+    return { ok: true };
+  }
+
+  var PA_STEPS = ['ineligible','reason','iae','credit','amount','contact','review','applied'];
+  function showPAStep(name) {
+    for (var i = 0; i < PA_STEPS.length; i++) {
+      var el = document.getElementById('pa-step-' + PA_STEPS[i]);
+      if (el) el.style.display = PA_STEPS[i] === name ? 'block' : 'none';
+    }
+  }
+
+  function initPAFlow() {
+    var elig = paEligibility();
+    if (!elig.ok) {
+      document.getElementById('pa-ineligible-msg').textContent = elig.reason;
+      showPAStep('ineligible');
+    } else {
+      buildPAReasonStep();
+      showPAStep('reason');
+    }
+  }
+
+  function buildPAReasonStep() {
+    var html = '<p class="hde">To help us support you, please tell us the main reason you need a payment arrangement.</p>'
+      + '<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">';
+    for (var i = 0; i < FORBEARANCE_REASONS.length; i++) {
+      html += '<button class="pa-reason-btn hbtn" data-r="' + FORBEARANCE_REASONS[i] + '" style="text-align:left;background:var(--bg);border:1.5px solid var(--border);color:var(--text)">' + FORBEARANCE_REASONS[i] + '</button>';
+    }
+    html += '</div>';
+    document.getElementById('pa-step-reason').innerHTML = html;
+    var btns = document.getElementById('pa-step-reason').querySelectorAll('.pa-reason-btn');
+    for (var k = 0; k < btns.length; k++) {
+      btns[k].addEventListener('click', function() {
+        paReason = this.getAttribute('data-r');
+        buildPAIEForm();
+        showPAStep('iae');
+      });
+    }
+  }
+
+  function calcPAIE() {
+    var totalInc = 0, totalExp = 0;
+    for (var i = 0; i < PA_INC_KEYS.length; i++) {
+      var el = document.getElementById('pa-ie-' + PA_INC_KEYS[i]);
+      if (el) totalInc += parseFloat(el.value) || 0;
+    }
+    for (var j = 0; j < PA_EXP_KEYS.length; j++) {
+      var el2 = document.getElementById('pa-ie-' + PA_EXP_KEYS[j]);
+      if (el2) totalExp += parseFloat(el2.value) || 0;
+    }
+    var disposable = totalInc - totalExp;
+    setText('pa-ie-income-total', LOAN.fmt(totalInc));
+    setText('pa-ie-exp-total',    LOAN.fmt(totalExp));
+    var dispEl = document.getElementById('pa-ie-disposable');
+    if (dispEl) {
+      dispEl.textContent = LOAN.fmt(Math.max(0, disposable));
+      dispEl.style.color = disposable > 0 ? 'var(--green)' : 'var(--err)';
+    }
+    return { income: totalInc, expenses: totalExp, disposable: disposable };
+  }
+
+  function buildPAIEForm() {
+    var fieldRow = function(inputId, label, val) {
+      return '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">'
+        + '<span style="font-size:11px;color:var(--muted);flex:1;padding-right:8px">' + label + '</span>'
+        + '<div style="display:flex;align-items:center;gap:3px"><span style="font-size:12px;color:var(--muted)">£</span>'
+        + '<input id="' + inputId + '" type="number" min="0" step="1" value="' + val + '" style="width:76px;padding:4px 6px;border:1px solid var(--border);border-radius:6px;font-size:12px;text-align:right;outline:none;background:var(--bg);color:var(--text)"></div></div>';
+    };
+    var html = '<p class="hde">Please review and update your income and expenses. Any changes will be saved to your profile.</p>';
+    html += '<div style="font-size:11px;font-weight:700;color:var(--ok-text);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Monthly income</div>';
+    for (var i = 0; i < PA_INC_KEYS.length; i++) {
+      var v = parsePound((document.getElementById('val-' + PA_INC_KEYS[i]) || {}).textContent);
+      html += fieldRow('pa-ie-' + PA_INC_KEYS[i], PA_INC_LABELS[i], v);
+    }
+    html += '<div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:12px 0 6px">Monthly expenses</div>';
+    for (var j = 0; j < PA_EXP_KEYS.length; j++) {
+      var v2 = parsePound((document.getElementById('val-' + PA_EXP_KEYS[j]) || {}).textContent);
+      html += fieldRow('pa-ie-' + PA_EXP_KEYS[j], PA_EXP_LABELS[j], v2);
+    }
+    html += '<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin:12px 0">'
+      + '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--muted)">Total income</span><strong id="pa-ie-income-total">£0.00</strong></div>'
+      + '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--muted)">Total expenses</span><strong id="pa-ie-exp-total">£0.00</strong></div>'
+      + '<div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;border-top:1px solid var(--border);padding-top:8px;margin-top:4px"><span>Disposable income</span><span id="pa-ie-disposable" style="color:var(--green)">£0.00</span></div>'
+      + '</div>'
+      + '<button class="hbtn bm" id="pa-ie-next">Calculate my payment</button>'
+      + '<button class="hbtn" id="pa-ie-back" style="background:var(--bg);color:var(--muted);border:1.5px solid var(--border);margin-top:8px">Back</button>';
+
+    document.getElementById('pa-step-iae').innerHTML = html;
+    var inputs = document.getElementById('pa-step-iae').querySelectorAll('input[type="number"]');
+    for (var k = 0; k < inputs.length; k++) inputs[k].addEventListener('input', calcPAIE);
+    calcPAIE();
+
+    document.getElementById('pa-ie-next').addEventListener('click', function() {
+      var ie  = calcPAIE();
+      var bal = outstandingBalance();
+      var maxPA = ie.disposable * 0.5;
+      var minPA = bal / 24;
+      if (ie.disposable <= 0 || maxPA < minPA) {
+        buildPAContactStep(ie, maxPA);
+        showPAStep('contact');
+      } else {
+        buildPACreditStep(ie, bal, maxPA, minPA);
+        showPAStep('credit');
+      }
+    });
+    document.getElementById('pa-ie-back').addEventListener('click', function() { showPAStep('reason'); });
+  }
+
+  function buildPAContactStep(ie, maxPA) {
+    var wSvg = '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#92400e" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#92400e" stroke-width="1.2" stroke-linecap="round"/></svg>';
+    var html = '<p class="hde">Based on your income and expenses, we\'re unable to set up a payment arrangement online.</p>'
+      + '<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px">'
+      + '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--muted)">Disposable income</span><strong>' + LOAN.fmt(Math.max(0, ie.disposable)) + '/month</strong></div>'
+      + '<div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">Maximum affordable (50%)</span><strong style="color:var(--err)">' + LOAN.fmt(Math.max(0, maxPA)) + '/month</strong></div>'
+      + '</div>'
+      + '<div class="hn wn" style="align-items:flex-start;margin-bottom:12px">' + wSvg + '<span>50% of your disposable income is not enough to clear your balance within 24 months. Our team can discuss the best option for you.</span></div>'
+      + '<button class="hbtn bm" id="pa-contact-chat">Chat with Nova</button>'
+      + '<button class="hbtn am" style="margin-top:8px">Call us: 0800 123 4567</button>'
+      + '<button class="hbtn" style="background:var(--surface);color:var(--blue);border:1.5px solid var(--blue);margin-top:8px">Write to us: info@novapay.co.uk</button>'
+      + '<button class="hbtn" id="pa-contact-back" style="background:var(--bg);color:var(--muted);border:1.5px solid var(--border);margin-top:8px">Back</button>';
+    document.getElementById('pa-step-contact').innerHTML = html;
+    document.getElementById('pa-contact-chat').addEventListener('click', function() { document.getElementById('cfab').click(); });
+    document.getElementById('pa-contact-back').addEventListener('click', function() { showPAStep('iae'); });
+  }
+
+  function buildPAAmountStep(ie, bal, maxPA, minPA) {
+    // Normalise to 2dp so input value, feedback and validation all use the same precision
+    minPA = parseFloat(minPA.toFixed(2));
+    maxPA = parseFloat(maxPA.toFixed(2));
+    var today    = new Date();
+    var maxStart = new Date(today); maxStart.setMonth(maxStart.getMonth() + 1);
+    var todayStr    = today.toISOString().slice(0, 10);
+    var maxStartStr = maxStart.toISOString().slice(0, 10);
+    var suggested   = Math.max(minPA, Math.min(maxPA, bal / 12));
+
+    var html = '<p class="hde">Set your monthly payment and choose when to start.</p>'
+      + '<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:14px">'
+      + '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--muted)">Disposable income</span><strong>' + LOAN.fmt(ie.disposable) + '/month</strong></div>'
+      + '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--muted)">Maximum (50% of disposable)</span><strong style="color:var(--green)">' + LOAN.fmt(maxPA) + '/month</strong></div>'
+      + '<div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">Minimum (clear within 24 months)</span><strong>' + LOAN.fmt(minPA) + '/month</strong></div>'
+      + '</div>'
+      + '<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Monthly payment</div>'
+      + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">'
+      + '<span style="font-size:18px;font-weight:700;color:var(--text)">£</span>'
+      + '<input id="pa-amt-input" type="number" min="' + minPA.toFixed(2) + '" max="' + maxPA.toFixed(2) + '" step="0.01" value="' + suggested.toFixed(2) + '" style="flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:16px;font-weight:600;outline:none;background:var(--bg);color:var(--text)">'
+      + '</div>'
+      + '<div id="pa-amt-feedback" style="font-size:11px;min-height:16px;margin-bottom:14px"></div>'
+      + '<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">First payment date</div>'
+      + '<input id="pa-start-input" type="date" min="' + todayStr + '" max="' + maxStartStr + '" value="' + todayStr + '" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;outline:none;background:var(--bg);color:var(--text);margin-bottom:14px">'
+      + '<button class="hbtn bm" id="pa-amt-next">Review arrangement</button>'
+      + '<button class="hbtn" id="pa-amt-back" style="background:var(--bg);color:var(--muted);border:1.5px solid var(--border);margin-top:8px">Back</button>';
+
+    document.getElementById('pa-step-amount').innerHTML = html;
+
+    function updateAmtFeedback() {
+      var amt = parseFloat(document.getElementById('pa-amt-input').value) || 0;
+      var fb  = document.getElementById('pa-amt-feedback');
+      var inp = document.getElementById('pa-amt-input');
+      if (!fb || !inp) return;
+      if (amt < minPA) {
+        fb.textContent = 'Minimum is ' + LOAN.fmt(minPA) + '/month to clear within 24 months.';
+        fb.style.color = 'var(--err)'; inp.style.borderColor = 'var(--err)';
+      } else if (amt > maxPA) {
+        fb.textContent = 'Maximum is ' + LOAN.fmt(maxPA) + '/month (50% of disposable income).';
+        fb.style.color = 'var(--err)'; inp.style.borderColor = 'var(--err)';
+      } else {
+        var mos = Math.ceil(bal / amt);
+        fb.textContent = 'This will clear your balance in approximately ' + mos + ' month' + (mos !== 1 ? 's' : '') + '.';
+        fb.style.color = 'var(--muted)'; inp.style.borderColor = '';
+      }
+    }
+    document.getElementById('pa-amt-input').addEventListener('input', updateAmtFeedback);
+    updateAmtFeedback();
+    document.getElementById('pa-amt-back').addEventListener('click', function() { showPAStep('credit'); });
+    document.getElementById('pa-amt-next').addEventListener('click', function() {
+      var amt      = parseFloat(document.getElementById('pa-amt-input').value) || 0;
+      var startVal = document.getElementById('pa-start-input').value;
+      if (amt < minPA || amt > maxPA || !startVal) {
+        document.getElementById('pa-amt-input').style.borderColor = 'var(--err)';
+        return;
+      }
+      buildPAReviewStep(amt, startVal, ie, bal);
+      showPAStep('review');
+    });
+  }
+
+  function buildPACreditStep(ie, bal, maxPA, minPA) {
+    var html = '<p class="hde">Before you proceed, please read how a payment arrangement will be reported to credit reference agencies.</p>'
+      + '<div style="background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:var(--r);padding:12px;margin-bottom:12px">'
+      + '<div style="font-size:12px;font-weight:700;color:var(--warn-text);margin-bottom:8px">Credit file impact</div>'
+      + '<ul style="font-size:11px;color:var(--warn-text);padding-left:14px;line-height:1.8;margin:0">'
+      + '<li>NovaPay is legally required to report the accurate status of your account to credit reference agencies (Experian, Equifax and TransUnion).</li>'
+      + '<li>This arrangement will be recorded as an <strong>Arrangement to Pay</strong> on your credit file.</li>'
+      + '<li>This marker remains on your credit file for <strong>6 years</strong> and may reduce your credit score.</li>'
+      + '<li>Future lenders may take this into account when you apply for credit.</li>'
+      + '</ul></div>'
+      + '<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--muted)">Reason recorded: <strong style="color:var(--text)">' + paReason + '</strong></div>'
+      + '<button class="hbtn am" id="pa-credit-next">I understand, continue</button>'
+      + '<button class="hbtn" id="pa-credit-back" style="background:var(--bg);color:var(--muted);border:1.5px solid var(--border);margin-top:8px">Back</button>';
+    document.getElementById('pa-step-credit').innerHTML = html;
+    document.getElementById('pa-credit-next').addEventListener('click', function() {
+      buildPAAmountStep(ie, bal, maxPA, minPA);
+      showPAStep('amount');
+    });
+    document.getElementById('pa-credit-back').addEventListener('click', function() { showPAStep('iae'); });
+  }
+
+  function buildPAReviewStep(amount, startDateStr, ie, bal) {
+    var months    = Math.ceil(bal / amount);
+    var startDate = new Date(startDateStr);
+    var endDate   = new Date(startDate); endDate.setMonth(endDate.getMonth() + months - 1);
+    var iSvg = '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#1a56db" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#1a56db" stroke-width="1.2" stroke-linecap="round"/></svg>';
+    var html = '<p class="hde">Please review your payment arrangement before confirming.</p>'
+      + '<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px">'
+      + '<table style="width:100%;border-collapse:collapse;font-size:12px">'
+      + '<tr><td style="padding:4px 0;color:var(--muted)">Outstanding balance</td><td style="text-align:right;font-weight:600">' + LOAN.fmt(bal) + '</td></tr>'
+      + '<tr><td style="padding:4px 0;color:var(--muted)">Monthly payment</td><td style="text-align:right;font-weight:600;color:var(--blue)">' + LOAN.fmt(amount) + '</td></tr>'
+      + '<tr><td style="padding:4px 0;color:var(--muted)">First payment</td><td style="text-align:right;font-weight:600">' + LOAN.shortDate(startDate) + '</td></tr>'
+      + '<tr><td style="padding:4px 0;color:var(--muted)">Number of payments</td><td style="text-align:right;font-weight:600">' + months + '</td></tr>'
+      + '<tr><td style="padding:4px 0;color:var(--muted)">Final payment date</td><td style="text-align:right;font-weight:600">' + LOAN.shortDate(endDate) + '</td></tr>'
+      + '<tr><td style="padding:8px 0 4px;color:var(--ok-text);font-weight:700;border-top:1px solid var(--border)">Interest rate</td><td style="text-align:right;font-weight:700;color:var(--ok-text);padding:8px 0 4px;border-top:1px solid var(--border)">0% — frozen immediately</td></tr>'
+      + '</table></div>'
+      + '<div class="hn bn" style="align-items:flex-start;margin-bottom:12px">' + iSvg + '<span>Interest stops accruing immediately. Your income &amp; expenditure will be updated on confirmation.</span></div>'
+      + '<button class="hbtn bm" id="pa-review-confirm">Confirm arrangement</button>'
+      + '<button class="hbtn" id="pa-review-back" style="background:var(--bg);color:var(--muted);border:1.5px solid var(--border);margin-top:8px">Back</button>';
+    document.getElementById('pa-step-review').innerHTML = html;
+    document.getElementById('pa-review-back').addEventListener('click', function() { showPAStep('amount'); });
+    document.getElementById('pa-review-confirm').addEventListener('click', function() { applyPaymentArrangement(amount, startDateStr, ie); });
+  }
+
+  // Apply PA: dispatch intent — the store tags PA rows and persists state.
+  function applyPaymentArrangement(amount, startDateStr, ie) {
+    var bal    = outstandingBalance();
+    var months = Math.ceil(bal / amount);
+
+    if (_store) {
+      _store.dispatch({
+        type:    NovaPay.CommandTypes.APPLY_PAYMENT_ARRANGEMENT,
+        payload: {
+          amount:             amount,
+          months:             months,
+          startDate:          startDateStr,
+          reason:             paReason || '',
+          outstandingBalance: bal
+        },
+        actor: 'customer_ui'
+      });
+    }
+
+    // Save updated I&E back to profile fields
+    for (var i = 0; i < PA_INC_KEYS.length; i++) {
+      var inp = document.getElementById('pa-ie-' + PA_INC_KEYS[i]);
+      var pEl = document.getElementById('val-' + PA_INC_KEYS[i]);
+      if (inp && pEl) pEl.textContent = '£' + (parseFloat(inp.value) || 0).toFixed(0);
+    }
+    for (var j = 0; j < PA_EXP_KEYS.length; j++) {
+      var inp2 = document.getElementById('pa-ie-' + PA_EXP_KEYS[j]);
+      var pEl2 = document.getElementById('val-' + PA_EXP_KEYS[j]);
+      if (inp2 && pEl2) pEl2.textContent = '£' + (parseFloat(inp2.value) || 0).toFixed(0);
+    }
+    setText('val-inc-total', LOAN.fmt(ie.income));
+    setText('val-loan-repayment', LOAN.fmt(amount)); // update profile repayment row
+
+    updateAllUI();
+
+    var d2 = new Date(startDateStr);
+    var appliedHtml = '<div class="hcf"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:2px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#059669" stroke-width="1.2"/><path d="M4 6.5l2 2 3-3" stroke="#059669" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      + '<div>Arrangement confirmed. ' + LOAN.fmt(amount) + '/month from ' + LOAN.shortDate(d2) + '. Interest frozen at 0%.</div></div>';
+    document.getElementById('pa-step-applied').innerHTML = appliedHtml;
+    showPAStep('applied');
+  }
 
   // ═══════════════════════════════════════════════
   // EDIT MODAL (section-based)
@@ -1203,7 +1735,10 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
     for (var i = 0; i < def.fields.length; i++) {
       var f = def.fields[i];
       var valEl = document.getElementById('val-' + f.key);
-      var current = valEl ? valEl.textContent.replace(/&amp;/g,'&') : '';
+      var rawTxt = valEl ? valEl.textContent.replace(/&amp;/g,'&') : '';
+      // Strip currency formatting for I&E fields so numeric editing is clean
+      var isIEField = ieIncome.indexOf(f.key) > -1 || ieExpense.indexOf(f.key) > -1;
+      var current = isIEField ? String(parseFloat(rawTxt.replace(/[^0-9.]/g,''))||0) : rawTxt;
       html += '<div style="margin-bottom:12px">';
       html += '<div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em">' + f.label + '</div>';
       if (f.type === 'select' && editSelectOpts[f.key]) {
@@ -1257,7 +1792,77 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
       for (var b = 0; b < ieExpense.length; b++) { if (ieExpense[b] === key) { ieChanged = true; } }
     }
     if (ieChanged) recalcIE();
+    // ── Persist profile changes via canonical store commands
+    if (_store) {
+      var idPatch = {}, conPatch = {}, empPatch = {}, pmCard = {}, pmBank = {};
+      var cardChanged = false, bankChanged = false;
+      for (var j = 0; j < inputs.length; j++) {
+        var k2 = inputs[j].getAttribute('data-field');
+        var v2 = inputs[j].value.replace(/^\s+|\s+$/g,'');
+        if (!v2) continue;
+        if (inputs[j].type === 'date') { var dd = new Date(v2); if (!isNaN(dd)) v2 = LOAN.shortDate(dd); }
+        switch (k2) {
+          case 'title':        idPatch.title    = v2; break;
+          case 'lastname':     idPatch.lastName = v2; break;
+          case 'mobile':       conPatch.phone   = v2; break;
+          case 'email':        conPatch.email   = v2; break;
+          case 'address':      conPatch.address = v2; break;
+          case 'since':        conPatch.residentSince = v2; break;
+          case 'empstatus':    empPatch.status          = v2; break;
+          case 'employer':     empPatch.employer        = v2; break;
+          case 'jobtitle':     empPatch.jobTitle        = v2; break;
+          case 'empstart':     empPatch.employmentStart = v2; break;
+          case 'income':       empPatch.annualIncome    = v2; break;
+          case 'payfreq':      empPatch.payFrequency    = v2; break;
+          case 'payday':       empPatch.nextPayDate     = v2; break;
+          case 'pd-cardtype':  pmCard.type = v2; cardChanged = true; break;
+          case 'pd-cardlast':  pmCard.last4 = v2; pmCard.active = true; cardChanged = true; break;
+          case 'pd-cardexp':   pmCard.expiry = v2; cardChanged = true; break;
+          case 'pd-collection': pmCard.collectionDayOfMonth = parseInt(v2)||null; cardChanged = true; break;
+          case 'pd-accholder': pmBank.accountHolder = v2; bankChanged = true; break;
+          case 'pd-bankname':  pmBank.bankName = v2; bankChanged = true; break;
+          case 'pd-sort':      pmBank.sortCodeMasked = v2; bankChanged = true; break;
+          case 'pd-accnum':    pmBank.accountNumberMasked = v2; bankChanged = true; break;
+        }
+      }
+      if (Object.keys(idPatch).length || Object.keys(conPatch).length) {
+        _store.dispatch({ type: NovaPay.CommandTypes.UPDATE_PROFILE, payload: { identity: idPatch, contact: conPatch }, actor: 'customer_ui' });
+      }
+      if (Object.keys(empPatch).length) {
+        _store.dispatch({ type: NovaPay.CommandTypes.UPDATE_EMPLOYMENT, payload: empPatch, actor: 'customer_ui' });
+      }
+      if (cardChanged || bankChanged) {
+        _store.dispatch({ type: NovaPay.CommandTypes.UPDATE_PAYMENT_METHODS, payload: { card: cardChanged ? pmCard : undefined, bank: bankChanged ? pmBank : undefined }, actor: 'customer_ui' });
+      }
+      if (ieChanged) {
+        var gn = function(id) { var e2 = document.getElementById('val-'+id); return e2 ? parseFloat(e2.textContent.replace(/[^0-9.]/g,''))||0 : 0; };
+        var gran = {
+          incSalary:    gn('inc-salary'),   incSecondary: gn('inc-secondary'),
+          incBenefits:  gn('inc-benefits'), incOther:     gn('inc-other'),
+          expRent:      gn('exp-rent'),     expCouncil:   gn('exp-council'),
+          expUtilities: gn('exp-utilities'), expFood:     gn('exp-food'),
+          expTransport: gn('exp-transport'), expChildcare: gn('exp-childcare'),
+          expMobile:    gn('exp-mobile'),   expLoans:     gn('exp-loans'),
+          expCards:     gn('exp-cards'),    expBnpl:      gn('exp-bnpl'),
+          expInsurance: gn('exp-insurance'), expSubs:     gn('exp-subs')
+        };
+        _store.dispatch({
+          type: NovaPay.CommandTypes.UPDATE_AFFORDABILITY,
+          payload: {
+            monthlyIncome:  gran.incSalary+gran.incSecondary+gran.incBenefits+gran.incOther,
+            housingCosts:   gran.expRent+gran.expCouncil+gran.expUtilities,
+            transportCosts: gran.expTransport,
+            livingCosts:    gran.expFood+gran.expChildcare+gran.expMobile,
+            otherDebts:     gran.expLoans+gran.expCards+gran.expBnpl+gran.expInsurance+gran.expSubs,
+            granular:       gran
+          },
+          actor: 'customer_ui'
+        });
+      }
+    }
+    logAction('profile_edit', { section:editKey });
     closeEdit();
+    renderProfile();
   });
   document.getElementById('em-cancel').addEventListener('click', closeEdit);
   function closeEdit() { emModal.classList.remove('open'); editKey = ''; }
@@ -1390,6 +1995,7 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
     var inp = document.getElementById('cinp');
     var txt = inp.value.replace(/^\s+|\s+$/g,'');
     if (!txt) return;
+    logAction('chat_message', { preview:txt.slice(0,60) });
     appendMsg(txt, 'user'); inp.value='';
     setTimeout(function() { appendMsg(chatReply(txt), 'agent'); }, 900);
   }
@@ -1413,12 +2019,541 @@ body{background:#1a1a2e;display:flex;justify-content:center;align-items:flex-sta
   }
 
   // ═══════════════════════════════════════════════
-  // INIT
+  // SHARED CONTACT BLOCK — injected into sub-screens
+  // ═══════════════════════════════════════════════
+  (function() {
+    var faqBtn = '<button class="stab bl" data-goto="s-faq"><div class="si-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#fff" stroke-width="1.5"/><path d="M9 6.5a1.5 1.5 0 011 2.6c-.5.5-.8.9-.8 1.3v.4M9 12v.5" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="st"><div class="sl">Frequently Asked Questions</div><div class="ss">Find answers to common queries</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+    var callBtn = '<button class="stab bl"><div class="si-ic"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4a1 1 0 011-1h2.5l1.2 3.5-1.8 1.8a10 10 0 005.3 5.3l1.8-1.8L17 14v2.5a1 1 0 01-1 1C8.2 17.5 2 11.8 4 4z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="st"><div class="sl">Call Us (Mon\u2013Fri)</div><div class="ss">0800 123 4567 \u00b7 9:00\u201317:00</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+    var writeBtn = '<button class="stab bl"><div class="si-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 4a1 1 0 011-1h10a1 1 0 011 1v7a1 1 0 01-1 1H5l-3 2.5V4z" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg></div><div class="st"><div class="sl">Write to us</div><div class="ss">info@novapay.co.uk</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+    var cmpBtn  = '<button class="stab bl" style="margin-bottom:16px"><div class="si-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#fff" stroke-width="1.4"/><path d="M9 5.5v4M9 11.5v.5" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="st"><div class="sl">Make a complaint</div><div class="ss">complaints@novapay.co.uk</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+    var footer  = '<div class="ft"><div class="ftg">Flexible loans.<br>Straightforward repayments.</div><div style="padding:0 20px"><table class="fgrid"><tr><td><a href="#">Loan</a></td><td><a href="#">About Us</a></td></tr><tr><td><a href="#">FAQs</a></td><td><a href="#">Careers</a></td></tr><tr><td><a href="#">Beware of Loan Sharks</a></td><td><a href="#">Terms of Use</a></td></tr><tr><td><a href="#">Contact Us</a></td><td><a href="#">Privacy Policy</a></td></tr><tr><td><a href="#">File a Complaint</a></td><td><a href="#">Fraud Disclaimer</a></td></tr><tr><td><a href="#">Insights</a></td><td><a href="#">Cookies Policy</a></td></tr></table></div><div class="fleg">We are a lender and may pay commissions to credit brokers or other intermediaries. This commission does not affect the total cost of your loan.<br><br><strong>Responsible Lending:</strong> Take a moment to decide if NovaPay is right for you. Short term loans are an expensive form of borrowing.<br><br>NovaPay Ltd. Authorised and Regulated by the Financial Conduct Authority. Registration Number 900001.</div></div>';
+    var full = faqBtn + callBtn + writeBtn + cmpBtn + footer;
+    var noFaq = callBtn + writeBtn + cmpBtn + footer;
+    var screens = [
+      { id: 's-options', html: full },
+      { id: 's-faq',     html: noFaq },
+      { id: 's-profile', html: full },
+      { id: 's-payment-details', html: full },
+      { id: 's-statement',       html: full },
+      { id: 's-documents',       html: full }
+    ];
+    screens.forEach(function(s) {
+      var sc = document.querySelector('#' + s.id + ' .scroll');
+      if (sc) sc.insertAdjacentHTML('beforeend', s.html);
+    });
+  })();
+
+  // ═══════════════════════════════════════════════
+  // NOVAPAY CORE — shared repository, sync bus, store
+  // ═══════════════════════════════════════════════
+  var _repo   = new NovaPay.LocalStorageAccountRepository();
+  var syncBus = new NovaPay.BroadcastSyncBus('proto_sync_v2');
+  var _store  = null; // set per customer session in initCustomerSession()
+
+  // ── Backend API configuration ────────────────────────────────────────
+  // Set USE_API = true to enable write-through sync to the backend.
+  // The backend must be running: cd backend && node server.js
+  var USE_API  = true;
+  var API_BASE = 'http://localhost:3001/api';
+
+  // ═══════════════════════════════════════════════
+  // CUSTOMER REGISTRY — 5 demo accounts (credentials + seed data)
+  // ═══════════════════════════════════════════════
+  var CUSTOMER_REGISTRY = [
+    {
+      storageKey:'np_customer_28796', id:'customer_28796', name:'Sarah Mitchell', initials:'SM',
+      loanId:'28796', memberSince:'Jan 2025',
+      credentials:{ email:'sarah.mitchell@email.co.uk', pin:'1234' },
+      loan:{ principal:1000, apr:29.9, term:12, startDate:'2026-01-24', paidCount:2, accountStatus:'active' },
+      profile:{
+        personal:   { title:'Ms', firstName:'Sarah', lastName:'Mitchell', dob:'1989-03-14' },
+        contact:    { email:'sarah.mitchell@email.co.uk', phone:'+44 7700 900 7821', address:'42 Elm Grove, Brighton, BN2 3FA', residentSince:'January 2020' },
+        employment: { status:'Full-time employed', employer:'Mitchell & Co Ltd', jobTitle:'Senior Analyst', employmentStart:'March 2019', annualIncome:'£42,000', payFrequency:'Monthly', nextPayDate:'28 Mar 2026' }
+      },
+      incomeExpenditure:{ monthlyIncome:2800, housingCosts:850, transportCosts:120, livingCosts:450, otherDebts:150 },
+      paymentDetails:{
+        card:{ type:'Visa Debit', last4:'4821', expiry:'09/27', collectionDayOfMonth:22, active:true },
+        bank:{ accountHolder:'Sarah Mitchell', bankName:'Barclays Bank', sortCodeMasked:'20-··-··', accountNumberMasked:'····3847', fundedToDate:'2026-01-24' }
+      }
+    },
+    {
+      storageKey:'np_customer_34521', id:'customer_34521', name:'James Okafor', initials:'JO',
+      loanId:'34521', memberSince:'Sep 2025',
+      credentials:{ email:'j.okafor@email.co.uk', pin:'5678' },
+      loan:{ principal:3500, apr:29.9, term:18, startDate:'2025-09-15', paidCount:5, accountStatus:'arrears' },
+      profile:{
+        personal:   { title:'Mr', firstName:'James', lastName:'Okafor', dob:'1985-11-22' },
+        contact:    { email:'j.okafor@email.co.uk', phone:'+44 7912 345 678', address:'17 Birchwood Drive, Manchester, M14 6PQ', residentSince:'March 2018' },
+        employment: { status:'Self-employed', employer:'Okafor Consulting Ltd', jobTitle:'IT Consultant', employmentStart:'January 2015', annualIncome:'£38,000', payFrequency:'Monthly', nextPayDate:'15 Apr 2026' }
+      },
+      incomeExpenditure:{ monthlyIncome:3200, housingCosts:950, transportCosts:180, livingCosts:520, otherDebts:280 },
+      paymentDetails:{
+        card:{ type:'Mastercard Debit', last4:'7743', expiry:'03/26', collectionDayOfMonth:15, active:true },
+        bank:{ accountHolder:'James Okafor', bankName:'HSBC UK', sortCodeMasked:'40-··-··', accountNumberMasked:'····5521', fundedToDate:'2025-09-15' }
+      }
+    },
+    {
+      storageKey:'np_customer_19083', id:'customer_19083', name:'Priya Patel', initials:'PP',
+      loanId:'19083', memberSince:'Mar 2026',
+      credentials:{ email:'priya.patel@email.co.uk', pin:'9012' },
+      loan:{ principal:750, apr:29.9, term:6, startDate:'2026-03-01', paidCount:0, accountStatus:'active' },
+      profile:{
+        personal:   { title:'Ms', firstName:'Priya', lastName:'Patel', dob:'1994-07-08' },
+        contact:    { email:'priya.patel@email.co.uk', phone:'+44 7881 223 344', address:'9 Rosewood Close, Birmingham, B15 2TG', residentSince:'June 2021' },
+        employment: { status:'Full-time employed', employer:'Midlands NHS Trust', jobTitle:'Staff Nurse', employmentStart:'September 2019', annualIncome:'£31,500', payFrequency:'Monthly', nextPayDate:'01 Apr 2026' }
+      },
+      incomeExpenditure:{ monthlyIncome:2625, housingCosts:780, transportCosts:90, livingCosts:380, otherDebts:0 },
+      paymentDetails:{
+        card:{ type:'Visa Debit', last4:'2201', expiry:'11/28', collectionDayOfMonth:1, active:true },
+        bank:{ accountHolder:'Priya Patel', bankName:'Nationwide BS', sortCodeMasked:'07-··-··', accountNumberMasked:'····9034', fundedToDate:'2026-03-01' }
+      }
+    },
+    {
+      storageKey:'np_customer_52140', id:'customer_52140', name:'David Chen', initials:'DC',
+      loanId:'52140', memberSince:'Dec 2025',
+      credentials:{ email:'d.chen@email.co.uk', pin:'3456' },
+      loan:{ principal:5000, apr:29.9, term:24, startDate:'2025-12-10', paidCount:3, accountStatus:'default' },
+      profile:{
+        personal:   { title:'Mr', firstName:'David', lastName:'Chen', dob:'1979-04-30' },
+        contact:    { email:'d.chen@email.co.uk', phone:'+44 7700 556 789', address:'31 Harbour View, Liverpool, L1 0AX', residentSince:'November 2015' },
+        employment: { status:'Part-time employed', employer:'City Catering Ltd', jobTitle:'Catering Manager', employmentStart:'July 2021', annualIncome:'£22,000', payFrequency:'Monthly', nextPayDate:'10 Apr 2026' }
+      },
+      incomeExpenditure:{ monthlyIncome:1833, housingCosts:650, transportCosts:200, livingCosts:600, otherDebts:350 },
+      paymentDetails:{
+        card:{ type:'Mastercard Debit', last4:'6654', expiry:'07/26', collectionDayOfMonth:10, active:true },
+        bank:{ accountHolder:'David Chen', bankName:'Santander', sortCodeMasked:'09-··-··', accountNumberMasked:'····7712', fundedToDate:'2025-12-10' }
+      }
+    },
+    {
+      storageKey:'np_customer_67802', id:'customer_67802', name:'Emma Thompson', initials:'ET',
+      loanId:'67802', memberSince:'Feb 2025',
+      credentials:{ email:'emma.thompson@email.co.uk', pin:'7890' },
+      loan:{ principal:2500, apr:29.9, term:12, startDate:'2025-02-20', paidCount:12, accountStatus:'terminated' },
+      profile:{
+        personal:   { title:'Ms', firstName:'Emma', lastName:'Thompson', dob:'1991-09-16' },
+        contact:    { email:'emma.thompson@email.co.uk', phone:'+44 7799 123 456', address:'5 Oak Street, Leeds, LS1 5DT', residentSince:'February 2019' },
+        employment: { status:'Full-time employed', employer:'Northern Finance Ltd', jobTitle:'Finance Analyst', employmentStart:'May 2017', annualIncome:'£36,000', payFrequency:'Monthly', nextPayDate:'N/A (loan closed)' }
+      },
+      incomeExpenditure:{ monthlyIncome:3000, housingCosts:800, transportCosts:140, livingCosts:420, otherDebts:0 },
+      paymentDetails:{
+        card:{ type:'Visa Debit', last4:'3398', expiry:'06/27', collectionDayOfMonth:20, active:true },
+        bank:{ accountHolder:'Emma Thompson', bankName:'Lloyds Bank', sortCodeMasked:'30-··-··', accountNumberMasked:'····6612', fundedToDate:'2025-02-20' }
+      }
+    }
+  ];
+
+  var ACTIVE_CUSTOMER = null; // registry entry for the logged-in customer
+  var ACCT_KEY = null;        // set after login
+  var LOANS_SESSION_KEY = 'novapay_loans_session'; // localStorage key for session persistence
+
+  // ── Reload LOAN.* and LOAN.schedule from the v3 canonical store.
+  // Called after ops broadcasts a change. Uses stored scheduleSnapshot when
+  // available (preserves PH/PA schedule modifications); falls back to calcLoan().
+  // ── applyLoanOverrides ────────────────────────────────────────────────────
+  // Populates the LOAN.* bridge variables that all render functions read.
+  //
+  // Path A (preferred): use the resolved account from GET /api/accounts/:key/resolved
+  //   — pre-computed server-side, no local selector or active-loan logic needed.
+  //
+  // Path B (fallback): assemble from raw v3 state in localStorage
+  //   — used when the backend is offline or the resolved state hasn't arrived yet.
+  function applyLoanOverrides() {
+    if (!_store) return;
+
+    // ── Path A: resolved state from backend ──────────────────────────────
+    var resolved = _store.getResolvedState && _store.getResolvedState();
+    if (resolved && resolved.activeLoan) {
+      var al   = resolved.activeLoan;
+      var core = al.core;
+      LOAN.principal     = core.principal;
+      LOAN.apr           = core.apr;
+      LOAN.termMonths    = core.termMonths;
+      LOAN.startDate     = new Date(core.startDate);
+      LOAN.paidCount     = core.paidCount;
+      LOAN.accountStatus = al.status.coreStatus || 'active';
+      LOAN.emi           = al.emi || 0;
+      if (al.schedule && al.schedule.length) {
+        LOAN.schedule = al.schedule.map(function (r) {
+          return {
+            n: r.n,
+            dueDate:   r.dueDate instanceof Date ? r.dueDate : new Date(r.dueDate),
+            emi:       r.emi, principal: r.principal, interest: r.interest,
+            balance:   r.balance, status: r.status, ph: r.ph||false, pa: r.pa||false
+          };
+        });
+        LOAN.termMonths = LOAN.schedule.length;
+      }
+      // Allowed / blocked actions from backend engine
+      LOAN.allowedActions = al.allowedActions || [];
+      LOAN.blockedActions = al.blockedActions || [];
+      LOAN.actionReasons  = al.actionReasons  || {};
+      return;
+    }
+
+    // ── Path B: fallback — assemble from raw v3 store (offline) ─────────
+    var st = _store.getState();
+    if (!st) return;
+    var loan = NovaPay.accountStateResolver.getActiveLoan(st);
+    if (!loan) return;
+    var lc = loan.loanCore;
+    var se = loan.statusEngineState;
+    if (lc.principal  !== undefined) LOAN.principal    = lc.principal;
+    if (lc.apr        !== undefined) LOAN.apr           = lc.apr;
+    if (lc.termMonths !== undefined) LOAN.termMonths    = lc.termMonths;
+    if (lc.startDate)                LOAN.startDate     = new Date(lc.startDate);
+    if (lc.paidCount  !== undefined) LOAN.paidCount     = lc.paidCount;
+    LOAN.accountStatus = (se && se.coreStatus) || 'active';
+    var snap = loan.scheduleSnapshot;
+    if (snap && snap.length) {
+      LOAN.schedule = snap.map(function (r) {
+        return {
+          n: r.n,
+          dueDate:   r.dueDate instanceof Date ? r.dueDate : new Date(r.dueDate),
+          emi:       r.emi, principal: r.principal, interest: r.interest,
+          balance:   r.balance, status: r.status, ph: r.ph||false, pa: r.pa||false
+        };
+      });
+      LOAN.termMonths = LOAN.schedule.length;
+    } else {
+      calcLoan();
+    }
+    // Compute allowed/blocked actions from local state when backend resolved isn't available
+    try {
+      var _loan = NovaPay.accountStateResolver.getActiveLoan(st);
+      if (_loan && NovaPay.accountStateResolver.deriveAllowedActions) {
+        var _se  = _loan.statusEngineState || {};
+        var _ov  = _se.overlays    || {};
+        var _df  = _se.derivedFlags || {};
+        var _act = NovaPay.accountStateResolver.deriveAllowedActions(
+          _loan, _se.coreStatus || 'active', _ov, _df, new Date()
+        );
+        LOAN.allowedActions = _act.allowedActions || [];
+        LOAN.blockedActions = _act.blockedActions || [];
+        LOAN.actionReasons  = _act.reasons        || {};
+      }
+    } catch (e) { /* degrade gracefully */ }
+  }
+
+  // ── Show a non-intrusive banner when ops makes a change
+  function showOpsNotice(msg) {
+    var notice = document.getElementById('ops-notice-bar');
+    if (!notice) {
+      notice = document.createElement('div');
+      notice.id = 'ops-notice-bar';
+      notice.style.cssText = 'position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#1e293b;color:#f8fafc;padding:9px 18px;border-radius:8px;font-size:12px;font-weight:600;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.25);border-left:3px solid #3b82f6;white-space:nowrap;display:none';
+      document.body.appendChild(notice);
+    }
+    notice.textContent = msg;
+    notice.style.display = 'block';
+    clearTimeout(notice._t);
+    notice._t = setTimeout(function() { notice.style.display = 'none'; }, 5000);
+  }
+
+  // Incoming events from ops UI via NovaPay SyncBus (BroadcastChannel proto_sync_v2)
+  var CT = NovaPay.CommandTypes;
+  syncBus.subscribe(function(msg) {
+    if (!ACCT_KEY || !msg) return;
+    if (msg.storageKey && msg.storageKey !== ACCT_KEY) return;
+    // Reload from localStorage before rendering — ops has already written the
+    // updated account there; our cached store state is stale until reloaded.
+    if (_store) { try { _store.reload(); } catch(e) {} }
+    var type = msg.type;
+    if (type === CT.CHANGE_ACCOUNT_STATUS) {
+      applyLoanOverrides();
+      updateAllUI();
+      showOpsNotice('Your account status has been updated by NovaPay');
+    } else if (type === CT.RECORD_PAYMENT || type === CT.RECALCULATE_LOAN || type === CT.APPLY_PAYMENT_HOLIDAY || type === CT.APPLY_PAYMENT_ARRANGEMENT || type === CT.CHANGE_PAY_DATE || type === CT.EXTEND_TERM || type === CT.WAIVE_INTEREST) {
+      applyLoanOverrides();
+      calcLoan();
+      updateAllUI();
+      if (type === CT.RECORD_PAYMENT)            showOpsNotice('A payment has been recorded on your account by NovaPay');
+      else if (type === CT.APPLY_PAYMENT_HOLIDAY) showOpsNotice('A payment holiday has been applied to your account');
+      else if (type === CT.EXTEND_TERM)           showOpsNotice('Your loan term has been extended. New monthly payment: \u00a3' + LOAN.emi.toFixed(2));
+      else if (type === CT.CHANGE_PAY_DATE)       showOpsNotice('Your monthly payment date has been updated');
+      else if (type === CT.APPLY_PAYMENT_ARRANGEMENT) showOpsNotice('A payment arrangement has been set up on your account');
+    } else if (type === CT.UPDATE_PROFILE || type === CT.UPDATE_EMPLOYMENT || type === CT.UPDATE_AFFORDABILITY) {
+      renderProfile();
+      showOpsNotice('Your profile details have been updated by NovaPay');
+    } else if (type === CT.CLOSE_ACCOUNT) {
+      LOAN.accountStatus = 'terminated';
+      updateAllUI();
+      showOpsNotice('Your account has been closed. Please contact us if you have any questions.');
+    }
+  });
+
+  // ── Storage event: cross-tab fallback when BroadcastChannel is unavailable
+  window.addEventListener('storage', function(e) {
+    if (!ACCT_KEY || e.key !== ACCT_KEY || !e.newValue) return;
+    try {
+      var newAcct = JSON.parse(e.newValue);
+      // Detect v3 ops change (source in customerAuditTrail) or v2 legacy
+      var trail = newAcct.customerAuditTrail || [];
+      var lastEntry = trail.length ? trail[trail.length - 1] : null;
+      var isOpsChange = lastEntry && lastEntry.source === 'ops_ui';
+      if (!isOpsChange && newAcct.audit) {
+        isOpsChange = newAcct.audit.lastTouchedBy === 'ops_ui';
+      }
+      if (isOpsChange) {
+        if (_store) { _store.reload(); if (_store.refreshResolved) _store.refreshResolved(); }
+        applyLoanOverrides();
+        updateAllUI();
+        renderProfile();
+        showOpsNotice('Your account has been updated by NovaPay');
+      }
+    } catch(err) {}
+  });
+
+  // ── startSyncPolling: no-op — syncBus.subscribe + storage event handle cross-tab updates
+  function startSyncPolling() {}
+
+  // ── Account helpers — backed by NovaPay Repository + Store
+  function getAccount() {
+    if (!_store) return NovaPay.createEmptyCustomerAccount();
+    return _store.getState() || NovaPay.createEmptyCustomerAccount();
+  }
+  function saveAccount() { /* mutations go through store.dispatch() */ }
+
+  // ── Populate profile screen from canonical store state
+  function renderProfile() {
+    var st = _store && _store.getState();
+    if (!st) return;
+    var p = NovaPay.selectors.selectProfile(st);
+    function set(id, val) { var el = document.getElementById(id); if (el && val) el.textContent = val; }
+    set('val-title', p.title);    set('val-firstname', p.firstName);
+    set('val-lastname', p.lastName);
+    set('val-dob', NovaPay.formatters.fmtDob(p.dob));
+    set('val-mobile', p.phone);
+    set('val-email', p.email);
+    set('val-address', p.address);
+    set('val-since', p.residentSince);
+    set('val-empstatus', p.employmentStatus);
+    set('val-employer', p.employer);
+    set('val-jobtitle', p.jobTitle);
+    set('val-empstart', p.employmentStart);
+    set('val-income', NovaPay.formatters.fmtIncome(p.annualIncome));
+    set('val-payfreq', p.payFrequency);
+    set('val-payday', p.nextPayDate);
+  }
+
+  // ── Populate payment details display from canonical store state
+  function renderPaymentDetails() {
+    var st = _store && _store.getState();
+    if (!st) return;
+    var pd   = st.paymentDetails || {};
+    var card = pd.card || {};
+    var bank = pd.bank || {};
+    function setTxt(id, val) { var el = document.getElementById(id); if (el) el.textContent = val || ''; }
+    setTxt('val-pd-cardtype',   card.type   || '');
+    setTxt('val-pd-cardlast',   card.last4  || '');
+    setTxt('val-pd-cardexp',    card.expiry || '');
+    setTxt('val-pd-collection', card.collectionDayOfMonth
+      ? card.collectionDayOfMonth + (card.collectionDayOfMonth === 1 ? 'st' : card.collectionDayOfMonth === 2 ? 'nd' : card.collectionDayOfMonth === 3 ? 'rd' : 'th') + ' of each month'
+      : '');
+    setTxt('val-pd-accholder',  bank.accountHolder       || '');
+    setTxt('val-pd-bankname',   bank.bankName            || '');
+    setTxt('val-pd-bank',       bank.bankName            || '');
+    setTxt('val-pd-sort',       bank.sortCodeMasked      || '');
+    setTxt('val-pd-accnum',     bank.accountNumberMasked || '');
+    // Mirror values on the card visual
+    setTxt('pd-card-last', card.last4  || '');
+    setTxt('pd-card-exp',  card.expiry || '');
+    var cardName = document.getElementById('pd-card-name');
+    if (cardName) cardName.textContent = (bank.accountHolder || '').toUpperCase();
+  }
+
+  // ── Populate the granular I&E display from the canonical store state.
+  // Reads raw.granular (set by migration 2 or by a customer save). Falls back
+  // to zeros so the display is always consistent with what is stored.
+  function renderIE() {
+    var st = _store && _store.getState();
+    if (!st) return;
+    var raw = (st.affordability && st.affordability.incomeExpenditure && st.affordability.incomeExpenditure.raw) || {};
+    var g   = raw.granular || {};
+    // Fallback: if granular is absent/all-zero but flat values exist, derive display from flat
+    if (!(g.incSalary || g.expRent) && raw.monthlyIncome) {
+      g = {
+        incSalary:    raw.monthlyIncome  || 0, incSecondary: 0, incBenefits: 0, incOther: 0,
+        expRent:      raw.housingCosts   || 0, expCouncil:   0, expUtilities:  0,
+        expFood:      raw.livingCosts    || 0, expTransport: raw.transportCosts || 0,
+        expChildcare: 0, expMobile:      0,
+        expLoans:     0, expCards:       raw.otherDebts    || 0,
+        expBnpl:      0, expInsurance:   0,   expSubs:       0
+      };
+    }
+    function fmt(v) { return '£' + Number(v || 0).toLocaleString(); }
+    function setTxt(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
+    setTxt('val-inc-salary',    fmt(g.incSalary));
+    setTxt('val-inc-secondary', fmt(g.incSecondary));
+    setTxt('val-inc-benefits',  fmt(g.incBenefits));
+    setTxt('val-inc-other',     fmt(g.incOther));
+    setTxt('val-exp-rent',      fmt(g.expRent));
+    setTxt('val-exp-council',   fmt(g.expCouncil));
+    setTxt('val-exp-utilities', fmt(g.expUtilities));
+    setTxt('val-exp-food',      fmt(g.expFood));
+    setTxt('val-exp-transport', fmt(g.expTransport));
+    setTxt('val-exp-childcare', fmt(g.expChildcare));
+    setTxt('val-exp-mobile',    fmt(g.expMobile));
+    setTxt('val-exp-loans',     fmt(g.expLoans));
+    setTxt('val-exp-cards',     fmt(g.expCards));
+    setTxt('val-exp-bnpl',      fmt(g.expBnpl));
+    setTxt('val-exp-insurance', fmt(g.expInsurance));
+    setTxt('val-exp-subs',      fmt(g.expSubs));
+    var totalInc = (g.incSalary||0)+(g.incSecondary||0)+(g.incBenefits||0)+(g.incOther||0);
+    var totalExp = (g.expRent||0)+(g.expCouncil||0)+(g.expUtilities||0)+(g.expFood||0)+(g.expTransport||0)+(g.expChildcare||0)+(g.expMobile||0)+(g.expLoans||0)+(g.expCards||0)+(g.expBnpl||0)+(g.expInsurance||0)+(g.expSubs||0);
+    var surplus  = totalInc - totalExp;
+    setTxt('val-inc-total', '£' + totalInc.toLocaleString());
+    var et = document.getElementById('val-exp-total');
+    if (et) { et.textContent = '£' + totalExp.toLocaleString(); et.style.color = surplus < 0 ? 'var(--err)' : 'var(--text)'; }
+    var sv = document.getElementById('val-surplus');
+    if (sv) { sv.textContent = '£' + surplus.toLocaleString(); sv.style.color = surplus < 0 ? 'var(--err)' : 'var(--ok-text)'; }
+    var lr = document.getElementById('val-loan-repayment');
+    if (lr) lr.textContent = LOAN && LOAN.emi ? '£' + LOAN.emi.toFixed(2) : '£0.00';
+  }
+
+  // ── Update customer identity elements (name, loan ID, initials) after login
+  function refreshCustomerIdentity() {
+    var c = ACTIVE_CUSTOMER; if (!c) return;
+    function setText2(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; }
+    var statusLabel = LOAN.accountStatus ? LOAN.accountStatus.charAt(0).toUpperCase()+LOAN.accountStatus.slice(1) : 'Active';
+    setText2('cust-menu-name', c.name);
+    setText2('cust-menu-loan', 'Loan #' + c.loanId + ' \u00b7 ' + statusLabel);
+    setText2('cust-prof-initials', c.initials);
+    setText2('cust-prof-name', c.name);
+    setText2('cust-prof-loan', 'Loan #' + c.loanId + ' \u00b7 Customer since ' + c.memberSince);
+  }
+
+  // ── LOGIN FUNCTIONS
+  // Build demo account buttons on the login screen
+  (function() {
+    var list = document.getElementById('ln-demos'); if (!list) return;
+    var statusClr = { active:'#00b865', arrears:'#d97706', default:'#dc2626', terminated:'#64748b' };
+    CUSTOMER_REGISTRY.forEach(function(c) {
+      var clr = statusClr[c.loan.accountStatus] || '#64748b';
+      var btn = document.createElement('button');
+      btn.style.cssText = 'display:flex;align-items:center;gap:10px;width:100%;background:#fff;border:1px solid #e2e8f5;border-radius:10px;padding:10px 13px;cursor:pointer;text-align:left;transition:border-color .15s,background .15s';
+      btn.onmouseover = function(){ this.style.borderColor='#1a56db'; this.style.background='#f8faff'; };
+      btn.onmouseout  = function(){ this.style.borderColor='#e2e8f5'; this.style.background='#fff'; };
+      btn.innerHTML = '<div style="width:36px;height:36px;background:linear-gradient(135deg,#60a5fa,#1a56db);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0">'+c.initials+'</div>'
+        +'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;color:#0f1828">'+c.name+'</div>'
+        +'<div style="font-size:11px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+c.credentials.email+' &middot; PIN: '+c.credentials.pin+'</div></div>'
+        +'<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:12px;background:'+clr+'1a;color:'+clr+';flex-shrink:0">'+c.loan.accountStatus.charAt(0).toUpperCase()+c.loan.accountStatus.slice(1)+'</span>';
+      btn.onclick = function() {
+        document.getElementById('ln-email').value = c.credentials.email;
+        document.getElementById('ln-pin').value   = c.credentials.pin;
+        document.getElementById('ln-error').style.display = 'none';
+      };
+      list.appendChild(btn);
+    });
+  })();
+
+  function attemptLogin() {
+    var email = (document.getElementById('ln-email').value||'').toLowerCase().trim();
+    var pin   = (document.getElementById('ln-pin').value||'').trim();
+    var errEl = document.getElementById('ln-error');
+    if (!email || !pin) { errEl.textContent = 'Please enter your email address and PIN.'; errEl.style.display='block'; return; }
+    var customer = null;
+    for (var i = 0; i < CUSTOMER_REGISTRY.length; i++) {
+      if (CUSTOMER_REGISTRY[i].credentials.email === email && CUSTOMER_REGISTRY[i].credentials.pin === pin) { customer = CUSTOMER_REGISTRY[i]; break; }
+    }
+    if (!customer) { errEl.textContent = 'Email or PIN not recognised. Please try again.'; errEl.style.display='block'; return; }
+    errEl.style.display = 'none';
+    initCustomerSession(customer);
+  }
+
+  function initCustomerSession(customer) {
+    ACTIVE_CUSTOMER = customer;
+    ACCT_KEY = customer.storageKey;
+    // Persist session so hard refresh restores the logged-in state
+    try { localStorage.setItem(LOANS_SESSION_KEY, JSON.stringify({ storageKey: customer.storageKey })); } catch(e) {}
+    // Create store for this customer session
+    var localStore = NovaPay.createAccountStore({
+      repository:  _repo,
+      syncBus:     syncBus,
+      loanService: new NovaPay.LoanService()
+    });
+    // When USE_API is true, wrap the localStorage store with the API write-through adapter.
+    // Every dispatch() writes to both localStorage (synchronous) and the backend API (async).
+    _store = USE_API && NovaPay.createApiAccountStore
+      ? NovaPay.createApiAccountStore({ localStore: localStore, storageKey: ACCT_KEY, apiBase: API_BASE })
+      : localStore;
+
+    // Load or migrate existing localStorage data; creates v3 account from seed if new.
+    // When USE_API=true the API store also fires a background sync with the backend,
+    // which on completion fetches the resolved view and triggers subscribeResolved callbacks.
+    _store.loadLegacy(ACCT_KEY, customer);
+
+    // Populate LOAN.* bridge from local state immediately (synchronous — instant UI).
+    try { applyLoanOverrides(); } catch(e) {}
+
+    // Navigate to home NOW — before any render calls.
+    // This guarantees the customer lands on the dashboard even if a render function
+    // throws, rather than being left on the login screen.
+    go('s-home');
+
+    // Initial synchronous render from local (Path B) state.
+    try { refreshCustomerIdentity(); } catch(e) {}
+    try { renderProfile();        } catch(e) {}
+    try { renderPaymentDetails(); } catch(e) {}
+    try { renderIE();             } catch(e) {}
+    try { updateAllUI();          } catch(e) {}
+    try { previewEngine();        } catch(e) {}
+
+    // When the resolved (backend-authoritative) state arrives, re-render everything.
+    // This overwrites the local-first values with the server projection.
+    if (_store.subscribeResolved) {
+      _store.subscribeResolved(function () {
+        try { applyLoanOverrides();   } catch(e) {}
+        try { renderProfile();        } catch(e) {}
+        try { renderPaymentDetails(); } catch(e) {}
+        try { renderIE();             } catch(e) {}
+        try { updateAllUI();          } catch(e) {}
+      });
+    }
+  }
+
+  // ── logAction: dispatch LOG_EVENT to store (persists + broadcasts via syncBus)
+  function logAction(action, details) {
+    if (!_store) return;
+    _store.dispatch({
+      type:    NovaPay.CommandTypes.LOG_EVENT,
+      payload: { action: action, details: details || {} },
+      actor:   'customer_ui'
+    });
+  }
+
+  // ═══════════════════════════════════════════════
+  // INIT — wire navigation, then show login screen
   // ═══════════════════════════════════════════════
   wireGoto();
-  calcLoan();
-  updateAllUI();
-  previewEngine();
+  // Expose login handler to global scope (called from inline onclick attribute)
+  window.attemptLogin = attemptLogin;
+
+  // ── Session restore: if a valid session key exists in localStorage, bypass the
+  // login screen and rehydrate directly. Survives hard refresh and tab restore.
+  (function restoreSession() {
+    var raw;
+    try { raw = localStorage.getItem(LOANS_SESSION_KEY); } catch(e) { return; }
+    if (!raw) return;
+    var sess;
+    try { sess = JSON.parse(raw); } catch(e) {
+      try { localStorage.removeItem(LOANS_SESSION_KEY); } catch(ex) {}
+      return;
+    }
+    if (!sess || !sess.storageKey) return;
+    var customer = null;
+    for (var i = 0; i < CUSTOMER_REGISTRY.length; i++) {
+      if (CUSTOMER_REGISTRY[i].storageKey === sess.storageKey) { customer = CUSTOMER_REGISTRY[i]; break; }
+    }
+    if (!customer) {
+      // Session key references an unknown customer — clear it and stay on login
+      try { localStorage.removeItem(LOANS_SESSION_KEY); } catch(e) {}
+      return;
+    }
+    // initCustomerSession navigates to s-home internally; any render errors are
+    // caught individually inside the function and do not block navigation.
+    initCustomerSession(customer);
+  })();
+  // All loan/account initialisation happens inside initCustomerSession() after login
 
 })();
 </script>

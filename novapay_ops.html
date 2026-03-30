@@ -1,0 +1,2346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NovaPay — Operations Centre</title>
+<style>
+:root {
+  --sb:#0f172a; --sb-border:#1e293b; --sb-text:#94a3b8; --sb-hover:#1e293b;
+  --sb-active:rgba(59,130,246,.18); --sb-active-text:#93c5fd; --sb-w:240px;
+  --bg:#f1f5f9; --surface:#fff; --border:#e2e8f0; --border-strong:#cbd5e1;
+  --text:#0f172a; --muted:#64748b; --dim:#94a3b8;
+  --blue:#1a56db; --blue-dark:#1e40af; --blue-light:#dbeafe;
+  --green:#059669; --green-bg:#d1fae5;
+  --amber:#b45309; --amber-bg:#fef3c7;
+  --red:#dc2626; --red-bg:#fee2e2;
+  --purple:#7c3aed; --purple-bg:#ede9fe;
+  --r:8px; --r-sm:5px; --r-lg:12px;
+  --sh:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --sh-md:0 4px 6px rgba(0,0,0,.05),0 2px 4px rgba(0,0,0,.04);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;overflow:hidden;height:100vh}
+input,select,textarea,button{font:inherit}
+a{text-decoration:none;color:inherit;cursor:pointer}
+
+/* ── App Layout */
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* ── Sidebar */
+.sidebar{width:var(--sb-w);min-width:var(--sb-w);background:var(--sb);display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--sb-border)}
+.sb-logo{display:flex;align-items:center;gap:10px;padding:18px 16px 16px;border-bottom:1px solid var(--sb-border)}
+.sb-mark{width:32px;height:32px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0}
+.sb-name{font-size:13px;font-weight:700;color:#f8fafc}
+.sb-sub{font-size:10px;color:var(--sb-text);text-transform:uppercase;letter-spacing:.06em}
+.sb-scroll{flex:1;overflow-y:auto;padding:10px 8px}
+.sb-scroll::-webkit-scrollbar{display:none}
+.sb-group{font-size:9px;font-weight:700;color:var(--sb-text);text-transform:uppercase;letter-spacing:.08em;padding:12px 8px 4px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:6px;color:var(--sb-text);font-size:12.5px;font-weight:500;cursor:pointer;margin-bottom:1px;transition:background .15s,color .15s;position:relative}
+.sb-item:hover{background:var(--sb-hover);color:#e2e8f0}
+.sb-item.active{background:var(--sb-active);color:var(--sb-active-text);font-weight:600}
+.sb-item svg{flex-shrink:0;opacity:.7}
+.sb-item.active svg{opacity:1}
+.sb-badge{background:var(--red);color:#fff;border-radius:9px;min-width:17px;height:17px;font-size:9px;font-weight:700;display:none;align-items:center;justify-content:center;padding:0 4px;margin-left:auto}
+.sb-footer{padding:12px;border-top:1px solid var(--sb-border)}
+.sb-agent{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.sb-av{width:30px;height:30px;background:linear-gradient(135deg,#3b82f6,#1a56db);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.sb-agent-name{font-size:12px;font-weight:600;color:#e2e8f0}
+.sb-agent-role{font-size:10px;color:var(--sb-text)}
+.sb-live{display:flex;align-items:center;gap:7px;font-size:10px;color:var(--sb-text);padding:7px 8px;background:rgba(255,255,255,.04);border-radius:5px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--dim);flex-shrink:0;transition:background .3s}
+.live-dot.on{background:var(--green);box-shadow:0 0 0 3px rgba(5,150,105,.2)}
+
+/* ── Main */
+.main{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:56px;min-height:56px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:16px;box-shadow:var(--sh);z-index:10}
+.tb-left{flex:1;min-width:0}
+.tb-title{font-size:15px;font-weight:700;color:var(--text)}
+.tb-crumb{font-size:11px;color:var(--muted)}
+.tb-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.tb-cust{display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--bg);border-radius:8px;border:1px solid var(--border)}
+.tb-cav{width:26px;height:26px;background:linear-gradient(135deg,#60a5fa,var(--blue));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff}
+.tb-cname{font-size:12px;font-weight:600}
+.tb-cloan{font-size:10px;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.chip::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.chip-active{background:var(--green-bg);color:var(--green)}
+.chip-arrears{background:var(--amber-bg);color:var(--amber)}
+.chip-default{background:var(--red-bg);color:var(--red)}
+.chip-terminated{background:#f1f5f9;color:var(--muted)}
+
+/* ── Content */
+.content{flex:1;overflow-y:auto;padding:24px}
+.content::-webkit-scrollbar{width:6px}
+.content::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:3px}
+.section{display:none}
+.section.active{display:block}
+
+/* ── Cards */
+.card{background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);box-shadow:var(--sh);margin-bottom:16px;overflow:hidden}
+.card-hdr{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:13px;font-weight:700;color:var(--text)}
+.card-body{padding:18px}
+.card-body-tight{padding:14px 18px}
+
+/* ── Stat grid */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.stat-card{background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);padding:16px 18px;box-shadow:var(--sh)}
+.stat-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.stat-value{font-size:22px;font-weight:800;color:var(--text);margin-bottom:3px;line-height:1.1}
+.stat-sub{font-size:11px;color:var(--muted)}
+
+/* ── Grid layouts */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px}
+.loan-layout{display:grid;grid-template-columns:280px 1fr;gap:16px}
+.calc-layout{display:grid;grid-template-columns:320px 1fr;gap:16px}
+
+/* ── Forms */
+.field{margin-bottom:12px}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:10px;font-weight:700;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.field input,.field select,.field textarea{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--bg);color:var(--text);font-size:12.5px;transition:border-color .15s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue);background:var(--surface)}
+.field textarea{resize:vertical;min-height:80px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* ── Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--r-sm);font-size:12.5px;font-weight:600;border:none;cursor:pointer;transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btn:active{opacity:.7}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-secondary{background:var(--bg);color:var(--text);border:1px solid var(--border)}
+.btn-success{background:var(--green);color:#fff}
+.btn-danger{background:var(--red);color:#fff}
+.btn-warning{background:var(--amber);color:#fff}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-sm{padding:5px 11px;font-size:11.5px}
+.btn-xs{padding:3px 8px;font-size:11px}
+.btn-block{width:100%;justify-content:center}
+
+/* ── Tables */
+.tbl-wrap{overflow-x:auto}
+.tbl-wrap::-webkit-scrollbar{height:4px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.tbl th{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;text-align:left;background:#f8fafc;border-bottom:1px solid var(--border);white-space:nowrap}
+.tbl td{padding:8px 12px;border-bottom:1px solid #f1f5f9;color:var(--text)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:#f8fafc}
+.tbl .mono{font-family:'SF Mono',Monaco,Consolas,monospace;font-size:12px}
+.tbl tr.row-paid td{color:var(--muted)}
+.tbl tr.row-current td{background:#eff6ff;font-weight:600}
+.tbl tr.row-current:hover td{background:#dbeafe}
+.tbl tr.row-ph td{background:#fdf4ff;color:var(--purple)}
+.tbl tr.row-pa td{background:#fffbeb}
+
+/* ── KV list */
+.kv{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:12.5px}
+.kv:last-child{border-bottom:none;padding-bottom:0}
+.kv-k{color:var(--muted);font-weight:500}
+.kv-v{font-weight:600;color:var(--text)}
+
+/* ── Section header */
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.sec-hdr-left h2{font-size:18px;font-weight:800;color:var(--text)}
+.sec-hdr-left p{font-size:12px;color:var(--muted);margin-top:2px}
+.sec-hdr-right{display:flex;gap:8px}
+
+
+/* ── Activity */
+.activity-item{display:flex;gap:12px;padding:9px 0;border-bottom:1px solid #f8fafc}
+.activity-item:last-child{border-bottom:none}
+.act-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.act-action{font-size:12.5px;font-weight:600;color:var(--text)}
+.act-detail{font-size:11px;color:var(--muted);margin-top:1px}
+.act-time{font-size:10px;color:var(--dim);margin-left:auto;flex-shrink:0;white-space:nowrap;margin-top:2px}
+
+/* ── Filter bar */
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.filter-btn{padding:4px 11px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .15s}
+.filter-btn:hover{border-color:var(--blue);color:var(--blue)}
+.filter-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* ── Action cards */
+.action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.action-card{background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);padding:18px;box-shadow:var(--sh)}
+.action-card-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.action-card-desc{font-size:11.5px;color:var(--muted);margin-bottom:14px;line-height:1.55}
+
+/* ── Collections */
+.col-risk{display:flex;align-items:center;gap:12px;padding:14px 18px}
+.col-risk-bar{flex:1;height:7px;background:#f1f5f9;border-radius:4px;overflow:hidden}
+.col-risk-fill{height:100%;border-radius:4px;transition:width .5s,background .5s}
+.note-item{padding:10px 12px;background:#fffbeb;border-left:3px solid var(--amber);border-radius:0 var(--r-sm) var(--r-sm) 0;margin-bottom:8px;font-size:12px;line-height:1.5}
+.note-meta{font-size:10px;color:var(--dim);margin-top:4px}
+
+/* ── Toast */
+#toast-root{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{display:flex;align-items:center;gap:10px;padding:11px 16px;background:#1e293b;color:#f8fafc;border-radius:var(--r);font-size:12.5px;box-shadow:var(--sh-md);min-width:220px;max-width:340px;animation:slideIn .2s ease;pointer-events:all}
+.toast.success{border-left:3px solid var(--green)}
+.toast.error{border-left:3px solid var(--red)}
+.toast.info{border-left:3px solid var(--blue)}
+.toast.warning{border-left:3px solid var(--amber)}
+@keyframes slideIn{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* ── Divider */
+.divider{height:1px;background:var(--border);margin:16px 0}
+</style>
+</head>
+<body>
+<!-- ═══════ OPS LOGIN OVERLAY ═══════ -->
+<div id="ops-login-overlay" style="position:fixed;inset:0;background:#0f172a;z-index:9900;display:flex;align-items:center;justify-content:center">
+  <div style="width:420px;background:#fff;border-radius:16px;padding:40px;box-shadow:0 24px 80px rgba(0,0,0,.55)">
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="width:52px;height:52px;background:#1a56db;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#fff;margin:0 auto 14px;box-shadow:0 6px 20px rgba(26,86,219,.4)">N</div>
+      <div style="font-size:20px;font-weight:800;color:#0f172a">NovaPay Operations</div>
+      <div style="font-size:12px;color:#64748b;margin-top:3px">Agent sign-in</div>
+    </div>
+    <div class="field">
+      <label>Agent email</label>
+      <input id="ops-ln-email" type="email" placeholder="agent@novapay.co.uk" value="ops.agent@novapay.co.uk"
+        onkeydown="if(event.key==='Enter')document.getElementById('ops-ln-pwd').focus()">
+    </div>
+    <div class="field" style="margin-bottom:20px">
+      <label>Password</label>
+      <input id="ops-ln-pwd" type="password" placeholder="••••••••"
+        onkeydown="if(event.key==='Enter')opsLogin()">
+    </div>
+    <div id="ops-ln-error" style="display:none;padding:9px 12px;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;color:#dc2626;font-size:12px;margin-bottom:14px"></div>
+    <button class="btn btn-primary btn-block" onclick="opsLogin()" style="padding:11px;font-size:13.5px">Sign in to Operations Centre</button>
+    <div style="margin-top:14px;padding:10px 12px;background:#f8fafc;border-radius:6px;font-size:11.5px;color:#64748b;text-align:center;line-height:1.7">
+      Demo credentials<br><strong style="color:#0f172a">ops.agent@novapay.co.uk</strong> &nbsp;/&nbsp; <strong style="color:#0f172a">novapay2026</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ OPS CUSTOMER SELECTOR ═══════ -->
+<div id="ops-cust-selector" style="position:fixed;inset:0;background:var(--bg);z-index:9800;display:none;flex-direction:column;overflow:hidden">
+  <div style="background:var(--sb);padding:16px 24px;display:flex;align-items:center;gap:14px;flex-shrink:0;border-bottom:1px solid var(--sb-border)">
+    <div style="width:32px;height:32px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0">N</div>
+    <div>
+      <div style="font-size:13px;font-weight:700;color:#f8fafc">NovaPay Operations Centre</div>
+      <div style="font-size:10px;color:var(--sb-text);text-transform:uppercase;letter-spacing:.06em">Select a customer to open their workspace</div>
+    </div>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
+      <span id="ops-agent-badge" style="font-size:11px;color:var(--sb-text);background:rgba(255,255,255,.06);border-radius:6px;padding:4px 10px"></span>
+      <button onclick="opsLogout()" style="background:transparent;border:1px solid rgba(255,255,255,.18);border-radius:6px;color:var(--sb-text);font-size:11px;padding:5px 12px;cursor:pointer;transition:color .15s" onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='var(--sb-text)'">Sign out</button>
+    </div>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:28px 24px">
+    <div style="max-width:800px;margin:0 auto">
+      <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:3px">Customer Directory</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:20px">5 accounts &middot; Click a customer to open their full workspace</div>
+      <div id="ops-cust-list" style="display:flex;flex-direction:column;gap:10px"></div>
+    </div>
+  </div>
+</div>
+
+<div class="app">
+
+  <!-- ═══════ SIDEBAR ═══════ -->
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-mark">N</div>
+      <div><div class="sb-name">NovaPay</div><div class="sb-sub">Operations Centre</div></div>
+    </div>
+
+    <div class="sb-scroll">
+      <div class="sb-group">Directory</div>
+      <div class="sb-item" id="sb-change-cust" onclick="showCustomerSelector()" style="cursor:pointer">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="5" cy="4.5" r="2" stroke="currentColor" stroke-width="1.3"/><circle cx="10" cy="4.5" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M1 11c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M10 7.5c1.7.3 3 1.8 3 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Change Customer
+      </div>
+      <div class="sb-group">Workspace</div>
+      <div class="sb-item active" data-sec="sec-overview">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1.2" stroke="#93c5fd" stroke-width="1.3"/><rect x="8" y="1" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="8" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/><rect x="8" y="8" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/></svg>
+        Overview
+      </div>
+      <div class="sb-item" data-sec="sec-customer">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="4.5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 12c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Customer Profile
+      </div>
+      <div class="sb-item" data-sec="sec-loan">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="1" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 5h5M4.5 7.5h5M4.5 10h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Loan &amp; Schedule
+      </div>
+      <div class="sb-item" data-sec="sec-payment-details">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3.5" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 6.5h12" stroke="currentColor" stroke-width="1.3"/><rect x="3" y="8.5" width="3" height="1.5" rx=".4" fill="currentColor"/></svg>
+        Payment Details
+      </div>
+      <div class="sb-item" data-sec="sec-statement">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="1" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 4.5h6M4 7h6M4 9.5h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Statement
+      </div>
+      <div class="sb-item" data-sec="sec-documents">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 1.5h5.5l3 3V12.5H3V1.5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M8.5 1.5V4.5H11.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 6.5h4M5 8.5h4M5 10.5h2.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>
+        Documents
+      </div>
+
+      <div class="sb-group">Actions</div>
+      <div class="sb-item" data-sec="sec-actions">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 4v3l2 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Account Actions
+      </div>
+      <div class="sb-item" data-sec="sec-calculator">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="1.5" width="10" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 4.5h5M4.5 7.5h1.5M7 7.5h1.5M8.5 7.5h1M4.5 10h1.5M7 10h1.5M8.5 10h1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Loan Calculator
+      </div>
+
+      <div class="sb-group">Monitoring</div>
+      <div class="sb-item" data-sec="sec-activity">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 4v3.5l2.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Activity Log
+        <span class="sb-badge" id="sb-activity-badge">0</span>
+      </div>
+      <div class="sb-item" data-sec="sec-collections">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5l1.5 3 3.3.5-2.4 2.3.6 3.3L7 9l-3 1.6.6-3.3L2.2 5l3.3-.5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+        Collections
+      </div>
+    </div>
+
+    <div class="sb-footer">
+      <div class="sb-agent">
+        <div class="sb-av">OA</div>
+        <div><div class="sb-agent-name">Ops Agent</div><div class="sb-agent-role">Senior Specialist</div></div>
+      </div>
+      <div class="sb-live">
+        <div class="live-dot" id="live-dot"></div>
+        <span id="live-text">Customer offline</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══════ MAIN ═══════ -->
+  <div class="main">
+    <div class="topbar">
+      <div class="tb-left">
+        <div class="tb-title" id="tb-title">Overview</div>
+        <div class="tb-crumb" id="tb-crumb">Sarah Mitchell &middot; Loan #28796</div>
+      </div>
+      <div class="tb-right">
+        <button onclick="openSearch()" title="Search customers (Ctrl+K)" style="width:34px;height:34px;background:var(--bg);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:border-color .15s" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border)'">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="var(--muted)" stroke-width="1.4"/><path d="M10 10l2.5 2.5" stroke="var(--muted)" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </button>
+        <span class="chip chip-active" id="tb-status"><span id="tb-status-text">Active</span></span>
+        <div class="tb-cust">
+          <div class="tb-cav" id="tb-cav">SM</div>
+          <div><div class="tb-cname" id="tb-cname">Sarah Mitchell</div><div class="tb-cloan" id="tb-cloan">Loan #28796</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ══ OVERVIEW ══ -->
+      <section id="sec-overview" class="section active">
+        <div class="sec-hdr">
+          <div class="sec-hdr-left"><h2>Overview</h2><p>Account summary &mdash; Sarah Mitchell &middot; Loan #28796</p></div>
+          <div class="sec-hdr-right">
+            <button class="btn btn-primary btn-sm" onclick="gotoSec('sec-actions')">Account Actions</button>
+          </div>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-label">Outstanding Balance</div><div class="stat-value" id="ov-balance">—</div><div class="stat-sub" id="ov-balance-sub">—</div></div>
+          <div class="stat-card"><div class="stat-label">Next Payment Due</div><div class="stat-value" id="ov-next-due" style="font-size:16px;padding-top:4px">—</div><div class="stat-sub" id="ov-next-emi">—</div></div>
+          <div class="stat-card"><div class="stat-label">Monthly EMI</div><div class="stat-value" id="ov-emi">—</div><div class="stat-sub" id="ov-emi-sub">—</div></div>
+          <div class="stat-card"><div class="stat-label">Instalments Remaining</div><div class="stat-value" id="ov-remaining">—</div><div class="stat-sub" id="ov-remaining-sub">—</div></div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="card-hdr"><span class="card-title">Recent Activity</span><button class="btn btn-ghost btn-xs" onclick="gotoSec('sec-activity')">View all</button></div>
+            <div id="ov-activity" style="padding:0 18px"></div>
+          </div>
+          <div>
+            <div class="card" style="margin-bottom:14px">
+              <div class="card-hdr"><span class="card-title">Repayment Progress</span><span id="ov-health-pct" style="font-size:11px;color:var(--muted)">—</span></div>
+              <div class="card-body-tight">
+                <div style="height:8px;background:#f1f5f9;border-radius:4px;overflow:hidden">
+                  <div id="ov-health-fill" style="height:100%;background:var(--blue);border-radius:4px;transition:width .5s;width:0%"></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-hdr"><span class="card-title">Quick Actions</span></div>
+              <div class="card-body">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                  <button class="btn btn-secondary btn-sm" onclick="gotoSec('sec-actions')">Change Status</button>
+                  <button class="btn btn-secondary btn-sm" onclick="gotoSec('sec-actions')">Record Payment</button>
+                  <button class="btn btn-secondary btn-sm" onclick="gotoSec('sec-actions')">Payment Holiday</button>
+                  <button class="btn btn-secondary btn-sm" onclick="gotoSec('sec-loan')">View Schedule</button>
+                  <button class="btn btn-secondary btn-sm" onclick="gotoSec('sec-calculator')">Calculator</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ CUSTOMER PROFILE ══ -->
+      <section id="sec-customer" class="section">
+        <div class="sec-hdr">
+          <div class="sec-hdr-left"><h2>Customer Profile</h2><p>Personal details, income &amp; expenditure, and internal notes</p></div>
+          <div class="sec-hdr-right"><button class="btn btn-primary btn-sm" onclick="saveCustomerProfile()">Save Changes</button></div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="card" style="margin-bottom:14px">
+              <div class="card-hdr"><span class="card-title">Personal Details</span></div>
+              <div class="card-body">
+                <div class="field-row" style="margin-bottom:10px">
+                  <div class="field" style="flex:0 0 72px"><label>Title</label><input type="text" id="cust-title" style="background:var(--bg)" readonly></div>
+                  <div class="field"><label>First Name</label><input type="text" id="cust-firstname" style="background:var(--bg)" readonly></div>
+                  <div class="field"><label>Last Name</label><input type="text" id="cust-name" placeholder="Mitchell"></div>
+                </div>
+                <div class="field"><label>Email Address</label><input type="email" id="cust-email"></div>
+                <div class="field"><label>Phone Number</label><input type="tel" id="cust-phone"></div>
+                <div class="field"><label>Home Address</label><input type="text" id="cust-address"></div>
+                <div class="field-row" style="margin-bottom:0">
+                  <div class="field"><label>Date of Birth</label><input type="date" id="cust-dob"></div>
+                  <div class="field"><label>Resident Since</label><input type="text" id="cust-resident-since"></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-hdr"><span class="card-title">Employment</span></div>
+              <div class="card-body">
+                <div class="field"><label>Employment Status</label><input type="text" id="cust-empstatus"></div>
+                <div class="field-row" style="margin-bottom:10px">
+                  <div class="field"><label>Employer</label><input type="text" id="cust-employer"></div>
+                  <div class="field"><label>Job Title</label><input type="text" id="cust-jobtitle"></div>
+                </div>
+                <div class="field-row" style="margin-bottom:0">
+                  <div class="field"><label>Start Date</label><input type="text" id="cust-empstart"></div>
+                  <div class="field"><label>Annual Income</label><input type="text" id="cust-income"></div>
+                </div>
+                <div class="field-row" style="margin-bottom:0">
+                  <div class="field"><label>Pay Frequency</label><input type="text" id="cust-payfreq"></div>
+                  <div class="field"><label>Next Pay Date</label><input type="text" id="cust-payday"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="card" style="margin-bottom:14px">
+              <div class="card-hdr"><span class="card-title">Account Metadata</span></div>
+              <div class="card-body-tight">
+                <div class="kv"><span class="kv-k">Customer ID</span><span class="kv-v mono" id="cust-meta-id">—</span></div>
+                <div class="kv"><span class="kv-k">Loan ID</span><span class="kv-v mono" id="cust-meta-loan">—</span></div>
+                <div class="kv"><span class="kv-k">Account Created</span><span class="kv-v" id="cust-meta-created">—</span></div>
+                <div class="kv"><span class="kv-k">Last Active</span><span class="kv-v" id="cust-meta-active">—</span></div>
+                <div class="kv"><span class="kv-k">Account Status</span><span class="kv-v" id="cust-meta-status">—</span></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-hdr"><span class="card-title">Income &amp; Expenditure</span></div>
+              <div class="card-body">
+                <div class="field-row" style="margin-bottom:10px">
+                  <div class="field"><label>Monthly Income</label><input type="number" id="cust-ie-income" step="10"></div>
+                  <div class="field"><label>Housing Costs</label><input type="number" id="cust-ie-housing" step="10"></div>
+                </div>
+                <div class="field-row" style="margin-bottom:10px">
+                  <div class="field"><label>Transport</label><input type="number" id="cust-ie-transport" step="10"></div>
+                  <div class="field"><label>Living Costs</label><input type="number" id="cust-ie-living" step="10"></div>
+                </div>
+                <div class="field"><label>Other Debts (monthly)</label><input type="number" id="cust-ie-debts" step="10"></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0 0;font-size:12.5px">
+                  <span style="color:var(--muted);font-weight:500">Disposable Income</span>
+                  <strong id="cust-ie-disposable">—</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Granular I&E breakdown (read-only — populated from raw.granular) -->
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">Granular I&amp;E Breakdown</span><span style="font-size:11px;color:var(--muted)">Full 16-line statement</span></div>
+          <div class="card-body" style="padding-bottom:4px">
+            <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Income</div>
+            <div class="kv"><span class="kv-k">Primary income (net salary)</span><span class="kv-v mono" id="ops-g-inc-salary">—</span></div>
+            <div class="kv"><span class="kv-k">Secondary income</span><span class="kv-v mono" id="ops-g-inc-secondary">—</span></div>
+            <div class="kv"><span class="kv-k">Benefits / Universal Credit</span><span class="kv-v mono" id="ops-g-inc-benefits">—</span></div>
+            <div class="kv"><span class="kv-k">Other income</span><span class="kv-v mono" id="ops-g-inc-other">—</span></div>
+            <div class="kv" style="border-top:1px solid var(--border);margin-top:4px;padding-top:8px"><span class="kv-k" style="font-weight:700">Total income</span><span class="kv-v mono" style="font-weight:700;color:var(--green)" id="ops-g-inc-total">—</span></div>
+            <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:12px 0 6px">Expenditure</div>
+            <div class="kv"><span class="kv-k">Rent / mortgage</span><span class="kv-v mono" id="ops-g-exp-rent">—</span></div>
+            <div class="kv"><span class="kv-k">Council tax</span><span class="kv-v mono" id="ops-g-exp-council">—</span></div>
+            <div class="kv"><span class="kv-k">Utilities</span><span class="kv-v mono" id="ops-g-exp-utilities">—</span></div>
+            <div class="kv"><span class="kv-k">Food &amp; groceries</span><span class="kv-v mono" id="ops-g-exp-food">—</span></div>
+            <div class="kv"><span class="kv-k">Transport</span><span class="kv-v mono" id="ops-g-exp-transport">—</span></div>
+            <div class="kv"><span class="kv-k">Childcare / dependants</span><span class="kv-v mono" id="ops-g-exp-childcare">—</span></div>
+            <div class="kv"><span class="kv-k">Mobile phone</span><span class="kv-v mono" id="ops-g-exp-mobile">—</span></div>
+            <div class="kv"><span class="kv-k">Other loan repayments</span><span class="kv-v mono" id="ops-g-exp-loans">—</span></div>
+            <div class="kv"><span class="kv-k">Credit card minimums</span><span class="kv-v mono" id="ops-g-exp-cards">—</span></div>
+            <div class="kv"><span class="kv-k">Buy now pay later</span><span class="kv-v mono" id="ops-g-exp-bnpl">—</span></div>
+            <div class="kv"><span class="kv-k">Insurance</span><span class="kv-v mono" id="ops-g-exp-insurance">—</span></div>
+            <div class="kv"><span class="kv-k">Subscriptions</span><span class="kv-v mono" id="ops-g-exp-subs">—</span></div>
+            <div class="kv" style="border-top:1px solid var(--border);margin-top:4px;padding-top:8px"><span class="kv-k" style="font-weight:700">Total expenditure</span><span class="kv-v mono" style="font-weight:700;color:var(--red,#dc2626)" id="ops-g-exp-total">—</span></div>
+            <div class="kv" style="margin-bottom:8px"><span class="kv-k" style="font-weight:700">Monthly surplus</span><span class="kv-v mono" style="font-weight:700" id="ops-g-surplus">—</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">Internal Notes</span><span style="font-size:11px;color:var(--muted)">Ops-only &mdash; not visible to customer</span></div>
+          <div class="card-body">
+            <div id="cust-notes-list" style="margin-bottom:14px;min-height:30px"></div>
+            <div style="display:flex;gap:8px">
+              <input type="text" id="cust-note-input" placeholder="Add a note..." style="flex:1;padding:7px 10px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--bg);font-size:12.5px">
+              <button class="btn btn-secondary btn-sm" onclick="addOpsNote()">Add Note</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ LOAN & SCHEDULE ══ -->
+      <section id="sec-loan" class="section">
+        <div class="sec-hdr">
+          <div class="sec-hdr-left"><h2>Loan &amp; Schedule</h2><p>Full amortisation schedule with live parameters</p></div>
+          <div class="sec-hdr-right">
+            <button class="btn btn-warning btn-sm" onclick="applyPaymentHoliday()">Apply PH</button>
+            <button class="btn btn-success btn-sm" onclick="markNextPaid()">Mark Next Paid</button>
+            <button class="btn btn-primary btn-sm" onclick="recalcAndSync()">Recalculate &amp; Sync</button>
+          </div>
+        </div>
+
+        <div class="loan-layout">
+          <div>
+            <div class="card">
+              <div class="card-hdr"><span class="card-title">Loan Parameters</span></div>
+              <div class="card-body">
+                <div class="field"><label>Principal (&pound;)</label><input type="number" id="lp-principal" step="100"></div>
+                <div class="field"><label>APR (%)</label><input type="number" id="lp-apr" step="0.1"></div>
+                <div class="field"><label>Term (months)</label><input type="number" id="lp-term" min="1" max="84"></div>
+                <div class="field"><label>Paid Count</label><input type="number" id="lp-paidcount" min="0"></div>
+                <div class="field"><label>Start Date</label><input type="date" id="lp-startdate"></div>
+                <div class="field"><label>Account Status</label>
+                  <select id="lp-status">
+                    <option value="active">Active</option>
+                    <option value="arrears">Arrears</option>
+                    <option value="default">Default</option>
+                    <option value="terminated">Terminated</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-hdr"><span class="card-title">Loan Summary</span></div>
+              <div class="card-body-tight" id="loan-summary"></div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:0">
+            <div class="card-hdr"><span class="card-title">Amortisation Schedule</span><span style="font-size:11px;color:var(--muted)" id="sched-subtitle"></span></div>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>#</th><th>Due Date</th><th>EMI</th><th>Principal</th><th>Interest</th><th>Balance</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody id="sched-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ══ ACCOUNT ACTIONS ══ -->
+      <section id="sec-actions" class="section">
+        <div class="sec-hdr">
+          <div class="sec-hdr-left"><h2>Account Actions</h2><p>All actions are logged and synced to the customer account in real time</p></div>
+        </div>
+
+        <div class="action-grid">
+          <div class="action-card">
+            <div class="action-card-title">Account Status</div>
+            <div class="action-card-desc">Change the account status. Affects available options for the customer and collections workflow.</div>
+            <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:14px">
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer"><input type="radio" name="acct-status" value="active"> Active</label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer"><input type="radio" name="acct-status" value="arrears"> Arrears</label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer"><input type="radio" name="acct-status" value="default"> Default</label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer"><input type="radio" name="acct-status" value="terminated"> Terminated</label>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="applyStatusChange()">Apply Status Change</button>
+          </div>
+
+          <div class="action-card">
+            <div class="action-card-title">Payment Holiday</div>
+            <div class="action-card-desc">Pause the next instalment. Interest accrues and is added to the outstanding balance. Max 2 per loan.</div>
+            <button class="btn btn-warning btn-sm btn-block" onclick="applyPaymentHoliday()">Grant Payment Holiday</button>
+          </div>
+
+          <div class="action-card">
+            <div class="action-card-title">Record Manual Payment</div>
+            <div class="action-card-desc">Record a payment received outside the automated system (cash, BACS, etc.).</div>
+            <div class="field"><label>Amount (&pound;)</label><input type="number" id="mp-amount" placeholder="97.44" step="0.01" min="0"></div>
+            <div class="field"><label>Reference</label><input type="text" id="mp-ref" placeholder="NP-2026-XXXXX"></div>
+            <div class="field"><label>Payment Date</label><input type="date" id="mp-date"></div>
+            <button class="btn btn-success btn-sm" onclick="recordManualPayment()">Record Payment</button>
+          </div>
+
+          <div class="action-card">
+            <div class="action-card-title">Change Pay Date</div>
+            <div class="action-card-desc">Shift all future due dates to a different day of the month. Use 1&ndash;28 to avoid month-end issues.</div>
+            <div class="field"><label>Day of month (1&ndash;28)</label><input type="number" id="cpd-day" min="1" max="28" placeholder="e.g. 1"></div>
+            <button class="btn btn-primary btn-sm" onclick="changePayDate()">Apply Pay Date Change</button>
+          </div>
+
+          <div class="action-card">
+            <div class="action-card-title">Payment Arrangement</div>
+            <div class="action-card-desc">Restructure remaining balance into reduced payments with frozen interest for customers in financial difficulty.</div>
+            <div class="field"><label>Reduced monthly amount (&pound;)</label><input type="number" id="pa-amount" placeholder="50.00" step="0.01" min="1"></div>
+            <div class="field"><label>Start date</label><input type="date" id="pa-start"></div>
+            <div class="field"><label>Duration (months)</label><input type="number" id="pa-months" placeholder="6" min="1" max="24"></div>
+            <button class="btn btn-warning btn-sm" onclick="applyPaymentArrangement()">Apply Arrangement</button>
+          </div>
+
+          <div class="action-card">
+            <div class="action-card-title">Extend Loan Term</div>
+            <div class="action-card-desc">Add months to the loan term, reducing the monthly EMI and easing the customer&rsquo;s repayment burden.</div>
+            <div class="field"><label>Additional months (1&ndash;24)</label><input type="number" id="ext-months" min="1" max="24" placeholder="3"></div>
+            <button class="btn btn-primary btn-sm" onclick="extendTerm()">Extend Term</button>
+          </div>
+
+          <div class="action-card">
+            <div class="action-card-title">Waive Interest</div>
+            <div class="action-card-desc">Write off a portion of accrued interest. Used for goodwill gestures or financial hardship cases.</div>
+            <div class="field"><label>Amount to waive (&pound;)</label><input type="number" id="waive-amount" step="0.01" placeholder="0.00" min="0"></div>
+            <button class="btn btn-secondary btn-sm" onclick="waiveInterest()">Apply Waiver</button>
+          </div>
+
+          <div class="action-card">
+            <div class="action-card-title">Flag for Collections</div>
+            <div class="action-card-desc">Escalate this account to the collections team. A contact log entry is required before escalating.</div>
+            <button class="btn btn-danger btn-sm btn-block" style="margin-bottom:8px" onclick="flagCollections()">Flag for Collections</button>
+            <button class="btn btn-ghost btn-sm btn-block" onclick="gotoSec('sec-collections')">View Collections Screen</button>
+          </div>
+
+          <div class="action-card">
+            <div class="action-card-title">Close Account</div>
+            <div class="action-card-desc">Permanently close and terminate the account. This action is irreversible and fully logged.</div>
+            <button class="btn btn-danger btn-sm btn-block" onclick="closeAccount()">Close Account</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ LOAN CALCULATOR ══ -->
+      <section id="sec-calculator" class="section">
+        <div class="sec-hdr">
+          <div class="sec-hdr-left"><h2>Loan Calculator</h2><p>Standalone — use to model scenarios before applying to the account</p></div>
+        </div>
+
+        <div class="calc-layout">
+          <div>
+            <div class="card">
+              <div class="card-hdr"><span class="card-title">Parameters</span></div>
+              <div class="card-body">
+                <div class="field"><label>Principal (&pound;)</label><input type="number" id="calc-principal" value="1000" step="100" min="100"></div>
+                <div class="field"><label>APR (%)</label><input type="number" id="calc-apr" value="29.9" step="0.1" min="0.1"></div>
+                <div class="field"><label>Term (months)</label><input type="number" id="calc-term" value="12" min="1" max="84"></div>
+                <div class="field"><label>Start Date</label><input type="date" id="calc-start" value="2026-01-24"></div>
+                <div class="field"><label>Simulate paid count</label><input type="number" id="calc-paid" value="0" min="0"></div>
+                <button class="btn btn-primary btn-block" onclick="runCalculator()">Calculate</button>
+              </div>
+            </div>
+            <div class="card" id="calc-results" style="display:none">
+              <div class="card-hdr"><span class="card-title">Results</span></div>
+              <div class="card-body-tight">
+                <div class="kv"><span class="kv-k">Monthly EMI</span><span class="kv-v" id="calc-emi">—</span></div>
+                <div class="kv"><span class="kv-k">Total repayable</span><span class="kv-v" id="calc-total">—</span></div>
+                <div class="kv"><span class="kv-k">Total interest</span><span class="kv-v" id="calc-interest">—</span></div>
+                <div class="kv"><span class="kv-k">Outstanding (from paid)</span><span class="kv-v" id="calc-outstanding">—</span></div>
+                <div class="kv"><span class="kv-k">Monthly rate</span><span class="kv-v" id="calc-rate">—</span></div>
+              </div>
+              <div class="card-body" style="padding-top:0">
+                <button class="btn btn-warning btn-block" onclick="applyCalcToAccount()">Apply to Account &amp; Sync</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:0">
+            <div class="card-hdr"><span class="card-title">Amortisation Schedule</span></div>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>#</th><th>Due Date</th><th>EMI</th><th>Principal</th><th>Interest</th><th>Balance</th><th>Status</th></tr></thead>
+                <tbody id="calc-sched-body"><tr><td colspan="7" style="text-align:center;color:var(--dim);padding:24px">Run the calculator to see the schedule</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ ACTIVITY LOG ══ -->
+      <section id="sec-activity" class="section">
+        <div class="sec-hdr">
+          <div class="sec-hdr-left"><h2>Activity Log</h2><p>All customer and ops events, newest first</p></div>
+          <div class="sec-hdr-right">
+            <button class="btn btn-ghost btn-sm" onclick="clearActivityBadge()">Clear badge</button>
+            <button class="btn btn-secondary btn-sm" onclick="renderActivity()">Refresh</button>
+          </div>
+        </div>
+        <div class="filter-bar">
+          <button class="filter-btn active" data-filter="all" onclick="filterActivity('all')">All</button>
+          <button class="filter-btn" data-filter="payment_recorded" onclick="filterActivity('payment_recorded')">Payments</button>
+          <button class="filter-btn" data-filter="profile_edit" onclick="filterActivity('profile_edit')">Profile edits</button>
+          <button class="filter-btn" data-filter="ops" onclick="filterActivity('ops')">Ops actions</button>
+        </div>
+        <div class="card">
+          <div class="card-body" id="activity-list">Loading...</div>
+        </div>
+      </section>
+
+      <!-- ══ COLLECTIONS ══ -->
+      <section id="sec-collections" class="section">
+        <div class="sec-hdr">
+          <div class="sec-hdr-left"><h2>Collections</h2><p>Arrears management, risk scoring, and contact log</p></div>
+          <div class="sec-hdr-right">
+            <button class="btn btn-secondary btn-sm" onclick="gotoSec('sec-actions')">Account Actions</button>
+          </div>
+        </div>
+
+        <div class="three-col">
+          <div class="stat-card"><div class="stat-label">Days Past Due</div><div class="stat-value" id="col-dpd" style="font-size:18px">—</div></div>
+          <div class="stat-card"><div class="stat-label">Account Status</div><div class="stat-value" id="col-status" style="font-size:18px">—</div></div>
+          <div class="stat-card"><div class="stat-label">Outstanding Balance</div><div class="stat-value" id="col-outstanding" style="font-size:18px">—</div></div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="card-hdr"><span class="card-title">Risk Score</span></div>
+            <div class="col-risk">
+              <span style="font-size:11px;color:var(--muted);width:70px;flex-shrink:0">Risk level</span>
+              <div class="col-risk-bar"><div id="col-risk-fill" class="col-risk-fill" style="width:10%;background:var(--green)"></div></div>
+              <span id="col-risk-pct" style="font-size:11px;font-weight:700;color:var(--text);width:30px;text-align:right;flex-shrink:0">—</span>
+            </div>
+            <div class="card-body" style="padding-top:0">
+              <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Recommended Actions</div>
+              <div id="col-recommendations" style="font-size:12.5px;color:var(--muted)">Calculating...</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-hdr">
+              <span class="card-title">Contact Log</span>
+              <button class="btn btn-secondary btn-xs" onclick="toggleColForm()">+ Log Attempt</button>
+            </div>
+            <div id="col-contact-log" style="padding:0 18px;max-height:200px;overflow-y:auto"></div>
+            <div id="col-add-form" style="display:none;padding:16px;border-top:1px solid var(--border)">
+              <div class="field-row">
+                <div class="field"><label>Method</label>
+                  <select id="col-method"><option>Phone</option><option>Email</option><option>SMS</option><option>Letter</option><option>Portal message</option></select>
+                </div>
+                <div class="field"><label>Date</label><input type="date" id="col-date"></div>
+              </div>
+              <div class="field"><label>Outcome</label><input type="text" id="col-outcome" placeholder="e.g. No answer — voicemail left"></div>
+              <div style="display:flex;gap:8px;margin-top:4px">
+                <button class="btn btn-ghost btn-sm" onclick="toggleColForm()">Cancel</button>
+                <button class="btn btn-primary btn-sm" onclick="addContactAttempt()">Log Attempt</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ PAYMENT DETAILS ══ -->
+      <section id="sec-payment-details" class="section">
+        <div class="sec-hdr">
+          <div class="sec-hdr-left"><h2>Payment Details</h2><p>Customer's active payment methods on file</p></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-hdr">
+              <span class="card-title">Card on File</span>
+              <span id="pd-ops-card-type" style="font-size:11px;background:#eff6ff;color:var(--blue);padding:2px 9px;border-radius:6px;font-weight:600"></span>
+            </div>
+            <div class="card-body-tight">
+              <div class="kv"><span class="kv-k">Card number</span><span class="kv-v mono" id="pd-ops-card-num">Not on file</span></div>
+              <div class="kv"><span class="kv-k">Expiry</span><span class="kv-v" id="pd-ops-card-exp">Not on file</span></div>
+              <div class="kv"><span class="kv-k">Collection date</span><span class="kv-v" id="pd-ops-card-collect">Not on file</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hdr"><span class="card-title">Bank Account (DD / BACS)</span></div>
+            <div class="card-body-tight">
+              <div class="kv"><span class="kv-k">Account holder</span><span class="kv-v" id="pd-ops-bank-holder">Not on file</span></div>
+              <div class="kv"><span class="kv-k">Bank</span><span class="kv-v" id="pd-ops-bank-name">Not on file</span></div>
+              <div class="kv"><span class="kv-k">Sort code</span><span class="kv-v mono" id="pd-ops-bank-sort">Not on file</span></div>
+              <div class="kv"><span class="kv-k">Account number</span><span class="kv-v mono" id="pd-ops-bank-acc">Not on file</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">Collection Schedule</span></div>
+          <div class="card-body-tight" id="pd-ops-schedule" style="padding-top:4px"></div>
+        </div>
+      </section>
+
+      <!-- ══ STATEMENT OF ACCOUNT ══ -->
+      <section id="sec-statement" class="section">
+        <div class="sec-hdr">
+          <div class="sec-hdr-left"><h2>Statement of Account</h2><p>Transaction history and running account summary</p></div>
+        </div>
+        <div class="two-col">
+          <div>
+            <div class="card" style="margin-bottom:14px">
+              <div class="card-hdr"><span class="card-title">Account Summary</span></div>
+              <div class="card-body-tight">
+                <div class="kv"><span class="kv-k">Loan amount</span><span class="kv-v" id="stmt-ops-principal">—</span></div>
+                <div class="kv"><span class="kv-k">Total repayable</span><span class="kv-v" id="stmt-ops-total">—</span></div>
+                <div class="kv"><span class="kv-k">Total interest</span><span class="kv-v" id="stmt-ops-interest">—</span></div>
+                <div class="kv"><span class="kv-k">Total repaid to date</span><span class="kv-v" style="color:var(--green);font-weight:600" id="stmt-ops-repaid">—</span></div>
+                <div class="kv" style="border-top:1px solid var(--border);margin-top:8px;padding-top:8px"><span class="kv-k" style="font-weight:700">Outstanding balance</span><span class="kv-v" style="font-weight:700;font-size:15px" id="stmt-ops-balance">—</span></div>
+                <div class="kv"><span class="kv-k">Instalments paid</span><span class="kv-v" id="stmt-ops-paid-count">—</span></div>
+                <div class="kv"><span class="kv-k">Instalments remaining</span><span class="kv-v" id="stmt-ops-remaining">—</span></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-hdr"><span class="card-title">Loan Info</span></div>
+              <div class="card-body-tight">
+                <div class="kv"><span class="kv-k">Start date</span><span class="kv-v" id="stmt-ops-start">—</span></div>
+                <div class="kv"><span class="kv-k">Final payment</span><span class="kv-v" id="stmt-ops-end">—</span></div>
+                <div class="kv"><span class="kv-k">Monthly EMI</span><span class="kv-v" id="stmt-ops-emi">—</span></div>
+                <div class="kv"><span class="kv-k">APR</span><span class="kv-v" id="stmt-ops-apr">—</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:0">
+            <div class="card-hdr"><span class="card-title">Transaction History</span></div>
+            <div id="stmt-ops-list" style="padding:0 18px;max-height:520px;overflow-y:auto"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ DOCUMENTS ══ -->
+      <section id="sec-documents" class="section">
+        <div class="sec-hdr">
+          <div class="sec-hdr-left"><h2>Documents</h2><p>Loan documents and compliance records on file</p></div>
+        </div>
+        <div class="card" style="margin-bottom:14px">
+          <div class="card-hdr"><span class="card-title">Customer-Facing Documents</span></div>
+          <div id="docs-ops-customer" style="padding:0 18px 8px"></div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">Internal &amp; Compliance Records</span><span style="font-size:11px;color:var(--muted)">Ops only — not visible to customer</span></div>
+          <div id="docs-ops-internal" style="padding:0 18px 8px"></div>
+        </div>
+      </section>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ═══════ SEARCH OVERLAY ═══════ -->
+<div id="search-overlay" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(15,23,42,.5);backdrop-filter:blur(4px)" onclick="if(event.target===this)closeSearch()">
+  <div style="position:absolute;top:80px;left:50%;transform:translateX(-50%);width:600px;max-width:calc(100vw - 48px)">
+    <div style="background:#fff;border-radius:14px;box-shadow:0 24px 56px rgba(0,0,0,.22);overflow:hidden">
+      <div style="padding:14px 18px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:12px">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#94a3b8" stroke-width="1.5"/><path d="M11.5 11.5l3 3" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input type="text" id="search-input" placeholder="Search by name, email, phone, loan ID, date of birth, or address&hellip;" autocomplete="off"
+          style="flex:1;border:none;outline:none;font-size:14px;color:#0f172a;background:transparent"
+          oninput="runSearch(this.value)" onkeyup="runSearch(this.value)" onkeydown="if(event.key==='Escape')closeSearch()">
+        <kbd style="font-size:10px;color:#94a3b8;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 6px;cursor:pointer" onclick="closeSearch()">Esc</kbd>
+      </div>
+      <div id="search-results" style="max-height:440px;overflow-y:auto">
+        <div style="padding:48px;text-align:center;color:#94a3b8;font-size:13px">Start typing to search&hellip;</div>
+      </div>
+      <div style="padding:9px 18px;border-top:1px solid #f1f5f9;background:#f8fafc;display:flex;align-items:center;gap:16px">
+        <span style="font-size:11px;color:#94a3b8">Search across: name &middot; email &middot; phone &middot; loan ID &middot; customer ID &middot; date of birth &middot; address</span>
+        <kbd style="margin-left:auto;font-size:10px;background:#e2e8f0;border-radius:3px;padding:1px 6px;color:#64748b;white-space:nowrap">Ctrl + K</kbd>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-root"></div>
+
+<!-- ═══════ DOCUMENT MODAL ═══════ -->
+<div id="doc-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(15,23,42,.5);backdrop-filter:blur(4px)" onclick="if(event.target===this)closeDocModal()">
+  <div style="position:absolute;top:80px;left:50%;transform:translateX(-50%);width:560px;max-width:calc(100vw - 48px);background:#fff;border-radius:14px;box-shadow:0 24px 56px rgba(0,0,0,.22);overflow:hidden">
+    <div style="padding:18px 20px;border-bottom:1px solid #e2e8f0;display:flex;align-items:flex-start;gap:12px">
+      <div id="doc-modal-icon" style="width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="16" height="16" viewBox="0 0 14 14" fill="none"><rect x="2" y="1" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 5h5M4.5 7.5h5M4.5 10h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div id="doc-modal-title" style="font-size:14px;font-weight:700;color:#0f172a;margin-bottom:2px"></div>
+        <div id="doc-modal-sub" style="font-size:12px;color:#64748b"></div>
+      </div>
+      <button onclick="closeDocModal()" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:18px;line-height:1;padding:0 4px">&times;</button>
+    </div>
+    <div id="doc-modal-body" style="padding:20px"></div>
+    <div style="padding:14px 20px;border-top:1px solid #f1f5f9;background:#f8fafc;display:flex;justify-content:flex-end;gap:8px">
+      <button onclick="closeDocModal()" style="font-size:12px;font-weight:600;padding:7px 18px;border:1px solid #e2e8f0;border-radius:7px;background:#fff;color:#374151;cursor:pointer">Close</button>
+      <button style="font-size:12px;font-weight:600;padding:7px 18px;border:none;border-radius:7px;background:#1a56db;color:#fff;cursor:pointer" onclick="closeDocModal()">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<script src="shared/status-engine-config.js"></script>
+<script src="shared/loan-status-engine.js"></script>
+<script src="shared/servicing-policy-engine.js"></script>
+<script src="shared/account-state-resolver.js"></script>
+<script src="shared/novapay-core.js"></script>
+<script src="shared/api-account-store.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════
+// CONSTANTS & NOVAPAY CORE
+// ═══════════════════════════════════════════════════════
+var ACCT_KEY  = null;  // set when a customer is selected
+var OPS_AGENT = null;  // logged-in agent
+var OPS_SESSION_KEY = 'novapay_ops_session'; // localStorage key for session persistence
+var _repo   = new NovaPay.LocalStorageAccountRepository();
+var syncBus = new NovaPay.BroadcastSyncBus('proto_sync_v2');
+var _store  = null;    // set when a customer is selected
+
+// ── Backend API configuration ────────────────────────────────────────────
+// Set USE_API = true to enable write-through sync to the backend.
+// The backend must be running: cd backend && node server.js
+var USE_API  = true;
+var API_BASE = 'http://localhost:3001/api';
+
+// CUSTOMER_REGISTRY — seed data using v3 profile structure.
+// profile.personal  → identity fields (name, dob)
+// profile.contact   → communication fields (email, phone, address)
+// profile.employment → work / income fields
+// incomeExpenditure  → affordability inputs (customer-level, separate from loan)
+var CUSTOMER_REGISTRY = [
+  {
+    storageKey:'np_customer_28796', id:'customer_28796', name:'Sarah Mitchell', initials:'SM',
+    loanId:'28796', memberSince:'Jan 2025',
+    credentials:{ email:'sarah.mitchell@email.co.uk', pin:'1234' },
+    loan:{ principal:1000, apr:29.9, term:12, startDate:'2026-01-24', paidCount:2, accountStatus:'active' },
+    profile:{
+      personal:   { title:'Ms', firstName:'Sarah', lastName:'Mitchell', dob:'1989-03-14' },
+      contact:    { email:'sarah.mitchell@email.co.uk', phone:'+44 7700 900 7821', address:'42 Elm Grove, Brighton, BN2 3FA', residentSince:'January 2020' },
+      employment: { status:'Full-time employed', employer:'Mitchell & Co Ltd', jobTitle:'Senior Analyst', employmentStart:'March 2019', annualIncome:'£42,000', payFrequency:'Monthly', nextPayDate:'28 Mar 2026' }
+    },
+    incomeExpenditure:{ monthlyIncome:2800, housingCosts:850, transportCosts:120, livingCosts:450, otherDebts:150 },
+    paymentDetails:{
+      card:{ type:'Visa Debit', last4:'4821', expiry:'09/27', collectionDayOfMonth:22, active:true },
+      bank:{ accountHolder:'Sarah Mitchell', bankName:'Barclays Bank', sortCodeMasked:'20-··-··', accountNumberMasked:'····3847', fundedToDate:'2026-01-24' }
+    }
+  },
+  {
+    storageKey:'np_customer_34521', id:'customer_34521', name:'James Okafor', initials:'JO',
+    loanId:'34521', memberSince:'Sep 2025',
+    credentials:{ email:'j.okafor@email.co.uk', pin:'5678' },
+    loan:{ principal:3500, apr:29.9, term:18, startDate:'2025-09-15', paidCount:5, accountStatus:'arrears' },
+    profile:{
+      personal:   { title:'Mr', firstName:'James', lastName:'Okafor', dob:'1985-11-22' },
+      contact:    { email:'j.okafor@email.co.uk', phone:'+44 7912 345 678', address:'17 Birchwood Drive, Manchester, M14 6PQ', residentSince:'March 2018' },
+      employment: { status:'Self-employed', employer:'Okafor Consulting Ltd', jobTitle:'IT Consultant', employmentStart:'January 2015', annualIncome:'£38,000', payFrequency:'Monthly', nextPayDate:'15 Apr 2026' }
+    },
+    incomeExpenditure:{ monthlyIncome:3200, housingCosts:950, transportCosts:180, livingCosts:520, otherDebts:280 },
+    paymentDetails:{
+      card:{ type:'Mastercard Debit', last4:'7743', expiry:'03/26', collectionDayOfMonth:15, active:true },
+      bank:{ accountHolder:'James Okafor', bankName:'HSBC UK', sortCodeMasked:'40-··-··', accountNumberMasked:'····5521', fundedToDate:'2025-09-15' }
+    }
+  },
+  {
+    storageKey:'np_customer_19083', id:'customer_19083', name:'Priya Patel', initials:'PP',
+    loanId:'19083', memberSince:'Mar 2026',
+    credentials:{ email:'priya.patel@email.co.uk', pin:'9012' },
+    loan:{ principal:750, apr:29.9, term:6, startDate:'2026-03-01', paidCount:0, accountStatus:'active' },
+    profile:{
+      personal:   { title:'Ms', firstName:'Priya', lastName:'Patel', dob:'1994-07-08' },
+      contact:    { email:'priya.patel@email.co.uk', phone:'+44 7881 223 344', address:'9 Rosewood Close, Birmingham, B15 2TG', residentSince:'June 2021' },
+      employment: { status:'Full-time employed', employer:'Midlands NHS Trust', jobTitle:'Staff Nurse', employmentStart:'September 2019', annualIncome:'£31,500', payFrequency:'Monthly', nextPayDate:'01 Apr 2026' }
+    },
+    incomeExpenditure:{ monthlyIncome:2625, housingCosts:780, transportCosts:90, livingCosts:380, otherDebts:0 },
+    paymentDetails:{
+      card:{ type:'Visa Debit', last4:'2201', expiry:'11/28', collectionDayOfMonth:1, active:true },
+      bank:{ accountHolder:'Priya Patel', bankName:'Nationwide BS', sortCodeMasked:'07-··-··', accountNumberMasked:'····9034', fundedToDate:'2026-03-01' }
+    }
+  },
+  {
+    storageKey:'np_customer_52140', id:'customer_52140', name:'David Chen', initials:'DC',
+    loanId:'52140', memberSince:'Dec 2025',
+    credentials:{ email:'d.chen@email.co.uk', pin:'3456' },
+    loan:{ principal:5000, apr:29.9, term:24, startDate:'2025-12-10', paidCount:3, accountStatus:'default' },
+    profile:{
+      personal:   { title:'Mr', firstName:'David', lastName:'Chen', dob:'1979-04-30' },
+      contact:    { email:'d.chen@email.co.uk', phone:'+44 7700 556 789', address:'31 Harbour View, Liverpool, L1 0AX', residentSince:'November 2015' },
+      employment: { status:'Part-time employed', employer:'City Catering Ltd', jobTitle:'Catering Manager', employmentStart:'July 2021', annualIncome:'£22,000', payFrequency:'Monthly', nextPayDate:'10 Apr 2026' }
+    },
+    incomeExpenditure:{ monthlyIncome:1833, housingCosts:650, transportCosts:200, livingCosts:600, otherDebts:350 },
+    paymentDetails:{
+      card:{ type:'Mastercard Debit', last4:'6654', expiry:'07/26', collectionDayOfMonth:10, active:true },
+      bank:{ accountHolder:'David Chen', bankName:'Santander', sortCodeMasked:'09-··-··', accountNumberMasked:'····7712', fundedToDate:'2025-12-10' }
+    }
+  },
+  {
+    storageKey:'np_customer_67802', id:'customer_67802', name:'Emma Thompson', initials:'ET',
+    loanId:'67802', memberSince:'Feb 2025',
+    credentials:{ email:'emma.thompson@email.co.uk', pin:'7890' },
+    loan:{ principal:2500, apr:29.9, term:12, startDate:'2025-02-20', paidCount:12, accountStatus:'terminated' },
+    profile:{
+      personal:   { title:'Ms', firstName:'Emma', lastName:'Thompson', dob:'1991-09-16' },
+      contact:    { email:'emma.thompson@email.co.uk', phone:'+44 7799 123 456', address:'5 Oak Street, Leeds, LS1 5DT', residentSince:'February 2019' },
+      employment: { status:'Full-time employed', employer:'Northern Finance Ltd', jobTitle:'Finance Analyst', employmentStart:'May 2017', annualIncome:'£36,000', payFrequency:'Monthly', nextPayDate:'N/A (loan closed)' }
+    },
+    incomeExpenditure:{ monthlyIncome:3000, housingCosts:800, transportCosts:140, livingCosts:420, otherDebts:0 },
+    paymentDetails:{
+      card:{ type:'Visa Debit', last4:'3398', expiry:'06/27', collectionDayOfMonth:20, active:true },
+      bank:{ accountHolder:'Emma Thompson', bankName:'Lloyds Bank', sortCodeMasked:'30-··-··', accountNumberMasked:'····6612', fundedToDate:'2025-02-20' }
+    }
+  }
+];
+
+// protoSync replaced by syncBus (NovaPay.BroadcastSyncBus) above
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+var OPS = {
+  principal: 1000, apr: 29.9, term: 12,
+  startDate: new Date('2026-01-24'),
+  paidCount: 2, accountStatus: 'active',
+  emi: 0, schedule: [], account: null,
+  activeFilter: 'all',
+  allowedActions: [],
+  blockedActions: [],
+  actionReasons:  {}
+};
+
+// ═══════════════════════════════════════════════════════
+// DATA LAYER — NovaPay Repository + Store
+// ═══════════════════════════════════════════════════════
+function getAccount() {
+  if (!_store) return NovaPay.createEmptyAccount();
+  return _store.getState() || NovaPay.createEmptyAccount();
+}
+function saveAccount() { /* mutations go through store.dispatch() */ }
+function ensureFields(acct) { return acct; } // no-op — canonical schema is always complete
+
+// ═══════════════════════════════════════════════════════
+// LOAN ENGINE  — delegates to shared NovaPay.builtInEngineFactory
+// ═══════════════════════════════════════════════════════
+function calcSchedule(P, apr, n, startDate, paidCount) {
+  var engine = NovaPay.builtInEngineFactory({
+    principal:  P,
+    apr:        apr,
+    termMonths: n,
+    startDate:  startDate instanceof Date ? startDate.toISOString() : (startDate || new Date().toISOString()),
+    paidCount:  paidCount || 0
+  });
+  engine.calc();
+  return { emi: engine.summary().emi, schedule: engine.schedule() };
+}
+// Normalise a single schedule row — dueDate always as Date, ph/pa defaulted.
+// Used in loadState() Path A and Path B to avoid duplicating the same mapper.
+function _normRow(r) {
+  return {
+    n:         r.n,
+    dueDate:   r.dueDate instanceof Date ? r.dueDate : new Date(r.dueDate),
+    emi:       r.emi,
+    principal: r.principal,
+    interest:  r.interest,
+    balance:   r.balance,
+    status:    r.status,
+    ph:        r.ph || false,
+    pa:        r.pa || false
+  };
+}
+function fmt(n) { return '\u00a3' + (n||0).toFixed(2); }
+function shortDate(d) { return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
+function outstandingBal(schedule, paidCount) {
+  var t = 0;
+  for (var i = paidCount; i < schedule.length; i++) t += schedule[i].principal;
+  return t;
+}
+function totalRepaid(schedule, paidCount) {
+  var t = 0;
+  for (var i = 0; i < paidCount; i++) t += schedule[i].emi;
+  return t;
+}
+
+// ═══════════════════════════════════════════════════════
+// LOAD STATE — from canonical store into OPS.* + OPS.account bridge
+// ═══════════════════════════════════════════════════════
+// ── loadState ─────────────────────────────────────────────────────────────
+// Populates OPS.* bridge variables and OPS.account that all render functions
+// read.  Mirrors the same dual-path pattern as applyLoanOverrides() in the
+// customer app.
+//
+// Path A (preferred): use the resolved account from GET /api/accounts/:key/resolved
+//   — server-computed projection; eliminates all local selector and active-loan
+//   resolution logic (selectOpsCustomer, eventsToHistory, etc.).
+//
+// Path B (fallback): assemble from raw v3 state in localStorage
+//   — unchanged original logic; used when backend is offline.
+function loadState() {
+  if (!_store || !ACCT_KEY) return;
+
+  // ── Path A: resolved state from backend ────────────────────────────────
+  var resolved = _store.getResolvedState && _store.getResolvedState();
+  if (resolved && resolved.activeLoan) {
+    var al   = resolved.activeLoan;
+    var core = al.core;
+    OPS.principal     = core.principal;
+    OPS.apr           = core.apr;
+    OPS.term          = core.termMonths;
+    OPS.startDate     = new Date(core.startDate);
+    OPS.paidCount     = core.paidCount;
+    OPS.accountStatus = al.status.coreStatus || 'active';
+    OPS.emi           = al.emi || 0;
+    if (al.schedule && al.schedule.length) {
+      OPS.schedule = al.schedule.map(_normRow);
+      OPS.term = OPS.schedule.length;
+    }
+    // Build OPS.account bridge directly from the resolved projection —
+    // no NovaPay.selectors.selectOpsCustomer() or eventsToHistory() calls needed.
+    // Customer-level data (personal, contact, employment, affordability, paymentDetails)
+    // is kept in separate sub-objects matching the v3 canonical schema sections.
+    var aff = resolved.affordability || {};
+    // Payment details: always use the canonical local store state so the
+    // {card, bank} structure is guaranteed regardless of backend projection format.
+    var _localStA = (_store._localStore || _store);
+    var _stA      = _localStA && _localStA.getState ? _localStA.getState() : null;
+    var canonPdA  = (_stA && _stA.paymentDetails) || {};
+    // I&E granular: read from canonical store raw.granular (backend may not project it)
+    var rawIEA    = (_stA && _stA.affordability && _stA.affordability.incomeExpenditure && _stA.affordability.incomeExpenditure.raw) || {};
+    OPS.account = {
+      id:         resolved.customerId,
+      name:       resolved.profile.fullName,
+      loanId:     resolved.profile.loanId,
+      createdAt:  al.originatedAt,
+      lastActive: resolved.updatedAt,
+      // ── Customer-level sub-objects (parallel to v3 schema sections) ──
+      personal: {
+        title:     resolved.profile.title,
+        firstName: resolved.profile.firstName,
+        lastName:  resolved.profile.lastName,
+        dob:       resolved.profile.dob
+      },
+      contact: {
+        email:         resolved.contact.email,
+        phone:         resolved.contact.phone,
+        address:       resolved.contact.address,
+        residentSince: resolved.contact.residentSince
+      },
+      employment: {
+        status:          resolved.employment.status,
+        employer:        resolved.employment.employer,
+        jobTitle:        resolved.employment.jobTitle,
+        employmentStart: resolved.employment.employmentStart,
+        annualIncome:    resolved.employment.annualIncome,
+        payFrequency:    resolved.employment.payFrequency,
+        nextPayDate:     resolved.employment.nextPayDate
+      },
+      affordability: {
+        monthlyIncome:   aff.monthlyIncome  || rawIEA.monthlyIncome  || 0,
+        housingCosts:    aff.housingCosts   || rawIEA.housingCosts   || 0,
+        transportCosts:  aff.transportCosts || rawIEA.transportCosts || 0,
+        livingCosts:     aff.livingCosts    || rawIEA.livingCosts    || 0,
+        otherDebts:      aff.otherDebts     || rawIEA.otherDebts     || 0,
+        disposableIncome: (aff.monthlyIncome||rawIEA.monthlyIncome||0)
+                        - (aff.housingCosts||rawIEA.housingCosts||0)
+                        - (aff.transportCosts||rawIEA.transportCosts||0)
+                        - (aff.livingCosts||rawIEA.livingCosts||0)
+                        - (aff.otherDebts||rawIEA.otherDebts||0),
+        granular: rawIEA.granular || {}
+      },
+      // Use canonical {card, bank} structure from local store — backend may return differently
+      paymentDetails: {
+        card: Object.assign({}, canonPdA.card || {}),
+        bank: Object.assign({}, canonPdA.bank || {})
+      },
+      // ── Loan-level ops data ──
+      opsNotes:   resolved.ops.notes,
+      contactLog: resolved.ops.contactLog,
+      history:    resolved.ops.history
+    };
+    // Allowed / blocked actions from backend engine
+    OPS.allowedActions = al.allowedActions || [];
+    OPS.blockedActions = al.blockedActions || [];
+    OPS.actionReasons  = al.actionReasons  || {};
+    return;
+  }
+
+  // ── Path B: fallback — assemble from raw v3 store (offline) ───────────
+  var st = _store.getState();
+  if (!st) return;
+  var loan = NovaPay.accountStateResolver.getActiveLoan(st);
+  if (!loan) return;
+  var lc = loan.loanCore;
+  var se = loan.statusEngineState || {};
+  OPS.principal     = lc.principal;
+  OPS.apr           = lc.apr;
+  OPS.term          = lc.termMonths;
+  OPS.startDate     = new Date(lc.startDate);
+  OPS.paidCount     = lc.paidCount;
+  OPS.accountStatus = se.coreStatus || 'active';
+  var snap = loan.scheduleSnapshot;
+  if (snap && snap.length) {
+    OPS.schedule = snap.map(_normRow);
+    OPS.term = OPS.schedule.length;
+    OPS.emi  = 0;
+    for (var si = 0; si < OPS.schedule.length; si++) {
+      if (!OPS.schedule[si].ph) { OPS.emi = OPS.schedule[si].emi; break; }
+    }
+  } else {
+    var result = calcSchedule(OPS.principal, OPS.apr, OPS.term, OPS.startDate, OPS.paidCount);
+    OPS.emi      = result.emi;
+    OPS.schedule = result.schedule;
+  }
+  var prof    = NovaPay.selectors.selectOpsCustomer(st);
+  var rawIE   = (st.affordability && st.affordability.incomeExpenditure && st.affordability.incomeExpenditure.raw) || {};
+  var derivIE = (st.affordability && st.affordability.incomeExpenditure && st.affordability.incomeExpenditure.derived) || {};
+  var canonPdB = st.paymentDetails || {};
+  OPS.account = {
+    id: st.customerId, name: prof.fullName, loanId: prof.loanId,
+    createdAt: loan.originatedAt, lastActive: st.updatedAt,
+    // ── Customer-level sub-objects (parallel to v3 schema sections) ──
+    personal: {
+      title: prof.title, firstName: prof.firstName, lastName: prof.lastName, dob: prof.dob
+    },
+    contact: {
+      email: prof.email, phone: prof.phone,
+      address: prof.address, residentSince: prof.residentSince
+    },
+    employment: {
+      status: prof.employmentStatus, employer: prof.employer,
+      jobTitle: prof.jobTitle, employmentStart: prof.employmentStart,
+      annualIncome: prof.annualIncome, payFrequency: prof.payFrequency,
+      nextPayDate: prof.nextPayDate
+    },
+    affordability: {
+      monthlyIncome:   rawIE.monthlyIncome  || 0,
+      housingCosts:    rawIE.housingCosts   || 0,
+      transportCosts:  rawIE.transportCosts || 0,
+      livingCosts:     rawIE.livingCosts    || 0,
+      otherDebts:      rawIE.otherDebts     || 0,
+      disposableIncome: derivIE.disposableIncome || 0,
+      granular: rawIE.granular || {}
+    },
+    // Canonical {card, bank} from v3 state — single source of truth
+    paymentDetails: {
+      card: Object.assign({}, canonPdB.card || {}),
+      bank: Object.assign({}, canonPdB.bank || {})
+    },
+    // ── Loan-level ops data ──
+    opsNotes: loan.ops.notes || [], contactLog: loan.ops.contactLog || [],
+    history:  NovaPay.eventsToHistory(loan.auditTrail)
+  };
+  // Compute allowed/blocked actions from local state when backend resolved isn't available
+  try {
+    if (NovaPay.accountStateResolver && NovaPay.accountStateResolver.deriveAllowedActions) {
+      var _seB  = loan.statusEngineState || {};
+      var _ovB  = _seB.overlays    || {};
+      var _dfB  = _seB.derivedFlags || {};
+      var _actB = NovaPay.accountStateResolver.deriveAllowedActions(
+        loan, _seB.coreStatus || 'active', _ovB, _dfB, new Date()
+      );
+      OPS.allowedActions = _actB.allowedActions || [];
+      OPS.blockedActions = _actB.blockedActions || [];
+      OPS.actionReasons  = _actB.reasons        || {};
+    }
+  } catch (e) { /* degrade gracefully */ }
+}
+
+// Build a canonical store command from a UI action name + details object.
+// All parameter values come from the details object — never from the OPS.*
+// bridge.  The bridge is read-only state assembled by loadState(); mutating
+// it before dispatch was an anti-pattern that has been removed.
+function _actionToCommand(action, details) {
+  var CT = NovaPay.CommandTypes;
+  var d  = details || {};
+  if (action === 'account_status_change')
+    return { type: CT.CHANGE_ACCOUNT_STATUS, payload: { status: d.status } };
+  if (action === 'payment_recorded')
+    return { type: CT.RECORD_PAYMENT, payload: { paidCount: d.newPaidCount !== undefined ? d.newPaidCount : d.paidCount } };
+  if (action === 'manual_payment')
+    return { type: CT.RECORD_PAYMENT, payload: { amount: d.amount, date: d.date } };
+  if (action === 'loan_recalculated' || action === 'loan_restructure')
+    return { type: CT.RECALCULATE_LOAN, payload: {
+      contract:  { principal: d.principal, apr: d.apr, termMonths: d.term, startDate: d.startDate },
+      servicing: { paidCount: d.paidCount, accountStatus: d.accountStatus }
+    } };
+  if (action === 'pay_date_change')
+    return { type: CT.CHANGE_PAY_DATE, payload: { day: d.newDay, contract: { startDate: d.newStartDate } } };
+  if (action === 'payment_holiday_granted')
+    return { type: CT.APPLY_PAYMENT_HOLIDAY, payload: d };
+  if (action === 'term_extended')
+    return { type: CT.EXTEND_TERM, payload: { extraMonths: d.extraMonths, newTerm: d.newTerm } };
+  if (action === 'payment_arrangement')
+    return { type: CT.APPLY_PAYMENT_ARRANGEMENT, payload: {
+      amount:             d.amount,
+      months:             d.months,
+      startDate:          d.startDate,
+      outstandingBalance: d.outstandingBalance
+    } };
+  if (action === 'interest_waived')
+    return { type: CT.WAIVE_INTEREST, payload: { amount: d.amount } };
+  if (action === 'account_closed')
+    return { type: CT.CLOSE_ACCOUNT, payload: {} };
+  if (action === 'flagged_collections')
+    return { type: CT.FLAG_COLLECTIONS, payload: {} };
+  return null;
+}
+
+function syncToCustomer(action, details) {
+  if (!_store) return;
+  var actor = 'ops_ui';
+  var cmd = _actionToCommand(action, details);
+  if (cmd) {
+    _store.dispatch({ type: cmd.type, payload: cmd.payload, actor: actor });
+  } else {
+    _store.dispatch({ type: NovaPay.CommandTypes.LOG_EVENT, payload: { action: action, details: details || {} }, actor: actor });
+  }
+  loadState();
+  updateTopbar();
+}
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+function gotoSec(id) {
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+  document.querySelectorAll('.sb-item').forEach(function(i){ i.classList.remove('active'); });
+  var sec = document.getElementById(id);
+  if (sec) sec.classList.add('active');
+  var nav = document.querySelector('[data-sec="'+id+'"]');
+  if (nav) nav.classList.add('active');
+  var titles = { 'sec-overview':'Overview','sec-customer':'Customer Profile','sec-loan':'Loan & Schedule','sec-actions':'Account Actions','sec-calculator':'Loan Calculator','sec-activity':'Activity Log','sec-collections':'Collections','sec-payment-details':'Payment Details','sec-statement':'Statement of Account','sec-documents':'Documents' };
+  setText('tb-title', titles[id]||'');
+  var renders = { 'sec-overview':renderOverview,'sec-customer':renderCustomer,'sec-loan':renderLoan,'sec-actions':renderActions,'sec-activity':renderActivity,'sec-collections':renderCollections,'sec-payment-details':renderPaymentDetails,'sec-statement':renderStatement,'sec-documents':renderDocuments };
+  if (renders[id]) renders[id]();
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER: OVERVIEW
+// ═══════════════════════════════════════════════════════
+function renderOverview() {
+  loadState();
+  var remaining = OPS.schedule.length - OPS.paidCount;
+  var outstanding = outstandingBal(OPS.schedule, OPS.paidCount);
+  var next = OPS.paidCount < OPS.schedule.length ? OPS.schedule[OPS.paidCount] : null;
+  setText('ov-balance', fmt(outstanding));
+  setText('ov-balance-sub', OPS.paidCount+' of '+OPS.schedule.length+' paid');
+  setText('ov-next-due', next ? shortDate(next.dueDate) : 'Fully repaid');
+  setText('ov-next-emi', next ? fmt(next.emi)+' due' : '—');
+  setText('ov-emi', fmt(OPS.emi));
+  setText('ov-emi-sub', '@ '+OPS.apr.toFixed(1)+'% APR');
+  setText('ov-remaining', remaining);
+  setText('ov-remaining-sub', 'of '+OPS.schedule.length+' total');
+  var pct = OPS.schedule.length ? Math.round((OPS.paidCount/OPS.schedule.length)*100) : 0;
+  var fill = document.getElementById('ov-health-fill');
+  if (fill) fill.style.width = pct+'%';
+  setText('ov-health-pct', pct+'% repaid');
+  // Recent activity
+  var hist = (OPS.account.history||[]).slice().reverse().slice(0,7);
+  var el = document.getElementById('ov-activity');
+  if (el) {
+    if (!hist.length) { el.innerHTML = '<div style="padding:16px;color:var(--dim);font-size:12px">No activity recorded yet</div>'; }
+    else { el.innerHTML = hist.map(function(h){ return activityRow(h); }).join(''); }
+  }
+  updateTopbar();
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER: CUSTOMER
+// ═══════════════════════════════════════════════════════
+function renderCustomer() {
+  loadState();
+  var acct = OPS.account;
+  var per  = acct.personal    || {};
+  var con  = acct.contact     || {};
+  var emp  = acct.employment  || {};
+  var aff  = acct.affordability || {};
+  var displayName = ((per.firstName||'') + ' ' + (per.lastName||'')).trim() || acct.name || '';
+  setVal('cust-title',          per.title        || '');
+  setVal('cust-firstname',      per.firstName    || '');
+  setVal('cust-name',           per.lastName     || (acct.name||'').split(' ').slice(1).join(' ') || acct.name || '');
+  setVal('cust-email',          con.email        || '');
+  setVal('cust-phone',          con.phone        || '');
+  setVal('cust-address',        con.address      || '');
+  setVal('cust-dob',            per.dob          || '');
+  setVal('cust-resident-since', con.residentSince|| '');
+  setVal('cust-empstatus',      emp.status       || '');
+  setVal('cust-employer',       emp.employer     || '');
+  setVal('cust-jobtitle',       emp.jobTitle     || '');
+  setVal('cust-empstart',       emp.employmentStart || '');
+  setVal('cust-income',         emp.annualIncome || '');
+  setVal('cust-payfreq',        emp.payFrequency || '');
+  setVal('cust-payday',         emp.nextPayDate  || '');
+  setVal('cust-ie-income',      aff.monthlyIncome  || 0);
+  setVal('cust-ie-housing',     aff.housingCosts   || 0);
+  setVal('cust-ie-transport',   aff.transportCosts || 0);
+  setVal('cust-ie-living',      aff.livingCosts    || 0);
+  setVal('cust-ie-debts',       aff.otherDebts     || 0);
+  setText('cust-ie-disposable', fmt(Math.max(0, aff.disposableIncome || 0)) + '/month');
+  // Granular I&E panel — read-only display of all 16 line items
+  var g = aff.granular || {};
+  // Fallback: derive from flat buckets if granular is absent/all-zero
+  if (!(g.incSalary || g.expRent) && aff.monthlyIncome) {
+    g = { incSalary: aff.monthlyIncome, incSecondary:0, incBenefits:0, incOther:0,
+          expRent: aff.housingCosts, expCouncil:0, expUtilities:0,
+          expFood: aff.livingCosts, expTransport: aff.transportCosts, expChildcare:0,
+          expMobile:0, expLoans:0, expCards: aff.otherDebts, expBnpl:0, expInsurance:0, expSubs:0 };
+  }
+  var gTI = (g.incSalary||0)+(g.incSecondary||0)+(g.incBenefits||0)+(g.incOther||0);
+  var gTE = (g.expRent||0)+(g.expCouncil||0)+(g.expUtilities||0)+(g.expFood||0)+(g.expTransport||0)
+           +(g.expChildcare||0)+(g.expMobile||0)+(g.expLoans||0)+(g.expCards||0)+(g.expBnpl||0)
+           +(g.expInsurance||0)+(g.expSubs||0);
+  var gSurplus = gTI - gTE;
+  setText('ops-g-inc-salary',    fmt(g.incSalary    || 0));
+  setText('ops-g-inc-secondary', fmt(g.incSecondary || 0));
+  setText('ops-g-inc-benefits',  fmt(g.incBenefits  || 0));
+  setText('ops-g-inc-other',     fmt(g.incOther     || 0));
+  setText('ops-g-inc-total',     fmt(gTI));
+  setText('ops-g-exp-rent',      fmt(g.expRent      || 0));
+  setText('ops-g-exp-council',   fmt(g.expCouncil   || 0));
+  setText('ops-g-exp-utilities', fmt(g.expUtilities || 0));
+  setText('ops-g-exp-food',      fmt(g.expFood      || 0));
+  setText('ops-g-exp-transport', fmt(g.expTransport || 0));
+  setText('ops-g-exp-childcare', fmt(g.expChildcare || 0));
+  setText('ops-g-exp-mobile',    fmt(g.expMobile    || 0));
+  setText('ops-g-exp-loans',     fmt(g.expLoans     || 0));
+  setText('ops-g-exp-cards',     fmt(g.expCards     || 0));
+  setText('ops-g-exp-bnpl',      fmt(g.expBnpl      || 0));
+  setText('ops-g-exp-insurance', fmt(g.expInsurance || 0));
+  setText('ops-g-exp-subs',      fmt(g.expSubs      || 0));
+  setText('ops-g-exp-total',     fmt(gTE));
+  var surpEl = document.getElementById('ops-g-surplus');
+  if (surpEl) { surpEl.textContent = fmt(gSurplus); surpEl.style.color = gSurplus >= 0 ? 'var(--green)' : '#dc2626'; }
+  setText('cust-meta-id', acct.id||'—');
+  setText('cust-meta-loan', acct.loanId||'—');
+  setText('cust-meta-created', acct.createdAt ? shortDate(acct.createdAt) : '—');
+  setText('cust-meta-active', acct.lastActive ? fmtTs(acct.lastActive) : '—');
+  setText('cust-meta-status', OPS.accountStatus);
+  var notes = acct.opsNotes||[];
+  var notesEl = document.getElementById('cust-notes-list');
+  if (notesEl) {
+    if (!notes.length) { notesEl.innerHTML = '<div style="color:var(--dim);font-size:12px">No notes added yet</div>'; }
+    else { notesEl.innerHTML = notes.slice().reverse().map(function(n){ return '<div class="note-item">'+escHtml(n.text)+'<div class="note-meta">'+fmtTs(n.timestamp)+' &middot; '+escHtml(n.agent||'Ops')+'</div></div>'; }).join(''); }
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER: LOAN
+// ═══════════════════════════════════════════════════════
+function renderLoan() {
+  loadState();
+  setVal('lp-principal', OPS.principal);
+  setVal('lp-apr', OPS.apr);
+  setVal('lp-term', OPS.term);
+  setVal('lp-paidcount', OPS.paidCount);
+  var sd = OPS.startDate;
+  setVal('lp-startdate', sd.getFullYear()+'-'+String(sd.getMonth()+1).padStart(2,'0')+'-'+String(sd.getDate()).padStart(2,'0'));
+  var sel = document.getElementById('lp-status'); if (sel) sel.value = OPS.accountStatus;
+  var outstanding = outstandingBal(OPS.schedule, OPS.paidCount);
+  var repaid = totalRepaid(OPS.schedule, OPS.paidCount);
+  var totalInt = OPS.emi * OPS.term - OPS.principal;
+  var last = OPS.schedule.length ? shortDate(OPS.schedule[OPS.schedule.length-1].dueDate) : '—';
+  var sumEl = document.getElementById('loan-summary');
+  if (sumEl) sumEl.innerHTML = [
+    ['Monthly EMI',fmt(OPS.emi)],['Principal',fmt(OPS.principal)],
+    ['APR',OPS.apr.toFixed(1)+'%'],['Term',OPS.term+' months'],
+    ['Paid',OPS.paidCount+' / '+OPS.term],['Outstanding',fmt(outstanding)],
+    ['Total repaid',fmt(repaid)],['Total interest',fmt(totalInt)],
+    ['First payment',shortDate(OPS.startDate)],['Final payment',last]
+  ].map(function(r){ return '<div class="kv"><span class="kv-k">'+r[0]+'</span><span class="kv-v">'+r[1]+'</span></div>'; }).join('');
+  setText('sched-subtitle', OPS.schedule.length+' instalments');
+  buildSchedTable();
+}
+function buildSchedTable() {
+  var tbody = document.getElementById('sched-body'); if (!tbody) return;
+  var chips = { paid:'background:#d1fae5;color:#059669', current:'background:#dbeafe;color:#1a56db', upcoming:'background:#f1f5f9;color:#64748b', ph:'background:#ede9fe;color:#7c3aed', pa:'background:#fef3c7;color:#b45309' };
+  var labels = { paid:'Paid', current:'Current', upcoming:'Upcoming', ph:'Holiday', pa:'Arrangement' };
+  tbody.innerHTML = OPS.schedule.map(function(row){
+    var cs = chips[row.status]||'';
+    var act = (row.status==='upcoming'||row.status==='current') ? '<button class="btn btn-xs btn-secondary" onclick="markPaid('+row.n+')">Mark Paid</button>' : row.status==='paid' ? '<button class="btn btn-xs btn-ghost" onclick="unmarkPaid('+row.n+')">Undo</button>' : '';
+    return '<tr class="row-'+row.status+'"><td class="mono">'+row.n+'</td><td>'+shortDate(row.dueDate)+'</td><td class="mono">'+fmt(row.emi)+'</td><td class="mono">'+fmt(row.principal)+'</td><td class="mono" style="color:var(--muted)">'+fmt(row.interest)+'</td><td class="mono">'+fmt(row.balance)+'</td><td><span style="'+cs+';padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:600">'+(labels[row.status]||row.status)+'</span></td><td>'+act+'</td></tr>';
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER: MESSAGES
+// ═══════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════
+// RENDER: ACTIONS
+// ═══════════════════════════════════════════════════════
+function renderActions() {
+  loadState();
+  document.querySelectorAll('input[name="acct-status"]').forEach(function(r){ r.checked=(r.value===OPS.accountStatus); });
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER: CALCULATOR
+// ═══════════════════════════════════════════════════════
+function runCalculator() {
+  var P = parseFloat(document.getElementById('calc-principal').value)||1000;
+  var apr = parseFloat(document.getElementById('calc-apr').value)||29.9;
+  var n = parseInt(document.getElementById('calc-term').value)||12;
+  var sdv = document.getElementById('calc-start').value;
+  var sd = sdv ? new Date(sdv) : new Date();
+  var paid = parseInt(document.getElementById('calc-paid').value)||0;
+  var result = calcSchedule(P,apr,n,sd,paid);
+  setText('calc-emi', fmt(result.emi));
+  setText('calc-total', fmt(result.emi*n));
+  setText('calc-interest', fmt(result.emi*n-P));
+  setText('calc-outstanding', fmt(outstandingBal(result.schedule,paid)));
+  setText('calc-rate', ((apr/100)/12*100).toFixed(4)+'% / month');
+  document.getElementById('calc-results').style.display='block';
+  var chips = { paid:'background:#d1fae5;color:#059669', current:'background:#dbeafe;color:#1a56db', upcoming:'background:#f1f5f9;color:#64748b' };
+  var tbody = document.getElementById('calc-sched-body');
+  if (tbody) tbody.innerHTML = result.schedule.map(function(r){
+    return '<tr class="row-'+r.status+'"><td class="mono">'+r.n+'</td><td>'+shortDate(r.dueDate)+'</td><td class="mono">'+fmt(r.emi)+'</td><td class="mono">'+fmt(r.principal)+'</td><td class="mono" style="color:var(--muted)">'+fmt(r.interest)+'</td><td class="mono">'+fmt(r.balance)+'</td><td><span style="'+(chips[r.status]||'')+';padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:600">'+r.status.charAt(0).toUpperCase()+r.status.slice(1)+'</span></td></tr>';
+  }).join('');
+}
+function applyCalcToAccount() {
+  OPS.principal = parseFloat(document.getElementById('calc-principal').value)||OPS.principal;
+  OPS.apr = parseFloat(document.getElementById('calc-apr').value)||OPS.apr;
+  OPS.term = parseInt(document.getElementById('calc-term').value)||OPS.term;
+  var sd = document.getElementById('calc-start').value; if (sd) OPS.startDate = new Date(sd);
+  OPS.paidCount = parseInt(document.getElementById('calc-paid').value)||0;
+  var r = calcSchedule(OPS.principal,OPS.apr,OPS.term,OPS.startDate,OPS.paidCount);
+  OPS.emi = r.emi; OPS.schedule = r.schedule;
+  syncToCustomer('loan_restructure',{ principal:OPS.principal, apr:OPS.apr, term:OPS.term });
+  toast('Calculator values applied to account','success');
+  gotoSec('sec-loan');
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER: ACTIVITY
+// ═══════════════════════════════════════════════════════
+function renderActivity() {
+  loadState();
+  filterActivity(OPS.activeFilter||'all');
+}
+function filterActivity(type) {
+  OPS.activeFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.toggle('active',b.dataset.filter===type); });
+  var hist = (OPS.account.history||[]).slice().reverse();
+  if (type!=='all') {
+    if (type==='ops') hist = hist.filter(function(h){ return h.source==='ops_ui'; });
+    else hist = hist.filter(function(h){ return h.action===type; });
+  }
+  var el = document.getElementById('activity-list'); if (!el) return;
+  if (!hist.length) { el.innerHTML = '<div style="padding:20px;color:var(--dim);text-align:center;font-size:12px">No entries for this filter</div>'; return; }
+  el.innerHTML = hist.map(function(h){ return activityRow(h); }).join('');
+}
+function clearActivityBadge() {
+  var b = document.getElementById('sb-activity-badge'); if (b) { b.textContent='0'; b.style.display='none'; }
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER: COLLECTIONS
+// ═══════════════════════════════════════════════════════
+function renderCollections() {
+  loadState();
+  var next = OPS.paidCount < OPS.schedule.length ? OPS.schedule[OPS.paidCount] : null;
+  var daysUntil = next ? Math.round((new Date(next.dueDate)-new Date())/86400000) : null;
+  var dpd = (daysUntil!==null && daysUntil<0) ? Math.abs(daysUntil) : 0;
+  setText('col-dpd', dpd>0 ? dpd+' days' : 'Up to date');
+  setText('col-status', OPS.accountStatus.charAt(0).toUpperCase()+OPS.accountStatus.slice(1));
+  setText('col-outstanding', fmt(outstandingBal(OPS.schedule,OPS.paidCount)));
+  var risk = OPS.accountStatus==='default'?90 : OPS.accountStatus==='arrears'?55 : dpd>5?30 : 10;
+  var fill = document.getElementById('col-risk-fill');
+  if (fill) { fill.style.width=risk+'%'; fill.style.background=risk>70?'var(--red)':risk>40?'var(--amber)':'var(--green)'; }
+  setText('col-risk-pct', risk+'%');
+  var recs = [];
+  if (OPS.accountStatus==='active'&&dpd===0) recs=['No action required — account is current and up to date.'];
+  else if (OPS.accountStatus==='active'&&dpd>0) recs=['Account is '+dpd+' days past due.','Contact customer by phone immediately.','Offer payment arrangement if in difficulty.','If no response within 5 days, escalate to arrears.'];
+  else if (OPS.accountStatus==='arrears') recs=['Account in arrears.','Issue formal arrears notice to customer.','Discuss payment arrangement or payment holiday.','Conduct updated income & expenditure assessment.','Set next review date within 14 days.'];
+  else if (OPS.accountStatus==='default') recs=['Account in default.','Issue formal default notice (FCA-compliant).','Refer to collections team immediately.','Consider debt restructuring or write-off assessment.','No further payment holidays available.'];
+  else if (OPS.accountStatus==='terminated') recs=['Account closed — no further action required.'];
+  var recEl = document.getElementById('col-recommendations');
+  if (recEl) recEl.innerHTML = recs.map(function(r){ return '<div style="padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:12.5px">'+escHtml(r)+'</div>'; }).join('') || 'No recommendations.';
+  var logs = (OPS.account.contactLog||[]).slice().reverse();
+  var logEl = document.getElementById('col-contact-log');
+  if (logEl) {
+    if (!logs.length) { logEl.innerHTML = '<div style="padding:14px 0;color:var(--dim);font-size:12px">No contact attempts recorded</div>'; }
+    else { logEl.innerHTML = logs.map(function(l){ return '<div class="activity-item"><div class="act-icon" style="background:#dbeafe"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 3.5h10M1.5 6.5h7M1.5 9.5h5" stroke="#1a56db" stroke-width="1.3" stroke-linecap="round"/></svg></div><div style="flex:1"><div class="act-action">'+escHtml(l.method)+'</div><div class="act-detail">'+escHtml(l.outcome)+'</div></div><div class="act-time">'+fmtTs(l.timestamp)+'</div></div>'; }).join(''); }
+  }
+}
+function toggleColForm() {
+  var f = document.getElementById('col-add-form');
+  if (f) { f.style.display = f.style.display==='none'?'block':'none'; }
+  var d = document.getElementById('col-date');
+  if (d && !d.value) { var n = new Date(); d.value = n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0'); }
+}
+
+// ═══════════════════════════════════════════════════════
+// ACTION HANDLERS
+// ═══════════════════════════════════════════════════════
+function applyStatusChange() {
+  if (OPS.blockedActions && OPS.blockedActions.indexOf('change_account_status') !== -1) {
+    toast(OPS.actionReasons['change_account_status'] || 'Account status cannot be changed.', 'error'); return;
+  }
+  var sel = document.querySelector('input[name="acct-status"]:checked');
+  if (!sel) return;
+  syncToCustomer('account_status_change', { status: sel.value, prev: OPS.accountStatus });
+  updateTopbar();
+  toast('Account status changed to ' + sel.value, 'success');
+}
+function markPaid(n) {
+  if (n <= OPS.paidCount) { toast('Instalment ' + n + ' is already paid', 'info'); return; }
+  syncToCustomer('payment_recorded', { instalmentN: n, newPaidCount: n });
+  buildSchedTable();
+  toast('Instalment ' + n + ' marked as paid', 'success');
+}
+function unmarkPaid(n) {
+  var newCount = Math.max(0, n - 1);
+  syncToCustomer('payment_recorded', { instalmentN: n, newPaidCount: newCount });
+  buildSchedTable();
+  toast('Instalment ' + n + ' unmarked', 'info');
+}
+function markNextPaid() {
+  if (OPS.paidCount>=OPS.schedule.length) { toast('All instalments already paid','info'); return; }
+  markPaid(OPS.paidCount+1);
+}
+function recordManualPayment() {
+  var amt    = parseFloat(document.getElementById('mp-amount').value);
+  var ref    = (document.getElementById('mp-ref').value || '').trim() || 'MANUAL-' + Date.now();
+  var dateVal = document.getElementById('mp-date').value;
+  if (!amt || amt <= 0) { toast('Enter a valid payment amount', 'error'); return; }
+  syncToCustomer('manual_payment', { amount: amt, ref: ref, date: dateVal });
+  toast('Payment of ' + fmt(amt) + ' recorded (Ref: ' + ref + ')', 'success');
+  setVal('mp-amount', ''); setVal('mp-ref', ''); setVal('mp-date', '');
+}
+// Apply PH: dispatch intent — store builds the schedule.
+function applyPaymentHoliday() {
+  var idx = OPS.paidCount;
+  if (idx >= OPS.schedule.length) { toast('No upcoming instalments to apply holiday to', 'error'); return; }
+  if (OPS.blockedActions.indexOf('apply_payment_holiday') !== -1) {
+    toast(OPS.actionReasons['apply_payment_holiday'] || 'Payment holiday not available on this account.', 'error'); return;
+  }
+  syncToCustomer('payment_holiday_granted', { instalmentN: idx + 1 });
+  buildSchedTable();
+  setText('sched-subtitle', OPS.schedule.length + ' instalments');
+  toast('Payment holiday applied to instalment ' + (idx + 1) + '. Loan extended by 1 month.', 'success');
+}
+function changePayDate() {
+  var day = parseInt(document.getElementById('cpd-day').value);
+  if (!day || day < 1 || day > 28) { toast('Day must be between 1 and 28', 'error'); return; }
+  var newStart = new Date(OPS.startDate); newStart.setDate(day);
+  syncToCustomer('pay_date_change', { newDay: day, newStartDate: newStart.toISOString() });
+  setVal('cpd-day', '');
+  var suf = day === 1 ? 'st' : day === 2 ? 'nd' : day === 3 ? 'rd' : 'th';
+  toast('Pay date changed to the ' + day + suf + ' of each month', 'success');
+}
+// Apply PA: dispatch intent — store tags PA rows and persists state.
+function applyPaymentArrangement() {
+  var amt = parseFloat(document.getElementById('pa-amount').value);
+  var startVal = document.getElementById('pa-start').value;
+  var months = parseInt(document.getElementById('pa-months').value);
+  if (OPS.blockedActions.indexOf('apply_payment_arrangement') !== -1) {
+    toast(OPS.actionReasons['apply_payment_arrangement'] || 'Payment arrangement not available on this account.', 'error'); return;
+  }
+  if (!amt || amt <= 0) { toast('Enter a valid monthly amount', 'error'); return; }
+  if (!months || months < 1) { toast('Enter a valid duration', 'error'); return; }
+  var sd = startVal ? new Date(startVal) : new Date();
+  var outstanding = outstandingBal(OPS.schedule, OPS.paidCount);
+  syncToCustomer('payment_arrangement', {
+    amount:             amt,
+    months:             months,
+    startDate:          sd.toISOString(),
+    outstandingBalance: outstanding
+  });
+  toast('Payment arrangement applied: ' + fmt(amt) + '/month for ' + months + ' months', 'success');
+  setVal('pa-amount', ''); setVal('pa-months', '');
+}
+function extendTerm() {
+  var extra = parseInt(document.getElementById('ext-months').value);
+  if (!extra || extra < 1 || extra > 24) { toast('Enter 1–24 additional months', 'error'); return; }
+  var newTerm = OPS.term + extra;
+  syncToCustomer('term_extended', { extraMonths: extra, newTerm: newTerm });
+  setVal('ext-months', '');
+  toast('Term extended by ' + extra + ' months', 'success');
+}
+function waiveInterest() {
+  var amt = parseFloat(document.getElementById('waive-amount').value);
+  if (!amt||amt<=0) { toast('Enter a valid amount','error'); return; }
+  syncToCustomer('interest_waived',{ amount:amt });
+  toast('Interest waiver of '+fmt(amt)+' applied and logged','success');
+  setVal('waive-amount','');
+}
+function flagCollections() {
+  syncToCustomer('flagged_collections',{});
+  toast('Account flagged for collections team','warning');
+  gotoSec('sec-collections');
+}
+function closeAccount() {
+  if (OPS.blockedActions && OPS.blockedActions.indexOf('close_account') !== -1) {
+    toast(OPS.actionReasons['close_account'] || 'Account is already ' + OPS.accountStatus + '.', 'error'); return;
+  }
+  if (!confirm('Close this account? This action will be logged and broadcast to the customer tab.')) return;
+  syncToCustomer('account_closed', {});
+  updateTopbar();
+  toast('Account closed and status set to Terminated', 'warning');
+  renderActions();
+}
+function recalcAndSync() {
+  var principal = parseFloat(document.getElementById('lp-principal').value) || OPS.principal;
+  var apr       = parseFloat(document.getElementById('lp-apr').value)       || OPS.apr;
+  var term      = parseInt(document.getElementById('lp-term').value)        || OPS.term;
+  var paidCount = Math.min(parseInt(document.getElementById('lp-paidcount').value) || 0, term - 1);
+  var sdv       = document.getElementById('lp-startdate').value;
+  var startDate = sdv ? new Date(sdv).toISOString() : OPS.startDate.toISOString();
+  var sel       = document.getElementById('lp-status');
+  var status    = sel ? sel.value : OPS.accountStatus;
+  syncToCustomer('loan_recalculated', {
+    principal: principal, apr: apr, term: term,
+    startDate: startDate, paidCount: paidCount, accountStatus: status
+  });
+  renderLoan();
+  toast('Loan recalculated and synced to customer', 'success');
+}
+function saveCustomerProfile() {
+  if (!_store) return;
+  var st = _store.getState(); if (!st) return;
+  var per = st.profile.personal;
+  var con = st.profile.contact;
+  var emp = st.profile.employment;
+  var newLastName = (document.getElementById('cust-name').value||'').trim();
+  var newEmail    = (document.getElementById('cust-email').value||'').trim();
+  var newPhone    = (document.getElementById('cust-phone').value||'').trim();
+  _store.dispatch({
+    type: NovaPay.CommandTypes.UPDATE_PROFILE,
+    payload: {
+      personal: {
+        lastName: newLastName || per.lastName,
+        dob:      document.getElementById('cust-dob').value || per.dob
+      },
+      contact: {
+        email:         newEmail || con.email,
+        phone:         newPhone || con.phone,
+        address:       document.getElementById('cust-address').value        || con.address,
+        residentSince: document.getElementById('cust-resident-since').value || con.residentSince
+      }
+    },
+    actor: 'ops_ui'
+  });
+  _store.dispatch({
+    type: NovaPay.CommandTypes.UPDATE_EMPLOYMENT,
+    payload: {
+      status:          document.getElementById('cust-empstatus').value || emp.status,
+      employer:        document.getElementById('cust-employer').value  || emp.employer,
+      jobTitle:        document.getElementById('cust-jobtitle').value  || emp.jobTitle,
+      employmentStart: document.getElementById('cust-empstart').value  || emp.employmentStart,
+      annualIncome:    document.getElementById('cust-income').value    || emp.annualIncome,
+      payFrequency:    document.getElementById('cust-payfreq').value   || emp.payFrequency,
+      nextPayDate:     document.getElementById('cust-payday').value    || emp.nextPayDate
+    },
+    actor: 'ops_ui'
+  });
+  _store.dispatch({
+    type: NovaPay.CommandTypes.UPDATE_AFFORDABILITY,
+    payload: {
+      monthlyIncome:  parseFloat(document.getElementById('cust-ie-income').value)||0,
+      housingCosts:   parseFloat(document.getElementById('cust-ie-housing').value)||0,
+      transportCosts: parseFloat(document.getElementById('cust-ie-transport').value)||0,
+      livingCosts:    parseFloat(document.getElementById('cust-ie-living').value)||0,
+      otherDebts:     parseFloat(document.getElementById('cust-ie-debts').value)||0
+    },
+    actor: 'ops_ui'
+  });
+  loadState();
+  toast('Customer profile saved','success');
+  renderCustomer();
+}
+function addOpsNote() {
+  var txt = (document.getElementById('cust-note-input').value||'').trim(); if (!txt) return;
+  _store.dispatch({ type: NovaPay.CommandTypes.ADD_OPS_NOTE, payload: { text: txt }, actor: OPS_AGENT ? OPS_AGENT.name : 'Ops Agent' });
+  loadState();
+  setVal('cust-note-input','');
+  toast('Note added','success');
+  renderCustomer();
+}
+function addContactAttempt() {
+  var method  = document.getElementById('col-method').value;
+  var outcome = (document.getElementById('col-outcome').value||'').trim();
+  var dateVal = document.getElementById('col-date').value;
+  if (!outcome) { toast('Enter the outcome of the contact attempt','error'); return; }
+  _store.dispatch({ type: NovaPay.CommandTypes.ADD_CONTACT_ATTEMPT, payload: { method: method, outcome: outcome, date: dateVal }, actor: OPS_AGENT ? OPS_AGENT.name : 'Ops Agent' });
+  loadState();
+  setVal('col-outcome','');
+  toggleColForm();
+  toast('Contact attempt logged','success');
+  renderCollections();
+}
+
+// ═══════════════════════════════════════════════════════
+// SYNCBUS: RECEIVE CUSTOMER EVENTS via NovaPay BroadcastSyncBus
+// ═══════════════════════════════════════════════════════
+syncBus.subscribe(function(msg) {
+  if (!ACCT_KEY || !msg) return;
+  if (msg.storageKey && msg.storageKey !== ACCT_KEY) return;
+  if (!msg.actor || msg.actor === 'ops_ui') return; // ignore own messages
+  // Reload from localStorage before calling loadState() — the customer app has
+  // already written the updated account there; our cached state is stale.
+  if (_store) { try { _store.reload(); } catch(e) {} }
+  // Bump activity badge
+  var ab = document.getElementById('sb-activity-badge');
+  if (ab) { var n=parseInt(ab.textContent||'0')+1; ab.textContent=n; ab.style.display='flex'; }
+  // Mark customer as live
+  updateLiveStatus(true);
+  // Reload state from store then refresh active section
+  loadState();
+  var active = document.querySelector('.section.active');
+  if (active) {
+    if (active.id==='sec-activity') filterActivity(OPS.activeFilter||'all');
+    if (active.id==='sec-overview') renderOverview();
+  }
+  if (msg.type === NovaPay.CommandTypes.UPDATE_PROFILE || msg.type === NovaPay.CommandTypes.UPDATE_EMPLOYMENT) {
+    toast('Customer updated their profile','info');
+  }
+});
+
+// ═══════════════════════════════════════════════════════
+// LIVE STATUS & TOPBAR
+// ═══════════════════════════════════════════════════════
+var liveTimer;
+function updateLiveStatus(live) {
+  var dot = document.getElementById('live-dot');
+  var txt = document.getElementById('live-text');
+  if (dot) dot.className = 'live-dot'+(live?' on':'');
+  if (txt) txt.textContent = live ? 'Customer tab live' : 'Customer offline';
+  clearTimeout(liveTimer);
+  if (live) liveTimer = setTimeout(function(){ updateLiveStatus(false); }, 10000);
+}
+function updateTopbar() {
+  var el = document.getElementById('tb-status');
+  if (el) el.className = 'chip chip-'+OPS.accountStatus;
+  setText('tb-status-text', OPS.accountStatus.charAt(0).toUpperCase()+OPS.accountStatus.slice(1));
+}
+
+// ═══════════════════════════════════════════════════════
+// ACTIVITY HELPERS
+// ═══════════════════════════════════════════════════════
+var ACTION_LABELS = {
+  // Legacy action strings (from LOG_EVENT dispatches)
+  chat_message:'Chat message', profile_edit:'Profile updated (customer)',
+  account_status_change:'Status changed', payment_recorded:'Payment recorded',
+  pay_date_change:'Pay date changed', loan_recalculated:'Loan recalculated', term_extended:'Term extended',
+  payment_holiday_granted:'Payment holiday granted', manual_payment:'Manual payment recorded',
+  interest_waived:'Interest waived', loan_restructure:'Loan restructured', profile_updated:'Profile updated (ops)',
+  account_closed:'Account closed', flagged_collections:'Flagged for collections', payment_arrangement:'Payment arrangement set',
+  // Canonical CommandTypes (from store.dispatch commands)
+  CHANGE_ACCOUNT_STATUS:'Status changed', RECORD_PAYMENT:'Payment recorded',
+  RECALCULATE_LOAN:'Loan recalculated', APPLY_PAYMENT_HOLIDAY:'Payment holiday granted',
+  APPLY_PAYMENT_ARRANGEMENT:'Payment arrangement set', CHANGE_PAY_DATE:'Pay date changed',
+  EXTEND_TERM:'Term extended', WAIVE_INTEREST:'Interest waived',
+  CLOSE_ACCOUNT:'Account closed', FLAG_COLLECTIONS:'Flagged for collections',
+  ADD_OPS_NOTE:'Ops note added', ADD_CONTACT_ATTEMPT:'Contact attempt logged',
+  UPDATE_PROFILE:'Profile updated (ops)', UPDATE_EMPLOYMENT:'Employment updated (ops)',
+  UPDATE_AFFORDABILITY:'I&E updated (ops)', UPDATE_PAYMENT_METHODS:'Payment details updated',
+  LOG_EVENT:'Event logged'
+};
+var ACT_COLORS = {
+  chat_message:'#dcfce7', profile_edit:'#fef9c3', profile_updated:'#fef9c3',
+  account_status_change:'#fee2e2',
+  payment_recorded:'#dcfce7', manual_payment:'#dcfce7', pay_date_change:'#fef9c3',
+  loan_recalculated:'#e0f2fe', term_extended:'#fef3c7', payment_holiday_granted:'#ede9fe',
+  interest_waived:'#fef3c7', account_closed:'#fee2e2', flagged_collections:'#fee2e2', payment_arrangement:'#fef3c7',
+  // Canonical CommandTypes
+  CHANGE_ACCOUNT_STATUS:'#fee2e2', RECORD_PAYMENT:'#dcfce7', RECALCULATE_LOAN:'#e0f2fe',
+  APPLY_PAYMENT_HOLIDAY:'#ede9fe', APPLY_PAYMENT_ARRANGEMENT:'#fef3c7', CHANGE_PAY_DATE:'#fef9c3',
+  EXTEND_TERM:'#fef3c7', WAIVE_INTEREST:'#fef3c7', CLOSE_ACCOUNT:'#fee2e2',
+  FLAG_COLLECTIONS:'#fee2e2', ADD_OPS_NOTE:'#fef9c3', ADD_CONTACT_ATTEMPT:'#e0f2fe',
+  UPDATE_PROFILE:'#fef9c3', UPDATE_EMPLOYMENT:'#fef9c3', UPDATE_AFFORDABILITY:'#fef9c3',
+  UPDATE_PAYMENT_METHODS:'#e0f2fe'
+};
+function fmtAction(a) { return ACTION_LABELS[a]||a; }
+function fmtDetails(a,d) {
+  if (!d) return '';
+  if (a==='chat_message') return d.preview||'';
+  if (a==='account_status_change') return 'Changed to '+d.status+(d.prev?' from '+d.prev:'');
+  if (a==='payment_recorded') return 'Instalment '+(d.instalmentN||'')+' &middot; new count: '+d.newPaidCount;
+  if (a==='pay_date_change') return 'Day '+(d.newDay||'');
+  if (a==='manual_payment') return fmt(d.amount||0)+' &middot; Ref: '+(d.ref||'');
+  if (a==='loan_recalculated') return fmt(d.principal||0)+' &middot; '+d.apr+'% APR &middot; '+d.term+' months';
+  if (a==='term_extended') return '+'+d.extraMonths+' months &middot; new EMI: '+fmt(d.newEmi||0);
+  if (a==='profile_updated') return 'Name: '+(d.name||'');
+  return JSON.stringify(d).slice(0,50);
+}
+function actIconBg(a) { return ACT_COLORS[a]||'#f1f5f9'; }
+function actIconSvg(a) {
+  if (a==='payment_recorded'||a==='manual_payment') return '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#059669" stroke-width="1.3"/><path d="M4 6l1.5 1.5L8 4" stroke="#059669" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  if (a==='account_status_change'||a==='account_closed'||a==='flagged_collections') return '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#dc2626" stroke-width="1.3"/><path d="M6 3.5v3M6 8.5v.5" stroke="#dc2626" stroke-width="1.3" stroke-linecap="round"/></svg>';
+  if (a==='profile_edit'||a==='profile_updated') return '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="4" r="2" stroke="#b45309" stroke-width="1.3"/><path d="M2 10.5c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="#b45309" stroke-width="1.3" stroke-linecap="round"/></svg>';
+  return '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#94a3b8" stroke-width="1.3"/></svg>';
+}
+function activityRow(h) {
+  var isOps = h.source === 'ops_ui' || (h.source && h.source !== 'customer_ui' && h.source !== 'system');
+  return '<div class="activity-item">'
+    +'<div class="act-icon" style="background:'+actIconBg(h.action)+'">'+actIconSvg(h.action)+'</div>'
+    +'<div style="flex:1;min-width:0"><div class="act-action">'+fmtAction(h.action)+(isOps?' <span style="font-size:9px;background:var(--blue-light);color:var(--blue);padding:1px 5px;border-radius:4px;font-weight:700">OPS</span>':'')+'</div>'
+    +'<div class="act-detail">'+fmtDetails(h.action,h.details)+'</div></div>'
+    +'<div class="act-time">'+fmtTs(h.timestamp)+'</div></div>';
+}
+
+// ═══════════════════════════════════════════════════════
+// UTILITY
+// ═══════════════════════════════════════════════════════
+function setText(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; }
+function setVal(id,v){ var el=document.getElementById(id); if(el) el.value=v; }
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtTs(iso) {
+  if (!iso) return '—';
+  var d=new Date(iso), now=new Date(), diff=(now-d)/1000;
+  if (diff<60) return 'Just now';
+  if (diff<3600) return Math.floor(diff/60)+'m ago';
+  if (diff<86400) return Math.floor(diff/3600)+'h ago';
+  return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'});
+}
+function toast(msg, type) {
+  var root = document.getElementById('toast-root'); if (!root) return;
+  var el = document.createElement('div'); el.className='toast '+(type||'info'); el.textContent=msg;
+  root.appendChild(el);
+  setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 3500);
+}
+
+// ═══════════════════════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════════════════════
+function openSearch() {
+  document.getElementById('search-overlay').style.display = 'block';
+  setTimeout(function(){ document.getElementById('search-input').focus(); }, 60);
+}
+function closeSearch() {
+  var ov = document.getElementById('search-overlay'); if (!ov) return;
+  ov.style.display = 'none';
+  setVal('search-input','');
+  var res = document.getElementById('search-results');
+  if (res) res.innerHTML = '<div style="padding:48px;text-align:center;color:#94a3b8;font-size:13px">Start typing to search&hellip;</div>';
+}
+function runSearch(q) {
+  q = (q||'').trim();
+  var res = document.getElementById('search-results'); if (!res) return;
+  if (q.length < 1) { res.innerHTML = '<div style="padding:48px;text-align:center;color:#94a3b8;font-size:13px">Start typing to search&hellip;</div>'; return; }
+  var ql = q.toLowerCase().replace(/[\s\-\(\)]/g,'');
+  var matches = CUSTOMER_REGISTRY.filter(function(c) {
+    var pcon = (c.profile && c.profile.contact)  || {};
+    var pper = (c.profile && c.profile.personal) || {};
+    var txt = [c.name, pcon.email||'', pcon.phone||'', c.loanId, c.id, pper.dob||'', pcon.address||''].join(' ').toLowerCase().replace(/[\s\-\(\)]/g,'');
+    return txt.includes(ql);
+  });
+  if (!matches.length) { res.innerHTML = '<div style="padding:48px;text-align:center;color:#94a3b8;font-size:13px">No customers found matching <strong>"'+escHtml(q)+'"</strong></div>'; return; }
+  var statusBg  = { active:'#d1fae5', arrears:'#fef3c7', default:'#fee2e2', terminated:'#f1f5f9' };
+  var statusClr = { active:'#059669', arrears:'#b45309', default:'#dc2626', terminated:'#64748b' };
+  res.innerHTML = matches.map(function(c) {
+    var pcon = (c.profile && c.profile.contact)  || {};
+    var pper = (c.profile && c.profile.personal) || {};
+    // Use seed status in search — live status is shown once a customer session is loaded.
+    var liveStatus = c.loan.accountStatus;
+    return '<div onclick="selectFromSearch(\''+c.storageKey+'\')" style="display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;transition:background .12s;border-bottom:1px solid #f1f5f9" onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\'\'">'
+      +'<div style="width:46px;height:46px;background:linear-gradient(135deg,#60a5fa,#1a56db);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0">'+c.initials+'</div>'
+      +'<div style="flex:1;min-width:0">'
+        +'<div style="font-size:14px;font-weight:700;color:#0f172a;margin-bottom:3px">'+escHtml(c.name)+'</div>'
+        +'<div style="font-size:12px;color:#64748b;margin-bottom:2px">Loan #'+escHtml(c.loanId)+' &middot; '+escHtml(pcon.email||'')+' &middot; '+escHtml(pcon.phone||'')+'</div>'
+        +'<div style="font-size:11px;color:#94a3b8">DOB: '+escHtml(pper.dob||'')+' &middot; '+escHtml(pcon.address||'')+'</div>'
+      +'</div>'
+      +'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">'
+        +'<span style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;background:'+(statusBg[liveStatus]||'#f1f5f9')+';color:'+(statusClr[liveStatus]||'#64748b')+'">'+liveStatus.charAt(0).toUpperCase()+liveStatus.slice(1)+'</span>'
+        +'<span style="font-size:10.5px;color:#94a3b8">'+escHtml(c.id)+'</span>'
+      +'</div>'
+      +'</div>';
+  }).join('');
+}
+function selectFromSearch(key) {
+  closeSearch();
+  selectCustomer(key);
+}
+
+// ═══════════════════════════════════════════════════════
+// LOGIN & CUSTOMER SELECTION
+// ═══════════════════════════════════════════════════════
+function opsLogin() {
+  var email = (document.getElementById('ops-ln-email').value||'').toLowerCase().trim();
+  var pwd   = (document.getElementById('ops-ln-pwd').value||'').trim();
+  var errEl = document.getElementById('ops-ln-error');
+  if (email !== 'ops.agent@novapay.co.uk' || pwd !== 'novapay2026') {
+    errEl.textContent = 'Incorrect email or password. Please use the demo credentials shown below.';
+    errEl.style.display = 'block'; return;
+  }
+  OPS_AGENT = { name:'Ops Agent', role:'Senior Specialist', initials:'OA' };
+  // Persist agent session so hard refresh restores logged-in state
+  try {
+    var _existing = JSON.parse(localStorage.getItem(OPS_SESSION_KEY) || '{}');
+    localStorage.setItem(OPS_SESSION_KEY, JSON.stringify(Object.assign(_existing, { loggedIn: true })));
+  } catch(e) {}
+  var badge = document.getElementById('ops-agent-badge');
+  if (badge) badge.textContent = OPS_AGENT.name + ' \u00b7 ' + OPS_AGENT.role;
+  document.getElementById('ops-login-overlay').style.display = 'none';
+  document.getElementById('ops-cust-selector').style.display = 'flex';
+  buildCustDirectory();
+}
+function opsLogout() {
+  ACCT_KEY = null; OPS_AGENT = null;
+  // Clear persisted session on explicit logout
+  try { localStorage.removeItem(OPS_SESSION_KEY); } catch(e) {}
+  document.getElementById('ops-cust-selector').style.display = 'none';
+  document.getElementById('ops-login-overlay').style.display = 'flex';
+  document.getElementById('ops-ln-pwd').value = '';
+  document.getElementById('ops-ln-error').style.display = 'none';
+}
+function showCustomerSelector() {
+  if (!OPS_AGENT) return;
+  buildCustDirectory();
+  document.getElementById('ops-cust-selector').style.display = 'flex';
+}
+function buildCustDirectory() {
+  var list = document.getElementById('ops-cust-list'); if (!list) return;
+  var statusBg  = { active:'#d1fae5', arrears:'#fef3c7', default:'#fee2e2', terminated:'#f1f5f9' };
+  var statusClr = { active:'#059669', arrears:'#b45309', default:'#dc2626', terminated:'#64748b' };
+  list.innerHTML = CUSTOMER_REGISTRY.map(function(c) {
+    // Use seed status in the directory — live status is shown once a customer session is loaded.
+    var liveStatus = c.loan.accountStatus;
+    var r = calcSchedule(c.loan.principal, c.loan.apr, c.loan.term, new Date(c.loan.startDate), c.loan.paidCount);
+    var outstanding = outstandingBal(r.schedule, c.loan.paidCount);
+    return '<div onclick="selectCustomer(\''+c.storageKey+'\')" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:border-color .15s,box-shadow .15s" onmouseover="this.style.borderColor=\'var(--blue)\';this.style.boxShadow=\'0 4px 14px rgba(26,86,219,.1)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.boxShadow=\'\'">'
+      +'<div style="width:46px;height:46px;background:linear-gradient(135deg,#60a5fa,#1a56db);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0">'+c.initials+'</div>'
+      +'<div style="flex:1;min-width:0">'
+        +'<div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px">'+c.name+'</div>'
+        +'<div style="font-size:12px;color:var(--muted)">Loan #'+c.loanId+' &middot; '+((c.profile&&c.profile.contact&&c.profile.contact.email)||'')+'&middot; '+((c.profile&&c.profile.contact&&c.profile.contact.phone)||'')+'</div>'
+      +'</div>'
+      +'<div style="text-align:right;flex-shrink:0">'
+        +'<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:5px">\u00a3'+c.loan.principal.toLocaleString()+' &middot; '+c.loan.apr+'% APR &middot; '+c.loan.term+' months</div>'
+        +'<div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">'
+          +'<span style="font-size:11px;color:var(--muted)">Outstanding: '+fmt(outstanding)+'</span>'
+          +'<span style="padding:2px 9px;border-radius:12px;font-size:11px;font-weight:600;background:'+(statusBg[liveStatus]||'#f1f5f9')+';color:'+(statusClr[liveStatus]||'#64748b')+'">'+liveStatus.charAt(0).toUpperCase()+liveStatus.slice(1)+'</span>'
+        +'</div>'
+      +'</div>'
+      +'</div>';
+  }).join('');
+}
+function selectCustomer(key) {
+  var customer = null;
+  for (var i = 0; i < CUSTOMER_REGISTRY.length; i++) { if (CUSTOMER_REGISTRY[i].storageKey === key) { customer = CUSTOMER_REGISTRY[i]; break; } }
+  if (!customer) return;
+  ACCT_KEY = key;
+  // Persist the selected customer key so hard refresh restores the customer session
+  try {
+    var _s = JSON.parse(localStorage.getItem(OPS_SESSION_KEY) || '{}');
+    _s.customerKey = key;
+    localStorage.setItem(OPS_SESSION_KEY, JSON.stringify(_s));
+  } catch(e) {}
+  // Create the localStorage-backed store for this customer session
+  var localStore = NovaPay.createAccountStore({
+    repository:  _repo,
+    syncBus:     syncBus,
+    loanService: new NovaPay.LoanService()
+  });
+  // When USE_API is true, wrap the localStorage store with the API write-through adapter.
+  // Every dispatch() writes to both localStorage (synchronous) and the backend API (async).
+  _store = USE_API && NovaPay.createApiAccountStore
+    ? NovaPay.createApiAccountStore({ localStore: localStore, storageKey: ACCT_KEY, apiBase: API_BASE })
+    : localStore;
+
+  // Load or migrate existing localStorage data; creates canonical account from seed if new.
+  // When USE_API=true the API store also fires a background sync + resolved fetch.
+  _store.loadLegacy(ACCT_KEY, customer);
+  loadState(); // populates OPS.* and OPS.account (Path B on first call; Path A once resolved arrives)
+
+  // When the resolved state arrives from the backend, refresh the active section.
+  // This replaces locally-assembled OPS.account with the server-authoritative projection.
+  if (_store.subscribeResolved) {
+    _store.subscribeResolved(function () {
+      loadState();
+      // Re-render whichever section is currently active with server-authoritative data
+      var active = document.querySelector('.section.active');
+      if (active) {
+        var _resolvedRenders = {
+          'sec-overview':         renderOverview,
+          'sec-customer':         renderCustomer,
+          'sec-loan':             renderLoan,
+          'sec-actions':          renderActions,
+          'sec-activity':         function(){ filterActivity(OPS.activeFilter||'all'); },
+          'sec-collections':      renderCollections,
+          'sec-payment-details':  renderPaymentDetails,
+          'sec-statement':        renderStatement,
+          'sec-documents':        renderDocuments
+        };
+        if (_resolvedRenders[active.id]) _resolvedRenders[active.id]();
+      }
+      updateTopbar();
+    });
+  }
+  // Update topbar
+  setText('tb-crumb', customer.name + ' \u00b7 Loan #' + customer.loanId);
+  setText('tb-cname', customer.name);
+  setText('tb-cloan', 'Loan #' + customer.loanId);
+  var cav = document.getElementById('tb-cav'); if (cav) cav.textContent = customer.initials;
+  // Update sidebar agent footer
+  var an = document.getElementById('sb-agent-name'); if (an && OPS_AGENT) an.textContent = OPS_AGENT.name;
+  // Hide selector, start workspace
+  document.getElementById('ops-cust-selector').style.display = 'none';
+  startOpsPolling();
+  gotoSec('sec-overview');
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+(function init() {
+  document.querySelectorAll('.sb-item[data-sec]').forEach(function(item){
+    item.addEventListener('click', function(){ gotoSec(this.dataset.sec); });
+  });
+  updateLiveStatus(false);
+  document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey||e.metaKey) && e.key==='k') { e.preventDefault(); openSearch(); }
+    if (e.key==='Escape') closeSearch();
+  });
+
+  // ── Session restore: re-authenticate agent and re-open customer on hard refresh
+  (function restoreOpsSession() {
+    try {
+      var raw = localStorage.getItem(OPS_SESSION_KEY);
+      if (!raw) return;
+      var sess = JSON.parse(raw);
+      if (!sess || !sess.loggedIn) return;
+      // Restore agent without re-validating credentials (already validated previously)
+      OPS_AGENT = { name:'Ops Agent', role:'Senior Specialist', initials:'OA' };
+      var badge = document.getElementById('ops-agent-badge');
+      if (badge) badge.textContent = OPS_AGENT.name + ' \u00b7 ' + OPS_AGENT.role;
+      document.getElementById('ops-login-overlay').style.display = 'none';
+      document.getElementById('ops-cust-selector').style.display = 'flex';
+      buildCustDirectory();
+      // If a customer was selected before refresh, restore that session too
+      if (sess.customerKey) selectCustomer(sess.customerKey);
+    } catch(e) {}
+  })();
+})();
+
+// ── Storage event: cross-tab fallback when BroadcastChannel is unavailable
+window.addEventListener('storage', function(e) {
+  if (!ACCT_KEY || e.key !== ACCT_KEY || !e.newValue) return;
+  // Reload store state from updated localStorage, then refresh active section
+  if (_store) { _store.loadLegacy(ACCT_KEY); if (_store.refreshResolved) _store.refreshResolved(); loadState(); }
+  var active = document.querySelector('.section.active');
+  if (active && active.id === 'sec-overview') renderOverview();
+  if (active && active.id === 'sec-activity') filterActivity(OPS.activeFilter||'all');
+});
+
+// ── startOpsPolling: no-op — syncBus.subscribe + storage event handle cross-tab updates
+function startOpsPolling() {}
+
+// ═══════════════════════════════════════════════════════
+// RENDER: PAYMENT DETAILS
+// ═══════════════════════════════════════════════════════
+function renderPaymentDetails() {
+  loadState();
+  var pd   = (OPS.account && OPS.account.paymentDetails) || {};
+  var card = pd.card || {};
+  var bank = pd.bank || {};
+  setText('pd-ops-card-type',    card.type   || 'Not on file');
+  setText('pd-ops-card-num',     card.last4  ? 'XXXX  XXXX  XXXX  ' + card.last4 : 'Not on file');
+  setText('pd-ops-card-exp',     card.expiry || 'Not on file');
+  setText('pd-ops-card-collect', card.collectionDayOfMonth ? ''+card.collectionDayOfMonth : 'Not on file');
+  setText('pd-ops-bank-holder',  bank.accountHolder       || 'Not on file');
+  setText('pd-ops-bank-name',    bank.bankName            || 'Not on file');
+  setText('pd-ops-bank-sort',    bank.sortCodeMasked      || 'Not on file');
+  setText('pd-ops-bank-acc',     bank.accountNumberMasked || 'Not on file');
+  // Next 3 collection dates from schedule
+  var el = document.getElementById('pd-ops-schedule');
+  if (!el) return;
+  var upcoming = OPS.schedule.filter(function(s){ return s.status === 'current' || s.status === 'upcoming'; }).slice(0,3);
+  if (!upcoming.length) { el.innerHTML = '<div style="padding:12px 0;color:var(--dim);font-size:12px">No upcoming collections</div>'; return; }
+  el.innerHTML = upcoming.map(function(s) {
+    return '<div class="kv"><span class="kv-k">Instalment ' + s.n + ' &mdash; ' + shortDate(s.dueDate) + '</span>'
+      + '<span class="kv-v" style="font-weight:600">' + fmt(s.emi) + '</span></div>';
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER: STATEMENT OF ACCOUNT
+// ═══════════════════════════════════════════════════════
+function renderStatement() {
+  loadState();
+  var outstanding = outstandingBal(OPS.schedule, OPS.paidCount);
+  var repaid      = totalRepaid(OPS.schedule, OPS.paidCount);
+  var totalInt    = OPS.emi * OPS.term - OPS.principal;
+  var totalPay    = OPS.emi * OPS.term;
+  var remaining   = OPS.schedule.length - OPS.paidCount;
+  var lastRow     = OPS.schedule.length ? OPS.schedule[OPS.schedule.length - 1] : null;
+  setText('stmt-ops-principal',  fmt(OPS.principal));
+  setText('stmt-ops-total',      fmt(totalPay));
+  setText('stmt-ops-interest',   fmt(totalInt));
+  setText('stmt-ops-repaid',     fmt(repaid));
+  setText('stmt-ops-balance',    fmt(outstanding));
+  setText('stmt-ops-paid-count', OPS.paidCount + ' of ' + OPS.schedule.length);
+  setText('stmt-ops-remaining',  remaining + ' instalment' + (remaining !== 1 ? 's' : ''));
+  setText('stmt-ops-start',      shortDate(OPS.startDate));
+  setText('stmt-ops-end',        lastRow ? shortDate(lastRow.dueDate) : '—');
+  setText('stmt-ops-emi',        fmt(OPS.emi));
+  setText('stmt-ops-apr',        OPS.apr.toFixed(1) + '% APR');
+  var el = document.getElementById('stmt-ops-list');
+  if (!el) return;
+  el.innerHTML = '';
+  // Paid instalments newest-first
+  for (var i = OPS.paidCount - 1; i >= 0; i--) {
+    var e = OPS.schedule[i];
+    el.innerHTML += '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">'
+      + '<div style="width:28px;height:28px;border-radius:50%;background:#ecfdf5;display:flex;align-items:center;justify-content:center;flex-shrink:0">'
+      + '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#059669" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'
+      + '<div style="flex:1"><div style="font-size:12.5px;font-weight:600">Instalment ' + e.n + ' — Paid</div>'
+      + '<div style="font-size:11px;color:var(--muted)">' + shortDate(e.dueDate) + ' &middot; Ref: NP-' + (2025 + Math.floor(i/12)) + '-' + String(10000 + i * 317).slice(0,5) + '</div></div>'
+      + '<div style="font-size:13px;font-weight:700;color:var(--green)">−' + fmt(e.emi) + '</div>'
+      + '</div>';
+  }
+  // Disbursement row
+  el.innerHTML += '<div style="display:flex;align-items:center;gap:12px;padding:10px 0">'
+    + '<div style="width:28px;height:28px;border-radius:50%;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0">'
+    + '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="#1a56db" stroke-width="1.5" stroke-linecap="round"/></svg></div>'
+    + '<div style="flex:1"><div style="font-size:12.5px;font-weight:600">Loan disbursed</div>'
+    + '<div style="font-size:11px;color:var(--muted)">' + shortDate(OPS.startDate) + ' &middot; Ref: NP-2025-00421</div></div>'
+    + '<div style="font-size:13px;font-weight:700;color:var(--blue)">+' + fmt(OPS.principal) + '</div>'
+    + '</div>';
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER: DOCUMENTS
+// ═══════════════════════════════════════════════════════
+function closeDocModal() { document.getElementById('doc-modal').style.display = 'none'; }
+
+function showDocModal(name, sub, bgColor, strokeColor) {
+  var modal  = document.getElementById('doc-modal');
+  var icon   = document.getElementById('doc-modal-icon');
+  var title  = document.getElementById('doc-modal-title');
+  var subEl  = document.getElementById('doc-modal-sub');
+  var body   = document.getElementById('doc-modal-body');
+  icon.style.background = bgColor || '#eff6ff';
+  icon.style.color      = strokeColor || '#1a56db';
+  title.textContent = name;
+  subEl.textContent = sub;
+  var isGenerated = sub && sub.toLowerCase().indexOf('not generated') === -1 && sub.toLowerCase().indexOf('not issued') === -1;
+  var statusHtml = isGenerated
+    ? '<span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;background:#dcfce7;color:#15803d">On file</span>'
+    : '<span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;background:#f1f5f9;color:#64748b">Not applicable</span>';
+  body.innerHTML = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px"><span style="font-size:12px;font-weight:600;color:#374151">Status</span>' + statusHtml + '</div>'
+    + '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px 16px;font-size:12.5px;color:#374151;line-height:1.6">'
+    + 'This document is held in the NovaPay document management system. '
+    + 'In a production environment, clicking <strong>Download PDF</strong> would retrieve the signed, tamper-evident PDF from secure storage.'
+    + '</div>'
+    + '<div style="margin-top:14px;font-size:11px;color:#94a3b8">Document ID: DOC-' + (OPS && OPS.account && OPS.account.loanId ? OPS.account.loanId : '—') + '-' + name.replace(/\s+/g,'').substring(0,6).toUpperCase() + '</div>';
+  modal.style.display = 'block';
+}
+
+function renderDocuments() {
+  loadState();
+  var acct      = OPS.account;
+  var status    = OPS.accountStatus;
+  var startDate = shortDate(OPS.startDate);
+  var inArrears = status === 'arrears' || status === 'default' || status === 'terminated';
+
+  // ── Customer-facing documents ──────────────────────────────────────────────
+  // Build from canonical loan.documents[] — populated by createFromSeed() and
+  // status-change commands.  Status-conditional docs are derived from account state.
+  var st   = _store && _store.getState();
+  var loan = st && NovaPay.accountStateResolver && NovaPay.accountStateResolver.getActiveLoan(st);
+  var canonDocs = (loan && loan.documents) || [];
+
+  // Map canonical document types to display metadata
+  var _docMeta = {
+    secci:               { name:'Standard European Consumer Credit Information (SECCI)',
+                           sub: function(d){ return 'Pre-contractual information — issued ' + shortDate(d.issuedAt || OPS.startDate); },
+                           color:'#eff6ff', stroke:'#1a56db' },
+    agreement:           { name:'Loan Agreement (Regulated Credit Agreement)',
+                           sub: function(d){ return 'Signed ' + shortDate(d.signedAt || d.issuedAt || OPS.startDate); },
+                           color:'#eff6ff', stroke:'#1a56db' },
+    adequateExplanation: { name:'Adequate Explanations (s.55A CCA 1974)',
+                           sub: function(d){ return 'Issued ' + shortDate(d.issuedAt || OPS.startDate); },
+                           color:'#eff6ff', stroke:'#1a56db' },
+    cancellationNotice:  { name:'Cancellation Notice (14-day right to withdraw)',
+                           sub: function(d){ return 'Issued ' + shortDate(d.issuedAt || OPS.startDate); },
+                           color:'#eff6ff', stroke:'#1a56db' }
+  };
+
+  var customerDocs = [];
+  // Origination docs from canonical array
+  canonDocs.forEach(function(d) {
+    var meta = _docMeta[d.type];
+    if (meta) customerDocs.push({ name: meta.name, sub: meta.sub(d), color: meta.color, stroke: meta.stroke });
+  });
+  // If canonical array is empty (legacy account pre-migration), fall back to start date
+  if (!customerDocs.length) {
+    customerDocs = [
+      { name:'Standard European Consumer Credit Information (SECCI)', sub:'Pre-contractual information — issued ' + startDate, color:'#eff6ff', stroke:'#1a56db' },
+      { name:'Loan Agreement (Regulated Credit Agreement)', sub:'Signed ' + startDate, color:'#eff6ff', stroke:'#1a56db' },
+      { name:'Adequate Explanations (s.55A CCA 1974)', sub:'Issued ' + startDate, color:'#eff6ff', stroke:'#1a56db' }
+    ];
+  }
+  // Status-conditional docs — derived from canonical account status (not hardcoded)
+  customerDocs.push({
+    name:'Notice of Sums in Arrears',
+    sub: inArrears ? 'Generated — account in ' + status : 'Not generated — account status: ' + status,
+    color: inArrears ? '#fef2f2' : '#f8fafc', stroke: inArrears ? '#dc2626' : '#94a3b8'
+  });
+  customerDocs.push({
+    name:'Notice of Default (Default Sum)',
+    sub: (status === 'default' || status === 'terminated') ? 'Generated — account in default' : 'Not generated',
+    color: (status === 'default' || status === 'terminated') ? '#fef2f2' : '#f8fafc',
+    stroke: (status === 'default' || status === 'terminated') ? '#dc2626' : '#94a3b8'
+  });
+  customerDocs.push({
+    name:'Termination Notice',
+    sub: status === 'terminated' ? 'Issued — account terminated' : 'Not issued',
+    color: status === 'terminated' ? '#fef2f2' : '#f8fafc',
+    stroke: status === 'terminated' ? '#dc2626' : '#94a3b8'
+  });
+
+  // ── Internal / ops documents — derived from account state ─────────────────
+  var lastActiveDate = shortDate((acct && acct.lastActive) || new Date().toISOString());
+  var internalDocs = [
+    { name:'Credit Risk Assessment',           sub:'Completed at origination ' + startDate },
+    { name:'Affordability Assessment (s.55A)', sub:'Completed at origination ' + startDate },
+    { name:'Income & Expenditure Record',      sub:'Last updated ' + lastActiveDate },
+    { name:'KYC / Identity Verification',      sub:'Verified at origination' },
+    { name:'Data Processing Consent Record',   sub:'Collected at sign-up' },
+    { name:'Vulnerability Assessment',         sub:'Reviewed at origination' }
+  ];
+  function docRow(d, isInternal) {
+    var iconColor = isInternal ? '#fef3c7' : d.color;
+    var stroke = isInternal ? '#d97706' : d.stroke;
+    return '<div style="display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid var(--border)">'
+      + '<div style="width:34px;height:34px;background:' + iconColor + ';border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center">'
+      + '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="1" width="10" height="12" rx="1.5" stroke="' + stroke + '" stroke-width="1.3"/><path d="M4.5 5h5M4.5 7.5h5M4.5 10h3" stroke="' + stroke + '" stroke-width="1.2" stroke-linecap="round"/></svg></div>'
+      + '<div style="flex:1"><div style="font-size:12.5px;font-weight:600;color:var(--text)">' + escHtml(d.name) + '</div>'
+      + '<div style="font-size:11px;color:var(--muted)">' + d.sub + '</div></div>'
+      + '<button onclick="showDocModal(' + JSON.stringify(d.name) + ',' + JSON.stringify(d.sub) + ',' + JSON.stringify(isInternal ? '#fef3c7' : d.color) + ',' + JSON.stringify(isInternal ? '#d97706' : d.stroke) + ')" style="font-size:11px;color:var(--blue);font-weight:600;padding:4px 12px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer">View</button>'
+      + '</div>';
+  }
+  var custEl = document.getElementById('docs-ops-customer');
+  var intEl  = document.getElementById('docs-ops-internal');
+  if (custEl) custEl.innerHTML = customerDocs.map(function(d){ return docRow(d, false); }).join('');
+  if (intEl)  intEl.innerHTML  = internalDocs.map(function(d){ return docRow(d, true); }).join('');
+}
+
+function _refreshFromStorage(newVal, oldVal) {
+  try {
+    var newA = JSON.parse(newVal);
+    var oldA = oldVal ? JSON.parse(oldVal) : { history:[] };
+    // Ignore our own ops writes — avoids infinite refresh loops
+    var lastEntry = (newA.history||[]).slice(-1)[0];
+    if (lastEntry && lastEntry.source === 'ops_ui') return;
+    loadState();
+    updateLiveStatus(true);
+    // Bump activity badge for new entries
+    var added = (newA.history||[]).length - (oldA.history||[]).length;
+    if (added > 0) {
+      var ab = document.getElementById('sb-activity-badge');
+      if (ab) { var n = parseInt(ab.textContent||'0') + added; ab.textContent = n; ab.style.display = 'flex'; }
+    }
+    // Refresh whichever section is currently visible
+    var active = document.querySelector('.section.active'); if (!active) return;
+    var renders = {
+      'sec-overview': renderOverview,
+      'sec-customer': renderCustomer,
+      'sec-loan': renderLoan,
+      'sec-actions': renderActions,
+      'sec-activity': function(){ filterActivity(OPS.activeFilter||'all'); },
+      'sec-collections': renderCollections,
+      'sec-payment-details': renderPaymentDetails,
+      'sec-statement': renderStatement,
+      'sec-documents': renderDocuments
+    };
+    if (renders[active.id]) renders[active.id]();
+  } catch(err) {}
+}
+</script>
+</body>
+</html>
