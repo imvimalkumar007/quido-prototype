@@ -1,5 +1,5 @@
 /**
- * NovaPay Loan Engine — Backend Reference
+ * Quido Loan Engine — Backend Reference
  * ─────────────────────────────────────────────────────────────────
  * Standard reducing balance (amortisation) engine.
  * All figures derive from: EMI = P × r(1+r)ⁿ / ((1+r)ⁿ − 1)

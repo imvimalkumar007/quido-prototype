@@ -1,8 +1,8 @@
 /**
- * NovaPay Shared Logic Core — v3.0
+ * Quido Shared Logic Core — v3.0
  * Vanilla JS IIFE. Works on file:// (no ES module import required).
- * Load order: novapay-core.js must come AFTER the four engine files.
- * Exposes: window.NovaPay (merges into any object already placed there
+ * Load order: quido-core.js must come AFTER the four engine files.
+ * Exposes: window.Quido (merges into any object already placed there
  *          by the engine files)
  *
  * Schema v3 canonical structure:
@@ -18,8 +18,8 @@
 ;(function (global) {
   'use strict';
 
-  // Merge into the NovaPay namespace already seeded by engine files
-  var NovaPay = global.NovaPay || (global.NovaPay = {});
+  // Merge into the Quido namespace already seeded by engine files
+  var Quido = global.Quido || (global.Quido = {});
 
   // ══════════════════════════════════════════════════════════════════
   // UTILITIES
@@ -900,7 +900,7 @@
     var ASR         = null; // resolved lazily after engine files are ready
 
     function getASR() {
-      if (!ASR) ASR = NovaPay.accountStateResolver;
+      if (!ASR) ASR = Quido.accountStateResolver;
       return ASR;
     }
 
@@ -1615,9 +1615,9 @@
   };
 
   // ══════════════════════════════════════════════════════════════════
-  // MERGE INTO window.NovaPay
+  // MERGE INTO window.Quido
   // ══════════════════════════════════════════════════════════════════
-  merge(NovaPay, {
+  merge(Quido, {
     version:                    '3.0.0',
     CommandTypes:               CommandTypes,
 

@@ -1,5 +1,5 @@
 /**
- * NovaPay Status Engine Config — v3.0
+ * Quido Status Engine Config — v3.0
  * Central configuration for all loan status evaluation thresholds,
  * status codes, overlay types, and precedence rules.
  * Must be loaded before loan-status-engine.js and servicing-policy-engine.js.
@@ -7,9 +7,9 @@
 ;(function (global) {
   'use strict';
 
-  var NovaPay = global.NovaPay || (global.NovaPay = {});
+  var Quido = global.Quido || (global.Quido = {});
 
-  NovaPay.StatusConfig = {
+  Quido.StatusConfig = {
 
     // ── Core loan statuses ───────────────────────────────────────────
     CS: {

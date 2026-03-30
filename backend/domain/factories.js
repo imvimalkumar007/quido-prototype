@@ -1,8 +1,8 @@
 /**
- * NovaPay domain factories — Node.js / CommonJS
+ * Quido domain factories — Node.js / CommonJS
  *
  * Server-side equivalents of the v3 schema factory functions defined in
- * shared/novapay-core.js.  These produce the same canonical shapes so that
+ * shared/quido-core.js.  These produce the same canonical shapes so that
  * accounts created or mutated on the backend are structurally identical to
  * those created by the client-side engine.
  *

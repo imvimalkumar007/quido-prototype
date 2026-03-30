@@ -10,7 +10,7 @@ module.exports = function errorHandler(err, req, res, next) {
   const message = err.message || 'Internal server error';
 
   if (status >= 500) {
-    console.error('[NovaPay API error]', err);
+    console.error('[Quido API error]', err);
   }
 
   res.status(status).json({ error: message });

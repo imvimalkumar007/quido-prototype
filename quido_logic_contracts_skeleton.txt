@@ -1,5 +1,5 @@
 /**
- * NovaPay shared logic contracts
+ * Quido shared logic contracts
  *
  * This is not a drop-in replacement yet.
  * It is the architectural skeleton Claude Code should implement against.

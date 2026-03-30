@@ -1,5 +1,5 @@
 /**
- * NovaPay Status Engine — Node.js
+ * Quido Status Engine — Node.js
  *
  * Server-side port of shared/loan-status-engine.js + shared/servicing-policy-engine.js
  * + shared/status-engine-config.js.

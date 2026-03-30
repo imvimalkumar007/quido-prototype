@@ -1,7 +1,7 @@
 {
-  "name": "novapay-backend",
+  "name": "quido-backend",
   "version": "1.0.0",
-  "description": "NovaPay canonical account API — Priority 1 persistence layer",
+  "description": "Quido canonical account API — Priority 1 persistence layer",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

@@ -1,5 +1,5 @@
 /**
- * NovaPay Loan Status Engine — v3.0
+ * Quido Loan Status Engine — v3.0
  * Evaluates the canonical core status of a single loan object.
  * Depends on: status-engine-config.js
  *
@@ -21,7 +21,7 @@
 ;(function (global) {
   'use strict';
 
-  var NovaPay = global.NovaPay || (global.NovaPay = {});
+  var Quido = global.Quido || (global.Quido = {});
 
   // ── Helpers ──────────────────────────────────────────────────────
 
@@ -103,7 +103,7 @@
    * @returns {{ coreStatus, reasonCodes, derivedFlags }}
    */
   function evaluateCoreStatus(loan, now) {
-    var SC = NovaPay.StatusConfig;
+    var SC = Quido.StatusConfig;
     now = now || new Date();
 
     var prevStatus = (loan.statusEngineState && loan.statusEngineState.coreStatus) || SC.CS.ACTIVE;
@@ -189,7 +189,7 @@
   }
 
   // ── Public API ───────────────────────────────────────────────────
-  NovaPay.loanStatusEngine = {
+  Quido.loanStatusEngine = {
     evaluateCoreStatus:           evaluateCoreStatus,
     outstandingBalance:           outstandingBalance,
     lastSuccessfulPaymentDate:    lastSuccessfulPaymentDate,

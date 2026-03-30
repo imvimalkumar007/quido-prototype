@@ -1,5 +1,5 @@
 /**
- * NovaPay Backend — server entry point
+ * Quido Backend — server entry point
  *
  * Starts the Express API on PORT (default 3001).
  * Serves the shared engine files statically so frontends can load them
@@ -46,7 +46,7 @@ app.use(errorHandler);
 // ── Start ───────────────────────────────────────────────────────────────────
 app.listen(PORT, function () {
   console.log('');
-  console.log('  NovaPay backend  →  http://localhost:' + PORT);
+  console.log('  Quido backend — Flexibility when it matters most');
   console.log('  API root         →  http://localhost:' + PORT + '/api');
   console.log('  DB directory     →  ' + DB_DIR);
   console.log('');

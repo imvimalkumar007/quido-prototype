@@ -1,5 +1,5 @@
 /**
- * NovaPay Servicing Engine — Node.js
+ * Quido Servicing Engine — Node.js
  *
  * Central mutation engine for all loan servicing operations.
  *

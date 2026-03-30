@@ -1,8 +1,8 @@
 /**
- * NovaPay API Account Store — v1.0
+ * Quido API Account Store — v1.0
  *
- * Drop-in replacement / wrapper for NovaPay.createAccountStore() that
- * writes every mutation to the NovaPay backend API in addition to the
+ * Drop-in replacement / wrapper for Quido.createAccountStore() that
+ * writes every mutation to the Quido backend API in addition to the
  * local localStorage store.
  *
  * Architecture (Priority 1 — write-through migration):
@@ -22,9 +22,9 @@
  *
  * Usage:
  *   var USE_API  = true;
- *   var localStore = NovaPay.createAccountStore({ ... });
+ *   var localStore = Quido.createAccountStore({ ... });
  *   var _store = USE_API
- *     ? NovaPay.createApiAccountStore({ localStore: localStore, storageKey: ACCT_KEY })
+ *     ? Quido.createApiAccountStore({ localStore: localStore, storageKey: ACCT_KEY })
  *     : localStore;
  *
  * The returned store exposes the same interface as createAccountStore:
@@ -37,12 +37,12 @@
  *   .reload()              → re-fetch from API, update localStorage, notify
  *
  * Depends on: nothing (vanilla JS, no ES modules)
- * Loads after: novapay-core.js
+ * Loads after: quido-core.js
  */
 ;(function (global) {
   'use strict';
 
-  var NovaPay = global.NovaPay || (global.NovaPay = {});
+  var Quido = global.Quido || (global.Quido = {});
 
   // Default API base URL — override per environment
   var DEFAULT_API_BASE = 'http://localhost:3001/api';
@@ -74,7 +74,7 @@
 
   /**
    * @param {Object} options
-   * @param {Object} options.localStore    — existing NovaPay.createAccountStore() instance
+   * @param {Object} options.localStore    — existing Quido.createAccountStore() instance
    * @param {string} options.storageKey    — customer's storageKey
    * @param {string} [options.apiBase]     — API root (default: http://localhost:3001/api)
    * @param {boolean} [options.silent]     — suppress console warnings when API is unavailable
@@ -89,7 +89,7 @@
     var _resolvedListeners = [];  // callbacks registered via subscribeResolved()
 
     function warn(msg) {
-      if (!silent) console.warn('[NovaPay API store]', msg);
+      if (!silent) console.warn('[Quido API store]', msg);
     }
 
     function emitResolved() {
@@ -143,8 +143,8 @@
           var backendVer = backendAccount.version || 0;
           if (backendVer > localVer) {
             // Run migrations so client-only fields (e.g. granular I&E) are always present
-            var toStore = (NovaPay && NovaPay.normalizeAccount)
-              ? NovaPay.normalizeAccount(backendAccount, seed)
+            var toStore = (Quido && Quido.normalizeAccount)
+              ? Quido.normalizeAccount(backendAccount, seed)
               : backendAccount;
             try {
               window.localStorage.setItem(key, JSON.stringify(toStore));
@@ -271,8 +271,8 @@
             var backendVer = backendAccount.version || 0;
 
             if (backendVer > localVer) {
-              var toStoreR = (NovaPay && NovaPay.normalizeAccount)
-                ? NovaPay.normalizeAccount(backendAccount, null)
+              var toStoreR = (Quido && Quido.normalizeAccount)
+                ? Quido.normalizeAccount(backendAccount, null)
                 : backendAccount;
               try {
                 window.localStorage.setItem(storageKey, JSON.stringify(toStoreR));
@@ -325,8 +325,8 @@
     return store;
   }
 
-  // ── Expose on NovaPay namespace ─────────────────────────────────────────
-  NovaPay.createApiAccountStore = createApiAccountStore;
-  NovaPay.API_BASE = DEFAULT_API_BASE;
+  // ── Expose on Quido namespace ─────────────────────────────────────────
+  Quido.createApiAccountStore = createApiAccountStore;
+  Quido.API_BASE = DEFAULT_API_BASE;
 
 })(typeof window !== 'undefined' ? window : this);

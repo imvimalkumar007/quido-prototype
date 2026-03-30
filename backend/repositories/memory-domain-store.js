@@ -1,7 +1,7 @@
 /**
  * MemoryDomainStore
  *
- * In-memory implementation of all NovaPay domain repository interfaces.
+ * In-memory implementation of all Quido domain repository interfaces.
  * Implements the same method surface as FileDomainStore using a plain
  * in-memory Map.  Data is lost when the process exits.
  *

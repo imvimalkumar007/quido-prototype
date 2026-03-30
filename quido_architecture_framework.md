@@ -1,4 +1,4 @@
-# NovaPay Interactive Prototype — Logic Architecture Framework
+# Quido Interactive Prototype — Logic Architecture Framework
 
 ## What is broken now
 
@@ -6,11 +6,11 @@ The prototype already has the right intention, but the logic is split across too
 
 ### Current state in the uploaded files
 
-1. `novapay_ops.html` and `novapay_loans.html` both define their own `CUSTOMER_REGISTRY` with five customers.
+1. `quido_ops.html` and `quido_loans.html` both define their own `CUSTOMER_REGISTRY` with five customers.
 2. Both apps seed `localStorage` per customer and use `BroadcastChannel('proto_sync')` plus polling for sync.
 3. The ops app writes account changes into `localStorage` and stores loan changes under `loanOverrides` before broadcasting updates to the customer UI.
 4. The customer UI partially reads from `localStorage`, but several sections still render hardcoded Sarah Mitchell / Loan #28796 content, especially payment details and generated documents.
-5. The loan engine exists as a separate backend-style module (`novapay_loan_engine.js`), but the HTML apps also reimplement loan logic inline.
+5. The loan engine exists as a separate backend-style module (`quido_loan_engine.js`), but the HTML apps also reimplement loan logic inline.
 
 This creates four competing truth sources:
 
@@ -294,7 +294,7 @@ UI action
 ## Current issue
 
 You have:
-- `novapay_loan_engine.js` as backend reference
+- `quido_loan_engine.js` as backend reference
 - duplicated inline schedule logic inside both HTML apps
 
 That duplication must stop.
@@ -473,7 +473,7 @@ Do this in order.
 
 ### Phase 2 — centralize the loan engine
 1. Remove inline schedule calculators from both HTML apps.
-2. Use a single `LoanService` that calls `novapay_loan_engine.js`.
+2. Use a single `LoanService` that calls `quido_loan_engine.js`.
 3. Persist `loan.snapshot` after every command.
 
 ### Phase 3 — centralize writes

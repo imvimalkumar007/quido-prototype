@@ -4,7 +4,7 @@
  * Persists each v3 customerAccount as a single JSON file:
  *   {dbDir}/{storageKey}.json
  *
- * This is the default repository for the NovaPay prototype.
+ * This is the default repository for the Quido prototype.
  * To migrate to a real database, implement the same interface in a new
  * repository (e.g. MongoAccountRepository, PostgresAccountRepository)
  * and swap it in server.js.

@@ -1,7 +1,7 @@
 /**
  * FileDomainStore
  *
- * A single concrete class that implements all NovaPay domain repository
+ * A single concrete class that implements all Quido domain repository
  * interfaces by reading and writing one JSON file per customer account:
  *   {dbDir}/{storageKey}.json
  *

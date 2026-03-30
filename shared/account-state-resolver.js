@@ -1,5 +1,5 @@
 /**
- * NovaPay Account State Resolver — v3.0
+ * Quido Account State Resolver — v3.0
  * Central mutation paths for all account and loan changes.
  * Every state-changing operation flows through commitCustomerMutation or
  * commitLoanMutation — never direct property writes from application code.
@@ -19,7 +19,7 @@
 ;(function (global) {
   'use strict';
 
-  var NovaPay = global.NovaPay || (global.NovaPay = {});
+  var Quido = global.Quido || (global.Quido = {});
 
   // ── Internal helpers ─────────────────────────────────────────────
 
@@ -69,7 +69,7 @@
 
   /**
    * Rebuild scheduleSnapshot and loanSummary from loanCore parameters.
-   * Uses NovaPay.builtInEngineFactory (defined in novapay-core.js).
+   * Uses Quido.builtInEngineFactory (defined in quido-core.js).
    * Skips rebuild when opts.skipRebuild === true (caller supplies snapshot).
    */
   function rebuildLoanSnapshot(loan, opts) {
@@ -77,7 +77,7 @@
     var lc = loan.loanCore;
     if (!lc || !lc.principal || !lc.termMonths) return;
 
-    var engine = NovaPay.builtInEngineFactory({
+    var engine = Quido.builtInEngineFactory({
       principal:  lc.principal,
       apr:        lc.apr        || 0,
       termMonths: lc.termMonths,
@@ -120,9 +120,9 @@
    */
   function runStatusEngine(loan, now) {
     now = now || _now();
-    var seResult = NovaPay.loanStatusEngine.evaluateCoreStatus(loan, now);
-    var overlays = NovaPay.servicingPolicyEngine.evaluateOverlays(loan, seResult.coreStatus, now);
-    var display  = NovaPay.servicingPolicyEngine.resolveDisplayStatus(seResult.coreStatus, overlays);
+    var seResult = Quido.loanStatusEngine.evaluateCoreStatus(loan, now);
+    var overlays = Quido.servicingPolicyEngine.evaluateOverlays(loan, seResult.coreStatus, now);
+    var display  = Quido.servicingPolicyEngine.resolveDisplayStatus(seResult.coreStatus, overlays);
 
     loan.statusEngineState = {
       coreStatus:      seResult.coreStatus,
@@ -134,7 +134,7 @@
     };
 
     // Mark loan closed/settled if engine says so
-    var SC = NovaPay.StatusConfig;
+    var SC = Quido.StatusConfig;
     var cs = seResult.coreStatus;
     if ((cs === SC.CS.CLOSED || cs === SC.CS.SETTLED) && !loan.closedAt) {
       loan.closedAt      = _ts(now);
@@ -191,7 +191,7 @@
     var allowed = [];
     var blocked = [];
     var reasons = {};
-    var pe      = NovaPay.servicingPolicyEngine;
+    var pe      = Quido.servicingPolicyEngine;
 
     // Payments
     if (TERMINAL_STATUSES.indexOf(coreStatus) === -1) {
@@ -288,7 +288,7 @@
   }
 
   // ── Public API ───────────────────────────────────────────────────
-  NovaPay.accountStateResolver = {
+  Quido.accountStateResolver = {
     commitCustomerMutation: commitCustomerMutation,
     commitLoanMutation:     commitLoanMutation,
     rebuildLoanSnapshot:    rebuildLoanSnapshot,

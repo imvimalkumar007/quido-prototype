@@ -1,8 +1,8 @@
 /**
- * NovaPay Loan Engine — Node.js
+ * Quido Loan Engine — Node.js
  *
  * Reducing-balance EMI calculator and amortisation schedule builder.
- * Server-side equivalent of NovaPay.builtInEngineFactory in novapay-core.js.
+ * Server-side equivalent of Quido.builtInEngineFactory in quido-core.js.
  * Pure functions — no side-effects, no global state.
  *
  * Usage:

@@ -1,5 +1,5 @@
 /**
- * NovaPay Servicing Policy Engine — v3.0
+ * Quido Servicing Policy Engine — v3.0
  * Manages servicing overlays (Payment Holiday, Payment Arrangement)
  * and forbearance eligibility rules on top of the core loan status.
  * Depends on: status-engine-config.js, loan-status-engine.js
@@ -14,7 +14,7 @@
 ;(function (global) {
   'use strict';
 
-  var NovaPay = global.NovaPay || (global.NovaPay = {});
+  var Quido = global.Quido || (global.Quido = {});
 
   // ── Overlay evaluation ───────────────────────────────────────────
 
@@ -26,7 +26,7 @@
    * @returns {Object} overlays   - keyed by overlay category
    */
   function evaluateOverlays(loan, coreStatus, now) {
-    var SC   = NovaPay.StatusConfig;
+    var SC   = Quido.StatusConfig;
     now      = now || new Date();
     var arrs = loan.arrangements || {};
     var overlays = {};
@@ -115,7 +115,7 @@
    * Highest-precedence active overlay wins over core status.
    */
   function resolveDisplayStatus(coreStatus, overlays) {
-    var SC = NovaPay.StatusConfig;
+    var SC = Quido.StatusConfig;
     if (overlays.formalForbearance) {
       return overlays.formalForbearance.type || 'forbearance';
     }
@@ -141,7 +141,7 @@
    * @returns {{ eligible: boolean, reason?: string, phUsed?: number, phMax?: number }}
    */
   function checkPHEligibility(loan, coreStatus, derivedFlags, now) {
-    var SC   = NovaPay.StatusConfig;
+    var SC   = Quido.StatusConfig;
     now      = now || new Date();
     var arrs = loan.arrangements || {};
     var lc   = loan.loanCore     || {};
@@ -205,7 +205,7 @@
    * @returns {{ eligible: boolean, reason?: string }}
    */
   function checkPAEligibility(loan, coreStatus) {
-    var SC   = NovaPay.StatusConfig;
+    var SC   = Quido.StatusConfig;
     var arrs = loan.arrangements || {};
 
     if (SC.PA_BLOCKED_STATUSES.indexOf(coreStatus) !== -1) {
@@ -222,7 +222,7 @@
   }
 
   // ── Public API ───────────────────────────────────────────────────
-  NovaPay.servicingPolicyEngine = {
+  Quido.servicingPolicyEngine = {
     evaluateOverlays:      evaluateOverlays,
     resolveDisplayStatus:  resolveDisplayStatus,
     checkPHEligibility:    checkPHEligibility,
