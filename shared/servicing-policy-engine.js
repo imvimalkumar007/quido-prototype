@@ -31,18 +31,29 @@
     var arrs = loan.arrangements || {};
     var overlays = {};
 
-    // ── 1. Formal forbearance (future packs) ─────────────────────
-    var cases = loan.forbearanceCases || [];
-    for (var fc = 0; fc < cases.length; fc++) {
-      var c = cases[fc];
-      if (c.active) {
-        overlays.formalForbearance = {
-          type:      c.type,
-          startDate: c.startDate,
-          endDate:   c.endDate,
-          reference: c.reference
-        };
-        break; // only one active formal case at a time
+    // ── 1. Formal forbearance ────────────────────────────────────
+    // Check new single-object field first, fall back to legacy array
+    if (loan.forbearanceOverlay && loan.forbearanceOverlay.active) {
+      var fov = loan.forbearanceOverlay;
+      overlays.formalForbearance = {
+        type:      fov.type,
+        startDate: fov.startDate,
+        endDate:   fov.expectedEndDate || fov.endDate,
+        reference: fov.reference
+      };
+    } else {
+      var cases = loan.forbearanceCases || [];
+      for (var fc = 0; fc < cases.length; fc++) {
+        var c = cases[fc];
+        if (c.active) {
+          overlays.formalForbearance = {
+            type:      c.type,
+            startDate: c.startDate,
+            endDate:   c.endDate,
+            reference: c.reference
+          };
+          break; // only one active formal case at a time
+        }
       }
     }
 

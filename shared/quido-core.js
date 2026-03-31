@@ -66,7 +66,9 @@
     ADD_CONTACT_ATTEMPT:       'ADD_CONTACT_ATTEMPT',
     FLAG_COLLECTIONS:          'FLAG_COLLECTIONS',
     CLOSE_ACCOUNT:             'CLOSE_ACCOUNT',
-    LOG_EVENT:                 'LOG_EVENT'
+    LOG_EVENT:                 'LOG_EVENT',
+    APPLY_FORBEARANCE_OVERLAY: 'APPLY_FORBEARANCE_OVERLAY',
+    EXIT_FORBEARANCE_OVERLAY:  'EXIT_FORBEARANCE_OVERLAY'
   };
 
   // ══════════════════════════════════════════════════════════════════
@@ -1278,6 +1280,77 @@
               loan.closureReason = 'terminated';
               loan.adjustments.statusChanges.push({
                 from: 'active', to: 'terminated', timestamp: loan.closedAt, actor: actor
+              });
+            }
+            persistAndBroadcast(type, actor);
+            break;
+
+          case CommandTypes.APPLY_FORBEARANCE_OVERLAY:
+            if (loan && payload.type) {
+              // Block if overlay already active
+              if (loan.forbearanceOverlay && loan.forbearanceOverlay.active) break;
+              var foSE = loan.statusEngineState || {};
+              var foOrigCtx = {
+                baseStatus:         foSE.baseStatus || foSE.coreStatus || 'active',
+                servicingOverlay:   foSE.servicingOverlay   || null,
+                servicingSubStatus: foSE.servicingSubStatus || null
+              };
+              loan.forbearanceOverlay = {
+                active:          true,
+                type:            payload.type,
+                startDate:       payload.startDate       || nowIso(),
+                expectedEndDate: payload.expectedEndDate || null,
+                reason:          payload.reason          || '',
+                reference:       payload.reference       || '',
+                provider:        payload.provider        || '',
+                appliedBy:       actor,
+                appliedAt:       nowIso(),
+                originalContext: foOrigCtx,
+                exitedAt:  null,
+                exitReason: null,
+                outcome:   null
+              };
+              if (!Array.isArray(loan.forbearanceCases)) loan.forbearanceCases = [];
+              loan.auditTrail.push({
+                id: 'fov-apply-' + Date.now(), action: 'forbearance_overlay_applied',
+                payload: { type: payload.type, reference: payload.reference || '' },
+                source: actor, timestamp: nowIso()
+              });
+            }
+            persistAndBroadcast(type, actor);
+            break;
+
+          case CommandTypes.EXIT_FORBEARANCE_OVERLAY:
+            if (loan && loan.forbearanceOverlay && loan.forbearanceOverlay.active) {
+              var fovEx     = loan.forbearanceOverlay;
+              var fovOutcome = payload.outcome || 'restored';
+              var fovTs     = nowIso();
+              fovEx.active    = false;
+              fovEx.exitedAt  = fovTs;
+              fovEx.exitReason = payload.reason || '';
+              fovEx.outcome   = fovOutcome;
+              // Archive to history
+              if (!Array.isArray(loan.forbearanceCases)) loan.forbearanceCases = [];
+              loan.forbearanceCases.push(deepClone(fovEx));
+              loan.forbearanceOverlay = null;
+              // Seed status for outcome
+              var fovOrig = fovEx.originalContext || {};
+              var fovSE2  = loan.statusEngineState || {};
+              if (fovOutcome === 'settled') {
+                fovSE2.baseStatus = fovSE2.coreStatus = fovSE2.displayStatus = 'settled';
+              } else if (fovOutcome === 'closed') {
+                fovSE2.baseStatus = fovSE2.coreStatus = fovSE2.displayStatus = 'closed';
+              } else if (fovOutcome === 'terminated') {
+                fovSE2.baseStatus = fovSE2.coreStatus = fovSE2.displayStatus = 'terminated';
+              } else {
+                // pullback / restored — restore original base status
+                var restBase = fovOrig.baseStatus || 'active';
+                fovSE2.baseStatus = fovSE2.coreStatus = fovSE2.displayStatus = restBase;
+              }
+              loan.auditTrail.push({
+                id: 'fov-exit-' + Date.now(), action: 'forbearance_overlay_exited',
+                payload: { outcome: fovOutcome, type: fovEx.type },
+                source: actor, timestamp: fovTs
               });
             }
             persistAndBroadcast(type, actor);

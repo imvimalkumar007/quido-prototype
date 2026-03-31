@@ -124,7 +124,36 @@
     var overlays = Quido.servicingPolicyEngine.evaluateOverlays(loan, seResult.coreStatus, now);
     var display  = Quido.servicingPolicyEngine.resolveDisplayStatus(seResult.coreStatus, overlays);
 
+    // Derive 4-field model values from the evaluated overlays
+    var _SC = Quido.StatusConfig;
+    var _fovType = (loan.forbearanceOverlay && loan.forbearanceOverlay.active)
+                    ? loan.forbearanceOverlay.type : null;
+    var _svcOv = null, _svcSub = null;
+    if (!_fovType) {
+      if (overlays.paymentArrangement) {
+        _svcOv = 'payment_arrangement';
+        var _paType = overlays.paymentArrangement.type;
+        if (_paType === _SC.OV.PA_COMPLETED) _svcSub = 'completed';
+        else if (_paType === _SC.OV.PA_BROKEN) _svcSub = 'broken';
+        else _svcSub = 'on_track';
+      } else if (overlays.paymentHoliday && overlays.paymentHoliday.type === _SC.OV.PH_ACTIVE) {
+        _svcOv = 'payment_holiday';
+      }
+    }
+    var _resolvedDisplay = _fovType
+      || (_svcOv === 'payment_holiday' ? 'payment_holiday'
+      : (_svcOv === 'payment_arrangement' && _svcSub !== 'broken' && _svcSub !== 'completed'
+          ? 'payment_arrangement'
+          : seResult.coreStatus));
+
     loan.statusEngineState = {
+      // 4-field model (used by Forbearance tab and new renders)
+      baseStatus:            seResult.coreStatus,
+      servicingOverlay:      _svcOv,
+      servicingSubStatus:    _svcSub,
+      forbearanceOverlay:    _fovType,
+      resolvedDisplayStatus: _resolvedDisplay,
+      // Legacy fields (used by existing renders throughout the app)
       coreStatus:      seResult.coreStatus,
       overlays:        overlays,
       displayStatus:   display,

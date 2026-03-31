@@ -258,11 +258,13 @@ function buildResolvedAccount(account) {
       },
 
       status: {
-        coreStatus:      se.coreStatus      || 'active',
-        displayStatus:   se.displayStatus   || 'active',
-        overlays:        se.overlays        || {},
-        reasonCodes:     se.reasonCodes     || [],
-        lastEvaluatedAt: se.lastEvaluatedAt || ''
+        baseStatus:            se.baseStatus            || se.coreStatus    || 'active',
+        servicingOverlay:      se.servicingOverlay      || null,
+        servicingSubStatus:    se.servicingSubStatus    || null,
+        forbearanceOverlay:    se.forbearanceOverlay    || null,
+        resolvedDisplayStatus: se.resolvedDisplayStatus || se.displayStatus || 'active',
+        reasonCodes:           se.reasonCodes           || [],
+        lastEvaluatedAt:       se.lastEvaluatedAt       || ''
       },
 
       schedule:          snap,
