@@ -63,6 +63,14 @@ function mergeObj(target, src) {
   return target;
 }
 
+function pickValue() {
+  for (var i = 0; i < arguments.length; i++) {
+    var val = arguments[i];
+    if (val !== undefined && val !== null) return val;
+  }
+  return undefined;
+}
+
 // ── Resolved account projection ───────────────────────────────────────────
 
 /**
@@ -206,30 +214,30 @@ function buildResolvedAccount(account) {
     paymentDetails: pd,
 
     affordability: {
-      monthlyIncome:    raw.monthlyIncome    || 0,
-      housingCosts:     raw.housingCosts     || 0,
-      transportCosts:   raw.transportCosts   || 0,
-      livingCosts:      raw.livingCosts      || 0,
-      otherDebts:       raw.otherDebts       || 0,
-      totalExpenditure: der.totalExpenditure || 0,
-      disposableIncome: der.disposableIncome || 0,
+      monthlyIncome:    pickValue(raw.monthlyIncome, 0),
+      housingCosts:     pickValue(raw.housingCosts, 0),
+      transportCosts:   pickValue(raw.transportCosts, 0),
+      livingCosts:      pickValue(raw.livingCosts, 0),
+      otherDebts:       pickValue(raw.otherDebts, 0),
+      totalExpenditure: pickValue(der.totalExpenditure, 0),
+      disposableIncome: pickValue(der.disposableIncome, 0),
       granular: {
-        incSalary:    gran.incSalary    || 0,
-        incSecondary: gran.incSecondary || 0,
-        incBenefits:  gran.incBenefits  || 0,
-        incOther:     gran.incOther     || 0,
-        expRent:      gran.expRent      || 0,
-        expCouncil:   gran.expCouncil   || 0,
-        expUtilities: gran.expUtilities || 0,
-        expFood:      gran.expFood      || 0,
-        expTransport: gran.expTransport || 0,
-        expChildcare: gran.expChildcare || 0,
-        expMobile:    gran.expMobile    || 0,
-        expLoans:     gran.expLoans     || 0,
-        expCards:     gran.expCards     || 0,
-        expBnpl:      gran.expBnpl      || 0,
-        expInsurance: gran.expInsurance || 0,
-        expSubs:      gran.expSubs      || 0
+        incSalary:    pickValue(gran.incSalary, 0),
+        incSecondary: pickValue(gran.incSecondary, 0),
+        incBenefits:  pickValue(gran.incBenefits, 0),
+        incOther:     pickValue(gran.incOther, 0),
+        expRent:      pickValue(gran.expRent, 0),
+        expCouncil:   pickValue(gran.expCouncil, 0),
+        expUtilities: pickValue(gran.expUtilities, 0),
+        expFood:      pickValue(gran.expFood, 0),
+        expTransport: pickValue(gran.expTransport, 0),
+        expChildcare: pickValue(gran.expChildcare, 0),
+        expMobile:    pickValue(gran.expMobile, 0),
+        expLoans:     pickValue(gran.expLoans, 0),
+        expCards:     pickValue(gran.expCards, 0),
+        expBnpl:      pickValue(gran.expBnpl, 0),
+        expInsurance: pickValue(gran.expInsurance, 0),
+        expSubs:      pickValue(gran.expSubs, 0)
       }
     },
 
@@ -747,7 +755,12 @@ function applyCommandToState(state, command) {
       if (loan) {
         if (!loan.ops)            loan.ops = { notes: [], contactLog: [], collectionsFlagged: false };
         if (!loan.ops.notes)      loan.ops.notes = [];
-        loan.ops.notes.push({ text: payload.text || '', agent: actor, timestamp: now });
+        loan.ops.notes.push({
+          text: payload.text || '',
+          reason: payload.reason || '',
+          agent: actor,
+          timestamp: now
+        });
       }
       break;
 

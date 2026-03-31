@@ -398,7 +398,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       <div class="hdr"><div class="logo"><div class="lm"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4.5 4.5 7.5-9" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="lt">Quido</span></div><div class="mbtn m-open" id="menu-open"><span></span><span></span><span></span></div></div>
       <div class="scroll">
         <div class="hero">
-          <div class="hm"><div class="hmi"><span>Loan ID: </span><strong>28796</strong></div><div class="sp"><div class="sd"></div>Active</div></div>
+          <div class="hm"><div class="hmi"><span>Loan ID: </span><strong id="home-loan-id">28796</strong></div><div class="sp"><div class="sd"></div>Active</div></div>
           <div class="hl">Current Outstanding Balance</div>
           <div class="ha" id="dash-balance">£0.00</div>
           <div class="dr">
@@ -424,7 +424,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       <div class="hdr"><div class="logo"><div class="lm"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4.5 4.5 7.5-9" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="lt">Quido</span></div><div style="display:flex;align-items:center;gap:8px"><button class="bd" data-goto="s-home">← Back</button><div class="mbtn m-open"><span></span><span></span><span></span></div></div></div>
       <div class="scroll" style="flex:1;overflow-y:auto">
         <div class="hero">
-          <div class="hm"><div class="hmi"><span>Loan ID: </span><strong>28796</strong></div><div class="sp"><div class="sd"></div>Active</div></div>
+          <div class="hm"><div class="hmi"><span>Loan ID: </span><strong id="opts-loan-id">28796</strong></div><div class="sp"><div class="sd"></div>Active</div></div>
           <div class="hl">Current Outstanding Balance</div>
           <div class="ha" id="opts-balance">£0.00</div>
           <div class="dr"><div class="db"><div class="dbl">Next Due Amount</div><div class="dbv" id="opts-emi">£0.00</div></div><div class="db"><div class="dbl">Next Due Date</div><div class="dbv" id="opts-due-date">—</div></div></div>
@@ -539,7 +539,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
         <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:6px">Confirm with Apple Pay</div>
         <div style="font-size:13px;color:var(--muted);margin-bottom:24px;text-align:center;line-height:1.6">Use Face ID or Touch ID<br>to authorise your payment</div>
         <div class="sb2" style="width:100%;margin-bottom:20px">
-          <div class="sr"><span>Loan</span><span>#28796</span></div>
+          <div class="sr"><span>Loan</span><span id="ap-loan-id">#28796</span></div>
           <div class="sr"><span>Amount</span><span id="ap-amount">£0.00</span></div>
           <div class="sr"><span>Description</span><span id="ap-desc">—</span></div>
         </div>
@@ -556,9 +556,9 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       <div class="steps"><div class="stp"><div class="sn done">✓</div><div class="sl2">Method</div></div><div class="sline"></div><div class="stp"><div class="sn done">✓</div><div class="sl2">Details</div></div><div class="sline"></div><div class="stp"><div class="sn cur">3</div><div class="sl2 cur">Review</div></div><div class="sline"></div><div class="stp"><div class="sn">4</div><div class="sl2">Done</div></div></div>
       <div class="scroll"><div class="pb">
         <div class="sb2">
-          <div class="sr"><span>Loan ID</span><span>#28796</span></div>
+          <div class="sr"><span>Loan ID</span><span id="rev-loan-id">#28796</span></div>
           <div class="sr"><span>Payment type</span><span id="rev-type">—</span></div>
-          <div class="sr"><span>Card</span><span>Visa ••••0000</span></div>
+          <div class="sr"><span>Card</span><span id="rev-card-mask">Visa ••••0000</span></div>
           <div class="sr"><span>Processing date</span><span id="rev-date">—</span></div>
           <div class="sr"><span>Total</span><span id="rev-total">£0.00</span></div>
         </div>
@@ -759,7 +759,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
         </div>
         <div style="padding:0 16px 6px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Loan agreement</div>
         <div class="card" style="margin-bottom:12px">
-          <div class="docitem" data-doc="agreement"><div class="doci" style="background:#ecfdf5"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h7l4 4v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#059669" stroke-width="1.3"/><path d="M11 2v4h4M6 10h6M6 13h4" stroke="#059669" stroke-width="1.3" stroke-linecap="round"/></svg></div><div style="flex:1"><div class="doct">Credit Agreement — Loan #28796</div><div class="docs" id="doc-agr-sub">Signed —</div><span class="docbdg" style="background:#ecfdf5;color:#059669">Signed</span></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="docitem" data-doc="agreement"><div class="doci" style="background:#ecfdf5"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 2h7l4 4v11a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#059669" stroke-width="1.3"/><path d="M11 2v4h4M6 10h6M6 13h4" stroke="#059669" stroke-width="1.3" stroke-linecap="round"/></svg></div><div style="flex:1"><div class="doct" id="doc-agr-title">Credit Agreement — Loan #28796</div><div class="docs" id="doc-agr-sub">Signed —</div><span class="docbdg" style="background:#ecfdf5;color:#059669">Signed</span></div><svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         </div>
         <div style="padding:0 16px 6px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Statements</div>
         <div class="card" style="margin-bottom:20px">
@@ -896,6 +896,8 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
   // UPDATE ALL UI FROM ENGINE
   // ═══════════════════════════════════════════════
   function updateAllUI() {
+    var ctx = getAccountContext();
+    var loanRef = ctx.loanId ? ('#' + ctx.loanId) : '—';
     var bal   = outstandingBalance();
     var next  = nextInstalment();
     var emi   = LOAN.emi;
@@ -951,7 +953,13 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     setText('doc-ade-sub',    docDate);
     setText('doc-notice-sub', docDate);
     setText('doc-agr-sub',    'Signed ' + startStr);
+    setText('doc-agr-title',  'Credit Agreement — Loan ' + loanRef);
     setText('val-pd-disbursed', startStr);
+    setText('home-loan-id',   ctx.loanId || '—');
+    setText('opts-loan-id',   ctx.loanId || '—');
+    setText('ap-loan-id',     loanRef);
+    setText('rev-loan-id',    loanRef);
+    setText('rev-card-mask',  ctx.cardType + ' ••••' + ctx.cardLast4);
 
     // ── EMI list
     buildEmiList();
@@ -1863,7 +1871,10 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     }
     logAction('profile_edit', { section:editKey });
     closeEdit();
+    refreshCustomerIdentity();
     renderProfile();
+    renderIE();
+    updateAllUI();
   });
   document.getElementById('em-cancel').addEventListener('click', closeEdit);
   function closeEdit() { emModal.classList.remove('open'); editKey = ''; }
@@ -1940,7 +1951,28 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     notice:   { title:'Notice of Cancellation Rights', html:'' },
     agreement:{ title:'Credit Agreement', html:'' }
   };
+  function getAccountContext() {
+    var st = _store && _store.getState ? _store.getState() : null;
+    var profile = (st && Quido.selectors && Quido.selectors.selectProfile)
+      ? Quido.selectors.selectProfile(st)
+      : null;
+    var pd = (st && st.paymentDetails) || {};
+    var bank = pd.bank || {};
+    var card = pd.card || {};
+    return {
+      fullName: (profile && profile.fullName) || (ACTIVE_CUSTOMER && ACTIVE_CUSTOMER.name) || 'Customer',
+      loanId: (profile && profile.loanId) || (ACTIVE_CUSTOMER && ACTIVE_CUSTOMER.loanId) || '',
+      memberSince: (profile && profile.memberSince) || (ACTIVE_CUSTOMER && ACTIVE_CUSTOMER.memberSince) || '',
+      initials: (profile && profile.initials) || (ACTIVE_CUSTOMER && ACTIVE_CUSTOMER.initials) || '',
+      address: (profile && profile.address) || '',
+      bankHolder: bank.accountHolder || ((profile && profile.fullName) || (ACTIVE_CUSTOMER && ACTIVE_CUSTOMER.name) || 'Customer'),
+      cardType: card.type || 'Card',
+      cardLast4: card.last4 || '0000'
+    };
+  }
   function buildDocContent() {
+    var ctx = getAccountContext();
+    var loanRef = ctx.loanId ? ('#' + ctx.loanId) : '—';
     var P = LOAN.fmt(LOAN.principal);
     var apr = LOAN.apr.toFixed(1);
     var n = LOAN.termMonths;
@@ -1950,8 +1982,8 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     var sd = LOAN.fmtDate(LOAN.startDate);
     docContent.secci.html = '<h3>Standard European Consumer Credit Information</h3><table class="dtbl"><tr><td>Creditor</td><td>Quido Ltd</td></tr><tr><td>Type of credit</td><td>Fixed-term personal loan</td></tr><tr><td>Total amount of credit</td><td>'+P+'</td></tr><tr><td>Duration</td><td>'+n+' months</td></tr><tr><td>Borrowing rate</td><td>'+apr+'% per annum (fixed)</td></tr><tr><td>APR</td><td>'+apr+'% APR</td></tr><tr><td>Monthly repayment</td><td>'+emi+'</td></tr><tr><td>Total amount repayable</td><td>'+total+'</td></tr><tr><td>Total cost of credit</td><td>'+interest+'</td></tr></table><p>You have the right to withdraw from this agreement within 14 days of signing without giving any reason.</p><p style="font-size:10px;color:var(--dim)">Quido Ltd · FCA Reg. 900001</p>';
     docContent.adequate.html = '<h3>Adequate Explanation of Credit Agreement</h3><p>Quido is required under CONC 4.2 to provide you with an adequate explanation of this loan.</p><p>We explained the key features including the total amount of credit of '+P+', the duration of '+n+' months, the fixed interest rate of '+apr+'% APR, and the monthly repayment of '+emi+'.</p><p>We explained the cost implications of missing payments, including potential damage to your credit file and additional charges.</p><p style="font-size:10px;color:var(--dim)">Date: '+sd+' · Quido Ltd · FCA Reg. 900001</p>';
-    docContent.notice.html = '<h3>Your Right to Cancel</h3><p>You have the right to cancel this credit agreement within 14 days of the day after you receive this notice.</p><p>To cancel, notify Quido in writing: info@quido.co.uk or Quido Ltd, Unit 15, Clacton Enterprise Centre.</p><p>If you cancel, you must repay the capital advanced plus interest accrued within 30 days.</p><p style="font-size:10px;color:var(--dim)">Issued: '+sd+' · Loan #28796 · FCA Reg. 900001</p>';
-    docContent.agreement.html = '<h3>Consumer Credit Agreement</h3><table class="dtbl"><tr><td>Agreement number</td><td>#28796</td></tr><tr><td>Borrower</td><td>Sarah Mitchell</td></tr><tr><td>Address</td><td>42 Elm Grove, Brighton, BN2 3FA</td></tr><tr><td>Loan amount</td><td>'+P+'</td></tr><tr><td>APR</td><td>'+apr+'%</td></tr><tr><td>Term</td><td>'+n+' months</td></tr><tr><td>Monthly payment</td><td>'+emi+'</td></tr><tr><td>Start date</td><td>'+sd+'</td></tr><tr><td>Total repayable</td><td>'+total+'</td></tr></table><p>Regulated by the Consumer Credit Act 1974. Quido Ltd authorised and regulated by the FCA (Reg. 900001).</p><p style="font-size:10px;color:var(--dim)">Electronically signed by Sarah Mitchell on '+sd+' at 14:32 GMT.</p>';
+    docContent.notice.html = '<h3>Your Right to Cancel</h3><p>You have the right to cancel this credit agreement within 14 days of the day after you receive this notice.</p><p>To cancel, notify Quido in writing: info@quido.co.uk or Quido Ltd, Unit 15, Clacton Enterprise Centre.</p><p>If you cancel, you must repay the capital advanced plus interest accrued within 30 days.</p><p style="font-size:10px;color:var(--dim)">Issued: '+sd+' · Loan '+loanRef+' · FCA Reg. 900001</p>';
+    docContent.agreement.html = '<h3>Consumer Credit Agreement</h3><table class="dtbl"><tr><td>Agreement number</td><td>'+loanRef+'</td></tr><tr><td>Borrower</td><td>'+ctx.fullName+'</td></tr><tr><td>Address</td><td>'+(ctx.address || '—')+'</td></tr><tr><td>Loan amount</td><td>'+P+'</td></tr><tr><td>APR</td><td>'+apr+'%</td></tr><tr><td>Term</td><td>'+n+' months</td></tr><tr><td>Monthly payment</td><td>'+emi+'</td></tr><tr><td>Start date</td><td>'+sd+'</td></tr><tr><td>Total repayable</td><td>'+total+'</td></tr></table><p>Regulated by the Consumer Credit Act 1974. Quido Ltd authorised and regulated by the FCA (Reg. 900001).</p><p style="font-size:10px;color:var(--dim)">Electronically signed by '+ctx.fullName+' on '+sd+' at 14:32 GMT.</p>';
   }
   var docItems = document.querySelectorAll('.docitem');
   for (var di = 0; di < docItems.length; di++) {
@@ -2273,7 +2305,9 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       else if (type === CT.CHANGE_PAY_DATE)       showOpsNotice('Your monthly payment date has been updated');
       else if (type === CT.APPLY_PAYMENT_ARRANGEMENT) showOpsNotice('A payment arrangement has been set up on your account');
     } else if (type === CT.UPDATE_PROFILE || type === CT.UPDATE_EMPLOYMENT || type === CT.UPDATE_AFFORDABILITY) {
+      refreshCustomerIdentity();
       renderProfile();
+      renderIE();
       showOpsNotice('Your profile details have been updated by Quido');
     } else if (type === CT.CLOSE_ACCOUNT) {
       LOAN.accountStatus = 'terminated';
@@ -2298,7 +2332,9 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
         if (_store) { _store.reload(); if (_store.refreshResolved) _store.refreshResolved(); }
         applyLoanOverrides();
         updateAllUI();
+        refreshCustomerIdentity();
         renderProfile();
+        renderIE();
         showOpsNotice('Your account has been updated by Quido');
       }
     } catch(err) {}
@@ -2413,14 +2449,15 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
 
   // ── Update customer identity elements (name, loan ID, initials) after login
   function refreshCustomerIdentity() {
-    var c = ACTIVE_CUSTOMER; if (!c) return;
+    var c = getAccountContext(); if (!c) return;
     function setText2(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; }
     var statusLabel = LOAN.accountStatus ? LOAN.accountStatus.charAt(0).toUpperCase()+LOAN.accountStatus.slice(1) : 'Active';
-    setText2('cust-menu-name', c.name);
-    setText2('cust-menu-loan', 'Loan #' + c.loanId + ' \u00b7 ' + statusLabel);
+    var loanRef = c.loanId ? ('Loan #' + c.loanId) : 'Loan';
+    setText2('cust-menu-name', c.fullName);
+    setText2('cust-menu-loan', loanRef + ' \u00b7 ' + statusLabel);
     setText2('cust-prof-initials', c.initials);
-    setText2('cust-prof-name', c.name);
-    setText2('cust-prof-loan', 'Loan #' + c.loanId + ' \u00b7 Customer since ' + c.memberSince);
+    setText2('cust-prof-name', c.fullName);
+    setText2('cust-prof-loan', loanRef + (c.memberSince ? (' \u00b7 Customer since ' + c.memberSince) : ''));
   }
 
   // ── LOGIN FUNCTIONS

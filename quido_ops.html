@@ -340,7 +340,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
       <!-- ══ OVERVIEW ══ -->
       <section id="sec-overview" class="section active">
         <div class="sec-hdr">
-          <div class="sec-hdr-left"><h2>Overview</h2><p>Account summary &mdash; Sarah Mitchell &middot; Loan #28796</p></div>
+          <div class="sec-hdr-left"><h2>Overview</h2><p id="ov-summary">Account summary &mdash; Sarah Mitchell &middot; Loan #28796</p></div>
           <div class="sec-hdr-right">
             <button class="btn btn-primary btn-sm" onclick="gotoSec('sec-actions')">Account Actions</button>
           </div>
@@ -492,9 +492,12 @@ a{text-decoration:none;color:inherit;cursor:pointer}
           <div class="card-hdr"><span class="card-title">Internal Notes</span><span style="font-size:11px;color:var(--muted)">Ops-only &mdash; not visible to customer</span></div>
           <div class="card-body">
             <div id="cust-notes-list" style="margin-bottom:14px;min-height:30px"></div>
-            <div style="display:flex;gap:8px">
-              <input type="text" id="cust-note-input" placeholder="Add a note..." style="flex:1;padding:7px 10px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--bg);font-size:12.5px">
-              <button class="btn btn-secondary btn-sm" onclick="addOpsNote()">Add Note</button>
+            <div style="display:grid;gap:8px">
+              <input type="text" id="cust-note-reason" placeholder="Reason for note" style="padding:7px 10px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--bg);font-size:12.5px">
+              <textarea id="cust-note-input" rows="4" placeholder="Add an internal note..." style="width:100%;padding:9px 10px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--bg);font-size:12.5px;resize:vertical;min-height:96px"></textarea>
+              <div style="display:flex;justify-content:flex-end">
+                <button class="btn btn-secondary btn-sm" onclick="addOpsNote()">Add Note</button>
+              </div>
             </div>
           </div>
         </div>
@@ -1232,6 +1235,12 @@ function _normRow(r) {
 }
 function fmt(n) { return '\u00a3' + (n||0).toFixed(2); }
 function shortDate(d) { return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
+function firstDefined() {
+  for (var i = 0; i < arguments.length; i++) {
+    if (arguments[i] !== undefined && arguments[i] !== null) return arguments[i];
+  }
+  return undefined;
+}
 function outstandingBal(schedule, paidCount) {
   var t = 0;
   for (var i = paidCount; i < schedule.length; i++) t += schedule[i].principal;
@@ -1317,16 +1326,19 @@ function loadState() {
         nextPayDate:     resolved.employment.nextPayDate
       },
       affordability: {
-        monthlyIncome:   aff.monthlyIncome  || rawIEA.monthlyIncome  || 0,
-        housingCosts:    aff.housingCosts   || rawIEA.housingCosts   || 0,
-        transportCosts:  aff.transportCosts || rawIEA.transportCosts || 0,
-        livingCosts:     aff.livingCosts    || rawIEA.livingCosts    || 0,
-        otherDebts:      aff.otherDebts     || rawIEA.otherDebts     || 0,
-        disposableIncome: (aff.monthlyIncome||rawIEA.monthlyIncome||0)
-                        - (aff.housingCosts||rawIEA.housingCosts||0)
-                        - (aff.transportCosts||rawIEA.transportCosts||0)
-                        - (aff.livingCosts||rawIEA.livingCosts||0)
-                        - (aff.otherDebts||rawIEA.otherDebts||0),
+        monthlyIncome:   firstDefined(aff.monthlyIncome, rawIEA.monthlyIncome, 0),
+        housingCosts:    firstDefined(aff.housingCosts, rawIEA.housingCosts, 0),
+        transportCosts:  firstDefined(aff.transportCosts, rawIEA.transportCosts, 0),
+        livingCosts:     firstDefined(aff.livingCosts, rawIEA.livingCosts, 0),
+        otherDebts:      firstDefined(aff.otherDebts, rawIEA.otherDebts, 0),
+        disposableIncome: firstDefined(
+          aff.disposableIncome,
+          firstDefined(aff.monthlyIncome, rawIEA.monthlyIncome, 0)
+            - firstDefined(aff.housingCosts, rawIEA.housingCosts, 0)
+            - firstDefined(aff.transportCosts, rawIEA.transportCosts, 0)
+            - firstDefined(aff.livingCosts, rawIEA.livingCosts, 0)
+            - firstDefined(aff.otherDebts, rawIEA.otherDebts, 0)
+        ),
         granular: rawIEA.granular || {}
       },
       // Use canonical {card, bank} structure from local store — backend may return differently
@@ -1615,7 +1627,19 @@ function renderCustomer() {
   var notesEl = document.getElementById('cust-notes-list');
   if (notesEl) {
     if (!notes.length) { notesEl.innerHTML = '<div style="color:var(--dim);font-size:12px">No notes added yet</div>'; }
-    else { notesEl.innerHTML = notes.slice().reverse().map(function(n){ return '<div class="note-item">'+escHtml(n.text)+'<div class="note-meta">'+fmtTs(n.timestamp)+' &middot; '+escHtml(n.agent||'Ops')+'</div></div>'; }).join(''); }
+    else {
+      notesEl.innerHTML = notes.slice().reverse().map(function(n) {
+        var reason = (n.reason || '').trim();
+        var reasonHtml = reason
+          ? '<div style="font-size:11px;color:var(--muted);margin-bottom:6px"><strong>Reason:</strong> ' + escHtml(reason) + '</div>'
+          : '';
+        return '<div class="note-item">'
+          + reasonHtml
+          + '<div style="white-space:pre-wrap;line-height:1.55">' + escHtml(n.text) + '</div>'
+          + '<div class="note-meta">' + fmtTs(n.timestamp) + ' &middot; ' + escHtml(n.agent||'Ops') + '</div>'
+          + '</div>';
+      }).join('');
+    }
   }
 }
 
@@ -2224,7 +2248,25 @@ function saveCustomerProfile() {
       housingCosts:   parseFloat(document.getElementById('cust-ie-housing').value)||0,
       transportCosts: parseFloat(document.getElementById('cust-ie-transport').value)||0,
       livingCosts:    parseFloat(document.getElementById('cust-ie-living').value)||0,
-      otherDebts:     parseFloat(document.getElementById('cust-ie-debts').value)||0
+      otherDebts:     parseFloat(document.getElementById('cust-ie-debts').value)||0,
+      granular: {
+        incSalary:    parseFloat(document.getElementById('cust-ie-income').value)||0,
+        incSecondary: 0,
+        incBenefits:  0,
+        incOther:     0,
+        expRent:      parseFloat(document.getElementById('cust-ie-housing').value)||0,
+        expCouncil:   0,
+        expUtilities: 0,
+        expFood:      parseFloat(document.getElementById('cust-ie-living').value)||0,
+        expTransport: parseFloat(document.getElementById('cust-ie-transport').value)||0,
+        expChildcare: 0,
+        expMobile:    0,
+        expLoans:     0,
+        expCards:     parseFloat(document.getElementById('cust-ie-debts').value)||0,
+        expBnpl:      0,
+        expInsurance: 0,
+        expSubs:      0
+      }
     },
     actor: 'ops_ui'
   });
@@ -2234,9 +2276,15 @@ function saveCustomerProfile() {
 }
 function addOpsNote() {
   var txt = (document.getElementById('cust-note-input').value||'').trim(); if (!txt) return;
-  _store.dispatch({ type: Quido.CommandTypes.ADD_OPS_NOTE, payload: { text: txt }, actor: OPS_AGENT ? OPS_AGENT.name : 'Ops Agent' });
+  var reason = (document.getElementById('cust-note-reason').value||'').trim();
+  _store.dispatch({
+    type: Quido.CommandTypes.ADD_OPS_NOTE,
+    payload: { text: txt, reason: reason },
+    actor: OPS_AGENT ? OPS_AGENT.name : 'Ops Agent'
+  });
   loadState();
   setVal('cust-note-input','');
+  setVal('cust-note-reason','');
   toast('Note added','success');
   renderCustomer();
 }
@@ -2274,8 +2322,12 @@ syncBus.subscribe(function(msg) {
   if (active) {
     if (active.id==='sec-activity') filterActivity(OPS.activeFilter||'all');
     if (active.id==='sec-overview') renderOverview();
+    if (active.id==='sec-customer') renderCustomer();
+    if (active.id==='sec-payment-details') renderPaymentDetails();
+    if (active.id==='sec-statement') renderStatement();
+    if (active.id==='sec-documents') renderDocuments();
   }
-  if (msg.type === Quido.CommandTypes.UPDATE_PROFILE || msg.type === Quido.CommandTypes.UPDATE_EMPLOYMENT) {
+  if (msg.type === Quido.CommandTypes.UPDATE_PROFILE || msg.type === Quido.CommandTypes.UPDATE_EMPLOYMENT || msg.type === Quido.CommandTypes.UPDATE_AFFORDABILITY) {
     toast('Customer updated their profile','info');
   }
 });
@@ -2301,6 +2353,22 @@ function updateTopbar() {
   }
   var lbl = OPS.accountStatus.replace(/_/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
   setText('tb-status-text', lbl);
+  var acct = OPS.account || {};
+  var per  = acct.personal || {};
+  var fullName = ((per.firstName || '') + ' ' + (per.lastName || '')).trim() || acct.name || '';
+  var loanId = acct.loanId || (ACTIVE_CUSTOMER && ACTIVE_CUSTOMER.loanId) || '';
+  var loanRef = loanId ? ('Loan #' + loanId) : 'Loan';
+  setText('tb-crumb', fullName + ' · ' + loanRef);
+  setText('tb-cname', fullName);
+  setText('tb-cloan', loanRef);
+  setText('ov-summary', 'Account summary — ' + fullName + ' · ' + loanRef);
+  var cav = document.getElementById('tb-cav');
+  if (cav) {
+    var initials = (per.firstName && per.lastName)
+      ? (per.firstName.charAt(0) + per.lastName.charAt(0)).toUpperCase()
+      : (ACTIVE_CUSTOMER && ACTIVE_CUSTOMER.initials) || 'CU';
+    cav.textContent = initials;
+  }
 }
 
 // ═══════════════════════════════════════════════════════

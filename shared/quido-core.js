@@ -1253,6 +1253,7 @@
             if (loan) {
               loan.ops.notes.push({
                 text:      payload.text || '',
+                reason:    payload.reason || '',
                 agent:     actor,
                 timestamp: nowIso()
               });
