@@ -21,10 +21,14 @@
 const { computeOutstandingBalance } = require('./loan-engine');
 const {
   CS,
+  FOV,
+  FOV_PRIORITY,
   BALANCE_TOLERANCE,
   evaluateCoreStatus,
+  evaluateOverlays,
   checkPHEligibility,
   checkPAEligibility,
+  checkForbearanceEligibility,
   runStatusEngine
 } = require('./status-engine');
 const { ENTRY_TYPES, postEntry } = require('./ledger-engine');
@@ -289,7 +293,7 @@ function applyPaymentHoliday(loan, payload, now, actor) {
   payload = payload || {};
 
   var seResult = evaluateCoreStatus(loan, now);
-  var elig     = checkPHEligibility(loan, seResult.coreStatus, seResult.derivedFlags, now);
+  var elig     = checkPHEligibility(loan, seResult.coreStatus, seResult.derivedFlags, now, actor === 'ops');
   if (!elig.eligible) {
     return { ok: false, loan: loan, error: elig.reason };
   }
@@ -592,6 +596,178 @@ function recordFailedPayment(loan, amount, date, actor, reason, now) {
   return { ok: true, loan: loan };
 }
 
+// ── Forbearance / insolvency overlays ─────────────────────────────────────────
+
+/**
+ * Apply a forbearance or insolvency overlay to the loan.
+ *
+ * Eligible overlay types: dmp, breathing_space, dro, iva, trust_deed, bankruptcy
+ * Blocked when: account is settled/closed, or another forbearance overlay is active.
+ *
+ * Captures the original status context (base status + active servicing overlay)
+ * so exit logic can restore/recalculate correctly.
+ *
+ * @param {Object} loan
+ * @param {string} type    — one of FOV.*
+ * @param {{ startDate?, expectedEndDate?, reason? }} payload
+ * @param {Date}   [now]
+ * @param {string} [actor]
+ * @returns {{ ok, loan, error? }}
+ */
+function applyForbearanceOverlay(loan, type, payload, now, actor) {
+  now    = now    || new Date();
+  actor  = actor  || 'ops';
+  payload = payload || {};
+
+  if (!type || FOV_PRIORITY.indexOf(type) === -1) {
+    return { ok: false, loan: loan, error: 'Unknown forbearance overlay type: ' + type + '.' };
+  }
+
+  var seResult = evaluateCoreStatus(loan, now);
+  var svcState = deriveServicingState(loan, now);
+  var elig     = checkForbearanceEligibility(loan, seResult.coreStatus);
+
+  if (!elig.eligible) {
+    return { ok: false, loan: loan, error: elig.reason };
+  }
+
+  // Capture original context so exit can restore/recalculate correctly
+  var originalContext = {
+    baseStatus:        seResult.coreStatus,
+    reasonCodes:       seResult.reasonCodes || [],
+    servicingOverlay:  svcState.servicingOverlay,
+    servicingSubStatus: svcState.servicingSubStatus
+  };
+
+  loan.forbearanceOverlay = {
+    active:          true,
+    type:            type,
+    startDate:       payload.startDate       || now.toISOString(),
+    expectedEndDate: payload.expectedEndDate || null,
+    reason:          payload.reason          || '',
+    originalContext: originalContext,
+    exitedAt:        null,
+    exitReason:      null,
+    outcome:         null
+  };
+
+  runStatusEngine(loan, now);
+
+  _pushAudit(loan, 'forbearance_overlay_applied', {
+    type:            type,
+    startDate:       loan.forbearanceOverlay.startDate,
+    expectedEndDate: loan.forbearanceOverlay.expectedEndDate,
+    originalContext: originalContext
+  }, actor, now.toISOString());
+
+  return { ok: true, loan: loan };
+}
+
+/**
+ * Exit an active forbearance/insolvency overlay.
+ *
+ * Outcome values and their effects:
+ *   'settled'   — zero outstanding balance → status engine resolves to 'settled'
+ *                 (DRO, IVA, Trust Deed, Bankruptcy: successful completion)
+ *   'closed'    — zero outstanding balance → status engine resolves to 'closed'
+ *                 (DMP: fully paid off)
+ *   'terminated'— force coreStatus = terminated; engine keeps it sticky
+ *                 (DRO/IVA/Trust Deed/Bankruptcy cancelled or failed)
+ *   'pullback'  — clear overlay, restore original context baseline, re-evaluate
+ *                 (DMP cancelled/terminated without full payoff)
+ *   'restored'  — same as pullback (Breathing Space ended normally)
+ *
+ * @param {Object} loan
+ * @param {string} outcome  — 'settled' | 'closed' | 'terminated' | 'pullback' | 'restored'
+ * @param {{ reason? }} payload
+ * @param {Date}   [now]
+ * @param {string} [actor]
+ * @returns {{ ok, loan, error? }}
+ */
+function exitForbearanceOverlay(loan, outcome, payload, now, actor) {
+  now    = now    || new Date();
+  actor  = actor  || 'ops';
+  payload = payload || {};
+
+  if (!loan.forbearanceOverlay || !loan.forbearanceOverlay.active) {
+    return { ok: false, loan: loan, error: 'No active forbearance overlay to exit.' };
+  }
+
+  var validOutcomes = ['settled', 'closed', 'terminated', 'pullback', 'restored'];
+  if (validOutcomes.indexOf(outcome) === -1) {
+    return { ok: false, loan: loan, error: 'Unknown exit outcome: ' + outcome + '. Must be one of: ' + validOutcomes.join(', ') + '.' };
+  }
+
+  var fov      = loan.forbearanceOverlay;
+  var fovType  = fov.type;
+  var exitedAt = now.toISOString();
+  var orig     = fov.originalContext || {};
+
+  // Archive the overlay — move to forbearanceCases history
+  var archived = Object.assign({}, fov, {
+    active:     false,
+    exitedAt:   exitedAt,
+    exitReason: payload.reason || outcome,
+    outcome:    outcome
+  });
+  if (!Array.isArray(loan.forbearanceCases)) loan.forbearanceCases = [];
+  loan.forbearanceCases.push(archived);
+  loan.forbearanceOverlay = null;
+
+  // Apply outcome-specific state changes before running the status engine
+  switch (outcome) {
+
+    case 'settled':
+      // DRO, IVA, Trust Deed, Bankruptcy — successful completion.
+      // Zero the schedule balance, seed engine with terminated so balance-cleared branch → settled.
+      var snapSt = loan.scheduleSnapshot || [];
+      for (var si = 0; si < snapSt.length; si++) {
+        if (snapSt[si].status !== 'paid') snapSt[si].status = 'paid';
+      }
+      loan.loanCore.paidCount = snapSt.length;
+      loan.partialCredit      = 0;
+      if (loan.statusEngineState) loan.statusEngineState.baseStatus = CS.TERMINATED;
+      break;
+
+    case 'closed':
+      // DMP fully paid off — zero balance, seed with active so balance-cleared branch → closed.
+      var snapCl = loan.scheduleSnapshot || [];
+      for (var ci = 0; ci < snapCl.length; ci++) {
+        if (snapCl[ci].status !== 'paid') snapCl[ci].status = 'paid';
+      }
+      loan.loanCore.paidCount = snapCl.length;
+      loan.partialCredit      = 0;
+      if (loan.statusEngineState) loan.statusEngineState.baseStatus = CS.ACTIVE;
+      break;
+
+    case 'terminated':
+      // Cancelled/failed overlay (DRO/IVA/Trust Deed/Bankruptcy) → Terminated.
+      // Engine Rule 2 keeps terminated sticky while balance remains.
+      if (loan.statusEngineState) loan.statusEngineState.baseStatus = CS.TERMINATED;
+      break;
+
+    case 'pullback':
+    case 'restored':
+      // DMP cancelled / Breathing Space ended — restore original baseline, re-evaluate fresh.
+      if (loan.statusEngineState) {
+        loan.statusEngineState.baseStatus = orig.baseStatus || CS.ACTIVE;
+      }
+      break;
+  }
+
+  rebuildSummary(loan);
+  runStatusEngine(loan, now);
+
+  _pushAudit(loan, 'forbearance_overlay_exited', {
+    type:      fovType,
+    outcome:   outcome,
+    exitedAt:  exitedAt,
+    reason:    payload.reason || outcome
+  }, actor, exitedAt);
+
+  return { ok: true, loan: loan };
+}
+
 // ── Settlement ────────────────────────────────────────────────────────────────
 
 /**
@@ -611,7 +787,7 @@ function triggerSettlementEvaluation(loan, now, actor) {
   rebuildSummary(loan);
   runStatusEngine(loan, now);
 
-  var cs      = loan.statusEngineState.coreStatus;
+  var cs      = loan.statusEngineState.baseStatus;
   var settled = cs === CS.SETTLED || cs === CS.CLOSED;
 
   _pushAudit(loan, 'settlement_evaluation', {
@@ -640,5 +816,8 @@ module.exports = {
   breakPaymentArrangement,
   completePaymentArrangement,
   // Settlement
-  triggerSettlementEvaluation
+  triggerSettlementEvaluation,
+  // Forbearance / insolvency overlays
+  applyForbearanceOverlay,
+  exitForbearanceOverlay
 };

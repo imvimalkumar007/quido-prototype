@@ -39,12 +39,14 @@ function createEmptyLoan(loanId) {
     closureReason:  null,
 
     statusEngineState: {
-      coreStatus:      'active',
-      overlays:        {},
-      displayStatus:   'active',
-      reasonCodes:     [],
-      derivedFlags:    {},
-      lastEvaluatedAt: now
+      baseStatus:            'active',
+      servicingOverlay:      null,
+      servicingSubStatus:    null,
+      forbearanceOverlay:    null,
+      resolvedDisplayStatus: 'active',
+      reasonCodes:           [],
+      derivedFlags:          {},
+      lastEvaluatedAt:       now
     },
 
     loanCore: {
@@ -70,7 +72,8 @@ function createEmptyLoan(loanId) {
       paymentArrangementHistory: []
     },
 
-    forbearanceCases: [],
+    forbearanceOverlay: null,
+    forbearanceCases:   [],
 
     adjustments: {
       interestWaivers: [],

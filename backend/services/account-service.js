@@ -39,13 +39,11 @@ const {
 } = require('../domain/status-engine');
 
 const {
-  deriveOperativeSchedule,
-  computeOutstandingBalance
+  deriveOperativeSchedule
 } = require('../domain/loan-engine');
 
 const {
   applyRepayment,
-  applyManualPayment,
   recordFailedPayment,
   applyPaymentHoliday,
   completePaymentHoliday,
@@ -53,7 +51,8 @@ const {
   breakPaymentArrangement,
   completePaymentArrangement,
   triggerSettlementEvaluation,
-  rebuildSummary
+  applyForbearanceOverlay,
+  exitForbearanceOverlay
 } = require('../domain/servicing-engine');
 
 function nowIso() { return new Date().toISOString(); }
@@ -117,14 +116,12 @@ function buildResolvedAccount(account) {
   var operativeSchedule = deriveOperativeSchedule(snap);
   if (activeLoan) {
     try {
-      var seNow      = new Date();
-      var seSnapshot = runStatusEngine(activeLoan, seNow);
-      var seCheck    = seSnapshot;
-      var actResult  = deriveAllowedActions(
+      var seNow   = new Date();
+      var seState = runStatusEngine(activeLoan, seNow);
+      var actResult = deriveAllowedActions(
         activeLoan,
-        seCheck.coreStatus,
-        seCheck.overlays     || {},
-        seCheck.derivedFlags || {},
+        seState.baseStatus,
+        seState.derivedFlags || {},
         seNow
       );
       allowedActions = actResult.allowedActions || [];
@@ -566,6 +563,28 @@ AccountService.prototype.applyCommand = function (storageKey, command) {
     case 'SETTLE_EVALUATION':
       if (loan) {
         triggerSettlementEvaluation(loan, now, actor);
+      }
+      break;
+
+    case 'APPLY_FORBEARANCE_OVERLAY':
+      if (loan) {
+        engineResult = applyForbearanceOverlay(loan, payload.type, payload, now, actor);
+        if (!engineResult.ok) {
+          var fovErr = new Error(engineResult.error || 'Forbearance overlay could not be applied.');
+          fovErr.status = 422;
+          throw fovErr;
+        }
+      }
+      break;
+
+    case 'EXIT_FORBEARANCE_OVERLAY':
+      if (loan) {
+        engineResult = exitForbearanceOverlay(loan, payload.outcome, payload, now, actor);
+        if (!engineResult.ok) {
+          var efovErr = new Error(engineResult.error || 'Forbearance overlay could not be exited.');
+          efovErr.status = 422;
+          throw efovErr;
+        }
       }
       break;
 

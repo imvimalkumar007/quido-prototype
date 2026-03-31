@@ -36,15 +36,51 @@ const OV = {
   PA_BROKEN:     'payment_arrangement_broken'
 };
 
+// Forbearance / insolvency overlay type constants.
+// Priority (highest first): BANKRUPTCY > TRUST_DEED > DRO > IVA > BREATHING_SPACE > DMP
+const FOV = {
+  BANKRUPTCY:      'bankruptcy',
+  TRUST_DEED:      'trust_deed',
+  DRO:             'dro',
+  IVA:             'iva',
+  BREATHING_SPACE: 'breathing_space',
+  DMP:             'dmp'
+};
+
+// Ordered highest → lowest for display resolution
+const FOV_PRIORITY = [
+  FOV.BANKRUPTCY,
+  FOV.TRUST_DEED,
+  FOV.DRO,
+  FOV.IVA,
+  FOV.BREATHING_SPACE,
+  FOV.DMP
+];
+
+// Servicing overlay string values
+const SO = {
+  PAYMENT_HOLIDAY:     'payment_holiday',
+  PAYMENT_ARRANGEMENT: 'payment_arrangement'
+};
+
+// Payment Arrangement sub-status string values
+const SS = {
+  PA_ON_TRACK:  'on_track',
+  PA_BEHIND:    'behind_arrangement',
+  PA_COMPLETED: 'completed',
+  PA_BROKEN:    'broken'
+};
+
 const TERMINATION_DAYS  = 75;
 const CONSEC_DEFAULT    = 2;
 const CONSEC_ARREARS    = 1;
 const PH_ARREARS_GRACE  = 5;
 const BALANCE_TOLERANCE = 0.01;
 
-const PH_BLOCKED_STATUSES = ['default', 'terminated', 'settled', 'closed'];
-const PA_BLOCKED_STATUSES = ['settled', 'closed'];
-const TERMINAL_STATUSES   = ['settled', 'closed'];
+const PH_BLOCKED_STATUSES  = ['default', 'terminated', 'settled', 'closed'];
+const PA_BLOCKED_STATUSES  = ['settled', 'closed'];
+const FOV_BLOCKED_STATUSES = ['settled', 'closed'];
+const TERMINAL_STATUSES    = ['settled', 'closed'];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -111,7 +147,9 @@ function countMissedDueInstalments(loan, now) {
  */
 function evaluateCoreStatus(loan, now) {
   now = now || new Date();
-  var prevStatus = (loan.statusEngineState && loan.statusEngineState.coreStatus) || CS.ACTIVE;
+  // Read baseStatus first (new model), fall back to coreStatus (legacy stored loans)
+  var prevStatus = (loan.statusEngineState &&
+    (loan.statusEngineState.baseStatus || loan.statusEngineState.coreStatus)) || CS.ACTIVE;
   var bal        = outstandingBalance(loan);
   var lastPmt    = lastSuccessfulPaymentDate(loan);
   var daysNoPmt  = daysSince(lastPmt, now);
@@ -172,66 +210,107 @@ function evaluateCoreStatus(loan, now) {
 
 // ── Overlay evaluator ─────────────────────────────────────────────────────────
 
-function evaluateOverlays(loan, coreStatus, now) {
-  now  = now || new Date();
-  var arrs     = loan.arrangements || {};
-  var overlays = {};
+/**
+ * Derive the Payment Arrangement sub-status from the PA object.
+ * Returns null if no PA is present.
+ */
+function deriveServicingSubStatus(pa, now) {
+  if (!pa) return null;
+  if (pa.broken) return SS.PA_BROKEN;
 
-  // 1. Formal forbearance (future packs — placeholder)
-  var cases = loan.forbearanceCases || [];
-  for (var fc = 0; fc < cases.length; fc++) {
-    if (cases[fc].active) {
-      overlays.formalForbearance = { type: cases[fc].type, startDate: cases[fc].startDate, endDate: cases[fc].endDate };
-      break;
+  var allPaid = pa.totalAmount > 0 && (pa.totalPaid || 0) >= pa.totalAmount - BALANCE_TOLERANCE;
+  if (allPaid) return SS.PA_COMPLETED;
+
+  if (!pa.active) return null;
+
+  // Behind if totalPaid falls short of what should have been paid by now
+  if (pa.startDate && pa.amount > 0) {
+    var start         = new Date(pa.startDate);
+    var msPerMonth    = 30.4375 * 24 * 3600 * 1000;
+    var monthsElapsed = Math.floor((now - start) / msPerMonth);
+    var expectedPaid  = +(pa.amount * Math.max(0, monthsElapsed)).toFixed(2);
+    if ((pa.totalPaid || 0) < expectedPaid - BALANCE_TOLERANCE) {
+      return SS.PA_BEHIND;
     }
   }
 
-  // 2. Payment Arrangement
-  var pa = arrs.paymentArrangement;
-  if (pa) {
-    var paEnd    = pa.endDate ? new Date(pa.endDate) : null;
-    var paAllPaid = pa.totalAmount > 0 && (pa.totalPaid || 0) >= pa.totalAmount - BALANCE_TOLERANCE;
-
-    if (paAllPaid) {
-      overlays.paymentArrangement = { type: OV.PA_COMPLETED, startDate: pa.startDate, endDate: pa.endDate, totalPaid: pa.totalPaid };
-    } else if (pa.broken) {
-      overlays.paymentArrangement = { type: OV.PA_BROKEN, startDate: pa.startDate, brokenAt: pa.brokenAt };
-    } else if (paEnd && now > paEnd && !paAllPaid) {
-      overlays.paymentArrangement = { type: OV.PA_BROKEN, startDate: pa.startDate, endDate: pa.endDate };
-    } else if (pa.active) {
-      overlays.paymentArrangement = { type: OV.PA_ACTIVE, startDate: pa.startDate, endDate: pa.endDate, amount: pa.amount, months: pa.months };
-    }
-  }
-
-  // 3. Payment Holiday
-  var ph = arrs.paymentHoliday;
-  if (ph && ph.active) {
-    var phEnd      = ph.endDate ? new Date(ph.endDate) : null;
-    var paIsActive = overlays.paymentArrangement && overlays.paymentArrangement.type === OV.PA_ACTIVE;
-    var ffIsActive = !!overlays.formalForbearance;
-
-    if (ffIsActive || paIsActive) {
-      overlays.paymentHoliday = { type: OV.PH_SUPERSEDED };
-    } else if (phEnd && now > phEnd) {
-      overlays.paymentHoliday = { type: OV.PH_COMPLETED, endDate: ph.endDate };
-    } else {
-      overlays.paymentHoliday = { type: OV.PH_ACTIVE, startDate: ph.startDate, endDate: ph.endDate };
-    }
-  }
-
-  return overlays;
+  return SS.PA_ON_TRACK;
 }
 
-function resolveDisplayStatus(coreStatus, overlays) {
-  if (overlays.formalForbearance) return overlays.formalForbearance.type || 'forbearance';
-  if (overlays.paymentArrangement && overlays.paymentArrangement.type === OV.PA_ACTIVE) return 'arrangement';
-  if (overlays.paymentHoliday     && overlays.paymentHoliday.type     === OV.PH_ACTIVE) return 'holiday';
-  return coreStatus;
+/**
+ * Derive the active servicing overlay and its sub-status from loan.arrangements.
+ * Payment Arrangement and Payment Holiday are mutually exclusive per eligibility rules.
+ *
+ * @param {Object} loan
+ * @param {Date}   now
+ * @returns {{ servicingOverlay: string|null, servicingSubStatus: string|null }}
+ */
+function deriveServicingState(loan, now) {
+  var arrs = loan.arrangements || {};
+  var pa   = arrs.paymentArrangement;
+  var ph   = arrs.paymentHoliday;
+
+  // PA takes precedence (they should be mutually exclusive, but PA wins if both present)
+  if (pa) {
+    return {
+      servicingOverlay:   SO.PAYMENT_ARRANGEMENT,
+      servicingSubStatus: deriveServicingSubStatus(pa, now)
+    };
+  }
+
+  if (ph && ph.active) {
+    return { servicingOverlay: SO.PAYMENT_HOLIDAY, servicingSubStatus: null };
+  }
+
+  return { servicingOverlay: null, servicingSubStatus: null };
+}
+
+/**
+ * Resolve the single displayed status from the four model fields.
+ *
+ * Priority (highest first):
+ *   Bankruptcy > Trust Deed > DRO > IVA > Breathing Space > DMP
+ *   > Payment Holiday > Payment Arrangement > baseStatus
+ *
+ * Note: Payment Holiday and Arrangement are only shown while actively tracking
+ * (sub-status on_track or behind_arrangement). Broken and completed PA exits
+ * resolve to baseStatus — the base status engine has already recalculated.
+ *
+ * @param {string}      baseStatus
+ * @param {string|null} servicingOverlay
+ * @param {string|null} servicingSubStatus
+ * @param {string|null} forbearanceOverlay
+ * @returns {string}
+ */
+function resolveDisplayStatus(baseStatus, servicingOverlay, servicingSubStatus, forbearanceOverlay) {
+  // Forbearance / insolvency overlays take highest priority
+  if (forbearanceOverlay) return forbearanceOverlay;
+
+  // Servicing overlays — only when actively running
+  if (servicingOverlay === SO.PAYMENT_HOLIDAY) {
+    return SO.PAYMENT_HOLIDAY;
+  }
+  if (servicingOverlay === SO.PAYMENT_ARRANGEMENT &&
+      servicingSubStatus !== SS.PA_BROKEN &&
+      servicingSubStatus !== SS.PA_COMPLETED) {
+    return SO.PAYMENT_ARRANGEMENT;
+  }
+
+  return baseStatus;
 }
 
 // ── Eligibility checks ────────────────────────────────────────────────────────
 
-function checkPHEligibility(loan, coreStatus, derivedFlags, now) {
+/**
+ * @param {Object}  loan
+ * @param {string}  coreStatus
+ * @param {Object}  derivedFlags
+ * @param {Date}    [now]
+ * @param {boolean} [bypassCountLimit=false] — when true, the per-loan PH count cap
+ *   is not enforced. Pass true for ops-initiated checks; the limit still applies
+ *   to customer-facing eligibility.
+ */
+function checkPHEligibility(loan, coreStatus, derivedFlags, now, bypassCountLimit) {
   now  = now || new Date();
   var arrs = loan.arrangements || {};
   var lc   = loan.loanCore     || {};
@@ -251,15 +330,14 @@ function checkPHEligibility(loan, coreStatus, derivedFlags, now) {
     return { eligible: false, reason: 'A payment arrangement is already active on this account.' };
   }
 
-  var cases = loan.forbearanceCases || [];
-  for (var fc = 0; fc < cases.length; fc++) {
-    if (cases[fc].active) return { eligible: false, reason: 'A formal forbearance case is active.' };
+  if (loan.forbearanceOverlay && loan.forbearanceOverlay.active) {
+    return { eligible: false, reason: 'A forbearance overlay (' + loan.forbearanceOverlay.type + ') is currently active.' };
   }
 
   var phHistory = arrs.paymentHolidayHistory || [];
   var phMax     = (lc.termMonths <= 6) ? 1 : 2;
   var phUsed    = phHistory.length + (arrs.paymentHoliday && arrs.paymentHoliday.active ? 1 : 0);
-  if (phUsed >= phMax) {
+  if (!bypassCountLimit && phUsed >= phMax) {
     return { eligible: false, reason: 'Maximum payment holidays (' + phMax + ') already used on this loan.' };
   }
 
@@ -284,9 +362,36 @@ function checkPAEligibility(loan, coreStatus) {
     return { eligible: false, reason: 'Payment arrangements not available when account status is ' + coreStatus + '.' };
   }
 
+  if (loan.forbearanceOverlay && loan.forbearanceOverlay.active) {
+    return { eligible: false, reason: 'A forbearance overlay (' + loan.forbearanceOverlay.type + ') is currently active.' };
+  }
+
   var pa = arrs.paymentArrangement;
   if (pa && pa.active && !pa.broken) {
     return { eligible: false, reason: 'A payment arrangement is already active on this account.' };
+  }
+
+  return { eligible: true };
+}
+
+/**
+ * Check whether a forbearance/insolvency overlay can be applied.
+ *
+ * Blocked when:
+ *   - coreStatus is 'settled' or 'closed'
+ *   - another forbearance overlay is already active
+ *
+ * @param {Object} loan
+ * @param {string} coreStatus — evaluated core status
+ * @returns {{ eligible: boolean, reason?: string }}
+ */
+function checkForbearanceEligibility(loan, coreStatus) {
+  if (FOV_BLOCKED_STATUSES.indexOf(coreStatus) !== -1) {
+    return { eligible: false, reason: 'Forbearance overlays cannot be applied when account status is ' + coreStatus + '.' };
+  }
+
+  if (loan.forbearanceOverlay && loan.forbearanceOverlay.active) {
+    return { eligible: false, reason: 'A forbearance overlay (' + loan.forbearanceOverlay.type + ') is already active on this account.' };
   }
 
   return { eligible: true };
@@ -297,13 +402,12 @@ function checkPAEligibility(loan, coreStatus) {
 /**
  * Derive which servicing actions are currently permitted or blocked.
  * @param {Object} loan
- * @param {string} coreStatus
- * @param {Object} overlays
+ * @param {string} coreStatus  — evaluated base status
  * @param {Object} derivedFlags
  * @param {Date}   [now]
  * @returns {{ allowedActions: string[], blockedActions: string[], reasons: Object }}
  */
-function deriveAllowedActions(loan, coreStatus, overlays, derivedFlags, now) {
+function deriveAllowedActions(loan, coreStatus, derivedFlags, now) {
   var allowed  = [];
   var blocked  = [];
   var reasons  = {};
@@ -338,6 +442,22 @@ function deriveAllowedActions(loan, coreStatus, overlays, derivedFlags, now) {
     reasons['apply_payment_arrangement'] = paElig.reason;
   }
 
+  // Forbearance / insolvency overlays
+  var fovElig = checkForbearanceEligibility(loan, coreStatus);
+  if (fovElig.eligible) {
+    allowed.push('apply_forbearance_overlay');
+  } else {
+    blocked.push('apply_forbearance_overlay');
+    reasons['apply_forbearance_overlay'] = fovElig.reason;
+  }
+
+  if (loan.forbearanceOverlay && loan.forbearanceOverlay.active) {
+    allowed.push('exit_forbearance_overlay');
+  } else {
+    blocked.push('exit_forbearance_overlay');
+    reasons['exit_forbearance_overlay'] = 'No active forbearance overlay.';
+  }
+
   // Ops-only mutations
   if (TERMINAL_STATUSES.indexOf(coreStatus) === -1) {
     allowed.push('change_account_status');
@@ -363,32 +483,55 @@ function deriveAllowedActions(loan, coreStatus, overlays, derivedFlags, now) {
 // ── Full engine runner ────────────────────────────────────────────────────────
 
 /**
- * Run the full status + overlay evaluation and update loan.statusEngineState in place.
+ * Run the full status evaluation and write the canonical 4-field model
+ * to loan.statusEngineState in place.
+ *
+ * Written fields:
+ *   baseStatus             — evaluated lifecycle status (CS.*)
+ *   servicingOverlay       — active servicing program (SO.* | null)
+ *   servicingSubStatus     — arrangement performance state (SS.* | null)
+ *   forbearanceOverlay     — active forbearance/insolvency type (FOV.* | null)
+ *   resolvedDisplayStatus  — single status shown in UI
+ *   reasonCodes            — reasons for current baseStatus
+ *   derivedFlags           — numeric flags (outstandingBalance, etc.)
+ *   lastEvaluatedAt        — ISO timestamp
+ *
  * @param {Object} loan
  * @param {Date}   [now]
  * @returns {Object} updated statusEngineState
  */
 function runStatusEngine(loan, now) {
   now = now || new Date();
-  var seResult = evaluateCoreStatus(loan, now);
-  var overlays = evaluateOverlays(loan, seResult.coreStatus, now);
-  var display  = resolveDisplayStatus(seResult.coreStatus, overlays);
+
+  var seResult   = evaluateCoreStatus(loan, now);
+  var svcState   = deriveServicingState(loan, now);
+  var fovType    = (loan.forbearanceOverlay && loan.forbearanceOverlay.active)
+    ? loan.forbearanceOverlay.type
+    : null;
+  var display    = resolveDisplayStatus(
+    seResult.coreStatus,
+    svcState.servicingOverlay,
+    svcState.servicingSubStatus,
+    fovType
+  );
 
   loan.statusEngineState = {
-    coreStatus:      seResult.coreStatus,
-    overlays:        overlays,
-    displayStatus:   display,
-    reasonCodes:     seResult.reasonCodes  || [],
-    derivedFlags:    seResult.derivedFlags || {},
-    lastEvaluatedAt: now.toISOString()
+    baseStatus:            seResult.coreStatus,
+    servicingOverlay:      svcState.servicingOverlay,
+    servicingSubStatus:    svcState.servicingSubStatus,
+    forbearanceOverlay:    fovType,
+    resolvedDisplayStatus: display,
+    reasonCodes:           seResult.reasonCodes  || [],
+    derivedFlags:          seResult.derivedFlags || {},
+    lastEvaluatedAt:       now.toISOString()
   };
 
-  // Mark loan closed/settled
-  var cs = seResult.coreStatus;
-  if ((cs === CS.CLOSED || cs === CS.SETTLED) && !loan.closedAt) {
+  // Mark loan closed/settled when it reaches a terminal state
+  var bs = seResult.coreStatus;
+  if ((bs === CS.CLOSED || bs === CS.SETTLED) && !loan.closedAt) {
     loan.closedAt      = now.toISOString();
-    loan.closureReason = cs;
-    if (cs === CS.SETTLED) loan.settlementDate = now.toISOString();
+    loan.closureReason = bs;
+    if (bs === CS.SETTLED) loan.settlementDate = now.toISOString();
   }
 
   return loan.statusEngineState;
@@ -397,6 +540,10 @@ function runStatusEngine(loan, now) {
 module.exports = {
   CS,
   OV,
+  FOV,
+  FOV_PRIORITY,
+  SO,
+  SS,
   TERMINATION_DAYS,
   CONSEC_DEFAULT,
   CONSEC_ARREARS,
@@ -404,16 +551,19 @@ module.exports = {
   BALANCE_TOLERANCE,
   PH_BLOCKED_STATUSES,
   PA_BLOCKED_STATUSES,
+  FOV_BLOCKED_STATUSES,
   TERMINAL_STATUSES,
   outstandingBalance,
   lastSuccessfulPaymentDate,
   daysSince,
   countMissedDueInstalments,
   evaluateCoreStatus,
-  evaluateOverlays,
+  deriveServicingSubStatus,
+  deriveServicingState,
   resolveDisplayStatus,
   checkPHEligibility,
   checkPAEligibility,
+  checkForbearanceEligibility,
   deriveAllowedActions,
   runStatusEngine
 };
