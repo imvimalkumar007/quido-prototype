@@ -505,7 +505,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
         <div class="sec-hdr">
           <div class="sec-hdr-left"><h2>Loan &amp; Schedule</h2><p>Full amortisation schedule with live parameters</p></div>
           <div class="sec-hdr-right">
-            <button class="btn btn-warning btn-sm" onclick="applyPaymentHoliday()">Apply PH</button>
+            <button class="btn btn-warning btn-sm" onclick="gotoSec('sec-actions');opsInitPHFlow()">Apply PH</button>
             <button class="btn btn-success btn-sm" onclick="markNextPaid()">Mark Next Paid</button>
             <button class="btn btn-primary btn-sm" onclick="recalcAndSync()">Recalculate &amp; Sync</button>
           </div>
@@ -571,8 +571,49 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 
           <div class="action-card">
             <div class="action-card-title">Payment Holiday</div>
-            <div class="action-card-desc">Pause the next instalment. Interest accrues and is added to the outstanding balance. Max 2 per loan.</div>
-            <button class="btn btn-warning btn-sm btn-block" onclick="applyPaymentHoliday()">Grant Payment Holiday</button>
+            <div class="action-card-desc">Pause the next instalment. Interest accrues and is added to the outstanding balance.</div>
+
+            <div id="ops-ph-step-init">
+              <button class="btn btn-warning btn-sm btn-block" onclick="opsInitPHFlow()">Grant Payment Holiday</button>
+            </div>
+
+            <div id="ops-ph-step-ineligible" style="display:none">
+              <div style="background:var(--red-bg);border-radius:var(--r-sm);padding:10px 12px;font-size:12px;color:var(--red);margin-bottom:10px" id="ops-ph-ineligible-msg"></div>
+              <button class="btn btn-secondary btn-sm btn-block" onclick="opsShowPHStep('init')">Back</button>
+            </div>
+
+            <div id="ops-ph-step-reason" style="display:none">
+              <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Select the reason the customer is requesting a payment holiday.</div>
+              <div id="ops-ph-reason-btns" style="display:flex;flex-direction:column;gap:6px"></div>
+            </div>
+
+            <div id="ops-ph-step-credit" style="display:none">
+              <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:6px">Credit file impact</div>
+              <ul style="font-size:11px;color:var(--muted);padding-left:14px;line-height:1.8;margin:0 0 12px">
+                <li>This holiday will be recorded as a <strong>Payment Holiday</strong> on the customer&rsquo;s credit file.</li>
+                <li>The marker remains for <strong>6 years</strong> and may reduce their credit score.</li>
+                <li>Future lenders may take this into account.</li>
+              </ul>
+              <div id="ops-ph-reason-display" style="font-size:11px;background:var(--bg);padding:8px 10px;border-radius:var(--r-sm);border:1px solid var(--border);margin-bottom:12px">Reason: <strong></strong></div>
+              <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;margin-bottom:12px;cursor:pointer;line-height:1.5">
+                <input type="checkbox" id="ops-ph-credit-ack" style="flex-shrink:0;margin-top:2px" onchange="opsTogglePHCreditNext()">
+                I have discussed the credit file impact with the customer and they understand the implications
+              </label>
+              <button class="btn btn-warning btn-sm btn-block" id="ops-ph-credit-next" onclick="opsBuildPHConfirmStep()" disabled style="margin-bottom:6px">Continue</button>
+              <button class="btn btn-ghost btn-sm btn-block" onclick="opsShowPHStep('reason')">Back</button>
+            </div>
+
+            <div id="ops-ph-step-confirm" style="display:none">
+              <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Review the impact before confirming.</div>
+              <div id="ops-ph-confirm-summary"></div>
+              <button class="btn btn-warning btn-sm btn-block" onclick="opsApplyPH()" style="margin-bottom:6px">Confirm payment holiday</button>
+              <button class="btn btn-ghost btn-sm btn-block" onclick="opsShowPHStep('credit')">Back</button>
+            </div>
+
+            <div id="ops-ph-step-applied" style="display:none">
+              <div id="ops-ph-applied-msg"></div>
+              <button class="btn btn-secondary btn-sm btn-block" onclick="opsShowPHStep('init')" style="margin-top:10px">Done</button>
+            </div>
           </div>
 
           <div class="action-card">
@@ -594,10 +635,46 @@ a{text-decoration:none;color:inherit;cursor:pointer}
           <div class="action-card">
             <div class="action-card-title">Payment Arrangement</div>
             <div class="action-card-desc">Restructure remaining balance into reduced payments with frozen interest for customers in financial difficulty.</div>
-            <div class="field"><label>Reduced monthly amount (&pound;)</label><input type="number" id="pa-amount" placeholder="50.00" step="0.01" min="1"></div>
-            <div class="field"><label>Start date</label><input type="date" id="pa-start"></div>
-            <div class="field"><label>Duration (months)</label><input type="number" id="pa-months" placeholder="6" min="1" max="24"></div>
-            <button class="btn btn-warning btn-sm" onclick="applyPaymentArrangement()">Apply Arrangement</button>
+
+            <div id="ops-pa-step-init">
+              <button class="btn btn-warning btn-sm btn-block" onclick="opsInitPAFlow()">Set Up Arrangement</button>
+            </div>
+
+            <div id="ops-pa-step-ineligible" style="display:none">
+              <div style="background:var(--red-bg);border-radius:var(--r-sm);padding:10px 12px;font-size:12px;color:var(--red);margin-bottom:10px" id="ops-pa-ineligible-msg"></div>
+              <button class="btn btn-secondary btn-sm btn-block" onclick="opsShowPAStep('init')">Back</button>
+            </div>
+
+            <div id="ops-pa-step-reason" style="display:none">
+              <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Select the reason the customer is requesting a payment arrangement.</div>
+              <div id="ops-pa-reason-btns" style="display:flex;flex-direction:column;gap:6px"></div>
+            </div>
+
+            <div id="ops-pa-step-iae" style="display:none"></div>
+
+            <div id="ops-pa-step-credit" style="display:none">
+              <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:6px">Credit file impact</div>
+              <ul style="font-size:11px;color:var(--muted);padding-left:14px;line-height:1.8;margin:0 0 12px">
+                <li>This arrangement will be recorded as an <strong>Arrangement to Pay</strong> on the customer&rsquo;s credit file.</li>
+                <li>The marker remains for <strong>6 years</strong> and may reduce their credit score.</li>
+                <li>Future lenders may take this into account.</li>
+              </ul>
+              <div id="ops-pa-reason-display" style="font-size:11px;background:var(--bg);padding:8px 10px;border-radius:var(--r-sm);border:1px solid var(--border);margin-bottom:12px">Reason: <strong></strong></div>
+              <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;margin-bottom:12px;cursor:pointer;line-height:1.5">
+                <input type="checkbox" id="ops-pa-credit-ack" style="flex-shrink:0;margin-top:2px" onchange="opsTogglePACreditNext()">
+                I have discussed the credit file impact with the customer and they understand the implications
+              </label>
+              <button class="btn btn-warning btn-sm btn-block" id="ops-pa-credit-next" onclick="opsBuildPAAmountStep()" disabled style="margin-bottom:6px">Continue</button>
+              <button class="btn btn-ghost btn-sm btn-block" onclick="opsShowPAStep('iae')">Back</button>
+            </div>
+
+            <div id="ops-pa-step-amount" style="display:none"></div>
+            <div id="ops-pa-step-review"  style="display:none"></div>
+
+            <div id="ops-pa-step-applied" style="display:none">
+              <div id="ops-pa-applied-msg"></div>
+              <button class="btn btn-secondary btn-sm btn-block" onclick="opsShowPAStep('init')" style="margin-top:10px">Done</button>
+            </div>
           </div>
 
           <div class="action-card">
@@ -1726,16 +1803,94 @@ function recordManualPayment() {
   toast('Payment of ' + fmt(amt) + ' recorded (Ref: ' + ref + ')', 'success');
   setVal('mp-amount', ''); setVal('mp-ref', ''); setVal('mp-date', '');
 }
-// Apply PH: dispatch intent — store builds the schedule.
-function applyPaymentHoliday() {
-  var idx = OPS.paidCount;
-  if (idx >= OPS.schedule.length) { toast('No upcoming instalments to apply holiday to', 'error'); return; }
-  if (OPS.blockedActions.indexOf('apply_payment_holiday') !== -1) {
-    toast(OPS.actionReasons['apply_payment_holiday'] || 'Payment holiday not available on this account.', 'error'); return;
+// ═══════════════════════════════════════════════════════
+// PAYMENT HOLIDAY WIZARD
+// ═══════════════════════════════════════════════════════
+var OPS_PH_REASONS = [
+  'Loss of income','Job loss','Redundancy','Change of job / reduced hours',
+  'Illness or medical condition','Bereavement','Relationship breakdown',
+  'Unexpected essential expense','Other'
+];
+var opsPHReason = '';
+var OPS_PH_STEPS = ['init','ineligible','reason','credit','confirm','applied'];
+
+function opsShowPHStep(name) {
+  for (var i = 0; i < OPS_PH_STEPS.length; i++) {
+    var el = document.getElementById('ops-ph-step-' + OPS_PH_STEPS[i]);
+    if (el) el.style.display = OPS_PH_STEPS[i] === name ? '' : 'none';
   }
-  syncToCustomer('payment_holiday_granted', { instalmentN: idx + 1 });
+}
+
+function opsInitPHFlow() {
+  opsPHReason = '';
+  loadState();
+  if (OPS.blockedActions && OPS.blockedActions.indexOf('apply_payment_holiday') !== -1) {
+    document.getElementById('ops-ph-ineligible-msg').textContent =
+      OPS.actionReasons['apply_payment_holiday'] || 'Payment holiday is not available on this account.';
+    opsShowPHStep('ineligible'); return;
+  }
+  if (!OPS.schedule || OPS.paidCount >= OPS.schedule.length) {
+    document.getElementById('ops-ph-ineligible-msg').textContent = 'No upcoming instalments to apply a holiday to.';
+    opsShowPHStep('ineligible'); return;
+  }
+  var html = '';
+  for (var i = 0; i < OPS_PH_REASONS.length; i++) {
+    html += '<button class="btn btn-secondary btn-sm btn-block" style="text-align:left;font-weight:500" '
+      + 'onclick="opsPHSelectReason(this)" data-r="' + OPS_PH_REASONS[i] + '">' + OPS_PH_REASONS[i] + '</button>';
+  }
+  document.getElementById('ops-ph-reason-btns').innerHTML = html;
+  opsShowPHStep('reason');
+}
+
+function opsPHSelectReason(btn) {
+  opsPHReason = btn.getAttribute('data-r');
+  var rd = document.getElementById('ops-ph-reason-display');
+  if (rd) rd.innerHTML = 'Reason recorded: <strong>' + opsPHReason + '</strong>';
+  var ack = document.getElementById('ops-ph-credit-ack');
+  if (ack) ack.checked = false;
+  var next = document.getElementById('ops-ph-credit-next');
+  if (next) next.disabled = true;
+  opsShowPHStep('credit');
+}
+
+function opsTogglePHCreditNext() {
+  var ack = document.getElementById('ops-ph-credit-ack');
+  var btn = document.getElementById('ops-ph-credit-next');
+  if (btn) btn.disabled = !(ack && ack.checked);
+}
+
+function opsBuildPHConfirmStep() {
+  var idx  = OPS.paidCount;
+  var next = OPS.schedule && OPS.schedule[idx];
+  if (!next) return;
+  var balBefore   = idx > 0 ? (OPS.schedule[idx - 1].balance || 0) : OPS.principal;
+  var monthlyRate = ((OPS.apr || 0) / 100) / 12;
+  var accrued     = balBefore * monthlyRate;
+  var phUsed = 0;
+  for (var i = 0; i < OPS.schedule.length; i++) { if (OPS.schedule[i].ph) phUsed++; }
+  var newEnd = new Date(OPS.schedule[OPS.schedule.length - 1].dueDate);
+  newEnd.setMonth(newEnd.getMonth() + 1);
+  document.getElementById('ops-ph-confirm-summary').innerHTML =
+    '<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;margin-bottom:12px">'
+    + '<table style="width:100%;border-collapse:collapse;font-size:12px">'
+    + '<tr><td style="padding:4px 0;color:var(--muted)">Instalment paused</td><td style="text-align:right;font-weight:600">' + fmt(next.emi) + '</td></tr>'
+    + '<tr><td style="padding:4px 0;color:var(--muted)">Interest accruing during holiday</td><td style="text-align:right;font-weight:600;color:var(--amber)">' + fmt(accrued) + '</td></tr>'
+    + '<tr><td style="padding:4px 0;color:var(--muted)">Estimated new loan end date</td><td style="text-align:right;font-weight:600">' + shortDate(newEnd) + '</td></tr>'
+    + '<tr><td style="padding:4px 0;color:var(--muted)">Payment holidays used after this</td><td style="text-align:right;font-weight:600">' + (phUsed + 1) + '</td></tr>'
+    + '</table></div>';
+  opsShowPHStep('confirm');
+}
+
+function opsApplyPH() {
+  var idx = OPS.paidCount;
+  syncToCustomer('payment_holiday_granted', { instalmentN: idx + 1, reason: opsPHReason });
   buildSchedTable();
-  setText('sched-subtitle', OPS.schedule.length + ' instalments');
+  setText('sched-subtitle', (OPS.schedule ? OPS.schedule.length : 0) + ' instalments');
+  document.getElementById('ops-ph-applied-msg').innerHTML =
+    '<div style="background:var(--green-bg);border-radius:var(--r-sm);padding:12px;font-size:12px;color:var(--green);font-weight:600;margin-bottom:8px">'
+    + '&#10003; Payment holiday confirmed. Loan extended by 1 month.</div>'
+    + '<div style="font-size:11px;color:var(--muted)">Reason: ' + opsPHReason + '</div>';
+  opsShowPHStep('applied');
   toast('Payment holiday applied to instalment ' + (idx + 1) + '. Loan extended by 1 month.', 'success');
 }
 function changePayDate() {
@@ -1747,26 +1902,236 @@ function changePayDate() {
   var suf = day === 1 ? 'st' : day === 2 ? 'nd' : day === 3 ? 'rd' : 'th';
   toast('Pay date changed to the ' + day + suf + ' of each month', 'success');
 }
-// Apply PA: dispatch intent — store tags PA rows and persists state.
-function applyPaymentArrangement() {
-  var amt = parseFloat(document.getElementById('pa-amount').value);
-  var startVal = document.getElementById('pa-start').value;
-  var months = parseInt(document.getElementById('pa-months').value);
-  if (OPS.blockedActions.indexOf('apply_payment_arrangement') !== -1) {
-    toast(OPS.actionReasons['apply_payment_arrangement'] || 'Payment arrangement not available on this account.', 'error'); return;
+// ═══════════════════════════════════════════════════════
+// PAYMENT ARRANGEMENT WIZARD
+// ═══════════════════════════════════════════════════════
+var OPS_PA_REASONS = [
+  'Loss of income','Job loss','Redundancy','Change of job / reduced hours',
+  'Illness or medical condition','Bereavement','Relationship breakdown',
+  'Unexpected essential expense','Other'
+];
+var OPS_PA_INC_KEYS   = ['inc-salary','inc-secondary','inc-benefits','inc-other'];
+var OPS_PA_INC_LABELS = ['Primary income (net)','Secondary income','Benefits / Universal Credit','Other income'];
+var OPS_PA_EXP_KEYS   = ['exp-rent','exp-council','exp-utilities','exp-food','exp-transport','exp-childcare','exp-mobile','exp-loans','exp-cards','exp-bnpl','exp-insurance','exp-subs'];
+var OPS_PA_EXP_LABELS = ['Rent / mortgage','Council tax','Utilities','Food & groceries','Transport','Childcare / dependants','Mobile phone','Other loan repayments','Credit card minimums','Buy now pay later','Insurance','Subscriptions'];
+var opsPAReason = '';
+var opsPAIEData  = null;
+var opsPABal     = 0;
+var opsPAMaxPA   = 0;
+var opsPAMinPA   = 0;
+var OPS_PA_STEPS = ['init','ineligible','reason','iae','credit','amount','review','applied'];
+
+function opsShowPAStep(name) {
+  for (var i = 0; i < OPS_PA_STEPS.length; i++) {
+    var el = document.getElementById('ops-pa-step-' + OPS_PA_STEPS[i]);
+    if (el) el.style.display = OPS_PA_STEPS[i] === name ? '' : 'none';
   }
-  if (!amt || amt <= 0) { toast('Enter a valid monthly amount', 'error'); return; }
-  if (!months || months < 1) { toast('Enter a valid duration', 'error'); return; }
-  var sd = startVal ? new Date(startVal) : new Date();
-  var outstanding = outstandingBal(OPS.schedule, OPS.paidCount);
-  syncToCustomer('payment_arrangement', {
-    amount:             amt,
-    months:             months,
-    startDate:          sd.toISOString(),
-    outstandingBalance: outstanding
+}
+
+function opsInitPAFlow() {
+  opsPAReason = ''; opsPAIEData = null;
+  loadState();
+  if (OPS.blockedActions && OPS.blockedActions.indexOf('apply_payment_arrangement') !== -1) {
+    document.getElementById('ops-pa-ineligible-msg').textContent =
+      OPS.actionReasons['apply_payment_arrangement'] || 'Payment arrangement is not available on this account.';
+    opsShowPAStep('ineligible'); return;
+  }
+  var html = '';
+  for (var i = 0; i < OPS_PA_REASONS.length; i++) {
+    html += '<button class="btn btn-secondary btn-sm btn-block" style="text-align:left;font-weight:500" '
+      + 'onclick="opsPASelectReason(this)" data-r="' + OPS_PA_REASONS[i] + '">' + OPS_PA_REASONS[i] + '</button>';
+  }
+  document.getElementById('ops-pa-reason-btns').innerHTML = html;
+  opsShowPAStep('reason');
+}
+
+function opsPASelectReason(btn) {
+  opsPAReason = btn.getAttribute('data-r');
+  opsBuildPAIEForm();
+  opsShowPAStep('iae');
+}
+
+function opsCalcPAIE() {
+  var totalInc = 0, totalExp = 0;
+  for (var i = 0; i < OPS_PA_INC_KEYS.length; i++) {
+    var el = document.getElementById('ops-pa-ie-' + OPS_PA_INC_KEYS[i]);
+    if (el) totalInc += parseFloat(el.value) || 0;
+  }
+  for (var j = 0; j < OPS_PA_EXP_KEYS.length; j++) {
+    var el2 = document.getElementById('ops-pa-ie-' + OPS_PA_EXP_KEYS[j]);
+    if (el2) totalExp += parseFloat(el2.value) || 0;
+  }
+  var disposable = totalInc - totalExp;
+  setText('ops-pa-ie-income-total', fmt(totalInc));
+  setText('ops-pa-ie-exp-total',    fmt(totalExp));
+  var dispEl = document.getElementById('ops-pa-ie-disposable');
+  if (dispEl) {
+    dispEl.textContent = fmt(Math.max(0, disposable));
+    dispEl.style.color = disposable > 0 ? 'var(--green)' : 'var(--red)';
+  }
+  return { income: totalInc, expenses: totalExp, disposable: disposable };
+}
+
+function opsBuildPAIEForm() {
+  var aff  = (OPS.account && OPS.account.affordability) || {};
+  var gran = aff.granular || {};
+  var incV = {
+    'inc-salary':    gran['inc-salary']    || aff.monthlyIncome   || 0,
+    'inc-secondary': gran['inc-secondary'] || 0,
+    'inc-benefits':  gran['inc-benefits']  || 0,
+    'inc-other':     gran['inc-other']     || 0
+  };
+  var expV = {
+    'exp-rent':      gran['exp-rent']      || aff.housingCosts    || 0,
+    'exp-council':   gran['exp-council']   || 0,
+    'exp-utilities': gran['exp-utilities'] || aff.livingCosts     || 0,
+    'exp-food':      gran['exp-food']      || 0,
+    'exp-transport': gran['exp-transport'] || aff.transportCosts  || 0,
+    'exp-childcare': gran['exp-childcare'] || 0,
+    'exp-mobile':    gran['exp-mobile']    || 0,
+    'exp-loans':     gran['exp-loans']     || aff.otherDebts      || 0,
+    'exp-cards':     gran['exp-cards']     || 0,
+    'exp-bnpl':      gran['exp-bnpl']      || 0,
+    'exp-insurance': gran['exp-insurance'] || 0,
+    'exp-subs':      gran['exp-subs']      || 0
+  };
+  function fieldRow(id, label, val) {
+    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)">'
+      + '<span style="font-size:11px;color:var(--muted);flex:1;padding-right:8px">' + label + '</span>'
+      + '<div style="display:flex;align-items:center;gap:3px"><span style="font-size:11px;color:var(--muted)">£</span>'
+      + '<input id="' + id + '" type="number" min="0" step="1" value="' + (val || 0) + '" '
+      + 'style="width:72px;padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:12px;text-align:right;background:var(--bg)"></div></div>';
+  }
+  var html = '<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Confirm the customer&rsquo;s income and expenses.</div>';
+  html += '<div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Income</div>';
+  for (var i = 0; i < OPS_PA_INC_KEYS.length; i++) {
+    html += fieldRow('ops-pa-ie-' + OPS_PA_INC_KEYS[i], OPS_PA_INC_LABELS[i], incV[OPS_PA_INC_KEYS[i]]);
+  }
+  html += '<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:10px 0 4px">Expenses</div>';
+  for (var j = 0; j < OPS_PA_EXP_KEYS.length; j++) {
+    html += fieldRow('ops-pa-ie-' + OPS_PA_EXP_KEYS[j], OPS_PA_EXP_LABELS[j], expV[OPS_PA_EXP_KEYS[j]]);
+  }
+  html += '<div style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:10px;margin:10px 0">'
+    + '<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span style="color:var(--muted)">Total income</span><strong id="ops-pa-ie-income-total">£0.00</strong></div>'
+    + '<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span style="color:var(--muted)">Total expenses</span><strong id="ops-pa-ie-exp-total">£0.00</strong></div>'
+    + '<div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;border-top:1px solid var(--border);padding-top:6px;margin-top:4px"><span>Disposable income</span><span id="ops-pa-ie-disposable" style="color:var(--green)">£0.00</span></div>'
+    + '</div>'
+    + '<button class="btn btn-warning btn-sm btn-block" id="ops-pa-ie-next" style="margin-bottom:6px">Next — Credit impact</button>'
+    + '<button class="btn btn-ghost btn-sm btn-block" onclick="opsShowPAStep(\'reason\')">Back</button>';
+  var step = document.getElementById('ops-pa-step-iae');
+  if (step) { step.innerHTML = html; }
+  var inputs = step ? step.querySelectorAll('input[type="number"]') : [];
+  for (var k = 0; k < inputs.length; k++) inputs[k].addEventListener('input', opsCalcPAIE);
+  opsCalcPAIE();
+  document.getElementById('ops-pa-ie-next').addEventListener('click', function() {
+    var ie   = opsCalcPAIE();
+    opsPABal   = outstandingBal(OPS.schedule, OPS.paidCount);
+    opsPAMaxPA = ie.disposable * 0.5;
+    opsPAMinPA = opsPABal / 24;
+    opsPAIEData = ie;
+    var rd = document.getElementById('ops-pa-reason-display');
+    if (rd) rd.innerHTML = 'Reason recorded: <strong>' + opsPAReason + '</strong>';
+    var ack = document.getElementById('ops-pa-credit-ack');
+    if (ack) ack.checked = false;
+    var cBtn = document.getElementById('ops-pa-credit-next');
+    if (cBtn) cBtn.disabled = true;
+    opsShowPAStep('credit');
   });
-  toast('Payment arrangement applied: ' + fmt(amt) + '/month for ' + months + ' months', 'success');
-  setVal('pa-amount', ''); setVal('pa-months', '');
+}
+
+function opsTogglePACreditNext() {
+  var ack = document.getElementById('ops-pa-credit-ack');
+  var btn = document.getElementById('ops-pa-credit-next');
+  if (btn) btn.disabled = !(ack && ack.checked);
+}
+
+function opsBuildPAAmountStep() {
+  var bal   = opsPABal;
+  var maxPA = parseFloat((opsPAMaxPA > 0 ? opsPAMaxPA : bal / 12).toFixed(2));
+  var minPA = parseFloat(opsPAMinPA.toFixed(2));
+  var today      = new Date();
+  var maxStart   = new Date(today); maxStart.setMonth(maxStart.getMonth() + 1);
+  var todayStr   = today.toISOString().slice(0, 10);
+  var maxStartStr = maxStart.toISOString().slice(0, 10);
+  var suggested  = +(Math.max(minPA > 0 ? minPA : 1, Math.min(maxPA, bal / 12))).toFixed(2);
+  var html = '<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px;margin-bottom:12px">'
+    + '<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span style="color:var(--muted)">Outstanding balance</span><strong>' + fmt(bal) + '</strong></div>'
+    + '<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span style="color:var(--muted)">Disposable income</span><strong>' + fmt(opsPAIEData ? opsPAIEData.disposable : 0) + '/month</strong></div>'
+    + (opsPAMaxPA > 0 ? '<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span style="color:var(--muted)">Suggested max (50% disposable)</span><strong style="color:var(--green)">' + fmt(opsPAMaxPA) + '/month</strong></div>' : '')
+    + (minPA > 0 ? '<div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--muted)">Min (clears in 24 months)</span><strong>' + fmt(minPA) + '/month</strong></div>' : '')
+    + '</div>'
+    + '<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">Monthly payment (£)</div>'
+    + '<input id="ops-pa-amt-input" type="number" min="1" step="0.01" value="' + (suggested > 0 ? suggested.toFixed(2) : '') + '" '
+    + 'style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:14px;font-weight:600;background:var(--bg);margin-bottom:4px">'
+    + '<div id="ops-pa-amt-feedback" style="font-size:11px;color:var(--muted);min-height:16px;margin-bottom:10px"></div>'
+    + '<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">First payment date</div>'
+    + '<input id="ops-pa-start-input" type="date" min="' + todayStr + '" max="' + maxStartStr + '" value="' + todayStr + '" '
+    + 'style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:12px;background:var(--bg);margin-bottom:12px">'
+    + '<button class="btn btn-warning btn-sm btn-block" id="ops-pa-amt-next" style="margin-bottom:6px">Review arrangement</button>'
+    + '<button class="btn btn-ghost btn-sm btn-block" onclick="opsShowPAStep(\'credit\')">Back</button>';
+  var step = document.getElementById('ops-pa-step-amount');
+  if (step) step.innerHTML = html;
+  function updateFb() {
+    var amt = parseFloat(document.getElementById('ops-pa-amt-input').value) || 0;
+    var fb  = document.getElementById('ops-pa-amt-feedback');
+    if (!fb || !amt) return;
+    var mos = Math.ceil(bal / amt);
+    fb.textContent = 'Clears in approximately ' + mos + ' month' + (mos !== 1 ? 's' : '') + '.';
+  }
+  document.getElementById('ops-pa-amt-input').addEventListener('input', updateFb);
+  updateFb();
+  document.getElementById('ops-pa-amt-next').addEventListener('click', function() {
+    var amt      = parseFloat(document.getElementById('ops-pa-amt-input').value) || 0;
+    var startVal = document.getElementById('ops-pa-start-input').value;
+    if (!amt || amt <= 0 || !startVal) {
+      document.getElementById('ops-pa-amt-input').style.borderColor = 'var(--red)'; return;
+    }
+    opsBuildPAReviewStep(amt, startVal);
+    opsShowPAStep('review');
+  });
+}
+
+function opsBuildPAReviewStep(amount, startDateStr) {
+  var bal    = opsPABal;
+  var months = Math.ceil(bal / amount);
+  var startDate = new Date(startDateStr);
+  var endDate   = new Date(startDate); endDate.setMonth(endDate.getMonth() + months - 1);
+  var html = '<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Review and confirm the arrangement.</div>'
+    + '<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;margin-bottom:12px">'
+    + '<table style="width:100%;border-collapse:collapse;font-size:12px">'
+    + '<tr><td style="padding:4px 0;color:var(--muted)">Outstanding balance</td><td style="text-align:right;font-weight:600">' + fmt(bal) + '</td></tr>'
+    + '<tr><td style="padding:4px 0;color:var(--muted)">Monthly payment</td><td style="text-align:right;font-weight:600;color:var(--blue)">' + fmt(amount) + '</td></tr>'
+    + '<tr><td style="padding:4px 0;color:var(--muted)">First payment</td><td style="text-align:right;font-weight:600">' + shortDate(startDate) + '</td></tr>'
+    + '<tr><td style="padding:4px 0;color:var(--muted)">Number of payments</td><td style="text-align:right;font-weight:600">' + months + '</td></tr>'
+    + '<tr><td style="padding:4px 0;color:var(--muted)">Final payment</td><td style="text-align:right;font-weight:600">' + shortDate(endDate) + '</td></tr>'
+    + '<tr><td style="padding:8px 0 4px;color:var(--green);font-weight:700;border-top:1px solid var(--border)">Interest rate</td>'
+    + '<td style="text-align:right;font-weight:700;color:var(--green);padding:8px 0 4px;border-top:1px solid var(--border)">0% — frozen</td></tr>'
+    + '</table></div>'
+    + '<button class="btn btn-success btn-sm btn-block" id="ops-pa-review-confirm" style="margin-bottom:6px">Confirm arrangement</button>'
+    + '<button class="btn btn-ghost btn-sm btn-block" onclick="opsShowPAStep(\'amount\')">Back</button>';
+  var step = document.getElementById('ops-pa-step-review');
+  if (step) step.innerHTML = html;
+  document.getElementById('ops-pa-review-confirm').addEventListener('click', function() {
+    opsApplyPA(amount, startDateStr);
+  });
+}
+
+function opsApplyPA(amount, startDateStr) {
+  var bal    = opsPABal;
+  var months = Math.ceil(bal / amount);
+  syncToCustomer('payment_arrangement', {
+    amount:             amount,
+    months:             months,
+    startDate:          new Date(startDateStr).toISOString(),
+    reason:             opsPAReason,
+    outstandingBalance: bal
+  });
+  document.getElementById('ops-pa-applied-msg').innerHTML =
+    '<div style="background:var(--green-bg);border-radius:var(--r-sm);padding:12px;font-size:12px;color:var(--green);font-weight:600;margin-bottom:8px">'
+    + '&#10003; Arrangement confirmed. ' + fmt(amount) + '/month from ' + shortDate(new Date(startDateStr)) + '. Interest frozen at 0%.</div>'
+    + '<div style="font-size:11px;color:var(--muted)">Reason: ' + opsPAReason + '</div>';
+  opsShowPAStep('applied');
+  toast('Payment arrangement applied: ' + fmt(amount) + '/month for ' + months + ' months', 'success');
 }
 function extendTerm() {
   var extra = parseInt(document.getElementById('ext-months').value);
