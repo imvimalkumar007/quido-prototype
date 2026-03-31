@@ -97,6 +97,17 @@ function createEmptyLoan(loanId) {
       collectionsFlagged: false
     },
 
+    ledger: {
+      entries: [],
+      totals: {
+        principalDue:     0,
+        interestDue:      0,
+        cashReceived:     0,
+        waivedAmount:     0,
+        adjustmentAmount: 0
+      }
+    },
+
     auditTrail: []
   };
 }

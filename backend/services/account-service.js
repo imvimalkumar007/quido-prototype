@@ -46,6 +46,7 @@ const {
 const {
   applyRepayment,
   applyManualPayment,
+  recordFailedPayment,
   applyPaymentHoliday,
   completePaymentHoliday,
   applyPaymentArrangement,
@@ -107,10 +108,12 @@ function buildResolvedAccount(account) {
   var arrs = (activeLoan && activeLoan.arrangements)       || {};
   var ops  = (activeLoan && activeLoan.ops)                || {};
 
+  var snap = (activeLoan && activeLoan.scheduleSnapshot) || [];
+
   // Run status engine to get fresh allowed/blocked actions
-  var allowedActions = [];
-  var blockedActions = [];
-  var actionReasons  = {};
+  var allowedActions    = [];
+  var blockedActions    = [];
+  var actionReasons     = {};
   var operativeSchedule = deriveOperativeSchedule(snap);
   if (activeLoan) {
     try {
@@ -135,8 +138,7 @@ function buildResolvedAccount(account) {
   }
 
   // Derive EMI: prefer loanSummary, then first non-PH schedule row
-  var emi  = ls.emi || 0;
-  var snap = (activeLoan && activeLoan.scheduleSnapshot) || [];
+  var emi = ls.emi || 0;
   if (!emi) {
     for (var j = 0; j < snap.length; j++) {
       if (!snap[j].ph) { emi = snap[j].emi; break; }
@@ -497,10 +499,12 @@ AccountService.prototype.applyCommand = function (storageKey, command) {
           pmtErr.status = 422;
           throw pmtErr;
         }
-        // Merge any explicit overrides the client sent (schedule, summary, status)
-        if (payload.scheduleSnapshot && payload.scheduleSnapshot.length) loan.scheduleSnapshot = payload.scheduleSnapshot;
-        if (payload.statusEngineState) loan.statusEngineState = payload.statusEngineState;
-        if (payload.loanSummary)       loan.loanSummary       = payload.loanSummary;
+      }
+      break;
+
+    case 'RECORD_FAILED_PAYMENT':
+      if (loan) {
+        recordFailedPayment(loan, payload.amount || 0, payload.date, actor, payload.reason, now);
       }
       break;
 
@@ -511,6 +515,17 @@ AccountService.prototype.applyCommand = function (storageKey, command) {
           var phErr = new Error(engineResult.error || 'Payment holiday could not be applied.');
           phErr.status = 422;
           throw phErr;
+        }
+      }
+      break;
+
+    case 'COMPLETE_PAYMENT_HOLIDAY':
+      if (loan) {
+        engineResult = completePaymentHoliday(loan, now, actor);
+        if (!engineResult.ok) {
+          var cphErr = new Error(engineResult.error || 'Payment holiday could not be completed.');
+          cphErr.status = 422;
+          throw cphErr;
         }
       }
       break;
@@ -581,9 +596,10 @@ function getActiveLoan(state) {
  * Pure function: apply a command mutation to a state object.
  * Returns the mutated state (same reference — mutates in place).
  *
- * Priority 1 note: the backend stores scheduleSnapshot and statusEngineState
- * exactly as provided by the client.  Server-side engine execution is
- * deferred to Priority 2.
+ * Handles all non-servicing commands (profile, employment, contact,
+ * affordability, payment methods, ops notes, account adjustments).
+ * Servicing commands (RECORD_PAYMENT, APPLY_PAYMENT_HOLIDAY, etc.)
+ * are routed exclusively through applyCommand's authoritative switch.
  */
 function applyCommandToState(state, command) {
   var type    = command.type    || '';
@@ -623,6 +639,8 @@ function applyCommandToState(state, command) {
       break;
 
     // ── Loan core mutations ───────────────────────────────────────────────
+    // Note: RECALCULATE_LOAN accepts client-provided scheduleSnapshot because
+    // it is an admin tool for correcting origination data, not a servicing action.
 
     case 'RECALCULATE_LOAN':
       if (loan) {
@@ -643,87 +661,6 @@ function applyCommandToState(state, command) {
         if (payload.startDate)               loan.loanCore.startDate  = payload.startDate;
         if (payload.scheduleSnapshot)        loan.scheduleSnapshot    = payload.scheduleSnapshot;
         if (payload.statusEngineState)       loan.statusEngineState   = payload.statusEngineState;
-      }
-      break;
-
-    case 'RECORD_PAYMENT':
-      if (loan) {
-        loan.loanCore.paidCount = payload.paidCount !== undefined
-          ? payload.paidCount
-          : (loan.loanCore.paidCount || 0) + 1;
-
-        if (!Array.isArray(loan.transactions)) loan.transactions = [];
-        loan.transactions.push({
-          id:         'pmt-' + Date.now(),
-          type:       'payment',
-          amount:     payload.amount || 0,
-          date:       payload.date   || now,
-          successful: true,
-          actor:      actor
-        });
-
-        if (payload.scheduleSnapshot && payload.scheduleSnapshot.length) {
-          loan.scheduleSnapshot = payload.scheduleSnapshot;
-        }
-        if (payload.statusEngineState) {
-          loan.statusEngineState = payload.statusEngineState;
-        }
-        if (payload.loanSummary) {
-          loan.loanSummary = payload.loanSummary;
-        }
-      }
-      break;
-
-    case 'APPLY_PAYMENT_HOLIDAY':
-      if (loan) {
-        var arrs = loan.arrangements;
-        if (arrs.paymentHoliday && arrs.paymentHoliday.active) {
-          arrs.paymentHolidayHistory.push(arrs.paymentHoliday);
-        }
-        arrs.paymentHoliday = {
-          active:      true,
-          startDate:   payload.startDate   || now,
-          endDate:     payload.endDate     || null,
-          instalmentN: payload.instalmentN || ((loan.loanCore.paidCount || 0) + 1),
-          reason:      payload.reason      || ''
-        };
-        if (payload.scheduleSnapshot && payload.scheduleSnapshot.length) {
-          loan.scheduleSnapshot = payload.scheduleSnapshot;
-          if (payload.newTermMonths) loan.loanCore.termMonths = payload.newTermMonths;
-          loan.loanCore.paidCount = (loan.loanCore.paidCount || 0) + 1;
-        } else {
-          loan.loanCore.paidCount  = (loan.loanCore.paidCount  || 0) + 1;
-          loan.loanCore.termMonths = (loan.loanCore.termMonths || 0) + 1;
-        }
-        if (payload.statusEngineState) loan.statusEngineState = payload.statusEngineState;
-      }
-      break;
-
-    case 'APPLY_PAYMENT_ARRANGEMENT':
-      if (loan) {
-        var arrsPA = loan.arrangements;
-        if (arrsPA.paymentArrangement && arrsPA.paymentArrangement.active) {
-          arrsPA.paymentArrangementHistory.push(arrsPA.paymentArrangement);
-        }
-        var outstanding = payload.outstandingBalance
-          || (loan.loanSummary && loan.loanSummary.outstandingBalance) || 0;
-        var months = payload.months || Math.ceil(outstanding / (payload.amount || 1));
-
-        arrsPA.paymentArrangement = {
-          active:      true,
-          amount:      payload.amount    || 0,
-          months:      months,
-          startDate:   payload.startDate || now,
-          endDate:     payload.endDate   || null,
-          totalAmount: payload.totalAmount || ((payload.amount || 0) * months),
-          totalPaid:   0,
-          broken:      false
-        };
-        if (payload.scheduleSnapshot && payload.scheduleSnapshot.length) {
-          loan.scheduleSnapshot = payload.scheduleSnapshot;
-          if (payload.newTermMonths) loan.loanCore.termMonths = payload.newTermMonths;
-        }
-        if (payload.statusEngineState) loan.statusEngineState = payload.statusEngineState;
       }
       break;
 

@@ -27,6 +27,7 @@ const {
   checkPAEligibility,
   runStatusEngine
 } = require('./status-engine');
+const { ENTRY_TYPES, postEntry } = require('./ledger-engine');
 
 // ── Audit helpers ─────────────────────────────────────────────────────────────
 
@@ -203,6 +204,15 @@ function applyRepayment(loan, amount, date, actor, now) {
   rebuildSummary(loan);
   runStatusEngine(loan, now);
 
+  // Track against active payment arrangement
+  var arrs = loan.arrangements || {};
+  if (arrs.paymentArrangement && arrs.paymentArrangement.active) {
+    arrs.paymentArrangement.totalPaid = +((arrs.paymentArrangement.totalPaid || 0) + amount).toFixed(2);
+  }
+
+  // Ledger
+  postEntry(loan, ENTRY_TYPES.CASH_RECEIVED, amount, date, actor, loan.transactions[loan.transactions.length - 1].id);
+
   _pushAudit(loan, 'repayment_recorded', {
     amount: amount, cleared: cleared, txnType: txnType
   }, actor, date);
@@ -242,6 +252,15 @@ function applyManualPayment(loan, amount, date, actor, now) {
   syncRowStatuses(loan);
   rebuildSummary(loan);
   runStatusEngine(loan, now);
+
+  // Track against active payment arrangement
+  var arrsM = loan.arrangements || {};
+  if (arrsM.paymentArrangement && arrsM.paymentArrangement.active) {
+    arrsM.paymentArrangement.totalPaid = +((arrsM.paymentArrangement.totalPaid || 0) + amount).toFixed(2);
+  }
+
+  // Ledger
+  postEntry(loan, ENTRY_TYPES.CASH_RECEIVED, amount, date, actor, loan.transactions[loan.transactions.length - 1].id);
 
   _pushAudit(loan, 'manual_payment_recorded', {
     amount: amount, cleared: cleared
@@ -532,6 +551,47 @@ function completePaymentArrangement(loan, now, actor) {
   return { ok: true, loan: loan };
 }
 
+// ── Failed payment ────────────────────────────────────────────────────────────
+
+/**
+ * Record a failed payment attempt.
+ *
+ * Does not advance paidCount or touch the schedule — the loan state is
+ * unchanged. Records the attempt in transactions[] and audit trail so
+ * ops and the status engine have an accurate payment history.
+ *
+ * @param {Object} loan
+ * @param {number} amount
+ * @param {string} [date]
+ * @param {string} [actor]
+ * @param {string} [reason]  — e.g. 'insufficient_funds', 'card_declined'
+ * @param {Date}   [now]
+ * @returns {{ ok: boolean, loan: Object }}
+ */
+function recordFailedPayment(loan, amount, date, actor, reason, now) {
+  now    = now    || new Date();
+  actor  = actor  || 'customer';
+  date   = date   || now.toISOString();
+  reason = reason || 'unknown';
+
+  if (!Array.isArray(loan.transactions)) loan.transactions = [];
+  loan.transactions.push({
+    id:         'fpmt-' + Date.now(),
+    type:       'failed_payment',
+    amount:     amount,
+    date:       date,
+    successful: false,
+    actor:      actor,
+    reason:     reason
+  });
+
+  _pushAudit(loan, 'payment_failed', {
+    amount: amount, reason: reason
+  }, actor, date);
+
+  return { ok: true, loan: loan };
+}
+
 // ── Settlement ────────────────────────────────────────────────────────────────
 
 /**
@@ -571,6 +631,7 @@ module.exports = {
   // Payment mutations
   applyRepayment,
   applyManualPayment,
+  recordFailedPayment,
   // Payment holiday
   applyPaymentHoliday,
   completePaymentHoliday,
