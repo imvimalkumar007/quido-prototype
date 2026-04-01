@@ -73,6 +73,8 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 .chip-active{background:var(--green-bg);color:var(--green)}
 .chip-arrears{background:var(--amber-bg);color:var(--amber)}
 .chip-default{background:var(--red-bg);color:var(--red)}
+.chip-payment-arrangement{background:#fef3c7;color:#b45309}
+.chip-payment-holiday{background:#ede9fe;color:#7c3aed}
 .chip-terminated{background:#f1f5f9;color:var(--muted)}
 
 /* ── Content */
@@ -393,6 +395,10 @@ a{text-decoration:none;color:inherit;cursor:pointer}
                 </div>
               </div>
             </div>
+            <div class="card" style="margin-bottom:14px">
+              <div class="card-hdr"><span class="card-title">Loan Summary</span></div>
+              <div class="card-body-tight" id="loan-summary"></div>
+            </div>
             <div class="card">
               <div class="card-hdr"><span class="card-title">Quick Actions</span></div>
               <div class="card-body">
@@ -534,7 +540,6 @@ a{text-decoration:none;color:inherit;cursor:pointer}
         <div class="sec-hdr">
           <div class="sec-hdr-left"><h2>Loan &amp; Schedule</h2><p>Full amortisation schedule with live parameters</p></div>
           <div class="sec-hdr-right">
-            <button class="btn btn-warning btn-sm" onclick="gotoSec('sec-actions');opsInitPHFlow()">Apply PH</button>
             <button class="btn btn-success btn-sm" onclick="markNextPaid()">Mark Next Paid</button>
             <button class="btn btn-primary btn-sm" onclick="recalcAndSync()">Recalculate &amp; Sync</button>
           </div>
@@ -559,10 +564,6 @@ a{text-decoration:none;color:inherit;cursor:pointer}
                   </select>
                 </div>
               </div>
-            </div>
-            <div class="card">
-              <div class="card-hdr"><span class="card-title">Loan Summary</span></div>
-              <div class="card-body-tight" id="loan-summary"></div>
             </div>
           </div>
 
@@ -666,7 +667,20 @@ a{text-decoration:none;color:inherit;cursor:pointer}
             <div class="action-card-desc">Restructure remaining balance into reduced payments with frozen interest for customers in financial difficulty.</div>
 
             <div id="ops-pa-step-init">
-              <button class="btn btn-warning btn-sm btn-block" onclick="opsInitPAFlow()">Set Up Arrangement</button>
+              <div id="ops-pa-active-panel" style="display:none;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;margin-bottom:10px">
+                <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:8px">
+                  <div>
+                    <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:3px">Active arrangement</div>
+                    <div id="ops-pa-active-summary" style="font-size:12px;color:var(--text);font-weight:600"></div>
+                  </div>
+                  <span style="padding:4px 8px;border-radius:999px;background:#fef3c7;color:#92400e;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em">Live</span>
+                </div>
+                <div id="ops-pa-active-meta" style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:12px"></div>
+                <button class="btn btn-danger btn-sm btn-block" onclick="opsBreakPA()">Remove Arrangement</button>
+              </div>
+              <div id="ops-pa-empty-panel">
+                <button class="btn btn-warning btn-sm btn-block" onclick="opsInitPAFlow()">Set Up Arrangement</button>
+              </div>
             </div>
 
             <div id="ops-pa-step-ineligible" style="display:none">
@@ -1114,7 +1128,11 @@ var _store  = null;    // set when a customer is selected
 // Set USE_API = true to enable write-through sync to the backend.
 // The backend must be running: cd backend && node server.js
 var USE_API  = true;
-var API_BASE = 'http://localhost:3001/api';
+var API_BASE = (function () {
+  var origin = (window.location && window.location.origin) || '';
+  if (origin && origin.indexOf('http') === 0) return origin + '/api';
+  return 'http://localhost:3001/api';
+})();
 
 // CUSTOMER_REGISTRY - seed data using v3 profile structure.
 // profile.personal  → identity fields (name, dob)
@@ -1449,7 +1467,7 @@ function loadState() {
   OPS.term          = lc.termMonths;
   OPS.startDate     = new Date(lc.startDate);
   OPS.paidCount     = lc.paidCount;
-  OPS.accountStatus = se.coreStatus || 'active';
+  OPS.accountStatus = se.resolvedDisplayStatus || se.displayStatus || se.baseStatus || se.coreStatus || 'active';
   OPS.closedAt      = loan.closedAt || null;
   OPS.totalRepaid   = firstDefined(ls.totalRepaid, 0);
   OPS.outstandingBalance = firstDefined(ls.outstandingBalance, 0);
@@ -1557,6 +1575,8 @@ function _actionToCommand(action, details) {
       startDate:          d.startDate,
       outstandingBalance: d.outstandingBalance
     } };
+  if (action === 'break_payment_arrangement')
+    return { type: CT.BREAK_PAYMENT_ARRANGEMENT, payload: {} };
   if (action === 'interest_waived')
     return { type: CT.WAIVE_INTEREST, payload: { amount: d.amount } };
   if (action === 'account_closed')
@@ -1630,6 +1650,19 @@ function renderOverview() {
   var fill = document.getElementById('ov-health-fill');
   if (fill) fill.style.width = pct+'%';
   setText('ov-health-pct', pct+'% repaid');
+  // Loan summary
+  var outstanding = currentOutstanding();
+  var repaid = currentTotalRepaid();
+  var totalInt = Math.max(0, firstDefined(OPS.totalRepayable, OPS.emi * OPS.term, 0) - OPS.principal);
+  var last = OPS.schedule.length ? shortDate(OPS.schedule[OPS.schedule.length-1].dueDate) : '-';
+  var sumEl = document.getElementById('loan-summary');
+  if (sumEl) sumEl.innerHTML = [
+    ['Monthly EMI',fmt(OPS.emi)],['Principal',fmt(OPS.principal)],
+    ['APR',OPS.apr.toFixed(1)+'%'],['Term',OPS.term+' months'],
+    ['Paid',OPS.paidCount+' / '+OPS.term],['Outstanding',fmt(outstanding)],
+    ['Total repaid',fmt(repaid)],['Total interest',fmt(totalInt)],
+    ['First payment',shortDate(OPS.startDate)],['Final payment',last]
+  ].map(function(r){ return '<div class="kv"><span class="kv-k">'+r[0]+'</span><span class="kv-v">'+r[1]+'</span></div>'; }).join('');
   // Recent activity
   var hist = (OPS.account.history||[]).slice().reverse().slice(0,7);
   var el = document.getElementById('ov-activity');
@@ -1781,6 +1814,7 @@ function buildSchedTable() {
 function renderActions() {
   loadState();
   document.querySelectorAll('input[name="acct-status"]').forEach(function(r){ r.checked=(r.value===OPS.accountStatus); });
+  opsRenderPAState();
 }
 
 // ═══════════════════════════════════════════════════════
@@ -2040,7 +2074,44 @@ var opsPAMaxPA   = 0;
 var opsPAMinPA   = 0;
 var OPS_PA_STEPS = ['init','ineligible','reason','iae','credit','amount','review','applied'];
 
+function opsGetActivePA() {
+  if (!_store || !_store.getState) return null;
+  try {
+    var st = _store.getState();
+    if (!st) return null;
+    var loan = (Quido.accountStateResolver && Quido.accountStateResolver.getActiveLoan)
+      ? Quido.accountStateResolver.getActiveLoan(st)
+      : ((st.loans && st.loans[0]) || null);
+    var pa = loan && loan.arrangements && loan.arrangements.paymentArrangement;
+    return (pa && pa.active && !pa.broken) ? pa : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function opsRenderPAState() {
+  var activePanel = document.getElementById('ops-pa-active-panel');
+  var emptyPanel  = document.getElementById('ops-pa-empty-panel');
+  var summaryEl   = document.getElementById('ops-pa-active-summary');
+  var metaEl      = document.getElementById('ops-pa-active-meta');
+  if (!activePanel || !emptyPanel || !summaryEl || !metaEl) return;
+  var pa = opsGetActivePA();
+  if (!pa) {
+    activePanel.style.display = 'none';
+    emptyPanel.style.display = '';
+    return;
+  }
+  activePanel.style.display = '';
+  emptyPanel.style.display = 'none';
+  summaryEl.textContent = fmt(pa.amount || 0) + '/month for ' + (pa.months || 0) + ' month' + ((pa.months || 0) === 1 ? '' : 's');
+  metaEl.innerHTML =
+    '<div>Started: <strong>' + (pa.startDate ? shortDate(pa.startDate) : '-') + '</strong></div>'
+    + '<div>Final payment: <strong>' + (pa.endDate ? shortDate(pa.endDate) : '-') + '</strong></div>'
+    + '<div>Total arranged: <strong>' + fmt(pa.totalAmount || ((pa.amount || 0) * (pa.months || 0))) + '</strong></div>';
+}
+
 function opsShowPAStep(name) {
+  if (name === 'init') opsRenderPAState();
   for (var i = 0; i < OPS_PA_STEPS.length; i++) {
     var el = document.getElementById('ops-pa-step-' + OPS_PA_STEPS[i]);
     if (el) el.style.display = OPS_PA_STEPS[i] === name ? '' : 'none';
@@ -2050,6 +2121,11 @@ function opsShowPAStep(name) {
 function opsInitPAFlow() {
   opsPAReason = ''; opsPAIEData = null;
   loadState();
+  if (opsGetActivePA()) {
+    opsRenderPAState();
+    opsShowPAStep('init');
+    return;
+  }
   if (OPS.blockedActions && OPS.blockedActions.indexOf('apply_payment_arrangement') !== -1) {
     document.getElementById('ops-pa-ineligible-msg').textContent =
       OPS.actionReasons['apply_payment_arrangement'] || 'Payment arrangement is not available on this account.';
@@ -2253,6 +2329,19 @@ function opsApplyPA(amount, startDateStr) {
   opsShowPAStep('applied');
   toast('Payment arrangement applied: ' + fmt(amount) + '/month for ' + months + ' months', 'success');
 }
+
+function opsBreakPA() {
+  loadState();
+  if (!opsGetActivePA()) {
+    toast('No active payment arrangement to remove.', 'info');
+    opsRenderPAState();
+    return;
+  }
+  if (!window.confirm('Remove the active payment arrangement? The account will return to its original status.')) return;
+  syncToCustomer('break_payment_arrangement', {});
+  refreshOpsWorkspace();
+  toast('Payment arrangement removed. Account restored to its original status.', 'success');
+}
 function extendTerm() {
   var extra = parseInt(document.getElementById('ext-months').value);
   if (!extra || extra < 1 || extra > 24) { toast('Enter 1–24 additional months', 'error'); return; }
@@ -2413,16 +2502,7 @@ syncBus.subscribe(function(msg) {
   // Mark customer as live
   updateLiveStatus(true);
   // Reload state from store then refresh active section
-  loadState();
-  var active = document.querySelector('.section.active');
-  if (active) {
-    if (active.id==='sec-activity') filterActivity(OPS.activeFilter||'all');
-    if (active.id==='sec-overview') renderOverview();
-    if (active.id==='sec-customer') renderCustomer();
-    if (active.id==='sec-payment-details') renderPaymentDetails();
-    if (active.id==='sec-statement') renderStatement();
-    if (active.id==='sec-documents') renderDocuments();
-  }
+  refreshOpsWorkspace();
   if (msg.type === Quido.CommandTypes.UPDATE_PROFILE || msg.type === Quido.CommandTypes.UPDATE_EMPLOYMENT || msg.type === Quido.CommandTypes.UPDATE_AFFORDABILITY) {
     toast('Customer updated their profile','info');
   }
@@ -2440,11 +2520,37 @@ function updateLiveStatus(live) {
   clearTimeout(liveTimer);
   if (live) liveTimer = setTimeout(function(){ updateLiveStatus(false); }, 10000);
 }
+function refreshOpsWorkspace() {
+  loadState();
+  updateTopbar();
+  renderOverview();
+  renderCustomer();
+  renderLoan();
+  renderActions();
+  renderCollections();
+  renderForbearance();
+  renderPaymentDetails();
+  renderStatement();
+  renderDocuments();
+  var active = document.querySelector('.section.active');
+  if (active && active.id === 'sec-activity') filterActivity(OPS.activeFilter || 'all');
+}
 function updateTopbar() {
   var el = document.getElementById('tb-status');
-  var knownChips = ['active','arrears','default','terminated','settled','closed'];
+  var chipMap = {
+    active: 'active',
+    arrears: 'arrears',
+    default: 'default',
+    terminated: 'terminated',
+    settled: 'terminated',
+    closed: 'terminated',
+    payment_arrangement: 'payment-arrangement',
+    arrangement: 'payment-arrangement',
+    payment_holiday: 'payment-holiday',
+    holiday: 'payment-holiday'
+  };
   if (el) {
-    var chipKey = knownChips.indexOf(OPS.accountStatus) !== -1 ? OPS.accountStatus : 'arrears';
+    var chipKey = chipMap[OPS.accountStatus] || 'arrears';
     el.className = 'chip chip-' + chipKey;
   }
   var lbl = OPS.accountStatus.replace(/_/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
@@ -2477,11 +2583,11 @@ var ACTION_LABELS = {
   pay_date_change:'Pay date changed', loan_recalculated:'Loan recalculated', term_extended:'Term extended',
   payment_holiday_granted:'Payment holiday granted', manual_payment:'Manual payment recorded',
   interest_waived:'Interest waived', loan_restructure:'Loan restructured', profile_updated:'Profile updated (ops)',
-  account_closed:'Account closed', flagged_collections:'Flagged for collections', payment_arrangement:'Payment arrangement set',
+  account_closed:'Account closed', flagged_collections:'Flagged for collections', payment_arrangement:'Payment arrangement set', break_payment_arrangement:'Payment arrangement removed',
   // Canonical CommandTypes (from store.dispatch commands)
   CHANGE_ACCOUNT_STATUS:'Status changed', RECORD_PAYMENT:'Payment recorded',
   RECALCULATE_LOAN:'Loan recalculated', APPLY_PAYMENT_HOLIDAY:'Payment holiday granted',
-  APPLY_PAYMENT_ARRANGEMENT:'Payment arrangement set', CHANGE_PAY_DATE:'Pay date changed',
+  APPLY_PAYMENT_ARRANGEMENT:'Payment arrangement set', BREAK_PAYMENT_ARRANGEMENT:'Payment arrangement removed', CHANGE_PAY_DATE:'Pay date changed',
   EXTEND_TERM:'Term extended', WAIVE_INTEREST:'Interest waived',
   CLOSE_ACCOUNT:'Account closed', FLAG_COLLECTIONS:'Flagged for collections',
   REFUND_PAYMENT:'Payment refunded', payment_refunded:'Payment refunded',
@@ -2495,10 +2601,10 @@ var ACT_COLORS = {
   account_status_change:'#fee2e2',
   payment_recorded:'#dcfce7', manual_payment:'#dcfce7', pay_date_change:'#fef9c3',
   loan_recalculated:'#e0f2fe', term_extended:'#fef3c7', payment_holiday_granted:'#ede9fe',
-  interest_waived:'#fef3c7', account_closed:'#fee2e2', flagged_collections:'#fee2e2', payment_arrangement:'#fef3c7',
+  interest_waived:'#fef3c7', account_closed:'#fee2e2', flagged_collections:'#fee2e2', payment_arrangement:'#fef3c7', break_payment_arrangement:'#fee2e2',
   // Canonical CommandTypes
   CHANGE_ACCOUNT_STATUS:'#fee2e2', RECORD_PAYMENT:'#dcfce7', RECALCULATE_LOAN:'#e0f2fe',
-  APPLY_PAYMENT_HOLIDAY:'#ede9fe', APPLY_PAYMENT_ARRANGEMENT:'#fef3c7', CHANGE_PAY_DATE:'#fef9c3',
+  APPLY_PAYMENT_HOLIDAY:'#ede9fe', APPLY_PAYMENT_ARRANGEMENT:'#fef3c7', BREAK_PAYMENT_ARRANGEMENT:'#fee2e2', CHANGE_PAY_DATE:'#fef9c3',
   EXTEND_TERM:'#fef3c7', WAIVE_INTEREST:'#fef3c7', CLOSE_ACCOUNT:'#fee2e2',
   REFUND_PAYMENT:'#fee2e2', payment_refunded:'#fee2e2',
   FLAG_COLLECTIONS:'#fee2e2', ADD_OPS_NOTE:'#fef9c3', ADD_CONTACT_ATTEMPT:'#e0f2fe',
@@ -2875,25 +2981,7 @@ function selectCustomer(key) {
   // This replaces locally-assembled OPS.account with the server-authoritative projection.
   if (_store.subscribeResolved) {
     _store.subscribeResolved(function () {
-      loadState();
-      // Re-render whichever section is currently active with server-authoritative data
-      var active = document.querySelector('.section.active');
-      if (active) {
-        var _resolvedRenders = {
-          'sec-overview':         renderOverview,
-          'sec-customer':         renderCustomer,
-          'sec-loan':             renderLoan,
-          'sec-actions':          renderActions,
-          'sec-activity':         function(){ filterActivity(OPS.activeFilter||'all'); },
-          'sec-collections':      renderCollections,
-          'sec-forbearance':      renderForbearance,
-          'sec-payment-details':  renderPaymentDetails,
-          'sec-statement':        renderStatement,
-          'sec-documents':        renderDocuments
-        };
-        if (_resolvedRenders[active.id]) _resolvedRenders[active.id]();
-      }
-      updateTopbar();
+      refreshOpsWorkspace();
     });
   }
   // Update topbar
@@ -2947,10 +3035,8 @@ function selectCustomer(key) {
 window.addEventListener('storage', function(e) {
   if (!ACCT_KEY || e.key !== ACCT_KEY || !e.newValue) return;
   // Reload store state from updated localStorage, then refresh active section
-  if (_store) { _store.loadLegacy(ACCT_KEY); if (_store.refreshResolved) _store.refreshResolved(); loadState(); }
-  var active = document.querySelector('.section.active');
-  if (active && active.id === 'sec-overview') renderOverview();
-  if (active && active.id === 'sec-activity') filterActivity(OPS.activeFilter||'all');
+  if (_store) { _store.loadLegacy(ACCT_KEY); if (_store.refreshResolved) _store.refreshResolved(); }
+  refreshOpsWorkspace();
 });
 
 // ═══════════════════════════════════════════════════════

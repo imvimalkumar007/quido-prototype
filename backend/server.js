@@ -29,16 +29,37 @@ const accountService = new AccountService(store);
 
 // ── Express setup ───────────────────────────────────────────────────────────
 const app = express();
+const ROOT_DIR = path.join(__dirname, '..');
+const CUSTOMER_PORTAL = path.join(ROOT_DIR, 'quido_loans.html');
+const OPS_PORTAL = path.join(ROOT_DIR, 'quido_ops.html');
 
 app.use(corsMiddleware);
 app.use(express.json({ limit: '4mb' }));
 
-// Static: let frontends on file:// load shared JS files from backend
-app.use('/shared', express.static(path.join(__dirname, '..', 'shared')));
+// Static assets and shared browser-side code
+app.use('/shared', express.static(path.join(ROOT_DIR, 'shared')));
+app.use('/backend', express.static(path.join(ROOT_DIR, 'backend')));
 
 // API routes — inject service via app.locals
 app.locals.accountService = accountService;
 app.use('/api', apiRouter);
+
+// Public prototype routes
+app.get('/', function (req, res) {
+  res.sendFile(CUSTOMER_PORTAL);
+});
+
+app.get('/customer', function (req, res) {
+  res.sendFile(CUSTOMER_PORTAL);
+});
+
+app.get('/ops', function (req, res) {
+  res.sendFile(OPS_PORTAL);
+});
+
+app.get('/ops-ui', function (req, res) {
+  res.redirect(302, '/ops');
+});
 
 // Error handler (must be last)
 app.use(errorHandler);

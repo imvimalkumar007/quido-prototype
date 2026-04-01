@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: quido-prototype
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    disk:
+      name: quido-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_DIR
+        value: /var/data/accounts

@@ -60,6 +60,7 @@
     REFUND_PAYMENT:            'REFUND_PAYMENT',
     APPLY_PAYMENT_HOLIDAY:     'APPLY_PAYMENT_HOLIDAY',
     APPLY_PAYMENT_ARRANGEMENT: 'APPLY_PAYMENT_ARRANGEMENT',
+    BREAK_PAYMENT_ARRANGEMENT: 'BREAK_PAYMENT_ARRANGEMENT',
     CHANGE_ACCOUNT_STATUS:     'CHANGE_ACCOUNT_STATUS',
     CHANGE_PAY_DATE:           'CHANGE_PAY_DATE',
     EXTEND_TERM:               'EXTEND_TERM',
@@ -1253,6 +1254,24 @@
               // Tag upcoming rows as PA-covered so UIs can style them
               for (var _pai = paPaidIdx; _pai < paSnap.length && _pai < paPaidIdx + paMonths; _pai++) {
                 paSnap[_pai].pa = true;
+              }
+            }
+            persistAndBroadcast(type, actor);
+            break;
+
+          case CommandTypes.BREAK_PAYMENT_ARRANGEMENT:
+            if (loan) {
+              var arrsBreak = loan.arrangements || {};
+              var activePA = arrsBreak.paymentArrangement;
+              if (activePA && activePA.active) {
+                activePA.active = false;
+                activePA.broken = true;
+                activePA.brokenAt = nowIso();
+                var breakSnap = loan.scheduleSnapshot || [];
+                var breakPaidIdx = (loan.loanCore && loan.loanCore.paidCount) || 0;
+                for (var _bpi = breakPaidIdx; _bpi < breakSnap.length; _bpi++) {
+                  if (breakSnap[_bpi].pa) breakSnap[_bpi].pa = false;
+                }
               }
             }
             persistAndBroadcast(type, actor);

@@ -23,6 +23,8 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
 .si{display:flex;flex-direction:column;flex:1;overflow-y:hidden;overflow-x:visible}
 .scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:8px}
 .scroll::-webkit-scrollbar{display:none}
+.scroll.fullbleed-scroll{max-width:none !important;margin-left:0 !important;margin-right:0 !important;width:100%}
+.content-stack{max-width:600px;margin:0 auto;width:100%}
 .wb{background:var(--warn-bg);border-bottom:1px solid var(--warn-border);padding:7px 16px;font-size:10.5px;color:var(--warn-text);line-height:1.5;flex-shrink:0;text-align:center}
 .wb a{color:var(--blue);font-weight:500}
 .hdr{background:var(--surface);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
@@ -316,6 +318,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
   /* Centre scrollable content; nav (.hdr) and warning (.wb) remain full-width
      as they are flex siblings above .scroll inside .si */
   .scroll{max-width:600px;margin-left:auto;margin-right:auto;width:100%}
+  .content-stack{max-width:600px}
   /* Wider menu drawer */
   .mdrawer{width:380px}
   /* Chat panel */
@@ -324,6 +327,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
 }
 @media (min-width: 1024px) {
   .scroll{max-width:540px}
+  .content-stack{max-width:540px}
   .cpanel{right:32px;bottom:88px;width:380px;height:460px}
   .cfab{right:32px;bottom:24px}
 }
@@ -442,9 +446,10 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
         </div>
         <div class="hdr-actions"><div class="mbtn m-open" id="menu-open"><span></span><span></span><span></span></div></div>
       </div>
-      <div class="scroll">
+      <div class="scroll fullbleed-scroll">
+        <div class="content-stack">
         <div class="hero">
-          <div class="hm"><div class="hmi"><span>Loan ID: </span><strong id="home-loan-id">28796</strong></div><div class="sp"><div class="sd"></div>Active</div></div>
+          <div class="hm"><div class="hmi"><span>Loan ID: </span><strong id="home-loan-id">28796</strong></div><div class="sp"><div class="sd"></div><span id="home-status-label">Active</span></div></div>
           <div class="hl">Current Outstanding Balance</div>
           <div class="ha" id="dash-balance">£0.00</div>
           <div class="dr">
@@ -482,6 +487,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
         <button class="stab bl"><div class="si-ic"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4a1 1 0 011-1h2.5l1.2 3.5-1.8 1.8a10 10 0 005.3 5.3l1.8-1.8L17 14v2.5a1 1 0 01-1 1C8.2 17.5 2 11.8 4 4z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="st"><div class="sl">Call Us (Mon–Fri)</div><div class="ss">0800 123 4567 · 9:00–17:00</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button class="stab bl"><div class="si-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 4a1 1 0 011-1h10a1 1 0 011 1v7a1 1 0 01-1 1H5l-3 2.5V4z" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg></div><div class="st"><div class="sl">Write to us</div><div class="ss">info@quido.co.uk</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button class="stab bl" style="margin-bottom:16px"><div class="si-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#fff" stroke-width="1.4"/><path d="M9 5.5v4M9 11.5v.5" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="st"><div class="sl">Make a complaint</div><div class="ss">complaints@quido.co.uk</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
         <div class="ft">
           <div class="ft-inner">
           <div class="ft-top">
@@ -537,7 +543,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       </div>
       <div class="scroll" style="flex:1;overflow-y:auto">
         <div class="hero">
-          <div class="hm"><div class="hmi"><span>Loan ID: </span><strong id="opts-loan-id">28796</strong></div><div class="sp"><div class="sd"></div>Active</div></div>
+          <div class="hm"><div class="hmi"><span>Loan ID: </span><strong id="opts-loan-id">28796</strong></div><div class="sp"><div class="sd"></div><span id="opts-status-label">Active</span></div></div>
           <div class="hl">Current Outstanding Balance</div>
           <div class="ha" id="opts-balance">£0.00</div>
           <div class="dr"><div class="db"><div class="dbl">Next Due Amount</div><div class="dbv" id="opts-emi">£0.00</div></div><div class="db"><div class="dbl">Next Due Date</div><div class="dbv" id="opts-due-date">-</div></div></div>
@@ -1040,6 +1046,21 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     }
     return null;
   }
+  function currentStatusLabel() {
+    var se = LOAN.statusEngineState || {};
+    var status = se.resolvedDisplayStatus || se.displayStatus || se.coreStatus || LOAN.accountStatus || 'active';
+    var labels = {
+      arrangement: 'Payment arrangement',
+      holiday: 'Payment holiday',
+      payment_arrangement: 'Payment arrangement',
+      payment_holiday: 'Payment holiday',
+      formal_forbearance: 'Forbearance',
+      pre_collection: 'Pre-collection',
+      'pre-collection': 'Pre-collection'
+    };
+    if (labels[status]) return labels[status];
+    return status.charAt(0).toUpperCase() + status.slice(1).replace(/_/g, ' ');
+  }
 
   // ═══════════════════════════════════════════════
   // UPDATE ALL UI FROM ENGINE
@@ -1067,11 +1088,13 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     setText('dash-emi',      next ? LOAN.fmt(instalmentDueAmount(next)) : 'Not scheduled');
     setText('dash-due-date', next ? LOAN.shortDate(next.dueDate) : 'Fully repaid');
     setText('emi-badge', LOAN.schedule.length + ' instalments');
+    setText('home-status-label', currentStatusLabel());
 
     // ── Options hero
     setText('opts-balance',  LOAN.fmt(bal));
     setText('opts-emi',      next ? LOAN.fmt(instalmentDueAmount(next)) : 'Not scheduled');
     setText('opts-due-date', next ? LOAN.shortDate(next.dueDate) : 'Fully repaid');
+    setText('opts-status-label', currentStatusLabel());
 
     // ── Pay next/full sub-labels
     if (next) {
@@ -2421,7 +2444,26 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     ];
     screens.forEach(function(s) {
       var sc = document.querySelector('#' + s.id + ' .scroll');
-      if (sc) sc.insertAdjacentHTML('beforeend', s.html);
+      if (!sc) return;
+      sc.classList.add('fullbleed-scroll');
+      sc.insertAdjacentHTML('beforeend', s.html);
+      var footer = null;
+      for (var i = sc.children.length - 1; i >= 0; i--) {
+        if (sc.children[i].classList && sc.children[i].classList.contains('ft')) {
+          footer = sc.children[i];
+          break;
+        }
+      }
+      if (!footer) return;
+      var stack = document.createElement('div');
+      stack.className = 'content-stack';
+      sc.insertBefore(stack, footer);
+      var node = sc.firstChild;
+      while (node && node !== footer) {
+        var next = node.nextSibling;
+        if (node !== stack) stack.appendChild(node);
+        node = next;
+      }
     });
   })();
 
@@ -2436,7 +2478,11 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
   // Set USE_API = true to enable write-through sync to the backend.
   // The backend must be running: cd backend && node server.js
   var USE_API  = true;
-  var API_BASE = 'http://localhost:3001/api';
+  var API_BASE = (function () {
+    var origin = (window.location && window.location.origin) || '';
+    if (origin && origin.indexOf('http') === 0) return origin + '/api';
+    return 'http://localhost:3001/api';
+  })();
 
   // ═══════════════════════════════════════════════
   // CUSTOMER REGISTRY - 5 demo accounts (credentials + seed data)
@@ -2626,7 +2672,8 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       LOAN.termMonths    = core.termMonths;
       LOAN.startDate     = new Date(core.startDate);
       LOAN.paidCount     = core.paidCount;
-      LOAN.accountStatus = al.status.coreStatus || 'active';
+      LOAN.accountStatus = (al.status && (al.status.resolvedDisplayStatus || al.status.displayStatus || al.status.coreStatus)) || 'active';
+      LOAN.statusEngineState = al.status || {};
       LOAN.emi           = al.emi || 0;
       LOAN.outstandingBalance = al.summary ? al.summary.outstandingBalance : 0;
       LOAN.totalRepaid        = al.summary ? al.summary.totalRepaid : 0;
@@ -2667,7 +2714,8 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     if (lc.termMonths !== undefined) LOAN.termMonths    = lc.termMonths;
     if (lc.startDate)                LOAN.startDate     = new Date(lc.startDate);
     if (lc.paidCount  !== undefined) LOAN.paidCount     = lc.paidCount;
-    LOAN.accountStatus = (se && se.coreStatus) || 'active';
+    LOAN.accountStatus = (se && (se.resolvedDisplayStatus || se.displayStatus || se.coreStatus)) || 'active';
+    LOAN.statusEngineState = se || {};
     LOAN.outstandingBalance = (loan.loanSummary && loan.loanSummary.outstandingBalance !== undefined)
       ? loan.loanSummary.outstandingBalance
       : null;
@@ -2752,14 +2800,18 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       applyLoanOverrides();
       updateAllUI();
       showOpsNotice('Your account status has been updated by Quido');
-    } else if (type === CT.RECORD_PAYMENT || type === CT.SET_PAID_COUNT || type === CT.REFUND_PAYMENT || type === CT.RECALCULATE_LOAN || type === CT.APPLY_PAYMENT_HOLIDAY || type === CT.APPLY_PAYMENT_ARRANGEMENT || type === CT.CHANGE_PAY_DATE || type === CT.EXTEND_TERM || type === CT.WAIVE_INTEREST) {
+    } else if (type === CT.RECORD_PAYMENT || type === CT.SET_PAID_COUNT || type === CT.REFUND_PAYMENT || type === CT.RECALCULATE_LOAN || type === CT.APPLY_PAYMENT_HOLIDAY || type === CT.APPLY_PAYMENT_ARRANGEMENT || type === CT.BREAK_PAYMENT_ARRANGEMENT || type === CT.CHANGE_PAY_DATE || type === CT.EXTEND_TERM || type === CT.WAIVE_INTEREST) {
       applyLoanOverrides();
       calcLoan();
+      renderPaymentDetails();
+      renderIE();
+      renderProfile();
       updateAllUI();
       if (type === CT.RECORD_PAYMENT)            showOpsNotice('A payment has been recorded on your account by Quido');
       else if (type === CT.SET_PAID_COUNT)       showOpsNotice('Your repayment schedule has been updated by Quido');
       else if (type === CT.REFUND_PAYMENT)       showOpsNotice('A payment has been refunded on your account by Quido');
       else if (type === CT.APPLY_PAYMENT_HOLIDAY) showOpsNotice('A payment holiday has been applied to your account');
+      else if (type === CT.BREAK_PAYMENT_ARRANGEMENT) showOpsNotice('Your payment arrangement has been removed and your account has returned to its original status');
       else if (type === CT.EXTEND_TERM)           showOpsNotice('Your loan term has been extended. New monthly payment: \u00a3' + LOAN.emi.toFixed(2));
       else if (type === CT.CHANGE_PAY_DATE)       showOpsNotice('Your monthly payment date has been updated');
       else if (type === CT.APPLY_PAYMENT_ARRANGEMENT) showOpsNotice('A payment arrangement has been set up on your account');
@@ -2912,7 +2964,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
   function refreshCustomerIdentity() {
     var c = getAccountContext(); if (!c) return;
     function setText2(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; }
-    var statusLabel = LOAN.accountStatus ? LOAN.accountStatus.charAt(0).toUpperCase()+LOAN.accountStatus.slice(1) : 'Active';
+    var statusLabel = currentStatusLabel();
     var loanRef = c.loanId ? ('Loan #' + c.loanId) : 'Loan';
     setText2('cust-menu-name', c.fullName);
     setText2('cust-menu-loan', loanRef + ' \u00b7 ' + statusLabel);
