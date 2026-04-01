@@ -15,6 +15,9 @@
  */
 'use strict';
 
+const { buildSchedule } = require('./loan-engine');
+const { runStatusEngine } = require('./status-engine');
+
 function nowIso() { return new Date().toISOString(); }
 
 function toNumber(v) {
@@ -25,6 +28,72 @@ function mergeObj(target, src) {
   if (!src || typeof src !== 'object') return target;
   Object.keys(src).forEach(function (k) { target[k] = src[k]; });
   return target;
+}
+
+function hydrateLoanFromCore(loan) {
+  if (!loan || !loan.loanCore) return loan;
+  var lc = loan.loanCore || {};
+  if (!lc.principal || !lc.termMonths || !lc.startDate) return loan;
+  var built = buildSchedule(
+    lc.principal || 0,
+    lc.apr || 0,
+    lc.termMonths || 0,
+    lc.startDate,
+    lc.paidCount || 0
+  );
+  loan.scheduleSnapshot = built.schedule.map(function (row) {
+    return {
+      n: row.n,
+      dueDate: row.dueDate,
+      emi: row.emi,
+      principal: row.principal,
+      interest: row.interest,
+      balance: row.balance,
+      status: row.status,
+      ph: !!row.ph,
+      pa: !!row.pa,
+      interestPaid: row.status === 'paid' ? row.interest : 0,
+      principalPaid: row.status === 'paid' ? row.principal : 0
+    };
+  });
+  loan.loanSummary = {
+    emi: built.summary.emi,
+    totalRepayable: built.summary.totalRepayable,
+    totalInterest: built.summary.totalInterest,
+    outstandingBalance: built.summary.outstandingBalance,
+    totalRepaid: built.summary.totalRepaid,
+    totalInterestPaid: loan.scheduleSnapshot
+      .filter(function (row) { return row.status === 'paid'; })
+      .reduce(function (acc, row) { return acc + (row.interestPaid || 0); }, 0),
+    totalPrincipalPaid: loan.scheduleSnapshot
+      .filter(function (row) { return row.status === 'paid'; })
+      .reduce(function (acc, row) { return acc + (row.principalPaid || 0); }, 0),
+    instalmentsRemaining: built.summary.instalmentsRemaining
+  };
+  try {
+    runStatusEngine(loan, new Date());
+  } catch (e) {}
+  return loan;
+}
+
+function repairV3Account(account) {
+  if (!account || !Array.isArray(account.loans)) return account;
+  for (var i = 0; i < account.loans.length; i++) {
+    var loan = account.loans[i];
+    var lc = loan && loan.loanCore || {};
+    if (!loan) continue;
+    var missingSchedule = !loan.scheduleSnapshot || !loan.scheduleSnapshot.length;
+    var missingSummary = !loan.loanSummary || !loan.loanSummary.emi;
+    if (missingSchedule || missingSummary) {
+      hydrateLoanFromCore(loan);
+      if (!loan.originatedAt) loan.originatedAt = lc.startDate || nowIso();
+      if (loan.closedAt && loan.loanSummary && loan.loanSummary.outstandingBalance > 0.01) {
+        loan.closedAt = null;
+        loan.closureReason = null;
+      }
+    }
+  }
+  return account;
 }
 
 // ── Empty schema factories ────────────────────────────────────────────────
@@ -273,7 +342,7 @@ function createAccountFromSeed(seed) {
 
   var loanId = seed.loanId || 'loan-1';
   var loan   = createEmptyLoan(loanId);
-  loan.originatedAt = now;
+  loan.originatedAt = sl.startDate || now;
   loan.loanCore     = {
     principal:  sl.principal  || 0,
     apr:        sl.apr        || 0,
@@ -281,8 +350,21 @@ function createAccountFromSeed(seed) {
     startDate:  sl.startDate  || '',
     paidCount:  sl.paidCount  || 0
   };
-  loan.statusEngineState.coreStatus    = sl.accountStatus || 'active';
-  loan.statusEngineState.displayStatus = sl.accountStatus || 'active';
+  hydrateLoanFromCore(loan);
+  if (sl.accountStatus && loan.statusEngineState) {
+    if (loan.statusEngineState.baseStatus === 'active' || !loan.statusEngineState.baseStatus) {
+      loan.statusEngineState.baseStatus = sl.accountStatus;
+    }
+    if (loan.statusEngineState.coreStatus === 'active' || !loan.statusEngineState.coreStatus) {
+      loan.statusEngineState.coreStatus = sl.accountStatus;
+    }
+    if (loan.statusEngineState.displayStatus) {
+      loan.statusEngineState.displayStatus = sl.accountStatus;
+    }
+    if (loan.statusEngineState.resolvedDisplayStatus === 'active' || !loan.statusEngineState.resolvedDisplayStatus) {
+      loan.statusEngineState.resolvedDisplayStatus = sl.accountStatus;
+    }
+  }
 
   account.loans        = [loan];
   account.activeLoanId = loanId;
@@ -305,7 +387,7 @@ function normalizeAccount(raw, seed) {
   if (raw.schemaVersion === 3 || Array.isArray(raw.loans)) {
     var v3 = createEmptyCustomerAccount();
     mergeObj(v3, raw);
-    return v3;
+    return repairV3Account(v3);
   }
 
   // v2: identity + loan.contract

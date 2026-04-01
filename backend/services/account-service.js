@@ -496,6 +496,13 @@ AccountService.prototype.getSchedule = function (storageKey, loanId) {
 AccountService.prototype.syncAccount = function (storageKey, clientAccount, seed) {
   var backendAccount = this.store.findByKey(storageKey);
 
+  if (backendAccount) {
+    var repairedBackend = normalizeAccount(backendAccount, seed);
+    repairedBackend.storageKey = storageKey;
+    backendAccount = repairedBackend;
+    this.store.save(repairedBackend);
+  }
+
   // Case 1: backend has nothing
   if (!backendAccount) {
     if (clientAccount && clientAccount.storageKey) {
