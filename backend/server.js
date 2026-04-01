@@ -19,6 +19,7 @@ const AccountService = require('./services/account-service');
 
 const PORT   = process.env.PORT   || 3001;
 const DB_DIR = process.env.DB_DIR || path.join(__dirname, 'db', 'accounts');
+const PUBLIC_DIR = path.join(__dirname, 'public');
 
 // ── Bootstrap dependencies ──────────────────────────────────────────────────
 // FileDomainStore implements all domain repository interfaces over JSON files.
@@ -29,16 +30,15 @@ const accountService = new AccountService(store);
 
 // ── Express setup ───────────────────────────────────────────────────────────
 const app = express();
-const ROOT_DIR = path.join(__dirname, '..');
-const CUSTOMER_PORTAL = path.join(ROOT_DIR, 'quido_loans.html');
-const OPS_PORTAL = path.join(ROOT_DIR, 'quido_ops.html');
+const CUSTOMER_PORTAL = path.join(PUBLIC_DIR, 'customer.html');
+const OPS_PORTAL = path.join(PUBLIC_DIR, 'ops.html');
 
 app.use(corsMiddleware);
 app.use(express.json({ limit: '4mb' }));
 
 // Static assets and shared browser-side code
-app.use('/shared', express.static(path.join(ROOT_DIR, 'shared')));
-app.use('/backend', express.static(path.join(ROOT_DIR, 'backend')));
+app.use('/shared', express.static(path.join(PUBLIC_DIR, 'shared')));
+app.use('/assets', express.static(PUBLIC_DIR));
 
 // API routes — inject service via app.locals
 app.locals.accountService = accountService;
@@ -46,14 +46,17 @@ app.use('/api', apiRouter);
 
 // Public prototype routes
 app.get('/', function (req, res) {
+  res.set('Cache-Control', 'no-store');
   res.sendFile(CUSTOMER_PORTAL);
 });
 
 app.get('/customer', function (req, res) {
+  res.set('Cache-Control', 'no-store');
   res.sendFile(CUSTOMER_PORTAL);
 });
 
 app.get('/ops', function (req, res) {
+  res.set('Cache-Control', 'no-store');
   res.sendFile(OPS_PORTAL);
 });
 

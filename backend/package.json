@@ -4,8 +4,10 @@
   "description": "Quido canonical account API — Priority 1 persistence layer",
   "main": "server.js",
   "scripts": {
+    "postinstall": "node scripts/prepare-public.js",
+    "prestart": "node scripts/prepare-public.js",
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node scripts/prepare-public.js && node server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
