@@ -25,10 +25,20 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
 .scroll::-webkit-scrollbar{display:none}
 .wb{background:var(--warn-bg);border-bottom:1px solid var(--warn-border);padding:7px 16px;font-size:10.5px;color:var(--warn-text);line-height:1.5;flex-shrink:0;text-align:center}
 .wb a{color:var(--blue);font-weight:500}
-.hdr{background:var(--surface);padding:4px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
-.logo{display:flex;align-items:center;gap:9px}
-.lm{width:36px;height:36px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:10px;display:flex;align-items:center;justify-content:center}
-.lt{font-size:19px;font-weight:800;color:var(--blue);letter-spacing:-.3px}
+.hdr{background:var(--surface);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
+.hdr-left,.hdr-actions{display:flex;align-items:center}
+.hdr-left{gap:10px}
+.hdr-actions{gap:8px}
+.brand-link{display:inline-flex;align-items:center;gap:10px;background:none;border:none;padding:0;cursor:pointer;text-align:left}
+.brand-lockup{display:flex;align-items:center;gap:10px}
+.brand-mark{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:linear-gradient(145deg,#1d4ed8 0%,#0f3aa0 65%,#0a214f 100%);box-shadow:0 8px 22px rgba(26,86,219,.24);position:relative;overflow:hidden}
+.brand-mark::after{content:'';position:absolute;inset:auto -8px -12px auto;width:24px;height:24px;border-radius:999px;background:linear-gradient(135deg,#34d399,#059669);opacity:.92}
+.brand-mark svg{position:relative;z-index:1}
+.brand-mark .q-tail{stroke:#c9f7df}
+.brand-mark .q-ring{stroke:#fff}
+.brand-word{display:flex;flex-direction:column;gap:1px}
+.brand-name{font-size:18px;font-weight:800;color:var(--blue);letter-spacing:-.4px;line-height:1}
+.brand-tag{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;line-height:1.2}
 .mbtn{width:36px;height:36px;background:var(--bg);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;border:1px solid var(--border)}
 .mbtn span{width:16px;height:1.8px;background:var(--muted);border-radius:2px;display:block}
 .mbtn-w{width:32px;height:32px;background:rgba(255,255,255,0.15);border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;border:1px solid rgba(255,255,255,0.25)}
@@ -47,9 +57,18 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
 .db{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r);padding:12px 14px}
 .dbl{font-size:10px;color:rgba(255,255,255,0.6);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
 .dbv{font-size:17px;font-weight:700;color:#fff}
-.cta{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 20px;flex-shrink:0}
+.cta{display:flex;align-items:center;gap:12px;padding:16px 20px;flex-shrink:0}
 .bp{background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;border:none;border-radius:var(--r-lg);padding:14px 10px;font-size:14px;font-weight:700;cursor:pointer;width:100%}
-.bo{background:var(--surface);color:var(--blue);border:1.5px solid var(--blue);border-radius:var(--r-lg);padding:13px 10px;font-size:14px;font-weight:700;cursor:pointer;width:100%}
+.cta-main{flex:1}
+.bo-wrap{position:relative;flex-shrink:0}
+.bo-dot{width:52px;height:52px;border-radius:50%;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(15,24,40,.08);cursor:pointer}
+.bo-dot span{width:5px;height:5px;border-radius:50%;background:var(--blue);display:block;box-shadow:0 -9px 0 var(--blue),0 9px 0 var(--blue)}
+.bo-menu{position:absolute;top:62px;right:0;width:230px;background:rgba(255,255,255,.96);backdrop-filter:blur(18px);border:1px solid rgba(226,232,245,.95);border-radius:18px;box-shadow:0 18px 40px rgba(15,24,40,.14);padding:10px;display:none;z-index:30}
+.bo-menu.open{display:block}
+.bo-menu-item{width:100%;border:none;background:none;border-radius:12px;padding:12px 12px;text-align:left;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;cursor:pointer}
+.bo-menu-item:hover{background:#f4f8ff}
+.bo-menu-title{font-size:12.5px;font-weight:700;color:var(--text)}
+.bo-menu-sub{font-size:10.5px;color:var(--muted);margin-top:2px;line-height:1.45}
 .card{background:var(--surface);margin:0 16px 12px;border-radius:var(--r-lg);box-shadow:0 1px 4px rgba(15,24,40,0.06),0 4px 16px rgba(15,24,40,0.04);overflow:hidden}
 .ch{padding:14px 16px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .ct{font-size:14px;font-weight:700;color:var(--text)}
@@ -237,14 +256,17 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
 .dtbl td{padding:7px 10px;border:1px solid var(--border)}
 .dtbl td:first-child{color:var(--muted);width:50%}
 .dtbl td:last-child{font-weight:600;color:var(--text)}
-.ft{background:var(--surface);padding:20px 0 16px;margin:0 16px 16px;border-radius:var(--r-lg);overflow:hidden}
-.ftg{font-size:16px;font-weight:800;color:var(--blue);text-align:center;margin-bottom:28px;line-height:1.3;padding:8px 20px 0}
-.fgrid{width:100%;border-collapse:collapse;margin-bottom:16px}
-.fgrid td{font-size:11px;padding:3px 0;vertical-align:top;width:50%}
-.fgrid td:first-child{padding-right:16px}
-.fgrid td:last-child{padding-left:16px}
-.fgrid td a{color:var(--blue);text-decoration:none;display:block}
-.fleg{font-size:9.5px;color:var(--dim);line-height:1.6;border-top:1px solid var(--border);padding:14px 20px 20px}
+.ft{background:linear-gradient(155deg,#0f1830 0%,#122447 58%,#143c7a 100%);padding:22px 20px 18px;margin:0 auto 20px;width:min(calc(100% - clamp(20px,6vw,48px)),960px);border-radius:24px;overflow:hidden;position:relative;color:#fff;box-shadow:0 18px 42px rgba(15,24,40,.18)}
+.ft::before{content:'';position:absolute;top:-60px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.06)}
+.ft::after{content:'';position:absolute;bottom:-70px;left:-50px;width:180px;height:180px;border-radius:50%;background:rgba(52,211,153,.12)}
+.ft-top{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:20px;align-items:start}
+.ft-brand{max-width:360px}
+.ft-copy{font-size:11px;color:rgba(255,255,255,.72);line-height:1.65;margin-top:12px}
+.ftg{font-size:23px;font-weight:800;color:#fff;line-height:1.08;letter-spacing:-.8px}
+.ft-links{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;align-content:start}
+.ft-links a{font-size:11.5px;color:rgba(255,255,255,.88);text-decoration:none;padding:4px 0;display:block}
+.ft-links a:hover{color:#fff}
+.fleg{position:relative;font-size:9.8px;color:rgba(255,255,255,.68);line-height:1.65;border-top:1px solid rgba(255,255,255,.12);padding-top:16px;margin-top:18px}
 .cfab{position:fixed;bottom:20px;right:20px;width:50px;height:50px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:50;border:none}
 .cnb{position:absolute;top:-2px;right:-2px;width:18px;height:18px;background:#ef4444;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff}
 .cpanel{position:fixed;bottom:80px;right:12px;width:320px;background:var(--surface);border-radius:var(--r-xl);box-shadow:0 12px 40px rgba(0,0,0,0.18);z-index:49;overflow:hidden;display:none;flex-direction:column;height:420px}
@@ -304,6 +326,17 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
   .cpanel{right:32px;bottom:88px;width:380px;height:460px}
   .cfab{right:32px;bottom:24px}
 }
+@media (max-width: 480px) {
+  .hdr{padding:10px 14px}
+  .brand-mark{width:34px;height:34px;border-radius:11px}
+  .brand-name{font-size:17px}
+  .brand-tag{font-size:9px}
+  .cta{padding:14px 16px}
+  .bo-menu{right:-6px;width:min(240px,calc(100vw - 32px))}
+  .ft{width:min(calc(100% - 16px),960px);margin:0 auto 18px;padding:18px 16px 16px}
+  .ft-top{grid-template-columns:1fr;gap:18px}
+  .ft-links{grid-template-columns:1fr 1fr;gap:6px 16px}
+}
 </style>
 </head>
 <body>
@@ -354,8 +387,8 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     <div class="si" style="background:linear-gradient(180deg,#eef2fa 0%,#dde5f4 100%);justify-content:center">
       <div class="scroll" style="padding:40px 20px 36px;display:flex;flex-direction:column;align-items:center">
         <div style="text-align:center;margin-bottom:32px">
-          <div style="width:68px;height:68px;background:linear-gradient(135deg,#1a56db,#0d3b9e);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 8px 28px rgba(26,86,219,.35)">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6.5v11L12 22l8-4.5v-11L12 2z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 2v20M4 6.5l8 4.5 8-4.5" stroke="rgba(255,255,255,.45)" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          <div class="brand-mark" style="width:68px;height:68px;border-radius:20px;margin:0 auto 16px;box-shadow:0 8px 28px rgba(26,86,219,.35)">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle class="q-ring" cx="11" cy="11" r="5.5" stroke-width="2.6"/><path class="q-tail" d="M14.9 15.1 18.7 19" stroke-width="2.6" stroke-linecap="round"/><path class="q-tail" d="M15.7 6.8c.9 1 1.4 2.5 1.4 4.2" stroke-width="2.2" stroke-linecap="round"/></svg>
           </div>
           <div style="font-size:28px;font-weight:800;color:#1a56db;letter-spacing:-.5px">Quido</div>
           <div style="font-size:13px;color:#64748b;margin-top:5px">Sign in to manage your loan</div>
@@ -395,7 +428,19 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
   <div id="s-home" class="screen">
     <div class="si">
       <div class="wb">⚠ Warning: Late repayments can cause serious money problems. For help, visit <a href="#">moneyhelper.org.uk</a>. You can compare our loans at <a href="#">All the Lenders</a>.</div>
-      <div class="hdr"><div class="logo"><div class="lm"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4.5 4.5 7.5-9" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="lt">Quido</span></div><div class="mbtn m-open" id="menu-open"><span></span><span></span><span></span></div></div>
+      <div class="hdr">
+        <div class="hdr-left">
+          <button class="brand-link" type="button" data-goto="s-home" aria-label="Go to homepage">
+            <span class="brand-lockup">
+              <span class="brand-mark">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle class="q-ring" cx="11" cy="11" r="5.5" stroke-width="2.6"/><path class="q-tail" d="M14.9 15.1 18.7 19" stroke-width="2.6" stroke-linecap="round"/><path class="q-tail" d="M15.7 6.8c.9 1 1.4 2.5 1.4 4.2" stroke-width="2.2" stroke-linecap="round"/></svg>
+              </span>
+              <span class="brand-word"><span class="brand-name">Quido</span><span class="brand-tag">Customer Hub</span></span>
+            </span>
+          </button>
+        </div>
+        <div class="hdr-actions"><div class="mbtn m-open" id="menu-open"><span></span><span></span><span></span></div></div>
+      </div>
       <div class="scroll">
         <div class="hero">
           <div class="hm"><div class="hmi"><span>Loan ID: </span><strong id="home-loan-id">28796</strong></div><div class="sp"><div class="sd"></div>Active</div></div>
@@ -406,13 +451,65 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
             <div class="db"><div class="dbl">Next Due Date</div><div class="dbv" id="dash-due-date">-</div></div>
           </div>
         </div>
-        <div class="cta"><button class="bp" data-goto="s-pay-method">Pay Now</button><button class="bo" data-goto="s-options">Other Options</button></div>
+        <div class="cta">
+          <button class="bp cta-main" data-goto="s-pay-method">Pay Now</button>
+          <div class="bo-wrap">
+            <button class="bo-dot" id="home-more-btn" type="button" aria-label="More options" aria-expanded="false" aria-controls="home-more-menu"><span></span></button>
+            <div class="bo-menu" id="home-more-menu">
+              <button class="bo-menu-item" type="button" data-support-target="ph">
+                <span><span class="bo-menu-title">Payment holiday</span><span class="bo-menu-sub">Pause your next payment and review the impact</span></span>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="bo-menu-item" type="button" data-support-target="pa">
+                <span><span class="bo-menu-title">Payment arrangement</span><span class="bo-menu-sub">Set up a more manageable repayment plan</span></span>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="bo-menu-item" type="button" data-support-target="eds">
+                <span><span class="bo-menu-title">Existing debt solution</span><span class="bo-menu-sub">Tell us if you already have support in place</span></span>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="bo-menu-item" type="button" data-support-target="dh">
+                <span><span class="bo-menu-title">Free debt advice</span><span class="bo-menu-sub">See independent organisations that can help</span></span>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="card"><div class="ch"><span class="ct">Loan Summary</span><span class="cb" id="emi-badge">- instalments</span></div><div id="emi-list"></div></div>
         <button class="stab bl" data-goto="s-faq"><div class="si-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#fff" stroke-width="1.5"/><path d="M9 6.5a1.5 1.5 0 011 2.6c-.5.5-.8.9-.8 1.3v.4M9 12v.5" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="st"><div class="sl">Frequently Asked Questions</div><div class="ss">Find answers to common queries</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button class="stab bl"><div class="si-ic"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4a1 1 0 011-1h2.5l1.2 3.5-1.8 1.8a10 10 0 005.3 5.3l1.8-1.8L17 14v2.5a1 1 0 01-1 1C8.2 17.5 2 11.8 4 4z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="st"><div class="sl">Call Us (Mon–Fri)</div><div class="ss">0800 123 4567 · 9:00–17:00</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button class="stab bl"><div class="si-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 4a1 1 0 011-1h10a1 1 0 011 1v7a1 1 0 01-1 1H5l-3 2.5V4z" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg></div><div class="st"><div class="sl">Write to us</div><div class="ss">info@quido.co.uk</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button class="stab bl" style="margin-bottom:16px"><div class="si-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#fff" stroke-width="1.4"/><path d="M9 5.5v4M9 11.5v.5" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="st"><div class="sl">Make a complaint</div><div class="ss">complaints@quido.co.uk</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <div class="ft"><div class="ftg">Flexible loans.<br>Straightforward repayments.</div><div style="padding:0 20px"><table class="fgrid"><tr><td><a href="#">Loan</a></td><td><a href="#">About Us</a></td></tr><tr><td><a href="#">FAQs</a></td><td><a href="#">Careers</a></td></tr><tr><td><a href="#">Beware of Loan Sharks</a></td><td><a href="#">Terms of Use</a></td></tr><tr><td><a href="#">Contact Us</a></td><td><a href="#">Privacy Policy</a></td></tr><tr><td><a href="#">File a Complaint</a></td><td><a href="#">Fraud Disclaimer</a></td></tr><tr><td><a href="#">Insights</a></td><td><a href="#">Cookies Policy</a></td></tr></table></div><div class="fleg">We are a lender and may pay commissions to credit brokers or other intermediaries. This commission does not affect the total cost of your loan.<br><br><strong>Responsible Lending:</strong> Take a moment to decide if Quido is right for you. Short term loans are an expensive form of borrowing.<br><br>Quido Ltd. Authorised and Regulated by the Financial Conduct Authority. Registration Number 900001.</div></div>
+        <div class="ft">
+          <div class="ft-top">
+            <div class="ft-brand">
+              <button class="brand-link" type="button" data-goto="s-home" aria-label="Go to homepage">
+                <span class="brand-lockup">
+                  <span class="brand-mark">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle class="q-ring" cx="11" cy="11" r="5.5" stroke-width="2.6"/><path class="q-tail" d="M14.9 15.1 18.7 19" stroke-width="2.6" stroke-linecap="round"/><path class="q-tail" d="M15.7 6.8c.9 1 1.4 2.5 1.4 4.2" stroke-width="2.2" stroke-linecap="round"/></svg>
+                  </span>
+                  <span class="brand-word"><span class="brand-name" style="color:#fff">Quido</span><span class="brand-tag" style="color:rgba(255,255,255,.62)">Your loan, clearly laid out</span></span>
+                </span>
+              </button>
+              <div class="ft-copy">View your balance, make a payment, download documents, and contact Quido support from your secure online account.</div>
+            </div>
+            <div class="ft-links">
+              <a href="#">Loan</a>
+              <a href="#">About Us</a>
+              <a href="#">FAQs</a>
+              <a href="#">Careers</a>
+              <a href="#">Beware of Loan Sharks</a>
+              <a href="#">Terms of Use</a>
+              <a href="#">Contact Us</a>
+              <a href="#">Privacy Policy</a>
+              <a href="#">File a Complaint</a>
+              <a href="#">Fraud Disclaimer</a>
+              <a href="#">Insights</a>
+              <a href="#">Cookies Policy</a>
+            </div>
+          </div>
+          <div class="fleg">We are a lender and may pay commissions to credit brokers or other intermediaries. This commission does not affect the total cost of your loan.<br><br><strong>Responsible lending:</strong> Take a moment to decide if Quido is right for you. Short term loans are an expensive form of borrowing.<br><br>Quido Ltd. Authorised and regulated by the Financial Conduct Authority. Registration number 900001.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -421,7 +518,19 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
   <div id="s-options" class="screen">
     <div class="si" style="overflow:hidden">
       <div class="wb">⚠ Warning: Late repayments can cause serious money problems. For help, visit <a href="#">moneyhelper.org.uk</a>.</div>
-      <div class="hdr"><div class="logo"><div class="lm"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4.5 4.5 7.5-9" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="lt">Quido</span></div><div style="display:flex;align-items:center;gap:8px"><button class="bd" data-goto="s-home">← Back</button><div class="mbtn m-open"><span></span><span></span><span></span></div></div></div>
+      <div class="hdr">
+        <div class="hdr-left">
+          <button class="brand-link" type="button" data-goto="s-home" aria-label="Go to homepage">
+            <span class="brand-lockup">
+              <span class="brand-mark">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle class="q-ring" cx="11" cy="11" r="5.5" stroke-width="2.6"/><path class="q-tail" d="M14.9 15.1 18.7 19" stroke-width="2.6" stroke-linecap="round"/><path class="q-tail" d="M15.7 6.8c.9 1 1.4 2.5 1.4 4.2" stroke-width="2.2" stroke-linecap="round"/></svg>
+              </span>
+              <span class="brand-word"><span class="brand-name">Quido</span><span class="brand-tag">Customer Hub</span></span>
+            </span>
+          </button>
+        </div>
+        <div class="hdr-actions"><button class="bd" data-goto="s-home">← Back</button><div class="mbtn m-open"><span></span><span></span><span></span></div></div>
+      </div>
       <div class="scroll" style="flex:1;overflow-y:auto">
         <div class="hero">
           <div class="hm"><div class="hmi"><span>Loan ID: </span><strong id="opts-loan-id">28796</strong></div><div class="sp"><div class="sd"></div>Active</div></div>
@@ -604,7 +713,19 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
   <div id="s-faq" class="screen">
     <div class="si">
       <div class="wb">⚠ Warning: Late repayments can cause serious money problems.</div>
-      <div class="hdr"><div class="logo"><div class="lm"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9l4.5 4.5 7.5-9" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="lt">Quido</span></div><div style="display:flex;align-items:center;gap:8px"><button class="bd" data-goto="s-home">← Back</button><div class="mbtn m-open"><span></span><span></span><span></span></div></div></div>
+      <div class="hdr">
+        <div class="hdr-left">
+          <button class="brand-link" type="button" data-goto="s-home" aria-label="Go to homepage">
+            <span class="brand-lockup">
+              <span class="brand-mark">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle class="q-ring" cx="11" cy="11" r="5.5" stroke-width="2.6"/><path class="q-tail" d="M14.9 15.1 18.7 19" stroke-width="2.6" stroke-linecap="round"/><path class="q-tail" d="M15.7 6.8c.9 1 1.4 2.5 1.4 4.2" stroke-width="2.2" stroke-linecap="round"/></svg>
+              </span>
+              <span class="brand-word"><span class="brand-name">Quido</span><span class="brand-tag">Customer Hub</span></span>
+            </span>
+          </button>
+        </div>
+        <div class="hdr-actions"><button class="bd" data-goto="s-home">← Back</button><div class="mbtn m-open"><span></span><span></span><span></span></div></div>
+      </div>
       <div class="scroll" style="padding:16px"><div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px">FAQs</div><div style="font-size:12px;color:var(--muted);margin-bottom:16px">Common questions about your Quido loan</div><div id="faq-list"></div></div>
     </div>
   </div>
@@ -1124,6 +1245,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     if (prev) prev.classList.remove('active');
     if (next) next.classList.add('active');
     closeMenu();
+    if (typeof closeMoreMenu === 'function') closeMoreMenu();
     cur = id;
     if (id === 's-profile') renderProfile();
     if (id === 's-processing') {
@@ -1191,6 +1313,8 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
 
   // ── Menu
   var moverlay = document.getElementById('moverlay');
+  var moreBtn = document.getElementById('home-more-btn');
+  var moreMenu = document.getElementById('home-more-menu');
   document.querySelectorAll('.m-open').forEach(function(btn){btn.addEventListener('click',openMenu)});
   document.getElementById('mclose').addEventListener('click', closeMenu);
   moverlay.addEventListener('click', function(e) { if (e.target === moverlay) closeMenu(); });
@@ -1202,6 +1326,54 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
   }
   function openMenu()  { moverlay.classList.add('open'); }
   function closeMenu() { moverlay.classList.remove('open'); }
+  function closeMoreMenu() {
+    if (!moreMenu || !moreBtn) return;
+    moreMenu.classList.remove('open');
+    moreBtn.setAttribute('aria-expanded', 'false');
+  }
+  function openSupportOption(key) {
+    if (!key || !helpOpen.hasOwnProperty(key)) return;
+    go('s-options');
+    setTimeout(function() {
+      for (var helpKey in helpOpen) {
+        if (!helpOpen.hasOwnProperty(helpKey)) continue;
+        helpOpen[helpKey] = helpKey === key;
+        var body = document.getElementById(helpKey + '-body');
+        var chev = document.getElementById(helpKey + '-chev');
+        if (body) body.classList.toggle('open', helpOpen[helpKey]);
+        if (chev) chev.classList.toggle('open', helpOpen[helpKey]);
+      }
+      if (key === 'ph') initPHFlow();
+      if (key === 'pa') initPAFlow();
+      var target = document.querySelector('.hct[data-help="' + key + '"]');
+      if (target && typeof target.scrollIntoView === 'function') {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 40);
+  }
+  if (moreBtn && moreMenu) {
+    moreBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var open = !moreMenu.classList.contains('open');
+      closeMoreMenu();
+      if (open) {
+        moreMenu.classList.add('open');
+        moreBtn.setAttribute('aria-expanded', 'true');
+      }
+    });
+    moreMenu.addEventListener('click', function(e) {
+      var item = e.target.closest('[data-support-target]');
+      if (!item) return;
+      e.stopPropagation();
+      closeMoreMenu();
+      openSupportOption(item.getAttribute('data-support-target'));
+    });
+    document.addEventListener('click', function(e) {
+      if (e.target === moreBtn || moreBtn.contains(e.target)) return;
+      if (moreMenu.contains(e.target)) return;
+      closeMoreMenu();
+    });
+  }
 
   document.getElementById('menu-logout').addEventListener('click', function() {
     closeMenu();
@@ -2232,7 +2404,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     var callBtn = '<button class="stab bl"><div class="si-ic"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4a1 1 0 011-1h2.5l1.2 3.5-1.8 1.8a10 10 0 005.3 5.3l1.8-1.8L17 14v2.5a1 1 0 01-1 1C8.2 17.5 2 11.8 4 4z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="st"><div class="sl">Call Us (Mon\u2013Fri)</div><div class="ss">0800 123 4567 \u00b7 9:00\u201317:00</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
     var writeBtn = '<button class="stab bl"><div class="si-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 4a1 1 0 011-1h10a1 1 0 011 1v7a1 1 0 01-1 1H5l-3 2.5V4z" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg></div><div class="st"><div class="sl">Write to us</div><div class="ss">info@quido.co.uk</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
     var cmpBtn  = '<button class="stab bl" style="margin-bottom:16px"><div class="si-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#fff" stroke-width="1.4"/><path d="M9 5.5v4M9 11.5v.5" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="st"><div class="sl">Make a complaint</div><div class="ss">complaints@quido.co.uk</div></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
-    var footer  = '<div class="ft"><div class="ftg">Flexible loans.<br>Straightforward repayments.</div><div style="padding:0 20px"><table class="fgrid"><tr><td><a href="#">Loan</a></td><td><a href="#">About Us</a></td></tr><tr><td><a href="#">FAQs</a></td><td><a href="#">Careers</a></td></tr><tr><td><a href="#">Beware of Loan Sharks</a></td><td><a href="#">Terms of Use</a></td></tr><tr><td><a href="#">Contact Us</a></td><td><a href="#">Privacy Policy</a></td></tr><tr><td><a href="#">File a Complaint</a></td><td><a href="#">Fraud Disclaimer</a></td></tr><tr><td><a href="#">Insights</a></td><td><a href="#">Cookies Policy</a></td></tr></table></div><div class="fleg">We are a lender and may pay commissions to credit brokers or other intermediaries. This commission does not affect the total cost of your loan.<br><br><strong>Responsible Lending:</strong> Take a moment to decide if Quido is right for you. Short term loans are an expensive form of borrowing.<br><br>Quido Ltd. Authorised and Regulated by the Financial Conduct Authority. Registration Number 900001.</div></div>';
+    var footer  = '<div class="ft"><div class="ft-top"><div class="ft-brand"><button class="brand-link" type="button" data-goto="s-home" aria-label="Go to homepage"><span class="brand-lockup"><span class="brand-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle class="q-ring" cx="11" cy="11" r="5.5" stroke-width="2.6"/><path class="q-tail" d="M14.9 15.1 18.7 19" stroke-width="2.6" stroke-linecap="round"/><path class="q-tail" d="M15.7 6.8c.9 1 1.4 2.5 1.4 4.2" stroke-width="2.2" stroke-linecap="round"/></svg></span><span class="brand-word"><span class="brand-name" style="color:#fff">Quido</span><span class="brand-tag" style="color:rgba(255,255,255,.62)">Your loan, clearly laid out</span></span></span></button><div class="ft-copy">View your balance, make a payment, download documents, and contact Quido support from your secure online account.</div></div><div class="ft-links"><a href="#">Loan</a><a href="#">About Us</a><a href="#">FAQs</a><a href="#">Careers</a><a href="#">Beware of Loan Sharks</a><a href="#">Terms of Use</a><a href="#">Contact Us</a><a href="#">Privacy Policy</a><a href="#">File a Complaint</a><a href="#">Fraud Disclaimer</a><a href="#">Insights</a><a href="#">Cookies Policy</a></div></div><div class="fleg">We are a lender and may pay commissions to credit brokers or other intermediaries. This commission does not affect the total cost of your loan.<br><br><strong>Responsible lending:</strong> Take a moment to decide if Quido is right for you. Short term loans are an expensive form of borrowing.<br><br>Quido Ltd. Authorised and regulated by the Financial Conduct Authority. Registration number 900001.</div></div>';
     var full = faqBtn + callBtn + writeBtn + cmpBtn + footer;
     var noFaq = callBtn + writeBtn + cmpBtn + footer;
     var screens = [

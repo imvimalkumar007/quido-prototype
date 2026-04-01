@@ -30,7 +30,13 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 /* ── Sidebar */
 .sidebar{width:var(--sb-w);min-width:var(--sb-w);background:var(--sb);display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--sb-border)}
 .sb-logo{display:flex;align-items:center;gap:10px;padding:18px 16px 16px;border-bottom:1px solid var(--sb-border)}
-.sb-mark{width:32px;height:32px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0}
+.brand-shell{display:inline-flex;align-items:center;gap:10px;background:none;border:none;padding:0;cursor:pointer;text-align:left}
+.brand-mark{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:linear-gradient(145deg,#1d4ed8 0%,#0f3aa0 65%,#0a214f 100%);box-shadow:0 8px 20px rgba(26,86,219,.22);position:relative;overflow:hidden}
+.brand-mark::after{content:'';position:absolute;inset:auto -8px -11px auto;width:22px;height:22px;border-radius:999px;background:linear-gradient(135deg,#34d399,#059669);opacity:.9}
+.brand-mark svg{position:relative;z-index:1}
+.brand-mark .q-tail{stroke:#c9f7df}
+.brand-mark .q-ring{stroke:#fff}
+.brand-copy{display:flex;flex-direction:column;gap:1px}
 .sb-name{font-size:13px;font-weight:700;color:#f8fafc}
 .sb-sub{font-size:10px;color:var(--sb-text);text-transform:uppercase;letter-spacing:.06em}
 .sb-scroll{flex:1;overflow-y:auto;padding:10px 8px}
@@ -193,7 +199,9 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 <div id="ops-login-overlay" style="position:fixed;inset:0;background:#0f172a;z-index:9900;display:flex;align-items:center;justify-content:center">
   <div style="width:420px;background:#fff;border-radius:16px;padding:40px;box-shadow:0 24px 80px rgba(0,0,0,.55)">
     <div style="text-align:center;margin-bottom:28px">
-      <div style="width:52px;height:52px;background:#1a56db;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#fff;margin:0 auto 14px;box-shadow:0 6px 20px rgba(26,86,219,.4)">N</div>
+      <div class="brand-mark" style="width:52px;height:52px;border-radius:16px;margin:0 auto 14px">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle class="q-ring" cx="11" cy="11" r="5.5" stroke-width="2.6"/><path class="q-tail" d="M14.9 15.1 18.7 19" stroke-width="2.6" stroke-linecap="round"/><path class="q-tail" d="M15.7 6.8c.9 1 1.4 2.5 1.4 4.2" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </div>
       <div style="font-size:20px;font-weight:800;color:#0f172a">Quido Operations</div>
       <div style="font-size:12px;color:#64748b;margin-top:3px">Agent sign-in</div>
     </div>
@@ -218,11 +226,13 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 <!-- ═══════ OPS CUSTOMER SELECTOR ═══════ -->
 <div id="ops-cust-selector" style="position:fixed;inset:0;background:var(--bg);z-index:9800;display:none;flex-direction:column;overflow:hidden">
   <div style="background:var(--sb);padding:16px 24px;display:flex;align-items:center;gap:14px;flex-shrink:0;border-bottom:1px solid var(--sb-border)">
-    <div style="width:32px;height:32px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0">N</div>
-    <div>
-      <div style="font-size:13px;font-weight:700;color:#f8fafc">Quido Operations Centre</div>
-      <div style="font-size:10px;color:var(--sb-text);text-transform:uppercase;letter-spacing:.06em">Select a customer to open their workspace</div>
-    </div>
+    <button class="brand-shell" type="button" onclick="if (typeof showCustomerSelector==='function') showCustomerSelector()">
+      <span class="brand-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle class="q-ring" cx="11" cy="11" r="5.5" stroke-width="2.6"/><path class="q-tail" d="M14.9 15.1 18.7 19" stroke-width="2.6" stroke-linecap="round"/><path class="q-tail" d="M15.7 6.8c.9 1 1.4 2.5 1.4 4.2" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+      <span class="brand-copy">
+        <span style="font-size:13px;font-weight:700;color:#f8fafc">Quido</span>
+        <span style="font-size:10px;color:var(--sb-text);text-transform:uppercase;letter-spacing:.06em">Operations Centre</span>
+      </span>
+    </button>
     <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
       <span id="ops-agent-badge" style="font-size:11px;color:var(--sb-text);background:rgba(255,255,255,.06);border-radius:6px;padding:4px 10px"></span>
       <button onclick="opsLogout()" style="background:transparent;border:1px solid rgba(255,255,255,.18);border-radius:6px;color:var(--sb-text);font-size:11px;padding:5px 12px;cursor:pointer;transition:color .15s" onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='var(--sb-text)'">Sign out</button>
@@ -256,8 +266,10 @@ a{text-decoration:none;color:inherit;cursor:pointer}
   <!-- ═══════ SIDEBAR ═══════ -->
   <aside class="sidebar">
     <div class="sb-logo">
-      <div class="sb-mark">N</div>
-      <div><div class="sb-name">Quido</div><div class="sb-sub">Operations Centre</div></div>
+      <button class="brand-shell" type="button" onclick="gotoSec('sec-overview')">
+        <span class="brand-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle class="q-ring" cx="11" cy="11" r="5.5" stroke-width="2.6"/><path class="q-tail" d="M14.9 15.1 18.7 19" stroke-width="2.6" stroke-linecap="round"/><path class="q-tail" d="M15.7 6.8c.9 1 1.4 2.5 1.4 4.2" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+        <span class="brand-copy"><span class="sb-name">Quido</span><span class="sb-sub">Operations Centre</span></span>
+      </button>
     </div>
 
     <div class="sb-scroll">
@@ -1397,10 +1409,30 @@ function loadState() {
       contactLog: resolved.ops.contactLog,
       history:    resolved.ops.history
     };
-    // Allowed / blocked actions from backend engine
-    OPS.allowedActions = al.allowedActions || [];
-    OPS.blockedActions = al.blockedActions || [];
-    OPS.actionReasons  = al.actionReasons  || {};
+    // Allowed / blocked actions from backend engine.
+    // Override PH count limit for ops context — agents are not subject to customer limits.
+    OPS.allowedActions = (al.allowedActions || []).slice();
+    OPS.blockedActions = (al.blockedActions || []).slice();
+    OPS.actionReasons  = Object.assign({}, al.actionReasons || {});
+    var _phIdx = OPS.blockedActions.indexOf('apply_payment_holiday');
+    if (_phIdx !== -1) {
+      try {
+        var _localStRA = (_store._localStore || _store);
+        var _stRA      = _localStRA && _localStRA.getState ? _localStRA.getState() : null;
+        var _loanRA    = _stRA && (_stRA.loans && _stRA.loans[0]);
+        if (_loanRA && Quido.servicingPolicyEngine) {
+          var _seRA  = _loanRA.statusEngineState || {};
+          var _phOps = Quido.servicingPolicyEngine.checkPHEligibility(
+            _loanRA, _seRA.coreStatus || 'active', _seRA.derivedFlags || {}, new Date(), { noLimit: true }
+          );
+          if (_phOps.eligible) {
+            OPS.blockedActions.splice(_phIdx, 1);
+            OPS.allowedActions.push('apply_payment_holiday');
+            delete OPS.actionReasons['apply_payment_holiday'];
+          }
+        }
+      } catch (_e) { /* degrade gracefully */ }
+    }
     return;
   }
 
@@ -1483,7 +1515,7 @@ function loadState() {
       var _ovB  = _seB.overlays    || {};
       var _dfB  = _seB.derivedFlags || {};
       var _actB = Quido.accountStateResolver.deriveAllowedActions(
-        loan, _seB.coreStatus || 'active', _ovB, _dfB, new Date()
+        loan, _seB.coreStatus || 'active', _ovB, _dfB, new Date(), { noLimit: true }
       );
       OPS.allowedActions = _actB.allowedActions || [];
       OPS.blockedActions = _actB.blockedActions || [];
@@ -1731,9 +1763,11 @@ function buildSchedTable() {
   var chips = { paid:'background:#d1fae5;color:#059669', current:'background:#dbeafe;color:#1a56db', upcoming:'background:#f1f5f9;color:#64748b', ph:'background:#ede9fe;color:#7c3aed', pa:'background:#fef3c7;color:#b45309' };
   var labels = { paid:'Paid', current:'Current', upcoming:'Upcoming', ph:'Holiday', pa:'Arrangement' };
   tbody.innerHTML = OPS.schedule.map(function(row){
-    var cs = chips[row.status]||'';
+    var chipKey = row.ph ? 'ph' : (row.pa && row.status !== 'paid') ? 'pa' : row.status;
+    var cs  = chips[chipKey]||'';
+    var lbl = labels[chipKey] || row.status;
     var act = (row.status==='upcoming'||row.status==='current') ? '<button class="btn btn-xs btn-secondary" onclick="markPaid('+row.n+')">Mark Paid</button>' : row.status==='paid' ? '<button class="btn btn-xs btn-ghost" onclick="unmarkPaid('+row.n+')">Undo</button>' : '';
-    return '<tr class="row-'+row.status+'"><td class="mono">'+row.n+'</td><td>'+shortDate(row.dueDate)+'</td><td class="mono">'+fmt(row.emi)+'</td><td class="mono">'+fmt(row.principal)+'</td><td class="mono" style="color:var(--muted)">'+fmt(row.interest)+'</td><td class="mono">'+fmt(row.balance)+'</td><td><span style="'+cs+';padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:600">'+(labels[row.status]||row.status)+'</span></td><td>'+act+'</td></tr>';
+    return '<tr class="row-'+row.status+'"><td class="mono">'+row.n+'</td><td>'+shortDate(row.dueDate)+'</td><td class="mono">'+fmt(row.emi)+'</td><td class="mono">'+fmt(row.principal)+'</td><td class="mono" style="color:var(--muted)">'+fmt(row.interest)+'</td><td class="mono">'+fmt(row.balance)+'</td><td><span style="'+cs+';padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:600">'+lbl+'</span></td><td>'+act+'</td></tr>';
   }).join('');
 }
 
@@ -1944,14 +1978,16 @@ function opsTogglePHCreditNext() {
 }
 
 function opsBuildPHConfirmStep() {
+  loadState();
   var idx  = OPS.paidCount;
   var next = OPS.schedule && OPS.schedule[idx];
-  if (!next) return;
+  if (!next) {
+    toast('Unable to load instalment details — please try again.', 'error');
+    return;
+  }
   var balBefore   = idx > 0 ? (OPS.schedule[idx - 1].balance || 0) : OPS.principal;
   var monthlyRate = ((OPS.apr || 0) / 100) / 12;
   var accrued     = balBefore * monthlyRate;
-  var phUsed = 0;
-  for (var i = 0; i < OPS.schedule.length; i++) { if (OPS.schedule[i].ph) phUsed++; }
   var newEnd = new Date(OPS.schedule[OPS.schedule.length - 1].dueDate);
   newEnd.setMonth(newEnd.getMonth() + 1);
   document.getElementById('ops-ph-confirm-summary').innerHTML =
@@ -1960,7 +1996,6 @@ function opsBuildPHConfirmStep() {
     + '<tr><td style="padding:4px 0;color:var(--muted)">Instalment paused</td><td style="text-align:right;font-weight:600">' + fmt(next.emi) + '</td></tr>'
     + '<tr><td style="padding:4px 0;color:var(--muted)">Interest accruing during holiday</td><td style="text-align:right;font-weight:600;color:var(--amber)">' + fmt(accrued) + '</td></tr>'
     + '<tr><td style="padding:4px 0;color:var(--muted)">Estimated new loan end date</td><td style="text-align:right;font-weight:600">' + shortDate(newEnd) + '</td></tr>'
-    + '<tr><td style="padding:4px 0;color:var(--muted)">Payment holidays used after this</td><td style="text-align:right;font-weight:600">' + (phUsed + 1) + '</td></tr>'
     + '</table></div>';
   opsShowPHStep('confirm');
 }
@@ -2173,6 +2208,7 @@ function opsBuildPAAmountStep() {
     opsBuildPAReviewStep(amt, startVal);
     opsShowPAStep('review');
   });
+  opsShowPAStep('amount');
 }
 
 function opsBuildPAReviewStep(amount, startDateStr) {
@@ -3661,5 +3697,6 @@ function _refreshFromStorage(newVal, oldVal) {
 </script>
 </body>
 </html>
+
 
 
