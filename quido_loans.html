@@ -1193,9 +1193,13 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       var remainingAmt = instalmentDueAmount(e);
       var paidSoFar = Math.max(0, (e.emi || 0) - remainingAmt);
       var dueMeta = '';
+      var totalLabel = 'Total EMI';
+      var totalValue = e.emi;
       if (e.status !== 'paid') {
-        dueMeta = '<tr class="dvr"><td>Remaining due</td><td>' + LOAN.fmt(remainingAmt) + '</td></tr>';
+        totalLabel = 'Amount due now';
+        totalValue = remainingAmt;
         if (paidSoFar > 0.009) {
+          dueMeta += '<tr class="dvr"><td>Scheduled EMI</td><td>' + LOAN.fmt(e.emi) + '</td></tr>';
           dueMeta += '<tr><td>Paid so far</td><td>' + LOAN.fmt(paidSoFar) + '</td></tr>';
         }
       }
@@ -1215,7 +1219,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
         + '<tr class="dvr"><td>Principal</td><td>' + LOAN.fmt(e.principal) + '</td></tr>'
         + '<tr><td>Interest</td><td' + iStyle + '>' + iVal + '</td></tr>'
         + dueMeta
-        + '<tr class="dvr tot"><td>Total EMI</td><td>' + LOAN.fmt(e.emi) + '</td></tr>'
+        + '<tr class="dvr tot"><td>' + totalLabel + '</td><td>' + LOAN.fmt(totalValue) + '</td></tr>'
         + '</table></div></div>'
       );
     }
