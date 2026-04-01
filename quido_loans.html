@@ -63,9 +63,9 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
 .bp{background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;border:none;border-radius:var(--r-lg);padding:14px 10px;font-size:14px;font-weight:700;cursor:pointer;width:100%}
 .cta-main{flex:1}
 .bo-wrap{position:relative;flex-shrink:0}
-.bo-dot{width:52px;height:52px;border-radius:50%;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(15,24,40,.08);cursor:pointer}
-.bo-dot span{width:5px;height:5px;border-radius:50%;background:var(--blue);display:block;box-shadow:0 -9px 0 var(--blue),0 9px 0 var(--blue)}
-.bo-menu{position:absolute;top:62px;right:0;width:230px;background:rgba(255,255,255,.96);backdrop-filter:blur(18px);border:1px solid rgba(226,232,245,.95);border-radius:18px;box-shadow:0 18px 40px rgba(15,24,40,.14);padding:10px;display:none;z-index:30}
+.bo-dot{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(15,24,40,.08);cursor:pointer}
+.bo-dot span{width:4px;height:4px;border-radius:50%;background:var(--blue);display:block;box-shadow:0 -7px 0 var(--blue),0 7px 0 var(--blue)}
+.bo-menu{position:absolute;top:54px;right:0;width:230px;background:rgba(255,255,255,.96);backdrop-filter:blur(18px);border:1px solid rgba(226,232,245,.95);border-radius:18px;box-shadow:0 18px 40px rgba(15,24,40,.14);padding:10px;display:none;z-index:30}
 .bo-menu.open{display:block}
 .bo-menu-hd{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:4px 10px 8px}
 .bo-menu-item{width:100%;border:none;background:none;border-radius:12px;padding:12px 12px;text-align:left;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;cursor:pointer}
@@ -462,7 +462,6 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
           <div class="bo-wrap">
             <button class="bo-dot" id="home-more-btn" type="button" aria-label="More options" aria-expanded="false" aria-controls="home-more-menu"><span></span></button>
             <div class="bo-menu" id="home-more-menu">
-              <div class="bo-menu-hd">Other Options</div>
               <button class="bo-menu-item" type="button" data-support-target="ph">
                 <span class="bo-menu-title">Payment holiday</span>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5 3l4 4-4 4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
