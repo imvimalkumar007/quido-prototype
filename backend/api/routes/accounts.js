@@ -1,70 +1,49 @@
 /**
- * /api/accounts — REST route handlers
- *
- * Routes:
- *   GET  /api/accounts              — list all accounts (ops directory)
- *   GET  /api/accounts/:key         — get one account by storageKey
- *   POST /api/accounts/sync         — upsert / reconcile client state
- *   POST /api/accounts/:key/commands — dispatch a command (mutation)
- *
- * All handlers delegate business logic to AccountService via app.locals.
+ * /api/accounts - REST route handlers
  */
 'use strict';
 
 const express = require('express');
-const router  = express.Router();
+const documentService = require('../../services/document-service');
 
-// ── Helper: get service from app.locals ───────────────────────────────────
+const router = express.Router();
 
 function svc(req) {
   return req.app.locals.accountService;
 }
 
-// ── GET /api/accounts ─────────────────────────────────────────────────────
-
-/**
- * List all accounts.
- * Used by the ops directory to populate the customer list.
- * Returns a summary projection, not full account bodies.
- */
 router.get('/', function (req, res, next) {
   try {
     var accounts = svc(req).listAccounts();
-
-    // Project to a lightweight summary for the directory listing
     var summaries = accounts.map(function (a) {
-      var loan       = getActiveLoanFromAccount(a);
-      var lc         = (loan && loan.loanCore)          || {};
-      var se         = (loan && loan.statusEngineState)  || {};
-      var pp         = (a.profile && a.profile.personal) || {};
-      var pc         = (a.profile && a.profile.contact)  || {};
+      var loan = getActiveLoanFromAccount(a);
+      var lc = (loan && loan.loanCore) || {};
+      var se = (loan && loan.statusEngineState) || {};
+      var pp = (a.profile && a.profile.personal) || {};
+      var pc = (a.profile && a.profile.contact) || {};
       return {
-        storageKey:    a.storageKey,
-        customerId:    a.customerId,
-        version:       a.version     || 0,
-        updatedAt:     a.updatedAt   || '',
-        name:          [pp.firstName, pp.lastName].filter(Boolean).join(' '),
-        initials:      pp.initials   || '',
-        email:         pc.email      || '',
-        loanId:        a.activeLoanId || '',
-        loanStatus:    se.displayStatus || se.coreStatus || 'active',
-        outstanding:   (loan && loan.loanSummary && loan.loanSummary.outstandingBalance) || lc.principal || 0,
-        originatedAt:  (loan && loan.originatedAt) || ''
+        storageKey: a.storageKey,
+        customerId: a.customerId,
+        version: a.version || 0,
+        updatedAt: a.updatedAt || '',
+        name: [pp.firstName, pp.lastName].filter(Boolean).join(' '),
+        initials: pp.initials || '',
+        email: pc.email || '',
+        phone: pc.phone || '',
+        dob: pp.dob || '',
+        address: pc.address || '',
+        loanId: a.activeLoanId || '',
+        loanStatus: se.displayStatus || se.coreStatus || 'active',
+        outstanding: (loan && loan.loanSummary && loan.loanSummary.outstandingBalance) || lc.principal || 0,
+        originatedAt: (loan && loan.originatedAt) || ''
       };
     });
-
     res.json({ accounts: summaries });
   } catch (err) {
     next(err);
   }
 });
 
-// ── GET /api/accounts/:key ────────────────────────────────────────────────
-
-/**
- * Return the full v3 account for a given storageKey.
- * Returns 404 if the account does not exist.
- */
 router.get('/:key', function (req, res, next) {
   try {
     var account = svc(req).getAccount(req.params.key);
@@ -77,27 +56,12 @@ router.get('/:key', function (req, res, next) {
   }
 });
 
-// ── POST /api/accounts/sync ───────────────────────────────────────────────
-
-/**
- * Sync / upsert an account from client state.
- *
- * Body: { storageKey, account?, seed? }
- *
- * The backend reconciles versions:
- *  - If backend has no record → saves client account (or creates from seed)
- *  - If backend version > client version → returns backend account (client is stale)
- *  - If client version >= backend version → accepts client, saves to backend
- *
- * Response always includes:
- *   { account, source: 'backend'|'client'|'seed' }
- */
 router.post('/sync', function (req, res, next) {
   try {
-    var body          = req.body || {};
-    var storageKey    = body.storageKey;
+    var body = req.body || {};
+    var storageKey = body.storageKey;
     var clientAccount = body.account || null;
-    var seed          = body.seed    || null;
+    var seed = body.seed || null;
 
     if (!storageKey) {
       return res.status(400).json({ error: 'storageKey is required' });
@@ -110,24 +74,6 @@ router.post('/sync', function (req, res, next) {
   }
 });
 
-// ── GET /api/accounts/:key/resolved ──────────────────────────────────────
-
-/**
- * Return the pre-computed resolved account view.
- *
- * The resolved view is a flat, UI-ready projection of the canonical v3
- * account.  Both frontends consume this directly without any client-side
- * selector logic, active-loan resolution, or schedule conversion.
- *
- * Shape:
- *   { storageKey, customerId, version, updatedAt,
- *     profile, contact, employment, paymentDetails, affordability,
- *     activeLoan: { core, emi, summary, status, schedule, transactions,
- *                   arrangements },
- *     loanHistory, ops }
- *
- * Returns 404 if the account does not exist.
- */
 router.get('/:key/resolved', function (req, res, next) {
   try {
     var resolved = svc(req).resolveAccount(req.params.key);
@@ -140,19 +86,69 @@ router.get('/:key/resolved', function (req, res, next) {
   }
 });
 
-// ── POST /api/accounts/:key/commands ─────────────────────────────────────
+router.get('/:key/documents', function (req, res, next) {
+  try {
+    var scope = req.query.scope === 'ops' ? 'ops' : 'customer';
+    var resolved = svc(req).resolveAccount(req.params.key);
+    if (!resolved) {
+      return res.status(404).json({ error: 'Account not found: ' + req.params.key });
+    }
+    var documents = documentService.buildDocumentCatalog(resolved, scope).map(function (doc) {
+      return {
+        type: doc.type,
+        title: doc.title,
+        subtitle: doc.subtitle,
+        category: doc.category,
+        available: doc.available,
+        documentId: doc.documentId,
+        fileName: doc.fileName
+      };
+    });
+    res.json({ documents: documents });
+  } catch (err) {
+    next(err);
+  }
+});
 
-/**
- * Dispatch a command (mutation) on an account.
- *
- * Body: { type, payload, actor }
- *   type   — one of the CommandTypes constants (e.g. 'RECORD_PAYMENT')
- *   payload — command-specific data
- *   actor  — 'customer_ui' | 'ops_ui' | 'system'
- *
- * Returns the full updated account.
- * Returns 404 if the account does not exist.
- */
+router.get('/:key/documents/:type/pdf', function (req, res, next) {
+  try {
+    var scope = req.query.scope === 'ops' ? 'ops' : 'customer';
+    var resolved = svc(req).resolveAccount(req.params.key);
+    if (!resolved) {
+      return res.status(404).json({ error: 'Account not found: ' + req.params.key });
+    }
+    var catalog = documentService.buildDocumentCatalog(resolved, scope);
+    var doc = documentService.getDocument(catalog, req.params.type);
+    if (!doc) {
+      return res.status(404).json({ error: 'Document not found: ' + req.params.type });
+    }
+    var pdf = documentService.buildSimplePdfBuffer(doc.title, doc.html);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="' + doc.fileName + '"');
+    res.send(pdf);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/:key/documents/:type', function (req, res, next) {
+  try {
+    var scope = req.query.scope === 'ops' ? 'ops' : 'customer';
+    var resolved = svc(req).resolveAccount(req.params.key);
+    if (!resolved) {
+      return res.status(404).json({ error: 'Account not found: ' + req.params.key });
+    }
+    var catalog = documentService.buildDocumentCatalog(resolved, scope);
+    var doc = documentService.getDocument(catalog, req.params.type);
+    if (!doc) {
+      return res.status(404).json({ error: 'Document not found: ' + req.params.type });
+    }
+    res.json({ document: doc });
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post('/:key/commands', function (req, res, next) {
   try {
     var command = req.body || {};
@@ -167,8 +163,6 @@ router.post('/:key/commands', function (req, res, next) {
     next(err);
   }
 });
-
-// ── Internal helper ───────────────────────────────────────────────────────
 
 function getActiveLoanFromAccount(account) {
   var loans = account.loans || [];

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Quido Ops — Flexibility when it matters most</title>
+<title>Quido Ops - Flexibility when it matters most</title>
 <style>
 :root {
   --sb:#0f172a; --sb-border:#1e293b; --sb-text:#94a3b8; --sb-hover:#1e293b;
@@ -231,7 +231,21 @@ a{text-decoration:none;color:inherit;cursor:pointer}
   <div style="flex:1;overflow-y:auto;padding:28px 24px">
     <div style="max-width:800px;margin:0 auto">
       <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:3px">Customer Directory</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:20px">5 accounts &middot; Click a customer to open their full workspace</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:16px">Search first for speed, or browse the available customer accounts below</div>
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:260px;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:0 14px;box-shadow:0 6px 20px rgba(15,23,42,.04)">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><circle cx="7" cy="7" r="5.5" stroke="#94a3b8" stroke-width="1.5"/><path d="M11.5 11.5l3 3" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input id="ops-cust-search" type="text" placeholder="Search by name, loan ID, email, phone, date of birth, or address" autocomplete="off"
+            style="flex:1;border:none;outline:none;background:transparent;padding:13px 0;font-size:13px;color:var(--text)"
+            oninput="filterCustomerDirectory(this.value)" onkeyup="filterCustomerDirectory(this.value)" onkeydown="if(event.key==='Escape'){clearCustomerDirectorySearch();event.preventDefault();}">
+          <button type="button" onclick="clearCustomerDirectorySearch()" style="background:none;border:none;color:var(--muted);font-size:11px;font-weight:700;cursor:pointer;padding:0">Clear</button>
+        </div>
+        <button type="button" onclick="openSearch()" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:11px;font-weight:700;padding:11px 14px;cursor:pointer">Advanced Search</button>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px">
+        <div id="ops-cust-meta" style="font-size:12px;color:var(--muted)">Loading accounts…</div>
+        <div id="ops-cust-hint" style="font-size:11px;color:#94a3b8">Search updates as directory data loads</div>
+      </div>
       <div id="ops-cust-list" style="display:flex;flex-direction:column;gap:10px"></div>
     </div>
   </div>
@@ -340,17 +354,17 @@ a{text-decoration:none;color:inherit;cursor:pointer}
       <!-- ══ OVERVIEW ══ -->
       <section id="sec-overview" class="section active">
         <div class="sec-hdr">
-          <div class="sec-hdr-left"><h2>Overview</h2><p id="ov-summary">Account summary &mdash; Sarah Mitchell &middot; Loan #28796</p></div>
+          <div class="sec-hdr-left"><h2>Overview</h2><p id="ov-summary">Account summary - Sarah Mitchell &middot; Loan #28796</p></div>
           <div class="sec-hdr-right">
             <button class="btn btn-primary btn-sm" onclick="gotoSec('sec-actions')">Account Actions</button>
           </div>
         </div>
 
         <div class="stat-grid">
-          <div class="stat-card"><div class="stat-label">Outstanding Balance</div><div class="stat-value" id="ov-balance">—</div><div class="stat-sub" id="ov-balance-sub">—</div></div>
-          <div class="stat-card"><div class="stat-label">Next Payment Due</div><div class="stat-value" id="ov-next-due" style="font-size:16px;padding-top:4px">—</div><div class="stat-sub" id="ov-next-emi">—</div></div>
-          <div class="stat-card"><div class="stat-label">Monthly EMI</div><div class="stat-value" id="ov-emi">—</div><div class="stat-sub" id="ov-emi-sub">—</div></div>
-          <div class="stat-card"><div class="stat-label">Instalments Remaining</div><div class="stat-value" id="ov-remaining">—</div><div class="stat-sub" id="ov-remaining-sub">—</div></div>
+          <div class="stat-card"><div class="stat-label">Outstanding Balance</div><div class="stat-value" id="ov-balance">-</div><div class="stat-sub" id="ov-balance-sub">-</div></div>
+          <div class="stat-card"><div class="stat-label">Next Payment Due</div><div class="stat-value" id="ov-next-due" style="font-size:16px;padding-top:4px">-</div><div class="stat-sub" id="ov-next-emi">-</div></div>
+          <div class="stat-card"><div class="stat-label">Monthly EMI</div><div class="stat-value" id="ov-emi">-</div><div class="stat-sub" id="ov-emi-sub">-</div></div>
+          <div class="stat-card"><div class="stat-label">Instalments Remaining</div><div class="stat-value" id="ov-remaining">-</div><div class="stat-sub" id="ov-remaining-sub">-</div></div>
         </div>
 
         <div class="two-col">
@@ -360,7 +374,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
           </div>
           <div>
             <div class="card" style="margin-bottom:14px">
-              <div class="card-hdr"><span class="card-title">Repayment Progress</span><span id="ov-health-pct" style="font-size:11px;color:var(--muted)">—</span></div>
+              <div class="card-hdr"><span class="card-title">Repayment Progress</span><span id="ov-health-pct" style="font-size:11px;color:var(--muted)">-</span></div>
               <div class="card-body-tight">
                 <div style="height:8px;background:#f1f5f9;border-radius:4px;overflow:hidden">
                   <div id="ov-health-fill" style="height:100%;background:var(--blue);border-radius:4px;transition:width .5s;width:0%"></div>
@@ -432,11 +446,11 @@ a{text-decoration:none;color:inherit;cursor:pointer}
             <div class="card" style="margin-bottom:14px">
               <div class="card-hdr"><span class="card-title">Account Metadata</span></div>
               <div class="card-body-tight">
-                <div class="kv"><span class="kv-k">Customer ID</span><span class="kv-v mono" id="cust-meta-id">—</span></div>
-                <div class="kv"><span class="kv-k">Loan ID</span><span class="kv-v mono" id="cust-meta-loan">—</span></div>
-                <div class="kv"><span class="kv-k">Account Created</span><span class="kv-v" id="cust-meta-created">—</span></div>
-                <div class="kv"><span class="kv-k">Last Active</span><span class="kv-v" id="cust-meta-active">—</span></div>
-                <div class="kv"><span class="kv-k">Account Status</span><span class="kv-v" id="cust-meta-status">—</span></div>
+                <div class="kv"><span class="kv-k">Customer ID</span><span class="kv-v mono" id="cust-meta-id">-</span></div>
+                <div class="kv"><span class="kv-k">Loan ID</span><span class="kv-v mono" id="cust-meta-loan">-</span></div>
+                <div class="kv"><span class="kv-k">Account Created</span><span class="kv-v" id="cust-meta-created">-</span></div>
+                <div class="kv"><span class="kv-k">Last Active</span><span class="kv-v" id="cust-meta-active">-</span></div>
+                <div class="kv"><span class="kv-k">Account Status</span><span class="kv-v" id="cust-meta-status">-</span></div>
               </div>
             </div>
             <div class="card">
@@ -453,43 +467,43 @@ a{text-decoration:none;color:inherit;cursor:pointer}
                 <div class="field"><label>Other Debts (monthly)</label><input type="number" id="cust-ie-debts" step="10"></div>
                 <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0 0;font-size:12.5px">
                   <span style="color:var(--muted);font-weight:500">Disposable Income</span>
-                  <strong id="cust-ie-disposable">—</strong>
+                  <strong id="cust-ie-disposable">-</strong>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Granular I&E breakdown (read-only — populated from raw.granular) -->
+        <!-- Granular I&E breakdown (read-only - populated from raw.granular) -->
         <div class="card">
           <div class="card-hdr"><span class="card-title">Granular I&amp;E Breakdown</span><span style="font-size:11px;color:var(--muted)">Full 16-line statement</span></div>
           <div class="card-body" style="padding-bottom:4px">
             <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Income</div>
-            <div class="kv"><span class="kv-k">Primary income (net salary)</span><span class="kv-v mono" id="ops-g-inc-salary">—</span></div>
-            <div class="kv"><span class="kv-k">Secondary income</span><span class="kv-v mono" id="ops-g-inc-secondary">—</span></div>
-            <div class="kv"><span class="kv-k">Benefits / Universal Credit</span><span class="kv-v mono" id="ops-g-inc-benefits">—</span></div>
-            <div class="kv"><span class="kv-k">Other income</span><span class="kv-v mono" id="ops-g-inc-other">—</span></div>
-            <div class="kv" style="border-top:1px solid var(--border);margin-top:4px;padding-top:8px"><span class="kv-k" style="font-weight:700">Total income</span><span class="kv-v mono" style="font-weight:700;color:var(--green)" id="ops-g-inc-total">—</span></div>
+            <div class="kv"><span class="kv-k">Primary income (net salary)</span><span class="kv-v mono" id="ops-g-inc-salary">-</span></div>
+            <div class="kv"><span class="kv-k">Secondary income</span><span class="kv-v mono" id="ops-g-inc-secondary">-</span></div>
+            <div class="kv"><span class="kv-k">Benefits / Universal Credit</span><span class="kv-v mono" id="ops-g-inc-benefits">-</span></div>
+            <div class="kv"><span class="kv-k">Other income</span><span class="kv-v mono" id="ops-g-inc-other">-</span></div>
+            <div class="kv" style="border-top:1px solid var(--border);margin-top:4px;padding-top:8px"><span class="kv-k" style="font-weight:700">Total income</span><span class="kv-v mono" style="font-weight:700;color:var(--green)" id="ops-g-inc-total">-</span></div>
             <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:12px 0 6px">Expenditure</div>
-            <div class="kv"><span class="kv-k">Rent / mortgage</span><span class="kv-v mono" id="ops-g-exp-rent">—</span></div>
-            <div class="kv"><span class="kv-k">Council tax</span><span class="kv-v mono" id="ops-g-exp-council">—</span></div>
-            <div class="kv"><span class="kv-k">Utilities</span><span class="kv-v mono" id="ops-g-exp-utilities">—</span></div>
-            <div class="kv"><span class="kv-k">Food &amp; groceries</span><span class="kv-v mono" id="ops-g-exp-food">—</span></div>
-            <div class="kv"><span class="kv-k">Transport</span><span class="kv-v mono" id="ops-g-exp-transport">—</span></div>
-            <div class="kv"><span class="kv-k">Childcare / dependants</span><span class="kv-v mono" id="ops-g-exp-childcare">—</span></div>
-            <div class="kv"><span class="kv-k">Mobile phone</span><span class="kv-v mono" id="ops-g-exp-mobile">—</span></div>
-            <div class="kv"><span class="kv-k">Other loan repayments</span><span class="kv-v mono" id="ops-g-exp-loans">—</span></div>
-            <div class="kv"><span class="kv-k">Credit card minimums</span><span class="kv-v mono" id="ops-g-exp-cards">—</span></div>
-            <div class="kv"><span class="kv-k">Buy now pay later</span><span class="kv-v mono" id="ops-g-exp-bnpl">—</span></div>
-            <div class="kv"><span class="kv-k">Insurance</span><span class="kv-v mono" id="ops-g-exp-insurance">—</span></div>
-            <div class="kv"><span class="kv-k">Subscriptions</span><span class="kv-v mono" id="ops-g-exp-subs">—</span></div>
-            <div class="kv" style="border-top:1px solid var(--border);margin-top:4px;padding-top:8px"><span class="kv-k" style="font-weight:700">Total expenditure</span><span class="kv-v mono" style="font-weight:700;color:var(--red,#dc2626)" id="ops-g-exp-total">—</span></div>
-            <div class="kv" style="margin-bottom:8px"><span class="kv-k" style="font-weight:700">Monthly surplus</span><span class="kv-v mono" style="font-weight:700" id="ops-g-surplus">—</span></div>
+            <div class="kv"><span class="kv-k">Rent / mortgage</span><span class="kv-v mono" id="ops-g-exp-rent">-</span></div>
+            <div class="kv"><span class="kv-k">Council tax</span><span class="kv-v mono" id="ops-g-exp-council">-</span></div>
+            <div class="kv"><span class="kv-k">Utilities</span><span class="kv-v mono" id="ops-g-exp-utilities">-</span></div>
+            <div class="kv"><span class="kv-k">Food &amp; groceries</span><span class="kv-v mono" id="ops-g-exp-food">-</span></div>
+            <div class="kv"><span class="kv-k">Transport</span><span class="kv-v mono" id="ops-g-exp-transport">-</span></div>
+            <div class="kv"><span class="kv-k">Childcare / dependants</span><span class="kv-v mono" id="ops-g-exp-childcare">-</span></div>
+            <div class="kv"><span class="kv-k">Mobile phone</span><span class="kv-v mono" id="ops-g-exp-mobile">-</span></div>
+            <div class="kv"><span class="kv-k">Other loan repayments</span><span class="kv-v mono" id="ops-g-exp-loans">-</span></div>
+            <div class="kv"><span class="kv-k">Credit card minimums</span><span class="kv-v mono" id="ops-g-exp-cards">-</span></div>
+            <div class="kv"><span class="kv-k">Buy now pay later</span><span class="kv-v mono" id="ops-g-exp-bnpl">-</span></div>
+            <div class="kv"><span class="kv-k">Insurance</span><span class="kv-v mono" id="ops-g-exp-insurance">-</span></div>
+            <div class="kv"><span class="kv-k">Subscriptions</span><span class="kv-v mono" id="ops-g-exp-subs">-</span></div>
+            <div class="kv" style="border-top:1px solid var(--border);margin-top:4px;padding-top:8px"><span class="kv-k" style="font-weight:700">Total expenditure</span><span class="kv-v mono" style="font-weight:700;color:var(--red,#dc2626)" id="ops-g-exp-total">-</span></div>
+            <div class="kv" style="margin-bottom:8px"><span class="kv-k" style="font-weight:700">Monthly surplus</span><span class="kv-v mono" style="font-weight:700" id="ops-g-surplus">-</span></div>
           </div>
         </div>
 
         <div class="card">
-          <div class="card-hdr"><span class="card-title">Internal Notes</span><span style="font-size:11px;color:var(--muted)">Ops-only &mdash; not visible to customer</span></div>
+          <div class="card-hdr"><span class="card-title">Internal Notes</span><span style="font-size:11px;color:var(--muted)">Ops-only - not visible to customer</span></div>
           <div class="card-body">
             <div id="cust-notes-list" style="margin-bottom:14px;min-height:30px"></div>
             <div style="display:grid;gap:8px">
@@ -712,7 +726,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
       <!-- ══ LOAN CALCULATOR ══ -->
       <section id="sec-calculator" class="section">
         <div class="sec-hdr">
-          <div class="sec-hdr-left"><h2>Loan Calculator</h2><p>Standalone — use to model scenarios before applying to the account</p></div>
+          <div class="sec-hdr-left"><h2>Loan Calculator</h2><p>Standalone - use to model scenarios before applying to the account</p></div>
         </div>
 
         <div class="calc-layout">
@@ -731,11 +745,11 @@ a{text-decoration:none;color:inherit;cursor:pointer}
             <div class="card" id="calc-results" style="display:none">
               <div class="card-hdr"><span class="card-title">Results</span></div>
               <div class="card-body-tight">
-                <div class="kv"><span class="kv-k">Monthly EMI</span><span class="kv-v" id="calc-emi">—</span></div>
-                <div class="kv"><span class="kv-k">Total repayable</span><span class="kv-v" id="calc-total">—</span></div>
-                <div class="kv"><span class="kv-k">Total interest</span><span class="kv-v" id="calc-interest">—</span></div>
-                <div class="kv"><span class="kv-k">Outstanding (from paid)</span><span class="kv-v" id="calc-outstanding">—</span></div>
-                <div class="kv"><span class="kv-k">Monthly rate</span><span class="kv-v" id="calc-rate">—</span></div>
+                <div class="kv"><span class="kv-k">Monthly EMI</span><span class="kv-v" id="calc-emi">-</span></div>
+                <div class="kv"><span class="kv-k">Total repayable</span><span class="kv-v" id="calc-total">-</span></div>
+                <div class="kv"><span class="kv-k">Total interest</span><span class="kv-v" id="calc-interest">-</span></div>
+                <div class="kv"><span class="kv-k">Outstanding (from paid)</span><span class="kv-v" id="calc-outstanding">-</span></div>
+                <div class="kv"><span class="kv-k">Monthly rate</span><span class="kv-v" id="calc-rate">-</span></div>
               </div>
               <div class="card-body" style="padding-top:0">
                 <button class="btn btn-warning btn-block" onclick="applyCalcToAccount()">Apply to Account &amp; Sync</button>
@@ -785,9 +799,9 @@ a{text-decoration:none;color:inherit;cursor:pointer}
         </div>
 
         <div class="three-col">
-          <div class="stat-card"><div class="stat-label">Days Past Due</div><div class="stat-value" id="col-dpd" style="font-size:18px">—</div></div>
-          <div class="stat-card"><div class="stat-label">Account Status</div><div class="stat-value" id="col-status" style="font-size:18px">—</div></div>
-          <div class="stat-card"><div class="stat-label">Outstanding Balance</div><div class="stat-value" id="col-outstanding" style="font-size:18px">—</div></div>
+          <div class="stat-card"><div class="stat-label">Days Past Due</div><div class="stat-value" id="col-dpd" style="font-size:18px">-</div></div>
+          <div class="stat-card"><div class="stat-label">Account Status</div><div class="stat-value" id="col-status" style="font-size:18px">-</div></div>
+          <div class="stat-card"><div class="stat-label">Outstanding Balance</div><div class="stat-value" id="col-outstanding" style="font-size:18px">-</div></div>
         </div>
 
         <div class="two-col">
@@ -796,7 +810,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
             <div class="col-risk">
               <span style="font-size:11px;color:var(--muted);width:70px;flex-shrink:0">Risk level</span>
               <div class="col-risk-bar"><div id="col-risk-fill" class="col-risk-fill" style="width:10%;background:var(--green)"></div></div>
-              <span id="col-risk-pct" style="font-size:11px;font-weight:700;color:var(--text);width:30px;text-align:right;flex-shrink:0">—</span>
+              <span id="col-risk-pct" style="font-size:11px;font-weight:700;color:var(--text);width:30px;text-align:right;flex-shrink:0">-</span>
             </div>
             <div class="card-body" style="padding-top:0">
               <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Recommended Actions</div>
@@ -817,7 +831,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
                 </div>
                 <div class="field"><label>Date</label><input type="date" id="col-date"></div>
               </div>
-              <div class="field"><label>Outcome</label><input type="text" id="col-outcome" placeholder="e.g. No answer — voicemail left"></div>
+              <div class="field"><label>Outcome</label><input type="text" id="col-outcome" placeholder="e.g. No answer - voicemail left"></div>
               <div style="display:flex;gap:8px;margin-top:4px">
                 <button class="btn btn-ghost btn-sm" onclick="toggleColForm()">Cancel</button>
                 <button class="btn btn-primary btn-sm" onclick="addContactAttempt()">Log Attempt</button>
@@ -837,11 +851,11 @@ a{text-decoration:none;color:inherit;cursor:pointer}
         <div class="card" style="margin-bottom:14px">
           <div class="card-hdr"><span class="card-title">Current Account Status</span></div>
           <div class="card-body-tight">
-            <div class="kv"><span class="kv-k">Resolved display status</span><span id="fov-resolved-status" class="kv-v">—</span></div>
-            <div class="kv"><span class="kv-k">Base status</span><span id="fov-base-status" class="kv-v">—</span></div>
-            <div class="kv"><span class="kv-k">Servicing overlay</span><span id="fov-servicing-overlay" class="kv-v">—</span></div>
-            <div class="kv"><span class="kv-k">Servicing sub-status</span><span id="fov-servicing-sub" class="kv-v">—</span></div>
-            <div class="kv"><span class="kv-k">Forbearance overlay</span><span id="fov-current-overlay" class="kv-v">—</span></div>
+            <div class="kv"><span class="kv-k">Resolved display status</span><span id="fov-resolved-status" class="kv-v">-</span></div>
+            <div class="kv"><span class="kv-k">Base status</span><span id="fov-base-status" class="kv-v">-</span></div>
+            <div class="kv"><span class="kv-k">Servicing overlay</span><span id="fov-servicing-overlay" class="kv-v">-</span></div>
+            <div class="kv"><span class="kv-k">Servicing sub-status</span><span id="fov-servicing-sub" class="kv-v">-</span></div>
+            <div class="kv"><span class="kv-k">Forbearance overlay</span><span id="fov-current-overlay" class="kv-v">-</span></div>
           </div>
         </div>
 
@@ -857,14 +871,14 @@ a{text-decoration:none;color:inherit;cursor:pointer}
                 <span id="fov-active-badge" style="font-size:11px;padding:2px 9px;border-radius:6px;font-weight:600;background:var(--amber-bg);color:var(--amber)">Active</span>
               </div>
               <div class="card-body-tight">
-                <div class="kv"><span class="kv-k">Type</span><span id="fov-detail-type" class="kv-v">—</span></div>
-                <div class="kv"><span class="kv-k">Effective from</span><span id="fov-detail-start" class="kv-v">—</span></div>
-                <div class="kv"><span class="kv-k">Expected end</span><span id="fov-detail-end" class="kv-v">—</span></div>
-                <div class="kv"><span class="kv-k">Reference</span><span id="fov-detail-ref" class="kv-v">—</span></div>
-                <div class="kv"><span class="kv-k">Reason / notes</span><span id="fov-detail-reason" class="kv-v" style="max-width:200px;text-align:right">—</span></div>
-                <div class="kv"><span class="kv-k">Applied by</span><span id="fov-detail-applied-by" class="kv-v">—</span></div>
-                <div class="kv"><span class="kv-k">Original base status</span><span id="fov-detail-orig-base" class="kv-v">—</span></div>
-                <div class="kv"><span class="kv-k">Original servicing overlay</span><span id="fov-detail-orig-svc" class="kv-v">—</span></div>
+                <div class="kv"><span class="kv-k">Type</span><span id="fov-detail-type" class="kv-v">-</span></div>
+                <div class="kv"><span class="kv-k">Effective from</span><span id="fov-detail-start" class="kv-v">-</span></div>
+                <div class="kv"><span class="kv-k">Expected end</span><span id="fov-detail-end" class="kv-v">-</span></div>
+                <div class="kv"><span class="kv-k">Reference</span><span id="fov-detail-ref" class="kv-v">-</span></div>
+                <div class="kv"><span class="kv-k">Reason / notes</span><span id="fov-detail-reason" class="kv-v" style="max-width:200px;text-align:right">-</span></div>
+                <div class="kv"><span class="kv-k">Applied by</span><span id="fov-detail-applied-by" class="kv-v">-</span></div>
+                <div class="kv"><span class="kv-k">Original base status</span><span id="fov-detail-orig-base" class="kv-v">-</span></div>
+                <div class="kv"><span class="kv-k">Original servicing overlay</span><span id="fov-detail-orig-svc" class="kv-v">-</span></div>
               </div>
               <div class="card-body" style="padding-top:0" id="fov-action-buttons"></div>
             </div>
@@ -889,7 +903,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
                 <div class="field">
                   <label>Overlay type</label>
                   <select id="fov-type" onchange="fovTypeChanged()">
-                    <option value="">— Select type —</option>
+                    <option value="">- Select type -</option>
                     <option value="dmp">DMP (Debt Management Plan)</option>
                     <option value="breathing_space">Breathing Space</option>
                     <option value="dro">DRO (Debt Relief Order)</option>
@@ -977,22 +991,22 @@ a{text-decoration:none;color:inherit;cursor:pointer}
             <div class="card" style="margin-bottom:14px">
               <div class="card-hdr"><span class="card-title">Account Summary</span></div>
               <div class="card-body-tight">
-                <div class="kv"><span class="kv-k">Loan amount</span><span class="kv-v" id="stmt-ops-principal">—</span></div>
-                <div class="kv"><span class="kv-k">Total repayable</span><span class="kv-v" id="stmt-ops-total">—</span></div>
-                <div class="kv"><span class="kv-k">Total interest</span><span class="kv-v" id="stmt-ops-interest">—</span></div>
-                <div class="kv"><span class="kv-k">Total repaid to date</span><span class="kv-v" style="color:var(--green);font-weight:600" id="stmt-ops-repaid">—</span></div>
-                <div class="kv" style="border-top:1px solid var(--border);margin-top:8px;padding-top:8px"><span class="kv-k" style="font-weight:700">Outstanding balance</span><span class="kv-v" style="font-weight:700;font-size:15px" id="stmt-ops-balance">—</span></div>
-                <div class="kv"><span class="kv-k">Instalments paid</span><span class="kv-v" id="stmt-ops-paid-count">—</span></div>
-                <div class="kv"><span class="kv-k">Instalments remaining</span><span class="kv-v" id="stmt-ops-remaining">—</span></div>
+                <div class="kv"><span class="kv-k">Loan amount</span><span class="kv-v" id="stmt-ops-principal">-</span></div>
+                <div class="kv"><span class="kv-k">Total repayable</span><span class="kv-v" id="stmt-ops-total">-</span></div>
+                <div class="kv"><span class="kv-k">Total interest</span><span class="kv-v" id="stmt-ops-interest">-</span></div>
+                <div class="kv"><span class="kv-k">Total repaid to date</span><span class="kv-v" style="color:var(--green);font-weight:600" id="stmt-ops-repaid">-</span></div>
+                <div class="kv" style="border-top:1px solid var(--border);margin-top:8px;padding-top:8px"><span class="kv-k" style="font-weight:700">Outstanding balance</span><span class="kv-v" style="font-weight:700;font-size:15px" id="stmt-ops-balance">-</span></div>
+                <div class="kv"><span class="kv-k">Instalments paid</span><span class="kv-v" id="stmt-ops-paid-count">-</span></div>
+                <div class="kv"><span class="kv-k">Instalments remaining</span><span class="kv-v" id="stmt-ops-remaining">-</span></div>
               </div>
             </div>
             <div class="card">
               <div class="card-hdr"><span class="card-title">Loan Info</span></div>
               <div class="card-body-tight">
-                <div class="kv"><span class="kv-k">Start date</span><span class="kv-v" id="stmt-ops-start">—</span></div>
-                <div class="kv"><span class="kv-k">Final payment</span><span class="kv-v" id="stmt-ops-end">—</span></div>
-                <div class="kv"><span class="kv-k">Monthly EMI</span><span class="kv-v" id="stmt-ops-emi">—</span></div>
-                <div class="kv"><span class="kv-k">APR</span><span class="kv-v" id="stmt-ops-apr">—</span></div>
+                <div class="kv"><span class="kv-k">Start date</span><span class="kv-v" id="stmt-ops-start">-</span></div>
+                <div class="kv"><span class="kv-k">Final payment</span><span class="kv-v" id="stmt-ops-end">-</span></div>
+                <div class="kv"><span class="kv-k">Monthly EMI</span><span class="kv-v" id="stmt-ops-emi">-</span></div>
+                <div class="kv"><span class="kv-k">APR</span><span class="kv-v" id="stmt-ops-apr">-</span></div>
               </div>
             </div>
           </div>
@@ -1013,7 +1027,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
           <div id="docs-ops-customer" style="padding:0 18px 8px"></div>
         </div>
         <div class="card">
-          <div class="card-hdr"><span class="card-title">Internal &amp; Compliance Records</span><span style="font-size:11px;color:var(--muted)">Ops only — not visible to customer</span></div>
+          <div class="card-hdr"><span class="card-title">Internal &amp; Compliance Records</span><span style="font-size:11px;color:var(--muted)">Ops only - not visible to customer</span></div>
           <div id="docs-ops-internal" style="padding:0 18px 8px"></div>
         </div>
       </section>
@@ -1062,7 +1076,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
     <div id="doc-modal-body" style="padding:20px"></div>
     <div style="padding:14px 20px;border-top:1px solid #f1f5f9;background:#f8fafc;display:flex;justify-content:flex-end;gap:8px">
       <button onclick="closeDocModal()" style="font-size:12px;font-weight:600;padding:7px 18px;border:1px solid #e2e8f0;border-radius:7px;background:#fff;color:#374151;cursor:pointer">Close</button>
-      <button style="font-size:12px;font-weight:600;padding:7px 18px;border:none;border-radius:7px;background:#1a56db;color:#fff;cursor:pointer" onclick="closeDocModal()">Download PDF</button>
+      <button id="doc-modal-download" style="font-size:12px;font-weight:600;padding:7px 18px;border:none;border-radius:7px;background:#1a56db;color:#fff;cursor:pointer">Download PDF</button>
     </div>
   </div>
 </div>
@@ -1090,7 +1104,7 @@ var _store  = null;    // set when a customer is selected
 var USE_API  = true;
 var API_BASE = 'http://localhost:3001/api';
 
-// CUSTOMER_REGISTRY — seed data using v3 profile structure.
+// CUSTOMER_REGISTRY - seed data using v3 profile structure.
 // profile.personal  → identity fields (name, dob)
 // profile.contact   → communication fields (email, phone, address)
 // profile.employment → work / income fields
@@ -1186,26 +1200,28 @@ var CUSTOMER_REGISTRY = [
 var OPS = {
   principal: 1000, apr: 29.9, term: 12,
   startDate: new Date('2026-01-24'),
-  paidCount: 2, accountStatus: 'active',
-  emi: 0, schedule: [], account: null,
+  paidCount: 2, accountStatus: 'active', closedAt: null,
+  emi: 0, schedule: [], transactions: [], account: null,
+  totalRepaid: 0, outstandingBalance: 0, totalRepayable: 0, instalmentsRemaining: 0,
   activeFilter: 'all',
   allowedActions: [],
   blockedActions: [],
   actionReasons:  {}
 };
+var DIRECTORY_ACCOUNTS = [];
 
 // ═══════════════════════════════════════════════════════
-// DATA LAYER — Quido Repository + Store
+// DATA LAYER - Quido Repository + Store
 // ═══════════════════════════════════════════════════════
 function getAccount() {
   if (!_store) return Quido.createEmptyAccount();
   return _store.getState() || Quido.createEmptyAccount();
 }
 function saveAccount() { /* mutations go through store.dispatch() */ }
-function ensureFields(acct) { return acct; } // no-op — canonical schema is always complete
+function ensureFields(acct) { return acct; } // no-op - canonical schema is always complete
 
 // ═══════════════════════════════════════════════════════
-// LOAN ENGINE  — delegates to shared Quido.builtInEngineFactory
+// LOAN ENGINE  - delegates to shared Quido.builtInEngineFactory
 // ═══════════════════════════════════════════════════════
 function calcSchedule(P, apr, n, startDate, paidCount) {
   var engine = Quido.builtInEngineFactory({
@@ -1218,7 +1234,7 @@ function calcSchedule(P, apr, n, startDate, paidCount) {
   engine.calc();
   return { emi: engine.summary().emi, schedule: engine.schedule() };
 }
-// Normalise a single schedule row — dueDate always as Date, ph/pa defaulted.
+// Normalise a single schedule row - dueDate always as Date, ph/pa defaulted.
 // Used in loadState() Path A and Path B to avoid duplicating the same mapper.
 function _normRow(r) {
   return {
@@ -1230,7 +1246,12 @@ function _normRow(r) {
     balance:   r.balance,
     status:    r.status,
     ph:        r.ph || false,
-    pa:        r.pa || false
+    pa:        r.pa || false,
+    interestPaid: firstDefined(r.interestPaid, 0),
+    principalPaid: firstDefined(r.principalPaid, 0),
+    interestRemaining: r.interestRemaining,
+    principalRemaining: r.principalRemaining,
+    remainingDue: r.remainingDue
   };
 }
 function fmt(n) { return '\u00a3' + (n||0).toFixed(2); }
@@ -1243,7 +1264,7 @@ function firstDefined() {
 }
 function outstandingBal(schedule, paidCount) {
   var t = 0;
-  for (var i = paidCount; i < schedule.length; i++) t += schedule[i].principal;
+  for (var i = paidCount; i < schedule.length; i++) t += schedule[i].emi;
   return t;
 }
 function totalRepaid(schedule, paidCount) {
@@ -1251,9 +1272,27 @@ function totalRepaid(schedule, paidCount) {
   for (var i = 0; i < paidCount; i++) t += schedule[i].emi;
   return t;
 }
+function rowDueAmount(row) {
+  if (!row) return 0;
+  return firstDefined(row.remainingDue, row.emi, 0);
+}
+function currentOutstanding() {
+  return firstDefined(OPS.outstandingBalance, outstandingBal(OPS.schedule, OPS.paidCount), 0);
+}
+function currentTotalRepaid() {
+  return firstDefined(OPS.totalRepaid, totalRepaid(OPS.schedule, OPS.paidCount), 0);
+}
+function currentInstalmentsRemaining() {
+  return firstDefined(OPS.instalmentsRemaining, Math.max(0, OPS.schedule.length - OPS.paidCount), 0);
+}
+function currentProgressPct() {
+  var total = firstDefined(OPS.totalRepayable, (OPS.emi || 0) * (OPS.schedule.length || OPS.term || 0), 0);
+  if (total > 0) return Math.max(0, Math.min(100, Math.round((currentTotalRepaid() / total) * 100)));
+  return OPS.schedule.length ? Math.round((OPS.paidCount / OPS.schedule.length) * 100) : 0;
+}
 
 // ═══════════════════════════════════════════════════════
-// LOAD STATE — from canonical store into OPS.* + OPS.account bridge
+// LOAD STATE - from canonical store into OPS.* + OPS.account bridge
 // ═══════════════════════════════════════════════════════
 // ── loadState ─────────────────────────────────────────────────────────────
 // Populates OPS.* bridge variables and OPS.account that all render functions
@@ -1261,11 +1300,11 @@ function totalRepaid(schedule, paidCount) {
 // customer app.
 //
 // Path A (preferred): use the resolved account from GET /api/accounts/:key/resolved
-//   — server-computed projection; eliminates all local selector and active-loan
+//   - server-computed projection; eliminates all local selector and active-loan
 //   resolution logic (selectOpsCustomer, eventsToHistory, etc.).
 //
 // Path B (fallback): assemble from raw v3 state in localStorage
-//   — unchanged original logic; used when backend is offline.
+//   - unchanged original logic; used when backend is offline.
 function loadState() {
   if (!_store || !ACCT_KEY) return;
 
@@ -1274,18 +1313,25 @@ function loadState() {
   if (resolved && resolved.activeLoan) {
     var al   = resolved.activeLoan;
     var core = al.core;
+    var sum  = al.summary || {};
     OPS.principal     = core.principal;
     OPS.apr           = core.apr;
     OPS.term          = core.termMonths;
     OPS.startDate     = new Date(core.startDate);
     OPS.paidCount     = core.paidCount;
     OPS.accountStatus = al.status.resolvedDisplayStatus || al.status.baseStatus || al.status.coreStatus || 'active';
+    OPS.closedAt      = al.closedAt || null;
     OPS.emi           = al.emi || 0;
+    OPS.totalRepaid   = firstDefined(sum.totalRepaid, 0);
+    OPS.outstandingBalance = firstDefined(sum.outstandingBalance, 0);
+    OPS.totalRepayable = firstDefined(sum.totalRepayable, 0);
+    OPS.instalmentsRemaining = firstDefined(sum.instalmentsRemaining, 0);
+    OPS.transactions  = (al.transactions || []).slice();
     if (al.schedule && al.schedule.length) {
       OPS.schedule = al.schedule.map(_normRow);
       OPS.term = OPS.schedule.length;
     }
-    // Build OPS.account bridge directly from the resolved projection —
+    // Build OPS.account bridge directly from the resolved projection -
     // no Quido.selectors.selectOpsCustomer() or eventsToHistory() calls needed.
     // Customer-level data (personal, contact, employment, affordability, paymentDetails)
     // is kept in separate sub-objects matching the v3 canonical schema sections.
@@ -1341,7 +1387,7 @@ function loadState() {
         ),
         granular: rawIEA.granular || {}
       },
-      // Use canonical {card, bank} structure from local store — backend may return differently
+      // Use canonical {card, bank} structure from local store - backend may return differently
       paymentDetails: {
         card: Object.assign({}, canonPdA.card || {}),
         bank: Object.assign({}, canonPdA.bank || {})
@@ -1358,19 +1404,26 @@ function loadState() {
     return;
   }
 
-  // ── Path B: fallback — assemble from raw v3 store (offline) ───────────
+  // ── Path B: fallback - assemble from raw v3 store (offline) ───────────
   var st = _store.getState();
   if (!st) return;
   var loan = Quido.accountStateResolver.getActiveLoan(st);
   if (!loan) return;
   var lc = loan.loanCore;
   var se = loan.statusEngineState || {};
+  var ls = loan.loanSummary || {};
   OPS.principal     = lc.principal;
   OPS.apr           = lc.apr;
   OPS.term          = lc.termMonths;
   OPS.startDate     = new Date(lc.startDate);
   OPS.paidCount     = lc.paidCount;
   OPS.accountStatus = se.coreStatus || 'active';
+  OPS.closedAt      = loan.closedAt || null;
+  OPS.totalRepaid   = firstDefined(ls.totalRepaid, 0);
+  OPS.outstandingBalance = firstDefined(ls.outstandingBalance, 0);
+  OPS.totalRepayable = firstDefined(ls.totalRepayable, 0);
+  OPS.instalmentsRemaining = firstDefined(ls.instalmentsRemaining, Math.max(0, OPS.term - OPS.paidCount));
+  OPS.transactions = (loan.transactions || []).slice();
   var snap = loan.scheduleSnapshot;
   if (snap && snap.length) {
     OPS.schedule = snap.map(_normRow);
@@ -1414,7 +1467,7 @@ function loadState() {
       disposableIncome: derivIE.disposableIncome || 0,
       granular: rawIE.granular || {}
     },
-    // Canonical {card, bank} from v3 state — single source of truth
+    // Canonical {card, bank} from v3 state - single source of truth
     paymentDetails: {
       card: Object.assign({}, canonPdB.card || {}),
       bank: Object.assign({}, canonPdB.bank || {})
@@ -1440,7 +1493,7 @@ function loadState() {
 }
 
 // Build a canonical store command from a UI action name + details object.
-// All parameter values come from the details object — never from the OPS.*
+// All parameter values come from the details object - never from the OPS.*
 // bridge.  The bridge is read-only state assembled by loadState(); mutating
 // it before dispatch was an anti-pattern that has been removed.
 function _actionToCommand(action, details) {
@@ -1449,9 +1502,11 @@ function _actionToCommand(action, details) {
   if (action === 'account_status_change')
     return { type: CT.CHANGE_ACCOUNT_STATUS, payload: { status: d.status } };
   if (action === 'payment_recorded')
-    return { type: CT.RECORD_PAYMENT, payload: { paidCount: d.newPaidCount !== undefined ? d.newPaidCount : d.paidCount } };
+    return { type: CT.SET_PAID_COUNT, payload: { paidCount: d.newPaidCount !== undefined ? d.newPaidCount : d.paidCount } };
   if (action === 'manual_payment')
     return { type: CT.RECORD_PAYMENT, payload: { amount: d.amount, date: d.date } };
+  if (action === 'refund_payment')
+    return { type: CT.REFUND_PAYMENT, payload: { txnId: d.txnId, reason: d.reason } };
   if (action === 'loan_recalculated' || action === 'loan_restructure')
     return { type: CT.RECALCULATE_LOAN, payload: {
       contract:  { principal: d.principal, apr: d.apr, termMonths: d.term, startDate: d.startDate },
@@ -1527,18 +1582,19 @@ function gotoSec(id) {
 // ═══════════════════════════════════════════════════════
 function renderOverview() {
   loadState();
-  var remaining = OPS.schedule.length - OPS.paidCount;
-  var outstanding = outstandingBal(OPS.schedule, OPS.paidCount);
+  var remaining = currentInstalmentsRemaining();
+  var outstanding = currentOutstanding();
+  var repaid = currentTotalRepaid();
   var next = OPS.paidCount < OPS.schedule.length ? OPS.schedule[OPS.paidCount] : null;
   setText('ov-balance', fmt(outstanding));
-  setText('ov-balance-sub', OPS.paidCount+' of '+OPS.schedule.length+' paid');
+  setText('ov-balance-sub', fmt(repaid)+' repaid');
   setText('ov-next-due', next ? shortDate(next.dueDate) : 'Fully repaid');
-  setText('ov-next-emi', next ? fmt(next.emi)+' due' : '—');
+  setText('ov-next-emi', next ? fmt(rowDueAmount(next))+' due' : '-');
   setText('ov-emi', fmt(OPS.emi));
   setText('ov-emi-sub', '@ '+OPS.apr.toFixed(1)+'% APR');
   setText('ov-remaining', remaining);
   setText('ov-remaining-sub', 'of '+OPS.schedule.length+' total');
-  var pct = OPS.schedule.length ? Math.round((OPS.paidCount/OPS.schedule.length)*100) : 0;
+  var pct = currentProgressPct();
   var fill = document.getElementById('ov-health-fill');
   if (fill) fill.style.width = pct+'%';
   setText('ov-health-pct', pct+'% repaid');
@@ -1584,7 +1640,7 @@ function renderCustomer() {
   setVal('cust-ie-living',      aff.livingCosts    || 0);
   setVal('cust-ie-debts',       aff.otherDebts     || 0);
   setText('cust-ie-disposable', fmt(Math.max(0, aff.disposableIncome || 0)) + '/month');
-  // Granular I&E panel — read-only display of all 16 line items
+  // Granular I&E panel - read-only display of all 16 line items
   var g = aff.granular || {};
   // Fallback: derive from flat buckets if granular is absent/all-zero
   if (!(g.incSalary || g.expRent) && aff.monthlyIncome) {
@@ -1618,10 +1674,10 @@ function renderCustomer() {
   setText('ops-g-exp-total',     fmt(gTE));
   var surpEl = document.getElementById('ops-g-surplus');
   if (surpEl) { surpEl.textContent = fmt(gSurplus); surpEl.style.color = gSurplus >= 0 ? 'var(--green)' : '#dc2626'; }
-  setText('cust-meta-id', acct.id||'—');
-  setText('cust-meta-loan', acct.loanId||'—');
-  setText('cust-meta-created', acct.createdAt ? shortDate(acct.createdAt) : '—');
-  setText('cust-meta-active', acct.lastActive ? fmtTs(acct.lastActive) : '—');
+  setText('cust-meta-id', acct.id||'-');
+  setText('cust-meta-loan', acct.loanId||'-');
+  setText('cust-meta-created', acct.createdAt ? shortDate(acct.createdAt) : '-');
+  setText('cust-meta-active', acct.lastActive ? fmtTs(acct.lastActive) : '-');
   setText('cust-meta-status', OPS.accountStatus);
   var notes = acct.opsNotes||[];
   var notesEl = document.getElementById('cust-notes-list');
@@ -1655,10 +1711,10 @@ function renderLoan() {
   var sd = OPS.startDate;
   setVal('lp-startdate', sd.getFullYear()+'-'+String(sd.getMonth()+1).padStart(2,'0')+'-'+String(sd.getDate()).padStart(2,'0'));
   var sel = document.getElementById('lp-status'); if (sel) sel.value = OPS.accountStatus;
-  var outstanding = outstandingBal(OPS.schedule, OPS.paidCount);
-  var repaid = totalRepaid(OPS.schedule, OPS.paidCount);
-  var totalInt = OPS.emi * OPS.term - OPS.principal;
-  var last = OPS.schedule.length ? shortDate(OPS.schedule[OPS.schedule.length-1].dueDate) : '—';
+  var outstanding = currentOutstanding();
+  var repaid = currentTotalRepaid();
+  var totalInt = Math.max(0, firstDefined(OPS.totalRepayable, OPS.emi * OPS.term, 0) - OPS.principal);
+  var last = OPS.schedule.length ? shortDate(OPS.schedule[OPS.schedule.length-1].dueDate) : '-';
   var sumEl = document.getElementById('loan-summary');
   if (sumEl) sumEl.innerHTML = [
     ['Monthly EMI',fmt(OPS.emi)],['Principal',fmt(OPS.principal)],
@@ -1762,17 +1818,17 @@ function renderCollections() {
   var dpd = (daysUntil!==null && daysUntil<0) ? Math.abs(daysUntil) : 0;
   setText('col-dpd', dpd>0 ? dpd+' days' : 'Up to date');
   setText('col-status', OPS.accountStatus.charAt(0).toUpperCase()+OPS.accountStatus.slice(1));
-  setText('col-outstanding', fmt(outstandingBal(OPS.schedule,OPS.paidCount)));
+  setText('col-outstanding', fmt(currentOutstanding()));
   var risk = OPS.accountStatus==='default'?90 : OPS.accountStatus==='arrears'?55 : dpd>5?30 : 10;
   var fill = document.getElementById('col-risk-fill');
   if (fill) { fill.style.width=risk+'%'; fill.style.background=risk>70?'var(--red)':risk>40?'var(--amber)':'var(--green)'; }
   setText('col-risk-pct', risk+'%');
   var recs = [];
-  if (OPS.accountStatus==='active'&&dpd===0) recs=['No action required — account is current and up to date.'];
+  if (OPS.accountStatus==='active'&&dpd===0) recs=['No action required - account is current and up to date.'];
   else if (OPS.accountStatus==='active'&&dpd>0) recs=['Account is '+dpd+' days past due.','Contact customer by phone immediately.','Offer payment arrangement if in difficulty.','If no response within 5 days, escalate to arrears.'];
   else if (OPS.accountStatus==='arrears') recs=['Account in arrears.','Issue formal arrears notice to customer.','Discuss payment arrangement or payment holiday.','Conduct updated income & expenditure assessment.','Set next review date within 14 days.'];
   else if (OPS.accountStatus==='default') recs=['Account in default.','Issue formal default notice (FCA-compliant).','Refer to collections team immediately.','Consider debt restructuring or write-off assessment.','No further payment holidays available.'];
-  else if (OPS.accountStatus==='terminated') recs=['Account closed — no further action required.'];
+  else if (OPS.accountStatus==='terminated') recs=['Account closed - no further action required.'];
   var recEl = document.getElementById('col-recommendations');
   if (recEl) recEl.innerHTML = recs.map(function(r){ return '<div style="padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:12.5px">'+escHtml(r)+'</div>'; }).join('') || 'No recommendations.';
   var logs = (OPS.account.contactLog||[]).slice().reverse();
@@ -1809,6 +1865,10 @@ function markPaid(n) {
   toast('Instalment ' + n + ' marked as paid', 'success');
 }
 function unmarkPaid(n) {
+  if (OPS.accountStatus === 'closed' || OPS.accountStatus === 'settled' || OPS.closedAt) {
+    toast('Undo does not reopen a closed or settled loan.', 'info');
+    return;
+  }
   var newCount = Math.max(0, n - 1);
   syncToCustomer('payment_recorded', { instalmentN: n, newPaidCount: newCount });
   buildSchedTable();
@@ -2040,7 +2100,7 @@ function opsBuildPAIEForm() {
     + '<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span style="color:var(--muted)">Total expenses</span><strong id="ops-pa-ie-exp-total">£0.00</strong></div>'
     + '<div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;border-top:1px solid var(--border);padding-top:6px;margin-top:4px"><span>Disposable income</span><span id="ops-pa-ie-disposable" style="color:var(--green)">£0.00</span></div>'
     + '</div>'
-    + '<button class="btn btn-warning btn-sm btn-block" id="ops-pa-ie-next" style="margin-bottom:6px">Next — Credit impact</button>'
+    + '<button class="btn btn-warning btn-sm btn-block" id="ops-pa-ie-next" style="margin-bottom:6px">Next - Credit impact</button>'
     + '<button class="btn btn-ghost btn-sm btn-block" onclick="opsShowPAStep(\'reason\')">Back</button>';
   var step = document.getElementById('ops-pa-step-iae');
   if (step) { step.innerHTML = html; }
@@ -2129,7 +2189,7 @@ function opsBuildPAReviewStep(amount, startDateStr) {
     + '<tr><td style="padding:4px 0;color:var(--muted)">Number of payments</td><td style="text-align:right;font-weight:600">' + months + '</td></tr>'
     + '<tr><td style="padding:4px 0;color:var(--muted)">Final payment</td><td style="text-align:right;font-weight:600">' + shortDate(endDate) + '</td></tr>'
     + '<tr><td style="padding:8px 0 4px;color:var(--green);font-weight:700;border-top:1px solid var(--border)">Interest rate</td>'
-    + '<td style="text-align:right;font-weight:700;color:var(--green);padding:8px 0 4px;border-top:1px solid var(--border)">0% — frozen</td></tr>'
+    + '<td style="text-align:right;font-weight:700;color:var(--green);padding:8px 0 4px;border-top:1px solid var(--border)">0% - frozen</td></tr>'
     + '</table></div>'
     + '<button class="btn btn-success btn-sm btn-block" id="ops-pa-review-confirm" style="margin-bottom:6px">Confirm arrangement</button>'
     + '<button class="btn btn-ghost btn-sm btn-block" onclick="opsShowPAStep(\'amount\')">Back</button>';
@@ -2308,7 +2368,7 @@ syncBus.subscribe(function(msg) {
   if (!ACCT_KEY || !msg) return;
   if (msg.storageKey && msg.storageKey !== ACCT_KEY) return;
   if (!msg.actor || msg.actor === 'ops_ui') return; // ignore own messages
-  // Reload from localStorage before calling loadState() — the customer app has
+  // Reload from localStorage before calling loadState() - the customer app has
   // already written the updated account there; our cached state is stale.
   if (_store) { try { _store.reload(); } catch(e) {} }
   // Bump activity badge
@@ -2361,7 +2421,7 @@ function updateTopbar() {
   setText('tb-crumb', fullName + ' · ' + loanRef);
   setText('tb-cname', fullName);
   setText('tb-cloan', loanRef);
-  setText('ov-summary', 'Account summary — ' + fullName + ' · ' + loanRef);
+  setText('ov-summary', 'Account summary - ' + fullName + ' · ' + loanRef);
   var cav = document.getElementById('tb-cav');
   if (cav) {
     var initials = (per.firstName && per.lastName)
@@ -2388,6 +2448,7 @@ var ACTION_LABELS = {
   APPLY_PAYMENT_ARRANGEMENT:'Payment arrangement set', CHANGE_PAY_DATE:'Pay date changed',
   EXTEND_TERM:'Term extended', WAIVE_INTEREST:'Interest waived',
   CLOSE_ACCOUNT:'Account closed', FLAG_COLLECTIONS:'Flagged for collections',
+  REFUND_PAYMENT:'Payment refunded', payment_refunded:'Payment refunded',
   ADD_OPS_NOTE:'Ops note added', ADD_CONTACT_ATTEMPT:'Contact attempt logged',
   UPDATE_PROFILE:'Profile updated (ops)', UPDATE_EMPLOYMENT:'Employment updated (ops)',
   UPDATE_AFFORDABILITY:'I&E updated (ops)', UPDATE_PAYMENT_METHODS:'Payment details updated',
@@ -2403,6 +2464,7 @@ var ACT_COLORS = {
   CHANGE_ACCOUNT_STATUS:'#fee2e2', RECORD_PAYMENT:'#dcfce7', RECALCULATE_LOAN:'#e0f2fe',
   APPLY_PAYMENT_HOLIDAY:'#ede9fe', APPLY_PAYMENT_ARRANGEMENT:'#fef3c7', CHANGE_PAY_DATE:'#fef9c3',
   EXTEND_TERM:'#fef3c7', WAIVE_INTEREST:'#fef3c7', CLOSE_ACCOUNT:'#fee2e2',
+  REFUND_PAYMENT:'#fee2e2', payment_refunded:'#fee2e2',
   FLAG_COLLECTIONS:'#fee2e2', ADD_OPS_NOTE:'#fef9c3', ADD_CONTACT_ATTEMPT:'#e0f2fe',
   UPDATE_PROFILE:'#fef9c3', UPDATE_EMPLOYMENT:'#fef9c3', UPDATE_AFFORDABILITY:'#fef9c3',
   UPDATE_PAYMENT_METHODS:'#e0f2fe'
@@ -2413,6 +2475,7 @@ function fmtDetails(a,d) {
   if (a==='chat_message') return d.preview||'';
   if (a==='account_status_change') return 'Changed to '+d.status+(d.prev?' from '+d.prev:'');
   if (a==='payment_recorded') return 'Instalment '+(d.instalmentN||'')+' &middot; new count: '+d.newPaidCount;
+  if (a==='payment_refunded' || a==='REFUND_PAYMENT') return fmt(d.amount||0)+' &middot; Payment reversed' + (d.reason ? ' &middot; Reason: ' + d.reason : '');
   if (a==='pay_date_change') return 'Day '+(d.newDay||'');
   if (a==='manual_payment') return fmt(d.amount||0)+' &middot; Ref: '+(d.ref||'');
   if (a==='loan_recalculated') return fmt(d.principal||0)+' &middot; '+d.apr+'% APR &middot; '+d.term+' months';
@@ -2423,6 +2486,7 @@ function fmtDetails(a,d) {
 function actIconBg(a) { return ACT_COLORS[a]||'#f1f5f9'; }
 function actIconSvg(a) {
   if (a==='payment_recorded'||a==='manual_payment') return '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#059669" stroke-width="1.3"/><path d="M4 6l1.5 1.5L8 4" stroke="#059669" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  if (a==='payment_refunded'||a==='REFUND_PAYMENT') return '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#dc2626" stroke-width="1.3"/><path d="M3.5 6h5" stroke="#dc2626" stroke-width="1.3" stroke-linecap="round"/></svg>';
   if (a==='account_status_change'||a==='account_closed'||a==='flagged_collections') return '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#dc2626" stroke-width="1.3"/><path d="M6 3.5v3M6 8.5v.5" stroke="#dc2626" stroke-width="1.3" stroke-linecap="round"/></svg>';
   if (a==='profile_edit'||a==='profile_updated') return '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="4" r="2" stroke="#b45309" stroke-width="1.3"/><path d="M2 10.5c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="#b45309" stroke-width="1.3" stroke-linecap="round"/></svg>';
   return '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#94a3b8" stroke-width="1.3"/></svg>';
@@ -2443,7 +2507,7 @@ function setText(id,v){ var el=document.getElementById(id); if(el) el.textConten
 function setVal(id,v){ var el=document.getElementById(id); if(el) el.value=v; }
 function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function fmtTs(iso) {
-  if (!iso) return '—';
+  if (!iso) return '-';
   var d=new Date(iso), now=new Date(), diff=(now-d)/1000;
   if (diff<60) return 'Just now';
   if (diff<3600) return Math.floor(diff/60)+'m ago';
@@ -2455,6 +2519,181 @@ function toast(msg, type) {
   var el = document.createElement('div'); el.className='toast '+(type||'info'); el.textContent=msg;
   root.appendChild(el);
   setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 3500);
+}
+
+var DIRECTORY_DEFAULT_LIMIT = 25;
+var DIRECTORY_SEARCH_LIMIT  = 50;
+
+function deriveInitials(name) {
+  return String(name || '')
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(function(part){ return part.charAt(0).toUpperCase(); })
+    .join('') || 'CU';
+}
+function normaliseDirectoryAccount(raw) {
+  raw = raw || {};
+  var name = raw.name || raw.fullName || 'Unknown customer';
+  return {
+    storageKey: raw.storageKey || '',
+    id:         raw.customerId || raw.id || '',
+    name:       name,
+    initials:   raw.initials || deriveInitials(name),
+    loanId:     raw.loanId || '',
+    loanStatus: raw.loanStatus || ((raw.loan && raw.loan.accountStatus) || 'active'),
+    outstanding: raw.outstanding !== undefined ? raw.outstanding : ((raw.loan && raw.loan.principal) || 0),
+    profile: {
+      personal: {
+        dob: raw.dob || (raw.profile && raw.profile.personal && raw.profile.personal.dob) || ''
+      },
+      contact: {
+        email:   raw.email   || (raw.profile && raw.profile.contact && raw.profile.contact.email) || '',
+        phone:   raw.phone   || (raw.profile && raw.profile.contact && raw.profile.contact.phone) || '',
+        address: raw.address || (raw.profile && raw.profile.contact && raw.profile.contact.address) || ''
+      }
+    },
+    loan: {
+      accountStatus: raw.loanStatus || ((raw.loan && raw.loan.accountStatus) || 'active'),
+      principal:     raw.outstanding !== undefined ? raw.outstanding : ((raw.loan && raw.loan.principal) || 0),
+      apr:           (raw.loan && raw.loan.apr) || 0,
+      term:          (raw.loan && raw.loan.term) || 0,
+      startDate:     (raw.loan && raw.loan.startDate) || '',
+      paidCount:     (raw.loan && raw.loan.paidCount) || 0
+    }
+  };
+}
+function getFallbackDirectoryAccounts() {
+  return CUSTOMER_REGISTRY.map(function(c) { return normaliseDirectoryAccount(c); });
+}
+function setDirectoryAccounts(accounts) {
+  DIRECTORY_ACCOUNTS = (accounts || []).map(normaliseDirectoryAccount).filter(function(a){ return !!a.storageKey; });
+}
+function loadCustomerDirectory() {
+  if (!USE_API || !window.fetch) {
+    setDirectoryAccounts(getFallbackDirectoryAccounts());
+    buildCustDirectory();
+    return Promise.resolve(DIRECTORY_ACCOUNTS);
+  }
+  return window.fetch(API_BASE.replace(/\/$/, '') + '/accounts', {
+    method: 'GET',
+    headers: { 'Accept': 'application/json' }
+  }).then(function(res) {
+    if (!res.ok) throw new Error('Directory request failed: ' + res.status);
+    return res.json();
+  }).then(function(data) {
+    var accounts = (data && data.accounts) || [];
+    if (!accounts.length) accounts = getFallbackDirectoryAccounts();
+    setDirectoryAccounts(accounts);
+    buildCustDirectory();
+    return DIRECTORY_ACCOUNTS;
+  }).catch(function() {
+    setDirectoryAccounts(getFallbackDirectoryAccounts());
+    buildCustDirectory();
+    return DIRECTORY_ACCOUNTS;
+  });
+}
+function findSeedCustomerByKey(key) {
+  for (var i = 0; i < CUSTOMER_REGISTRY.length; i++) {
+    if (CUSTOMER_REGISTRY[i].storageKey === key) return CUSTOMER_REGISTRY[i];
+  }
+  return null;
+}
+function findDirectoryCustomerByKey(key) {
+  for (var i = 0; i < DIRECTORY_ACCOUNTS.length; i++) {
+    if (DIRECTORY_ACCOUNTS[i].storageKey === key) return DIRECTORY_ACCOUNTS[i];
+  }
+  return null;
+}
+function makeSeedFromDirectoryAccount(entry) {
+  entry = normaliseDirectoryAccount(entry);
+  var parts = String(entry.name || '').trim().split(/\s+/);
+  return {
+    storageKey: entry.storageKey,
+    id: entry.id || entry.storageKey,
+    name: entry.name,
+    initials: entry.initials,
+    loanId: entry.loanId,
+    loan: {
+      principal: entry.outstanding || 0,
+      apr: 0,
+      term: 0,
+      startDate: '',
+      paidCount: 0,
+      accountStatus: entry.loanStatus || 'active'
+    },
+    profile: {
+      personal: {
+        title: '',
+        firstName: parts[0] || '',
+        lastName: parts.slice(1).join(' '),
+        dob: (entry.profile && entry.profile.personal && entry.profile.personal.dob) || ''
+      },
+      contact: {
+        email:   (entry.profile && entry.profile.contact && entry.profile.contact.email) || '',
+        phone:   (entry.profile && entry.profile.contact && entry.profile.contact.phone) || '',
+        address: (entry.profile && entry.profile.contact && entry.profile.contact.address) || ''
+      },
+      employment: {}
+    },
+    incomeExpenditure: {},
+    paymentDetails: { card:{}, bank:{} }
+  };
+}
+
+function normalizeCustomerSearchText(value) {
+  return (value || '').toLowerCase().replace(/[\s\-\(\)]/g,'');
+}
+function getCustomerSearchText(c) {
+  var pcon = (c.profile && c.profile.contact)  || {};
+  var pper = (c.profile && c.profile.personal) || {};
+  return normalizeCustomerSearchText([
+    c.name,
+    pcon.email || '',
+    pcon.phone || '',
+    c.loanId,
+    c.id,
+    pper.dob || '',
+    pcon.address || ''
+  ].join(' '));
+}
+function findCustomers(q) {
+  var needle = normalizeCustomerSearchText((q || '').trim());
+  var source = DIRECTORY_ACCOUNTS.length ? DIRECTORY_ACCOUNTS : getFallbackDirectoryAccounts();
+  if (!needle) return source.slice();
+  return source.filter(function(c) {
+    return getCustomerSearchText(c).includes(needle);
+  });
+}
+function renderCustomerLookupCards(customers, opts) {
+  opts = opts || {};
+  var emptyMessage = opts.emptyMessage || 'No customers found.';
+  if (!customers.length) {
+    return '<div style="padding:40px 24px;text-align:center;color:#94a3b8;font-size:13px;background:var(--surface);border:1px dashed var(--border);border-radius:12px">'+emptyMessage+'</div>';
+  }
+  var statusBg  = { active:'#d1fae5', arrears:'#fef3c7', default:'#fee2e2', terminated:'#f1f5f9' };
+  var statusClr = { active:'#059669', arrears:'#b45309', default:'#dc2626', terminated:'#64748b' };
+  return customers.map(function(c) {
+    var liveStatus = c.loanStatus || (c.loan && c.loan.accountStatus) || 'active';
+    var outstanding = c.outstanding !== undefined ? c.outstanding : ((c.loan && c.loan.principal) || 0);
+    var pcon = (c.profile && c.profile.contact)  || {};
+    var pper = (c.profile && c.profile.personal) || {};
+    return '<div onclick="selectCustomer(\''+c.storageKey+'\')" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:border-color .15s,box-shadow .15s" onmouseover="this.style.borderColor=\'var(--blue)\';this.style.boxShadow=\'0 4px 14px rgba(26,86,219,.1)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.boxShadow=\'\'">'
+      +'<div style="width:46px;height:46px;background:linear-gradient(135deg,#60a5fa,#1a56db);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0">'+escHtml(c.initials)+'</div>'
+      +'<div style="flex:1;min-width:0">'
+        +'<div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px">'+escHtml(c.name)+'</div>'
+        +'<div style="font-size:12px;color:var(--muted);margin-bottom:3px">Loan #'+escHtml(c.loanId)+' &middot; '+escHtml(pcon.email||'')+' &middot; '+escHtml(pcon.phone||'')+'</div>'
+        +'<div style="font-size:11px;color:#94a3b8">Customer ID: '+escHtml(c.id)+' &middot; DOB: '+escHtml(pper.dob||'-')+'</div>'
+      +'</div>'
+      +'<div style="text-align:right;flex-shrink:0">'
+        +'<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:5px">'+fmt(outstanding)+' outstanding</div>'
+        +'<div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">'
+          +'<span style="font-size:11px;color:var(--muted)">'+escHtml((pcon.address||'').split(',')[0] || 'No address')+'</span>'
+          +'<span style="padding:2px 9px;border-radius:12px;font-size:11px;font-weight:600;background:'+(statusBg[liveStatus]||'#f1f5f9')+';color:'+(statusClr[liveStatus]||'#64748b')+'">'+liveStatus.charAt(0).toUpperCase()+liveStatus.slice(1)+'</span>'
+        +'</div>'
+      +'</div>'
+      +'</div>';
+  }).join('');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -2475,34 +2714,11 @@ function runSearch(q) {
   q = (q||'').trim();
   var res = document.getElementById('search-results'); if (!res) return;
   if (q.length < 1) { res.innerHTML = '<div style="padding:48px;text-align:center;color:#94a3b8;font-size:13px">Start typing to search&hellip;</div>'; return; }
-  var ql = q.toLowerCase().replace(/[\s\-\(\)]/g,'');
-  var matches = CUSTOMER_REGISTRY.filter(function(c) {
-    var pcon = (c.profile && c.profile.contact)  || {};
-    var pper = (c.profile && c.profile.personal) || {};
-    var txt = [c.name, pcon.email||'', pcon.phone||'', c.loanId, c.id, pper.dob||'', pcon.address||''].join(' ').toLowerCase().replace(/[\s\-\(\)]/g,'');
-    return txt.includes(ql);
-  });
+  var matches = findCustomers(q);
   if (!matches.length) { res.innerHTML = '<div style="padding:48px;text-align:center;color:#94a3b8;font-size:13px">No customers found matching <strong>"'+escHtml(q)+'"</strong></div>'; return; }
-  var statusBg  = { active:'#d1fae5', arrears:'#fef3c7', default:'#fee2e2', terminated:'#f1f5f9' };
-  var statusClr = { active:'#059669', arrears:'#b45309', default:'#dc2626', terminated:'#64748b' };
-  res.innerHTML = matches.map(function(c) {
-    var pcon = (c.profile && c.profile.contact)  || {};
-    var pper = (c.profile && c.profile.personal) || {};
-    // Use seed status in search — live status is shown once a customer session is loaded.
-    var liveStatus = c.loan.accountStatus;
-    return '<div onclick="selectFromSearch(\''+c.storageKey+'\')" style="display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;transition:background .12s;border-bottom:1px solid #f1f5f9" onmouseover="this.style.background=\'#f8fafc\'" onmouseout="this.style.background=\'\'">'
-      +'<div style="width:46px;height:46px;background:linear-gradient(135deg,#60a5fa,#1a56db);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0">'+c.initials+'</div>'
-      +'<div style="flex:1;min-width:0">'
-        +'<div style="font-size:14px;font-weight:700;color:#0f172a;margin-bottom:3px">'+escHtml(c.name)+'</div>'
-        +'<div style="font-size:12px;color:#64748b;margin-bottom:2px">Loan #'+escHtml(c.loanId)+' &middot; '+escHtml(pcon.email||'')+' &middot; '+escHtml(pcon.phone||'')+'</div>'
-        +'<div style="font-size:11px;color:#94a3b8">DOB: '+escHtml(pper.dob||'')+' &middot; '+escHtml(pcon.address||'')+'</div>'
-      +'</div>'
-      +'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">'
-        +'<span style="padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;background:'+(statusBg[liveStatus]||'#f1f5f9')+';color:'+(statusClr[liveStatus]||'#64748b')+'">'+liveStatus.charAt(0).toUpperCase()+liveStatus.slice(1)+'</span>'
-        +'<span style="font-size:10.5px;color:#94a3b8">'+escHtml(c.id)+'</span>'
-      +'</div>'
-      +'</div>';
-  }).join('');
+  res.innerHTML = renderCustomerLookupCards(matches.slice(0, DIRECTORY_SEARCH_LIMIT), {
+    emptyMessage: 'No customers found matching "'+escHtml(q)+'".'
+  });
 }
 function selectFromSearch(key) {
   closeSearch();
@@ -2529,8 +2745,8 @@ function opsLogin() {
   var badge = document.getElementById('ops-agent-badge');
   if (badge) badge.textContent = OPS_AGENT.name + ' \u00b7 ' + OPS_AGENT.role;
   document.getElementById('ops-login-overlay').style.display = 'none';
-  document.getElementById('ops-cust-selector').style.display = 'flex';
-  buildCustDirectory();
+  if (!DIRECTORY_ACCOUNTS.length) setDirectoryAccounts(getFallbackDirectoryAccounts());
+  showCustomerSelector();
 }
 function opsLogout() {
   ACCT_KEY = null; OPS_AGENT = null;
@@ -2545,35 +2761,55 @@ function showCustomerSelector() {
   if (!OPS_AGENT) return;
   buildCustDirectory();
   document.getElementById('ops-cust-selector').style.display = 'flex';
+  setTimeout(function(){
+    var input = document.getElementById('ops-cust-search');
+    if (input) input.focus();
+  }, 60);
+  loadCustomerDirectory();
 }
 function buildCustDirectory() {
+  if (!DIRECTORY_ACCOUNTS.length) setDirectoryAccounts(getFallbackDirectoryAccounts());
+  filterCustomerDirectory((document.getElementById('ops-cust-search') || {}).value || '');
+}
+function filterCustomerDirectory(q) {
+  var query = (q || '').trim();
   var list = document.getElementById('ops-cust-list'); if (!list) return;
-  var statusBg  = { active:'#d1fae5', arrears:'#fef3c7', default:'#fee2e2', terminated:'#f1f5f9' };
-  var statusClr = { active:'#059669', arrears:'#b45309', default:'#dc2626', terminated:'#64748b' };
-  list.innerHTML = CUSTOMER_REGISTRY.map(function(c) {
-    // Use seed status in the directory — live status is shown once a customer session is loaded.
-    var liveStatus = c.loan.accountStatus;
-    var r = calcSchedule(c.loan.principal, c.loan.apr, c.loan.term, new Date(c.loan.startDate), c.loan.paidCount);
-    var outstanding = outstandingBal(r.schedule, c.loan.paidCount);
-    return '<div onclick="selectCustomer(\''+c.storageKey+'\')" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:border-color .15s,box-shadow .15s" onmouseover="this.style.borderColor=\'var(--blue)\';this.style.boxShadow=\'0 4px 14px rgba(26,86,219,.1)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.boxShadow=\'\'">'
-      +'<div style="width:46px;height:46px;background:linear-gradient(135deg,#60a5fa,#1a56db);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0">'+c.initials+'</div>'
-      +'<div style="flex:1;min-width:0">'
-        +'<div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px">'+c.name+'</div>'
-        +'<div style="font-size:12px;color:var(--muted)">Loan #'+c.loanId+' &middot; '+((c.profile&&c.profile.contact&&c.profile.contact.email)||'')+'&middot; '+((c.profile&&c.profile.contact&&c.profile.contact.phone)||'')+'</div>'
-      +'</div>'
-      +'<div style="text-align:right;flex-shrink:0">'
-        +'<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:5px">\u00a3'+c.loan.principal.toLocaleString()+' &middot; '+c.loan.apr+'% APR &middot; '+c.loan.term+' months</div>'
-        +'<div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">'
-          +'<span style="font-size:11px;color:var(--muted)">Outstanding: '+fmt(outstanding)+'</span>'
-          +'<span style="padding:2px 9px;border-radius:12px;font-size:11px;font-weight:600;background:'+(statusBg[liveStatus]||'#f1f5f9')+';color:'+(statusClr[liveStatus]||'#64748b')+'">'+liveStatus.charAt(0).toUpperCase()+liveStatus.slice(1)+'</span>'
-        +'</div>'
-      +'</div>'
-      +'</div>';
-  }).join('');
+  var meta = document.getElementById('ops-cust-meta');
+  var hint = document.getElementById('ops-cust-hint');
+  var matches = findCustomers(query);
+  var limit = query ? DIRECTORY_SEARCH_LIMIT : DIRECTORY_DEFAULT_LIMIT;
+  var shown = matches.slice(0, limit);
+  list.innerHTML = renderCustomerLookupCards(shown, {
+    emptyMessage: query
+      ? 'No customer accounts matched "'+escHtml(query)+'". Try a name, loan ID, email, phone, or address.'
+      : 'No customer accounts are available.'
+  });
+  if (meta) {
+    meta.textContent = query
+      ? (matches.length + ' matches for "' + query + '"')
+      : (DIRECTORY_ACCOUNTS.length + ' accounts available');
+  }
+  if (hint) {
+    if (!query) {
+      hint.textContent = DIRECTORY_ACCOUNTS.length > limit
+        ? ('Showing the first ' + shown.length + ' accounts. Use search to narrow the list.')
+        : 'Showing all available accounts';
+    } else if (matches.length > shown.length) {
+      hint.textContent = 'Showing the first ' + shown.length + ' matches. Refine the search to narrow further.';
+    } else {
+      hint.textContent = 'Results update as you type';
+    }
+  }
+}
+function clearCustomerDirectorySearch() {
+  var input = document.getElementById('ops-cust-search');
+  if (input) input.value = '';
+  filterCustomerDirectory('');
 }
 function selectCustomer(key) {
-  var customer = null;
-  for (var i = 0; i < CUSTOMER_REGISTRY.length; i++) { if (CUSTOMER_REGISTRY[i].storageKey === key) { customer = CUSTOMER_REGISTRY[i]; break; } }
+  var customer = findSeedCustomerByKey(key);
+  var directoryCustomer = findDirectoryCustomerByKey(key);
+  if (!customer && directoryCustomer) customer = makeSeedFromDirectoryAccount(directoryCustomer);
   if (!customer) return;
   ACCT_KEY = key;
   // Persist the selected customer key so hard refresh restores the customer session
@@ -2591,7 +2827,7 @@ function selectCustomer(key) {
   // When USE_API is true, wrap the localStorage store with the API write-through adapter.
   // Every dispatch() writes to both localStorage (synchronous) and the backend API (async).
   _store = USE_API && Quido.createApiAccountStore
-    ? Quido.createApiAccountStore({ localStore: localStore, storageKey: ACCT_KEY, apiBase: API_BASE })
+    ? Quido.createApiAccountStore({ localStore: localStore, storageKey: ACCT_KEY, apiBase: API_BASE, syncBus: syncBus })
     : localStore;
 
   // Load or migrate existing localStorage data; creates canonical account from seed if new.
@@ -2625,10 +2861,11 @@ function selectCustomer(key) {
     });
   }
   // Update topbar
-  setText('tb-crumb', customer.name + ' \u00b7 Loan #' + customer.loanId);
-  setText('tb-cname', customer.name);
-  setText('tb-cloan', 'Loan #' + customer.loanId);
-  var cav = document.getElementById('tb-cav'); if (cav) cav.textContent = customer.initials;
+  var displayCustomer = directoryCustomer || customer;
+  setText('tb-crumb', displayCustomer.name + ' \u00b7 Loan #' + (displayCustomer.loanId || customer.loanId || ''));
+  setText('tb-cname', displayCustomer.name);
+  setText('tb-cloan', 'Loan #' + (displayCustomer.loanId || customer.loanId || ''));
+  var cav = document.getElementById('tb-cav'); if (cav) cav.textContent = displayCustomer.initials || customer.initials;
   // Update sidebar agent footer
   var an = document.getElementById('sb-agent-name'); if (an && OPS_AGENT) an.textContent = OPS_AGENT.name;
   // Hide selector, start workspace
@@ -2750,7 +2987,7 @@ function renderForbearance() {
   var se   = (loan && loan.statusEngineState) || {};
 
   // Status card
-  var baseStatus       = se.baseStatus            || OPS.accountStatus || '—';
+  var baseStatus       = se.baseStatus            || OPS.accountStatus || '-';
   var svcOverlay       = se.servicingOverlay       || null;
   var svcSub           = se.servicingSubStatus     || null;
   var fovActive        = loan && loan.forbearanceOverlay && loan.forbearanceOverlay.active
@@ -2779,13 +3016,13 @@ function renderForbearance() {
     var lbl = FOV_LABELS[fovActive.type] || fovActive.type;
     setText('fov-active-title', lbl);
     setText('fov-detail-type',      lbl);
-    setText('fov-detail-start',     fovActive.startDate       ? shortDate(fovActive.startDate) : '—');
+    setText('fov-detail-start',     fovActive.startDate       ? shortDate(fovActive.startDate) : '-');
     setText('fov-detail-end',       fovActive.expectedEndDate ? shortDate(fovActive.expectedEndDate) : 'Not set');
-    setText('fov-detail-ref',       fovActive.reference       || '—');
-    setText('fov-detail-reason',    fovActive.reason          || '—');
+    setText('fov-detail-ref',       fovActive.reference       || '-');
+    setText('fov-detail-reason',    fovActive.reason          || '-');
     setText('fov-detail-applied-by', fovActive.appliedBy      || 'ops_ui');
     var orig = fovActive.originalContext || {};
-    setText('fov-detail-orig-base', _fovFmt(orig.baseStatus || '—'));
+    setText('fov-detail-orig-base', _fovFmt(orig.baseStatus || '-'));
     setText('fov-detail-orig-svc',  orig.servicingOverlay ? _fovFmt(orig.servicingOverlay) : 'None');
 
     // Exit action buttons
@@ -2819,16 +3056,16 @@ function renderForbearance() {
         + '</tr></thead><tbody>'
         + cases.slice().reverse().map(function(c) {
             return '<tr><td>' + (FOV_LABELS[c.type]||c.type) + '</td>'
-              + '<td>' + (c.startDate ? shortDate(c.startDate) : '—') + '</td>'
-              + '<td>' + (c.exitedAt  ? shortDate(c.exitedAt)  : '—') + '</td>'
-              + '<td>' + (FOV_OUTCOME_LABELS[c.outcome] || c.outcome || '—') + '</td>'
+              + '<td>' + (c.startDate ? shortDate(c.startDate) : '-') + '</td>'
+              + '<td>' + (c.exitedAt  ? shortDate(c.exitedAt)  : '-') + '</td>'
+              + '<td>' + (FOV_OUTCOME_LABELS[c.outcome] || c.outcome || '-') + '</td>'
               + '<td>' + (c.appliedBy || 'ops_ui') + '</td></tr>';
           }).join('')
         + '</tbody></table>';
     }
   }
 
-  // Forbearance audit trail — filter auditTrail for forbearance events
+  // Forbearance audit trail - filter auditTrail for forbearance events
   var auditAll = (loan && loan.auditTrail) || [];
   var fovAudit = auditAll.filter(function(e) {
     return e.action && e.action.indexOf('forbearance') !== -1;
@@ -2857,11 +3094,11 @@ function renderForbearance() {
 
 // Format snake_case → Title Case for display
 function _fovFmt(s) {
-  if (!s) return '—';
+  if (!s) return '-';
   return s.replace(/_/g, ' ').replace(/\b\w/g, function(c){ return c.toUpperCase(); });
 }
 
-// Called when overlay type changes — show/hide conditional fields
+// Called when overlay type changes - show/hide conditional fields
 function fovTypeChanged() {
   var t = (document.getElementById('fov-type') || {}).value || '';
   var dmpFields = document.getElementById('fov-dmp-fields');
@@ -2944,12 +3181,12 @@ function confirmFovExit(outcome, label) {
     reason:  notes || label
   });
 
-  toast(label + ' — account status updated to ' + resultingStatus + '.', 'success');
+  toast(label + ' - account status updated to ' + resultingStatus + '.', 'success');
   renderForbearance();
   updateTopbar();
 }
 
-// ── startOpsPolling: no-op — syncBus.subscribe + storage event handle cross-tab updates
+// ── startOpsPolling: no-op - syncBus.subscribe + storage event handle cross-tab updates
 function startOpsPolling() {}
 
 // ═══════════════════════════════════════════════════════
@@ -2974,8 +3211,8 @@ function renderPaymentDetails() {
   var upcoming = OPS.schedule.filter(function(s){ return s.status === 'current' || s.status === 'upcoming'; }).slice(0,3);
   if (!upcoming.length) { el.innerHTML = '<div style="padding:12px 0;color:var(--dim);font-size:12px">No upcoming collections</div>'; return; }
   el.innerHTML = upcoming.map(function(s) {
-    return '<div class="kv"><span class="kv-k">Instalment ' + s.n + ' &mdash; ' + shortDate(s.dueDate) + '</span>'
-      + '<span class="kv-v" style="font-weight:600">' + fmt(s.emi) + '</span></div>';
+    return '<div class="kv"><span class="kv-k">Instalment ' + s.n + ' - ' + shortDate(s.dueDate) + '</span>'
+      + '<span class="kv-v" style="font-weight:600">' + fmt(rowDueAmount(s)) + '</span></div>';
   }).join('');
 }
 
@@ -2984,11 +3221,11 @@ function renderPaymentDetails() {
 // ═══════════════════════════════════════════════════════
 function renderStatement() {
   loadState();
-  var outstanding = outstandingBal(OPS.schedule, OPS.paidCount);
-  var repaid      = totalRepaid(OPS.schedule, OPS.paidCount);
-  var totalInt    = OPS.emi * OPS.term - OPS.principal;
-  var totalPay    = OPS.emi * OPS.term;
-  var remaining   = OPS.schedule.length - OPS.paidCount;
+  var outstanding = currentOutstanding();
+  var repaid      = currentTotalRepaid();
+  var totalPay    = firstDefined(OPS.totalRepayable, OPS.emi * OPS.term, 0);
+  var totalInt    = Math.max(0, totalPay - OPS.principal);
+  var remaining   = currentInstalmentsRemaining();
   var lastRow     = OPS.schedule.length ? OPS.schedule[OPS.schedule.length - 1] : null;
   setText('stmt-ops-principal',  fmt(OPS.principal));
   setText('stmt-ops-total',      fmt(totalPay));
@@ -2998,7 +3235,7 @@ function renderStatement() {
   setText('stmt-ops-paid-count', OPS.paidCount + ' of ' + OPS.schedule.length);
   setText('stmt-ops-remaining',  remaining + ' instalment' + (remaining !== 1 ? 's' : ''));
   setText('stmt-ops-start',      shortDate(OPS.startDate));
-  setText('stmt-ops-end',        lastRow ? shortDate(lastRow.dueDate) : '—');
+  setText('stmt-ops-end',        lastRow ? shortDate(lastRow.dueDate) : '-');
   setText('stmt-ops-emi',        fmt(OPS.emi));
   setText('stmt-ops-apr',        OPS.apr.toFixed(1) + '% APR');
   var el = document.getElementById('stmt-ops-list');
@@ -3010,7 +3247,7 @@ function renderStatement() {
     el.innerHTML += '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">'
       + '<div style="width:28px;height:28px;border-radius:50%;background:#ecfdf5;display:flex;align-items:center;justify-content:center;flex-shrink:0">'
       + '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#059669" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'
-      + '<div style="flex:1"><div style="font-size:12.5px;font-weight:600">Instalment ' + e.n + ' — Paid</div>'
+      + '<div style="flex:1"><div style="font-size:12.5px;font-weight:600">Instalment ' + e.n + ' - Paid</div>'
       + '<div style="font-size:11px;color:var(--muted)">' + shortDate(e.dueDate) + ' &middot; Ref: NP-' + (2025 + Math.floor(i/12)) + '-' + String(10000 + i * 317).slice(0,5) + '</div></div>'
       + '<div style="font-size:13px;font-weight:700;color:var(--green)">−' + fmt(e.emi) + '</div>'
       + '</div>';
@@ -3028,126 +3265,373 @@ function renderStatement() {
 // ═══════════════════════════════════════════════════════
 // RENDER: DOCUMENTS
 // ═══════════════════════════════════════════════════════
+var OPS_DOC_LIBRARY = [];
 function closeDocModal() { document.getElementById('doc-modal').style.display = 'none'; }
-
-function showDocModal(name, sub, bgColor, strokeColor) {
+function opsHtmlToPlainText(html) {
+  var div = document.createElement('div');
+  div.innerHTML = String(html || '')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/p>/gi, '\n\n')
+    .replace(/<\/tr>/gi, '\n')
+    .replace(/<\/h[1-6]>/gi, '\n')
+    .replace(/<\/li>/gi, '\n');
+  return (div.textContent || div.innerText || '')
+    .replace(/\u00a0/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+function opsPdfEscape(text) {
+  return String(text || '').replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)');
+}
+function buildOpsPdfBlob(title, html) {
+  var plain = opsHtmlToPlainText(html);
+  var lines = [title || 'Document', '']
+    .concat(plain ? plain.split(/\r?\n/) : ['No document content available.'])
+    .map(function(line) { return line || ' '; });
+  var startY = 790;
+  var lineHeight = 16;
+  var usableLines = 44;
+  var objects = [];
+  var pageRefs = [];
+  function addObject(id, body) { objects.push({ id:id, body:body }); }
+  addObject(1, '<< /Type /Catalog /Pages 2 0 R >>');
+  addObject(3, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>');
+  var chunks = [];
+  for (var i = 0; i < lines.length; i += usableLines) chunks.push(lines.slice(i, i + usableLines));
+  if (!chunks.length) chunks.push(['No document content available.']);
+  var nextId = 4;
+  chunks.forEach(function(chunk) {
+    var pageId = nextId++;
+    var contentId = nextId++;
+    var textOps = ['BT', '/F1 12 Tf'];
+    for (var li = 0; li < chunk.length; li++) {
+      var y = startY - (li * lineHeight);
+      textOps.push('1 0 0 1 50 ' + y + ' Tm (' + opsPdfEscape(chunk[li]) + ') Tj');
+    }
+    textOps.push('ET');
+    var stream = textOps.join('\n');
+    addObject(contentId, '<< /Length ' + stream.length + ' >>\nstream\n' + stream + '\nendstream');
+    addObject(pageId, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents ' + contentId + ' 0 R >>');
+    pageRefs.push(pageId + ' 0 R');
+  });
+  addObject(2, '<< /Type /Pages /Count ' + pageRefs.length + ' /Kids [' + pageRefs.join(' ') + '] >>');
+  objects.sort(function(a, b) { return a.id - b.id; });
+  var pdf = '%PDF-1.4\n';
+  var offsets = [0];
+  objects.forEach(function(obj) {
+    offsets[obj.id] = pdf.length;
+    pdf += obj.id + ' 0 obj\n' + obj.body + '\nendobj\n';
+  });
+  var xrefStart = pdf.length;
+  pdf += 'xref\n0 ' + (objects.length + 1) + '\n';
+  pdf += '0000000000 65535 f \n';
+  for (var oi = 1; oi <= objects.length; oi++) {
+    var off = offsets[oi] || 0;
+    pdf += String(off).padStart(10, '0') + ' 00000 n \n';
+  }
+  pdf += 'trailer\n<< /Size ' + (objects.length + 1) + ' /Root 1 0 R >>\nstartxref\n' + xrefStart + '\n%%EOF';
+  return new Blob([pdf], { type: 'application/pdf' });
+}
+function downloadOpsPdfFile(filename, title, html) {
+  var blob = buildOpsPdfBlob(title, html);
+  var url = URL.createObjectURL(blob);
+  var link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+}
+function fetchOpsDocument(type) {
+  if (!USE_API || !ACCT_KEY || !window.fetch) return Promise.reject(new Error('API unavailable'));
+  return window.fetch(API_BASE.replace(/\/$/, '') + '/accounts/' + encodeURIComponent(ACCT_KEY) + '/documents/' + encodeURIComponent(type) + '?scope=ops', {
+    method: 'GET',
+    headers: { 'Accept': 'application/json' }
+  }).then(function(res) {
+    if (!res.ok) throw new Error('Document fetch failed');
+    return res.json();
+  }).then(function(data) {
+    if (!data || !data.document) throw new Error('Document payload missing');
+    return data.document;
+  });
+}
+function downloadOpsDocumentPdf(doc) {
+  if (!doc) return;
+  if (!USE_API || !ACCT_KEY || !window.fetch) {
+    downloadOpsPdfFile(doc.fileName, doc.name || doc.title, doc.html);
+    return;
+  }
+  window.fetch(API_BASE.replace(/\/$/, '') + '/accounts/' + encodeURIComponent(ACCT_KEY) + '/documents/' + encodeURIComponent(doc.type) + '/pdf?scope=ops', {
+    method: 'GET',
+    headers: { 'Accept': 'application/pdf' }
+  }).then(function(res) {
+    if (!res.ok) throw new Error('PDF download failed');
+    return res.blob();
+  }).then(function(blob) {
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.href = url;
+    link.download = doc.fileName || 'document.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  }).catch(function() {
+    downloadOpsPdfFile(doc.fileName, doc.name || doc.title, doc.html);
+  });
+}
+function showOpsDocument(index) {
+  var doc = OPS_DOC_LIBRARY[index];
+  if (!doc) return;
   var modal  = document.getElementById('doc-modal');
   var icon   = document.getElementById('doc-modal-icon');
   var title  = document.getElementById('doc-modal-title');
   var subEl  = document.getElementById('doc-modal-sub');
   var body   = document.getElementById('doc-modal-body');
-  icon.style.background = bgColor || '#eff6ff';
-  icon.style.color      = strokeColor || '#1a56db';
-  title.textContent = name;
-  subEl.textContent = sub;
-  var isGenerated = sub && sub.toLowerCase().indexOf('not generated') === -1 && sub.toLowerCase().indexOf('not issued') === -1;
-  var statusHtml = isGenerated
-    ? '<span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;background:#dcfce7;color:#15803d">On file</span>'
-    : '<span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;background:#f1f5f9;color:#64748b">Not applicable</span>';
-  body.innerHTML = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px"><span style="font-size:12px;font-weight:600;color:#374151">Status</span>' + statusHtml + '</div>'
-    + '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px 16px;font-size:12.5px;color:#374151;line-height:1.6">'
-    + 'This document is held in the Quido document management system. '
-    + 'In a production environment, clicking <strong>Download PDF</strong> would retrieve the signed, tamper-evident PDF from secure storage.'
-    + '</div>'
-    + '<div style="margin-top:14px;font-size:11px;color:#94a3b8">Document ID: DOC-' + (OPS && OPS.account && OPS.account.loanId ? OPS.account.loanId : '—') + '-' + name.replace(/\s+/g,'').substring(0,6).toUpperCase() + '</div>';
+  var dlBtn  = document.getElementById('doc-modal-download');
+  icon.style.background = doc.color || '#eff6ff';
+  icon.style.color      = doc.stroke || '#1a56db';
+  title.textContent = doc.name;
+  subEl.textContent = doc.sub;
+  body.innerHTML = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px"><span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;background:' + (doc.available ? '#dcfce7;color:#15803d' : '#f1f5f9;color:#64748b') + '">' + (doc.available ? 'On file' : 'Not applicable') + '</span><span style="font-size:11px;color:#94a3b8">' + doc.documentId + '</span></div><div style="font-size:12px;color:var(--muted)">Loading latest document...</div>';
+  dlBtn.onclick = function() {
+    downloadOpsDocumentPdf(doc);
+  };
   modal.style.display = 'block';
+  fetchOpsDocument(doc.type).then(function(apiDoc) {
+    doc.documentId = apiDoc.documentId || doc.documentId;
+    doc.fileName = apiDoc.fileName || doc.fileName;
+    doc.available = apiDoc.available !== false;
+    doc.html = apiDoc.html || doc.html;
+    doc.name = apiDoc.title || doc.name;
+    doc.sub = apiDoc.subtitle || doc.sub;
+    title.textContent = doc.name;
+    subEl.textContent = doc.sub;
+    body.innerHTML = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px"><span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;background:' + (doc.available ? '#dcfce7;color:#15803d' : '#f1f5f9;color:#64748b') + '">' + (doc.available ? 'On file' : 'Not applicable') + '</span><span style="font-size:11px;color:#94a3b8">' + doc.documentId + '</span></div>' + doc.html;
+  }).catch(function() {
+    body.innerHTML = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px"><span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;background:' + (doc.available ? '#dcfce7;color:#15803d' : '#f1f5f9;color:#64748b') + '">' + (doc.available ? 'On file' : 'Not applicable') + '</span><span style="font-size:11px;color:#94a3b8">' + doc.documentId + '</span></div>' + doc.html;
+  });
 }
-
 function renderDocuments() {
   loadState();
-  var acct      = OPS.account;
+  var acct      = OPS.account || {};
   var status    = OPS.accountStatus;
   var startDate = shortDate(OPS.startDate);
   var inArrears = status === 'arrears' || status === 'default' || status === 'terminated';
-
-  // ── Customer-facing documents ──────────────────────────────────────────────
-  // Build from canonical loan.documents[] — populated by createFromSeed() and
-  // status-change commands.  Status-conditional docs are derived from account state.
-  var st   = _store && _store.getState();
-  var loan = st && Quido.accountStateResolver && Quido.accountStateResolver.getActiveLoan(st);
+  var st        = _store && _store.getState();
+  var loan      = st && Quido.accountStateResolver && Quido.accountStateResolver.getActiveLoan(st);
   var canonDocs = (loan && loan.documents) || [];
-
-  // Map canonical document types to display metadata
-  var _docMeta = {
-    secci:               { name:'Standard European Consumer Credit Information (SECCI)',
-                           sub: function(d){ return 'Pre-contractual information — issued ' + shortDate(d.issuedAt || OPS.startDate); },
-                           color:'#eff6ff', stroke:'#1a56db' },
-    agreement:           { name:'Loan Agreement (Regulated Credit Agreement)',
-                           sub: function(d){ return 'Signed ' + shortDate(d.signedAt || d.issuedAt || OPS.startDate); },
-                           color:'#eff6ff', stroke:'#1a56db' },
-    adequateExplanation: { name:'Adequate Explanations (s.55A CCA 1974)',
-                           sub: function(d){ return 'Issued ' + shortDate(d.issuedAt || OPS.startDate); },
-                           color:'#eff6ff', stroke:'#1a56db' },
-    cancellationNotice:  { name:'Cancellation Notice (14-day right to withdraw)',
-                           sub: function(d){ return 'Issued ' + shortDate(d.issuedAt || OPS.startDate); },
-                           color:'#eff6ff', stroke:'#1a56db' }
-  };
-
+  var fullName  = acct.name || 'Customer';
+  var loanRef   = acct.loanId ? ('#' + acct.loanId) : '-';
+  var docIdBase = acct.loanId || '00000';
+  var lastActiveDate = shortDate((acct && acct.lastActive) || new Date().toISOString());
+  var totalPay = OPS.emi * OPS.term;
+  var totalInt = totalPay - OPS.principal;
+  function makeDoc(type, name, sub, color, stroke, html, available) {
+    var slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').substring(0, 24) || 'document';
+    return {
+      type: type,
+      name: name,
+      sub: sub,
+      color: color,
+      stroke: stroke,
+      html: html,
+      available: available !== false,
+      documentId: 'DOC-' + docIdBase + '-' + slug.toUpperCase(),
+      fileName: slug + '-' + docIdBase + '.pdf'
+    };
+  }
   var customerDocs = [];
-  // Origination docs from canonical array
+  var docMeta = {
+    secci: function(d) {
+      return makeDoc(
+        'secci',
+        'Standard European Consumer Credit Information (SECCI)',
+        'Pre-contract information | issued ' + shortDate(d.issuedAt || OPS.startDate),
+        '#eff6ff', '#1a56db',
+        '<h3>SECCI</h3><table class="dtbl"><tr><td>Borrower</td><td>' + fullName + '</td></tr><tr><td>Loan number</td><td>' + loanRef + '</td></tr><tr><td>Loan amount</td><td>' + fmt(OPS.principal) + '</td></tr><tr><td>APR</td><td>' + OPS.apr.toFixed(1) + '% APR</td></tr><tr><td>Term</td><td>' + OPS.term + ' months</td></tr><tr><td>Monthly repayment</td><td>' + fmt(OPS.emi) + '</td></tr></table><p>This document summarises the regulated credit offer disclosed before acceptance.</p>',
+        true
+      );
+    },
+    agreement: function(d) {
+      return makeDoc(
+        'agreement',
+        'Loan Agreement (Regulated Credit Agreement)',
+        'Signed ' + shortDate(d.signedAt || d.issuedAt || OPS.startDate),
+        '#eff6ff', '#1a56db',
+        '<h3>Loan Agreement</h3><table class="dtbl"><tr><td>Borrower</td><td>' + fullName + '</td></tr><tr><td>Loan number</td><td>' + loanRef + '</td></tr><tr><td>Start date</td><td>' + startDate + '</td></tr><tr><td>Loan amount</td><td>' + fmt(OPS.principal) + '</td></tr><tr><td>Total repayable</td><td>' + fmt(totalPay) + '</td></tr></table><p>Signed agreement held on file for servicing and compliance review.</p>',
+        true
+      );
+    },
+    adequateExplanation: function(d) {
+      return makeDoc(
+        'adequate',
+        'Adequate Explanations (s.55A CCA 1974)',
+        'Issued ' + shortDate(d.issuedAt || OPS.startDate),
+        '#eff6ff', '#1a56db',
+        '<h3>Adequate Explanations</h3><p>The borrower received an explanation of the credit agreement, repayment obligations, and the consequences of missed payments.</p><table class="dtbl"><tr><td>Borrower</td><td>' + fullName + '</td></tr><tr><td>Loan number</td><td>' + loanRef + '</td></tr><tr><td>Document date</td><td>' + shortDate(d.issuedAt || OPS.startDate) + '</td></tr></table>',
+        true
+      );
+    },
+    cancellationNotice: function(d) {
+      return makeDoc(
+        'notice',
+        'Cancellation Notice (14-day right to withdraw)',
+        'Issued ' + shortDate(d.issuedAt || OPS.startDate),
+        '#eff6ff', '#1a56db',
+        '<h3>Cancellation Notice</h3><p>The borrower may withdraw from the agreement within 14 days of receiving the notice.</p><table class="dtbl"><tr><td>Borrower</td><td>' + fullName + '</td></tr><tr><td>Loan number</td><td>' + loanRef + '</td></tr><tr><td>Issued</td><td>' + shortDate(d.issuedAt || OPS.startDate) + '</td></tr></table>',
+        true
+      );
+    }
+  };
   canonDocs.forEach(function(d) {
-    var meta = _docMeta[d.type];
-    if (meta) customerDocs.push({ name: meta.name, sub: meta.sub(d), color: meta.color, stroke: meta.stroke });
+    if (docMeta[d.type]) customerDocs.push(docMeta[d.type](d));
   });
-  // If canonical array is empty (legacy account pre-migration), fall back to start date
   if (!customerDocs.length) {
     customerDocs = [
-      { name:'Standard European Consumer Credit Information (SECCI)', sub:'Pre-contractual information — issued ' + startDate, color:'#eff6ff', stroke:'#1a56db' },
-      { name:'Loan Agreement (Regulated Credit Agreement)', sub:'Signed ' + startDate, color:'#eff6ff', stroke:'#1a56db' },
-      { name:'Adequate Explanations (s.55A CCA 1974)', sub:'Issued ' + startDate, color:'#eff6ff', stroke:'#1a56db' }
+      docMeta.secci({ issuedAt: OPS.startDate }),
+      docMeta.agreement({ signedAt: OPS.startDate }),
+      docMeta.adequateExplanation({ issuedAt: OPS.startDate })
     ];
   }
-  // Status-conditional docs — derived from canonical account status (not hardcoded)
-  customerDocs.push({
-    name:'Notice of Sums in Arrears',
-    sub: inArrears ? 'Generated — account in ' + status : 'Not generated — account status: ' + status,
-    color: inArrears ? '#fef2f2' : '#f8fafc', stroke: inArrears ? '#dc2626' : '#94a3b8'
-  });
-  customerDocs.push({
-    name:'Notice of Default (Default Sum)',
-    sub: (status === 'default' || status === 'terminated') ? 'Generated — account in default' : 'Not generated',
-    color: (status === 'default' || status === 'terminated') ? '#fef2f2' : '#f8fafc',
-    stroke: (status === 'default' || status === 'terminated') ? '#dc2626' : '#94a3b8'
-  });
-  customerDocs.push({
-    name:'Termination Notice',
-    sub: status === 'terminated' ? 'Issued — account terminated' : 'Not issued',
-    color: status === 'terminated' ? '#fef2f2' : '#f8fafc',
-    stroke: status === 'terminated' ? '#dc2626' : '#94a3b8'
-  });
-
-  // ── Internal / ops documents — derived from account state ─────────────────
-  var lastActiveDate = shortDate((acct && acct.lastActive) || new Date().toISOString());
+  customerDocs.push(makeDoc(
+    'arrears',
+    'Notice of Sums in Arrears',
+    inArrears ? 'Generated | account in ' + status : 'Not generated | account status: ' + status,
+    inArrears ? '#fef2f2' : '#f8fafc', inArrears ? '#dc2626' : '#94a3b8',
+    '<h3>Notice of Sums in Arrears</h3><p>' + (inArrears ? 'Account is currently in ' + status + '. This notice summarises the arrears status and outstanding balance.' : 'This notice is not currently generated because the account is not in arrears.') + '</p><table class="dtbl"><tr><td>Outstanding balance</td><td>' + fmt(currentOutstanding()) + '</td></tr><tr><td>Status</td><td>' + status + '</td></tr></table>',
+    inArrears
+  ));
+  customerDocs.push(makeDoc(
+    'annualStatement',
+    'Annual Statement',
+    'Generated ' + shortDate(new Date()),
+    '#fce4ec', '#c62828',
+    '<h3>Annual Statement</h3><table class="dtbl"><tr><td>Borrower</td><td>' + fullName + '</td></tr><tr><td>Loan number</td><td>' + loanRef + '</td></tr><tr><td>Loan amount</td><td>' + fmt(OPS.principal) + '</td></tr><tr><td>Total repaid</td><td>' + fmt(currentTotalRepaid()) + '</td></tr><tr><td>Interest paid</td><td>' + fmt(Math.max(0, currentTotalRepaid() - (OPS.principal - currentOutstanding()))) + '</td></tr><tr><td>Outstanding balance</td><td>' + fmt(currentOutstanding()) + '</td></tr></table><p>This statement summarises account activity at the time of download.</p>',
+    true
+  ));
   var internalDocs = [
-    { name:'Credit Risk Assessment',           sub:'Completed at origination ' + startDate },
-    { name:'Affordability Assessment (s.55A)', sub:'Completed at origination ' + startDate },
-    { name:'Income & Expenditure Record',      sub:'Last updated ' + lastActiveDate },
-    { name:'KYC / Identity Verification',      sub:'Verified at origination' },
-    { name:'Data Processing Consent Record',   sub:'Collected at sign-up' },
-    { name:'Vulnerability Assessment',         sub:'Reviewed at origination' }
+    makeDoc('creditRisk', 'Credit Risk Assessment', 'Completed at origination ' + startDate, '#fef3c7', '#d97706', '<h3>Credit Risk Assessment</h3><p>Internal underwriting summary retained for audit and quality review.</p><table class="dtbl"><tr><td>Customer</td><td>' + fullName + '</td></tr><tr><td>Loan number</td><td>' + loanRef + '</td></tr><tr><td>Completed</td><td>' + startDate + '</td></tr></table>', true),
+    makeDoc('affordabilityAssessment', 'Affordability Assessment (s.55A)', 'Completed at origination ' + startDate, '#fef3c7', '#d97706', '<h3>Affordability Assessment</h3><p>Internal affordability record based on income, expenditure, and servicing policy checks.</p><table class="dtbl"><tr><td>Monthly EMI</td><td>' + fmt(OPS.emi) + '</td></tr><tr><td>Total repayable</td><td>' + fmt(totalPay) + '</td></tr><tr><td>Total interest</td><td>' + fmt(totalInt) + '</td></tr></table>', true),
+    makeDoc('incomeExpenditure', 'Income and Expenditure Record', 'Last updated ' + lastActiveDate, '#fef3c7', '#d97706', '<h3>Income and Expenditure Record</h3><p>Internal servicing snapshot of the latest affordability details used by operations.</p><table class="dtbl"><tr><td>Customer</td><td>' + fullName + '</td></tr><tr><td>Loan number</td><td>' + loanRef + '</td></tr><tr><td>Last updated</td><td>' + lastActiveDate + '</td></tr></table>', true),
+    makeDoc('kyc', 'KYC and Identity Verification', 'Verified at origination', '#fef3c7', '#d97706', '<h3>KYC and Identity Verification</h3><p>Identity verification evidence and validation outcomes retained for compliance.</p>', true),
+    makeDoc('consent', 'Data Processing Consent Record', 'Collected at sign-up', '#fef3c7', '#d97706', '<h3>Data Processing Consent Record</h3><p>Customer consent capture record retained for audit and regulatory review.</p>', true),
+    makeDoc('vulnerability', 'Vulnerability Assessment', 'Reviewed at origination', '#fef3c7', '#d97706', '<h3>Vulnerability Assessment</h3><p>Operational vulnerability review summary held for servicing support and treatment monitoring.</p>', true)
   ];
-  function docRow(d, isInternal) {
-    var iconColor = isInternal ? '#fef3c7' : d.color;
-    var stroke = isInternal ? '#d97706' : d.stroke;
+  OPS_DOC_LIBRARY = customerDocs.concat(internalDocs);
+  function docRow(d, index) {
     return '<div style="display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid var(--border)">'
-      + '<div style="width:34px;height:34px;background:' + iconColor + ';border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center">'
-      + '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="1" width="10" height="12" rx="1.5" stroke="' + stroke + '" stroke-width="1.3"/><path d="M4.5 5h5M4.5 7.5h5M4.5 10h3" stroke="' + stroke + '" stroke-width="1.2" stroke-linecap="round"/></svg></div>'
+      + '<div style="width:34px;height:34px;background:' + d.color + ';border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center">'
+      + '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="1" width="10" height="12" rx="1.5" stroke="' + d.stroke + '" stroke-width="1.3"/><path d="M4.5 5h5M4.5 7.5h5M4.5 10h3" stroke="' + d.stroke + '" stroke-width="1.2" stroke-linecap="round"/></svg></div>'
       + '<div style="flex:1"><div style="font-size:12.5px;font-weight:600;color:var(--text)">' + escHtml(d.name) + '</div>'
       + '<div style="font-size:11px;color:var(--muted)">' + d.sub + '</div></div>'
-      + '<button onclick="showDocModal(' + JSON.stringify(d.name) + ',' + JSON.stringify(d.sub) + ',' + JSON.stringify(isInternal ? '#fef3c7' : d.color) + ',' + JSON.stringify(isInternal ? '#d97706' : d.stroke) + ')" style="font-size:11px;color:var(--blue);font-weight:600;padding:4px 12px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer">View</button>'
+      + '<button onclick="showOpsDocument(' + index + ')" style="font-size:11px;color:var(--blue);font-weight:600;padding:4px 12px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer">View</button>'
       + '</div>';
   }
   var custEl = document.getElementById('docs-ops-customer');
   var intEl  = document.getElementById('docs-ops-internal');
-  if (custEl) custEl.innerHTML = customerDocs.map(function(d){ return docRow(d, false); }).join('');
-  if (intEl)  intEl.innerHTML  = internalDocs.map(function(d){ return docRow(d, true); }).join('');
+  if (custEl) custEl.innerHTML = customerDocs.map(function(d, idx){ return docRow(d, idx); }).join('');
+  if (intEl)  intEl.innerHTML  = internalDocs.map(function(d, idx){ return docRow(d, customerDocs.length + idx); }).join('');
+}
+
+function canRefundTxn(txn) {
+  if (!txn || txn.successful === false) return false;
+  if (OPS.accountStatus === 'closed' || OPS.accountStatus === 'settled' || OPS.closedAt) return false;
+  if (txn.refundedAt || txn.refundTxnId) return false;
+  if (['payment', 'partial_payment', 'manual_payment'].indexOf(txn.type) === -1) return false;
+  return !!(txn.allocation && txn.allocation.rows && txn.allocation.rows.length);
+}
+
+function refundTxn(txnId) {
+  if (!txnId) return;
+  var txn = null;
+  for (var i = 0; i < OPS.transactions.length; i++) {
+    if (OPS.transactions[i].id === txnId) { txn = OPS.transactions[i]; break; }
+  }
+  if (!txn) { toast('Payment transaction not found.', 'error'); return; }
+  if (!canRefundTxn(txn)) { toast('This payment cannot be refunded.', 'error'); return; }
+  var reason = window.prompt('Enter the refund reason for ' + fmt(txn.amount || 0) + ':', '');
+  if (reason === null) return;
+  reason = String(reason || '').trim();
+  if (!reason) { toast('Refund reason is required.', 'error'); return; }
+  if (!confirm('Refund ' + fmt(txn.amount || 0) + ' and reverse this payment on the account?')) return;
+  syncToCustomer('refund_payment', { txnId: txnId, reason: reason });
+  renderStatement();
+  renderOverview();
+  renderLoan();
+  toast('Payment refunded and customer account updated', 'success');
+}
+
+function renderStatement() {
+  loadState();
+  var outstanding = currentOutstanding();
+  var repaid      = currentTotalRepaid();
+  var totalPay    = firstDefined(OPS.totalRepayable, OPS.emi * OPS.term, 0);
+  var totalInt    = Math.max(0, totalPay - OPS.principal);
+  var remaining   = currentInstalmentsRemaining();
+  var lastRow     = OPS.schedule.length ? OPS.schedule[OPS.schedule.length - 1] : null;
+  setText('stmt-ops-principal',  fmt(OPS.principal));
+  setText('stmt-ops-total',      fmt(totalPay));
+  setText('stmt-ops-interest',   fmt(totalInt));
+  setText('stmt-ops-repaid',     fmt(repaid));
+  setText('stmt-ops-balance',    fmt(outstanding));
+  setText('stmt-ops-paid-count', OPS.paidCount + ' of ' + OPS.schedule.length);
+  setText('stmt-ops-remaining',  remaining + ' instalment' + (remaining !== 1 ? 's' : ''));
+  setText('stmt-ops-start',      shortDate(OPS.startDate));
+  setText('stmt-ops-end',        lastRow ? shortDate(lastRow.dueDate) : '-');
+  setText('stmt-ops-emi',        fmt(OPS.emi));
+  setText('stmt-ops-apr',        OPS.apr.toFixed(1) + '% APR');
+  var el = document.getElementById('stmt-ops-list');
+  if (!el) return;
+
+  var txns = (OPS.transactions || []).slice().sort(function(a, b) {
+    return new Date(b.date || b.timestamp || 0) - new Date(a.date || a.timestamp || 0);
+  });
+  var rows = txns.map(function(txn) {
+    var isRefund = txn.type === 'refund';
+    var refunded = !!(txn.refundedAt || txn.refundTxnId);
+    var allocation = txn.allocation || {};
+    var detailBits = [];
+    if (allocation.interestApplied) detailBits.push('Interest ' + fmt(allocation.interestApplied));
+    if (allocation.principalApplied) detailBits.push('Principal ' + fmt(allocation.principalApplied));
+    if (txn.refundFor) detailBits.push('Reverses ' + txn.refundFor);
+    if (txn.reason) detailBits.push('Reason: ' + txn.reason);
+    if (txn.refundReason) detailBits.push('Refund reason: ' + txn.refundReason);
+    if (refunded && !isRefund) detailBits.push('Refunded');
+    var actionHtml = '';
+    if (canRefundTxn(txn)) {
+      actionHtml = '<button class="btn btn-xs btn-ghost" data-refund-txn="' + escHtml(txn.id) + '">Refund</button>';
+    }
+    return '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">'
+      + '<div style="width:28px;height:28px;border-radius:50%;background:' + (isRefund ? '#fee2e2' : '#ecfdf5') + ';display:flex;align-items:center;justify-content:center;flex-shrink:0">'
+      + (isRefund
+          ? '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 6h6" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round"/></svg>'
+          : '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#059669" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+      + '</div>'
+      + '<div style="flex:1"><div style="font-size:12.5px;font-weight:600">' + escHtml(isRefund ? 'Payment refunded' : (txn.type === 'manual_payment' ? 'Manual payment' : 'Payment received')) + '</div>'
+      + '<div style="font-size:11px;color:var(--muted)">' + shortDate(txn.date || txn.timestamp) + ' &middot; Ref: ' + escHtml(txn.id || '-') + (detailBits.length ? ' &middot; ' + escHtml(detailBits.join(' | ')) : '') + '</div></div>'
+      + '<div style="display:flex;align-items:center;gap:10px"><div style="font-size:13px;font-weight:700;color:' + (isRefund ? 'var(--red)' : 'var(--green)') + '">' + (isRefund ? '+' : '-') + fmt(txn.amount || 0) + '</div>' + actionHtml + '</div>'
+      + '</div>';
+  });
+  rows.push('<div style="display:flex;align-items:center;gap:12px;padding:10px 0">'
+    + '<div style="width:28px;height:28px;border-radius:50%;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0">'
+    + '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="#1a56db" stroke-width="1.5" stroke-linecap="round"/></svg></div>'
+    + '<div style="flex:1"><div style="font-size:12.5px;font-weight:600">Loan disbursed</div>'
+    + '<div style="font-size:11px;color:var(--muted)">' + shortDate(OPS.startDate) + ' &middot; Principal advance</div></div>'
+    + '<div style="font-size:13px;font-weight:700;color:var(--blue)">+' + fmt(OPS.principal) + '</div>'
+    + '</div>');
+  el.innerHTML = rows.join('');
+  Array.prototype.forEach.call(el.querySelectorAll('[data-refund-txn]'), function(btn) {
+    btn.addEventListener('click', function() { refundTxn(btn.getAttribute('data-refund-txn')); });
+  });
 }
 
 function _refreshFromStorage(newVal, oldVal) {
   try {
     var newA = JSON.parse(newVal);
     var oldA = oldVal ? JSON.parse(oldVal) : { history:[] };
-    // Ignore our own ops writes — avoids infinite refresh loops
+    // Ignore our own ops writes - avoids infinite refresh loops
     var lastEntry = (newA.history||[]).slice(-1)[0];
     if (lastEntry && lastEntry.source === 'ops_ui') return;
     loadState();
@@ -3177,3 +3661,5 @@ function _refreshFromStorage(newVal, oldVal) {
 </script>
 </body>
 </html>
+
+

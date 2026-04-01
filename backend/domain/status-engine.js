@@ -85,6 +85,9 @@ const TERMINAL_STATUSES    = ['settled', 'closed'];
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function outstandingBalance(loan) {
+  if (loan.loanSummary && loan.loanSummary.outstandingBalance !== undefined) {
+    return Math.max(0, loan.loanSummary.outstandingBalance || 0);
+  }
   var snap      = loan.scheduleSnapshot || [];
   var paid      = (loan.loanCore && loan.loanCore.paidCount) || 0;
   var partial   = loan.partialCredit || 0;

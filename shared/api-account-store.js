@@ -84,6 +84,7 @@
     var storageKey        = options.storageKey || '';
     var apiBase           = (options.apiBase || DEFAULT_API_BASE).replace(/\/$/, '');
     var silent            = !!options.silent;
+    var syncBus           = options.syncBus || null;
     var apiOnline         = true; // optimistically assume online; flipped on first failure
     var _resolvedState    = null; // cached resolved account from GET /resolved
     var _resolvedListeners = [];  // callbacks registered via subscribeResolved()
@@ -98,6 +99,18 @@
       }
     }
 
+    function rebroadcast(command) {
+      if (!syncBus || !syncBus.publish || !storageKey) return;
+      try {
+        syncBus.publish({
+          storageKey: storageKey,
+          type:       command && command.type,
+          actor:      (command && command.actor) || 'system',
+          at:         new Date().toISOString()
+        });
+      } catch (e) {}
+    }
+
     // ── Background sync helpers ───────────────────────────────────────────
 
     /**
@@ -107,8 +120,8 @@
      */
     function fetchResolved(key) {
       var k = key || storageKey;
-      if (!k) return;
-      apiGet(apiBase, '/accounts/' + k + '/resolved')
+      if (!k) return Promise.resolve(null);
+      return apiGet(apiBase, '/accounts/' + k + '/resolved')
         .then(function (data) {
           apiOnline = true;
           var resolved = data && data.resolved;
@@ -116,9 +129,11 @@
             _resolvedState = resolved;
             emitResolved();
           }
+          return resolved || null;
         })
         .catch(function () {
           // Backend offline — resolved state stays as last cached value
+          return _resolvedState || null;
         });
     }
 
@@ -166,25 +181,25 @@
 
     /**
      * Fire-and-forget: POST command to backend.
-     * If the backend responds with an updated account that is newer, reconcile.
+     * Always reconcile the local cache with the authoritative backend response
+     * because servicing commands can mutate richer state than the optimistic
+     * local reducer tracks (for example partial repayments).
      */
     function postCommandToApi(command) {
       if (!storageKey) return;
-      apiPost(apiBase, '/accounts/' + storageKey + '/commands', command)
+      return apiPost(apiBase, '/accounts/' + storageKey + '/commands', command)
         .then(function (result) {
           apiOnline = true;
-          // Backend may have applied additional logic — if its version is higher, reconcile
           var backendAccount = result && result.account;
-          var localState     = localStore ? localStore.getState() : null;
-          if (backendAccount && localState) {
-            var localVer   = localState.version || 0;
-            var backendVer = backendAccount.version || 0;
-            if (backendVer > localVer + 1) {
-              try {
-                window.localStorage.setItem(storageKey, JSON.stringify(backendAccount));
-              } catch (e) {}
-              if (localStore) localStore.reload();
-            }
+          if (backendAccount) {
+            var toStore = (Quido && Quido.normalizeAccount)
+              ? Quido.normalizeAccount(backendAccount, null)
+              : backendAccount;
+            try {
+              window.localStorage.setItem(storageKey, JSON.stringify(toStore));
+            } catch (e) {}
+            if (localStore) localStore.reload();
+            rebroadcast(command);
           }
           // Refresh resolved view after every successful command
           fetchResolved(storageKey);
@@ -194,6 +209,7 @@
             apiOnline = false;
             warn('Command not persisted to backend — mutation is local only. (' + err.message + ')');
           }
+          throw err;
         });
     }
 
@@ -238,7 +254,7 @@
         // Local-first for responsiveness
         if (localStore) localStore.dispatch(command);
         // Async persistence to backend
-        postCommandToApi(command);
+        return postCommandToApi(command);
       },
 
       /**
@@ -313,7 +329,7 @@
        * Manually trigger a fetch of the resolved view (e.g. after a cross-tab
        * sync event refreshes the account).
        */
-      refreshResolved: function () { fetchResolved(storageKey); },
+      refreshResolved: function () { return fetchResolved(storageKey); },
 
       /** True if the backend was reachable on the last attempt */
       isOnline: function () { return apiOnline; },

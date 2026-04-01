@@ -57,11 +57,14 @@ function createEmptyLoan(loanId) {
       paidCount:  0
     },
 
-    scheduleSnapshot: [],
-    loanSummary: {
-      emi: 0, totalRepayable: 0, totalInterest: 0,
-      outstandingBalance: 0, totalRepaid: 0, instalmentsRemaining: 0
-    },
+      scheduleSnapshot: [],
+      partialCredit:    0,
+      loanSummary: {
+        emi: 0, totalRepayable: 0, totalInterest: 0,
+        outstandingBalance: 0, totalRepaid: 0,
+        totalInterestPaid: 0, totalPrincipalPaid: 0,
+        instalmentsRemaining: 0
+      },
 
     transactions: [],
 

@@ -56,6 +56,8 @@
     UPDATE_PAYMENT_METHODS:    'UPDATE_PAYMENT_METHODS',
     RECALCULATE_LOAN:          'RECALCULATE_LOAN',
     RECORD_PAYMENT:            'RECORD_PAYMENT',
+    SET_PAID_COUNT:            'SET_PAID_COUNT',
+    REFUND_PAYMENT:            'REFUND_PAYMENT',
     APPLY_PAYMENT_HOLIDAY:     'APPLY_PAYMENT_HOLIDAY',
     APPLY_PAYMENT_ARRANGEMENT: 'APPLY_PAYMENT_ARRANGEMENT',
     CHANGE_ACCOUNT_STATUS:     'CHANGE_ACCOUNT_STATUS',
@@ -102,9 +104,12 @@
       },
 
       scheduleSnapshot: [],
+      partialCredit:    0,
       loanSummary: {
         emi: 0, totalRepayable: 0, totalInterest: 0,
-        outstandingBalance: 0, totalRepaid: 0, instalmentsRemaining: 0
+        outstandingBalance: 0, totalRepaid: 0,
+        totalInterestPaid: 0, totalPrincipalPaid: 0,
+        instalmentsRemaining: 0
       },
 
       transactions: [],
@@ -551,6 +556,8 @@
         totalInterest:        snap.totalInterest         || 0,
         outstandingBalance:   snap.outstandingBalance    || 0,
         totalRepaid:          snap.totalRepaid           || 0,
+        totalInterestPaid:    snap.totalInterestPaid     || 0,
+        totalPrincipalPaid:   snap.totalPrincipalPaid    || 0,
         instalmentsRemaining: snap.instalmentsRemaining  || 0
       };
     }
@@ -1088,6 +1095,46 @@
                 actor:      actor
               });
             }
+            persistAndBroadcast(type, actor);
+            break;
+
+          case CommandTypes.SET_PAID_COUNT:
+            if (loan) {
+              var spSnap = loan.scheduleSnapshot || [];
+              var target = Math.max(0, Math.min(payload.paidCount || 0, spSnap.length));
+              loan.loanCore.paidCount = target;
+              loan.partialCredit = 0;
+              for (var spi = 0; spi < spSnap.length; spi++) {
+                var spRow = spSnap[spi];
+                if (spi < target || spRow.ph) {
+                  spRow.status = 'paid';
+                  spRow.interestPaid = spRow.interest || 0;
+                  spRow.principalPaid = spRow.principal || 0;
+                } else {
+                  spRow.status = (spi === target) ? 'current' : 'upcoming';
+                  spRow.interestPaid = 0;
+                  spRow.principalPaid = 0;
+                }
+              }
+              if (!loan.loanSummary) loan.loanSummary = {};
+              loan.loanSummary.outstandingBalance = spSnap.slice(target).reduce(function(acc, row) {
+                return acc + ((row.ph ? 0 : row.emi) || 0);
+              }, 0);
+              loan.loanSummary.totalRepaid = spSnap.slice(0, target).reduce(function(acc, row) {
+                return acc + ((row.ph ? 0 : row.emi) || 0);
+              }, 0);
+              loan.loanSummary.totalInterestPaid = spSnap.slice(0, target).reduce(function(acc, row) {
+                return acc + (row.interest || 0);
+              }, 0);
+              loan.loanSummary.totalPrincipalPaid = spSnap.slice(0, target).reduce(function(acc, row) {
+                return acc + (row.principal || 0);
+              }, 0);
+              loan.loanSummary.instalmentsRemaining = Math.max(0, spSnap.length - target);
+            }
+            persistAndBroadcast(type, actor);
+            break;
+
+          case CommandTypes.REFUND_PAYMENT:
             persistAndBroadcast(type, actor);
             break;
 

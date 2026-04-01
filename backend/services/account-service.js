@@ -44,6 +44,8 @@ const {
 
 const {
   applyRepayment,
+  refundPayment,
+  rebuildSummary,
   recordFailedPayment,
   applyPaymentHoliday,
   completePaymentHoliday,
@@ -61,6 +63,65 @@ function mergeObj(target, src) {
   if (!src || typeof src !== 'object') return target;
   Object.keys(src).forEach(function (k) { target[k] = src[k]; });
   return target;
+}
+
+function paymentBreakdown(row) {
+  var interestPaid = Math.max(0, +(row && row.interestPaid || 0));
+  var principalPaid = Math.max(0, +(row && row.principalPaid || 0));
+  if (row && row.status === 'paid') {
+    interestPaid = Math.max(interestPaid, +(row.interest || 0));
+    principalPaid = Math.max(principalPaid, +(row.principal || 0));
+  }
+  var interestRemaining = Math.max(0, +(((row && row.interest) || 0) - interestPaid).toFixed(2));
+  var principalRemaining = Math.max(0, +(((row && row.principal) || 0) - principalPaid).toFixed(2));
+  return {
+    interestPaid: interestPaid,
+    principalPaid: principalPaid,
+    interestRemaining: interestRemaining,
+    principalRemaining: principalRemaining,
+    remainingDue: +(interestRemaining + principalRemaining).toFixed(2)
+  };
+}
+
+function setPaidCount(loan, paidCount, now, actor) {
+  var snap = loan.scheduleSnapshot || [];
+  var seState = loan.statusEngineState || {};
+  var current = (loan.loanCore && loan.loanCore.paidCount) || 0;
+  var target = Math.max(0, Math.min(paidCount || 0, snap.length));
+  var status = seState.coreStatus || seState.baseStatus || 'active';
+
+  if ((status === 'closed' || status === 'settled' || loan.closedAt) && target < current) {
+    return { ok: false, loan: loan, error: 'Paid instalments cannot be reduced on a closed or settled loan.' };
+  }
+
+  loan.loanCore.paidCount = target;
+  loan.partialCredit = 0;
+
+  for (var i = 0; i < snap.length; i++) {
+    var row = snap[i];
+    if (i < target || row.ph) {
+      row.status = 'paid';
+      row.interestPaid = row.interest || 0;
+      row.principalPaid = row.principal || 0;
+    } else {
+      row.status = (i === target) ? 'current' : 'upcoming';
+      row.interestPaid = 0;
+      row.principalPaid = 0;
+    }
+  }
+
+  rebuildSummary(loan);
+  runStatusEngine(loan, now);
+  if (!Array.isArray(loan.auditTrail)) loan.auditTrail = [];
+  loan.auditTrail.push({
+    id: 'audit-' + Date.now(),
+    action: 'paid_count_adjusted',
+    payload: { previousPaidCount: current, paidCount: target },
+    actor: actor,
+    timestamp: (now || new Date()).toISOString()
+  });
+
+  return { ok: true, loan: loan };
 }
 
 function pickValue() {
@@ -262,6 +323,8 @@ function buildResolvedAccount(account) {
         totalInterest:        ls.totalInterest         || 0,
         outstandingBalance:   ls.outstandingBalance    || 0,
         totalRepaid:          ls.totalRepaid           || 0,
+        totalInterestPaid:    ls.totalInterestPaid     || 0,
+        totalPrincipalPaid:   ls.totalPrincipalPaid    || 0,
         instalmentsRemaining: ls.instalmentsRemaining  || 0
       },
 
@@ -275,8 +338,12 @@ function buildResolvedAccount(account) {
         lastEvaluatedAt:       se.lastEvaluatedAt       || ''
       },
 
-      schedule:          snap,
-      operativeSchedule: operativeSchedule,
+      schedule:          snap.map(function (row) {
+        return Object.assign({}, row, paymentBreakdown(row));
+      }),
+      operativeSchedule: operativeSchedule.map(function (row) {
+        return Object.assign({}, row, paymentBreakdown(row));
+      }),
       transactions:      (activeLoan.transactions || []),
 
       arrangements: {
@@ -416,10 +483,10 @@ AccountService.prototype.getSchedule = function (storageKey, loanId) {
  *
  * Rules:
  *  1. If no backend record exists — save the client's account and return it.
- *  2. If backend record exists with a higher version — return backend's
+ *  2. If backend record exists with a higher or equal version — return backend's
  *     account (client should update its local cache).
- *  3. If client account has a higher or equal version — save the client's
- *     account and return it (client is authoritative on initial migration).
+ *  3. If client account has a higher version — save the client's
+ *     account and return it.
  *
  * @param  {string} storageKey
  * @param  {Object} clientAccount  — v3 account from the client (may be null)
@@ -450,15 +517,15 @@ AccountService.prototype.syncAccount = function (storageKey, clientAccount, seed
     return { account: empty, source: 'seed' };
   }
 
-  // Case 2: backend has a newer version
+  // Case 2: backend has a newer or equal version
   var backendVer = backendAccount.version || 0;
   var clientVer  = clientAccount ? (clientAccount.version || 0) : -1;
 
-  if (backendVer > clientVer) {
+  if (backendVer >= clientVer) {
     return { account: backendAccount, source: 'backend' };
   }
 
-  // Case 3: client is equal or newer — accept client, persist to backend
+  // Case 3: client is newer — accept client, persist to backend
   if (clientAccount && clientAccount.storageKey) {
     var accepted = normalizeAccount(clientAccount, seed);
     accepted.storageKey = storageKey;
@@ -505,6 +572,28 @@ AccountService.prototype.applyCommand = function (storageKey, command) {
           var pmtErr = new Error(engineResult.error || 'Payment could not be applied.');
           pmtErr.status = 422;
           throw pmtErr;
+        }
+      }
+      break;
+
+    case 'SET_PAID_COUNT':
+      if (loan) {
+        engineResult = setPaidCount(loan, payload.paidCount, now, actor);
+        if (!engineResult.ok) {
+          var spcErr = new Error(engineResult.error || 'Paid instalment count could not be adjusted.');
+          spcErr.status = 422;
+          throw spcErr;
+        }
+      }
+      break;
+
+    case 'REFUND_PAYMENT':
+      if (loan) {
+        engineResult = refundPayment(loan, payload.txnId, actor, now, payload.reason);
+        if (!engineResult.ok) {
+          var refundErr = new Error(engineResult.error || 'Payment could not be refunded.');
+          refundErr.status = 422;
+          throw refundErr;
         }
       }
       break;

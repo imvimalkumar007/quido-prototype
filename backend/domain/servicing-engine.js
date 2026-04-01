@@ -58,6 +58,59 @@ function _addMonths(date, n) {
   return d;
 }
 
+function _capAmount(value) {
+  return +Math.max(0, value || 0).toFixed(2);
+}
+
+function _ensureRowTracking(row) {
+  if (!row) return;
+  row.interestPaid  = _capAmount(row.interestPaid);
+  row.principalPaid = _capAmount(row.principalPaid);
+  if (row.status === 'paid') {
+    row.interestPaid  = _capAmount(Math.max(row.interestPaid, row.interest || 0));
+    row.principalPaid = _capAmount(Math.max(row.principalPaid, row.principal || 0));
+  }
+}
+
+function _interestRemaining(row) {
+  _ensureRowTracking(row);
+  return _capAmount((row.interest || 0) - (row.interestPaid || 0));
+}
+
+function _principalRemaining(row) {
+  _ensureRowTracking(row);
+  return _capAmount((row.principal || 0) - (row.principalPaid || 0));
+}
+
+function _rowRemaining(row) {
+  return _capAmount(_interestRemaining(row) + _principalRemaining(row));
+}
+
+function _recomputePaidCount(loan) {
+  var snap = loan.scheduleSnapshot || [];
+  var idx = 0;
+  for (; idx < snap.length; idx++) {
+    var row = snap[idx];
+    _ensureRowTracking(row);
+    if (row.ph) {
+      row.status = 'paid';
+      continue;
+    }
+    if (_rowRemaining(row) <= BALANCE_TOLERANCE) {
+      row.status = 'paid';
+      continue;
+    }
+    break;
+  }
+  return idx;
+}
+
+function _appendTransaction(loan, txn) {
+  if (!Array.isArray(loan.transactions)) loan.transactions = [];
+  loan.transactions.push(txn);
+  return txn;
+}
+
 // ── Schedule helpers ──────────────────────────────────────────────────────────
 
 /**
@@ -72,9 +125,12 @@ function _addMonths(date, n) {
 function allocatePaymentToSchedule(loan, amount) {
   var snap      = loan.scheduleSnapshot || [];
   var paidIdx   = (loan.loanCore && loan.loanCore.paidCount) || 0;
-  var partial   = loan.partialCredit || 0;
-  var remaining = amount + partial;
+  var remaining = _capAmount(amount);
   var cleared   = 0;
+  var interestApplied  = 0;
+  var principalApplied = 0;
+  var dueSatisfied = false;
+  var rowAllocations = [];
 
   for (var i = paidIdx; i < snap.length; i++) {
     var row = snap[i];
@@ -87,18 +143,60 @@ function allocatePaymentToSchedule(loan, amount) {
       continue;
     }
 
-    var rowCost = row.emi || row.principal || 0;
-    if (remaining >= rowCost - BALANCE_TOLERANCE) {
-      remaining -= rowCost;
-      row.status = 'paid';
-      cleared++;
-    } else {
+    _ensureRowTracking(row);
+
+    if (!dueSatisfied) {
+      var interestDue = _interestRemaining(row);
+      if (interestDue > BALANCE_TOLERANCE && remaining > BALANCE_TOLERANCE) {
+        var interestPay = Math.min(remaining, interestDue);
+        row.interestPaid = _capAmount((row.interestPaid || 0) + interestPay);
+        remaining = _capAmount(remaining - interestPay);
+        interestApplied = _capAmount(interestApplied + interestPay);
+        rowAllocations.push({ n: row.n, interestApplied: interestPay, principalApplied: 0 });
+      }
+
+      var principalDue = _principalRemaining(row);
+      if (principalDue > BALANCE_TOLERANCE && remaining > BALANCE_TOLERANCE) {
+        var principalPay = Math.min(remaining, principalDue);
+        row.principalPaid = _capAmount((row.principalPaid || 0) + principalPay);
+        remaining = _capAmount(remaining - principalPay);
+        principalApplied = _capAmount(principalApplied + principalPay);
+        rowAllocations.push({ n: row.n, interestApplied: 0, principalApplied: principalPay });
+      }
+
+      if (_rowRemaining(row) <= BALANCE_TOLERANCE) {
+        row.status = 'paid';
+        cleared++;
+        dueSatisfied = true;
+        continue;
+      }
       break;
     }
+
+    var prepaidPrincipal = _principalRemaining(row);
+    if (prepaidPrincipal > BALANCE_TOLERANCE && remaining > BALANCE_TOLERANCE) {
+      var overpay = Math.min(remaining, prepaidPrincipal);
+      row.principalPaid = _capAmount((row.principalPaid || 0) + overpay);
+      remaining = _capAmount(remaining - overpay);
+      principalApplied = _capAmount(principalApplied + overpay);
+      rowAllocations.push({ n: row.n, interestApplied: 0, principalApplied: overpay });
+    }
+
+    if (_rowRemaining(row) <= BALANCE_TOLERANCE) {
+      row.status = 'paid';
+    }
+
+    if (remaining <= BALANCE_TOLERANCE) break;
   }
 
-  loan.partialCredit = Math.max(0, remaining);
-  return cleared;
+  loan.partialCredit = 0;
+  return {
+    cleared:          cleared,
+    remaining:        remaining,
+    interestApplied:  interestApplied,
+    principalApplied: principalApplied,
+    rowAllocations:   rowAllocations
+  };
 }
 
 /**
@@ -112,7 +210,11 @@ function syncRowStatuses(loan) {
   var snap    = loan.scheduleSnapshot || [];
   var paidIdx = (loan.loanCore && loan.loanCore.paidCount) || 0;
   for (var i = 0; i < snap.length; i++) {
-    if (snap[i].status === 'paid') continue;
+    _ensureRowTracking(snap[i]);
+    if (_rowRemaining(snap[i]) <= BALANCE_TOLERANCE || snap[i].ph) {
+      snap[i].status = 'paid';
+      continue;
+    }
     if (i < paidIdx)        { snap[i].status = 'paid';    continue; }
     if (i === paidIdx)      { snap[i].status = 'current'; continue; }
     snap[i].status = 'upcoming';
@@ -125,34 +227,42 @@ function syncRowStatuses(loan) {
  */
 function rebuildSummary(loan) {
   var snap    = loan.scheduleSnapshot || [];
-  var partial = loan.partialCredit || 0;
 
-  // EMI = first non-PH row's emi field
+  // EMI = contractual amount of the first unpaid non-PH row
   var emiAmt = 0;
   for (var j = 0; j < snap.length; j++) {
-    if (!snap[j].ph) { emiAmt = snap[j].emi || 0; break; }
+    if (snap[j].ph) continue;
+    if (_rowRemaining(snap[j]) > BALANCE_TOLERANCE) {
+      emiAmt = snap[j].emi || 0;
+      break;
+    }
   }
 
   var totalRepayable = 0;
   var totalInterest  = 0;
   var totalRepaid    = 0;
-  var outBal         = 0;
+  var totalInterestPaid = 0;
+  var totalPrincipalPaid = 0;
   var remaining      = 0;
 
   for (var i = 0; i < snap.length; i++) {
     var row = snap[i];
     if (row.ph) continue; // PH rows contribute nothing to financials
+    _ensureRowTracking(row);
     totalRepayable += row.emi || 0;
     totalInterest  += row.interest || 0;
-    if (row.status === 'paid') {
-      totalRepaid += row.emi || 0;
-    } else {
-      outBal    += row.principal || 0;
+    totalInterestPaid  += row.interestPaid || 0;
+    totalPrincipalPaid += row.principalPaid || 0;
+    if (_rowRemaining(row) > BALANCE_TOLERANCE) {
       remaining += 1;
     }
   }
 
-  outBal = Math.max(0, outBal - partial);
+  totalInterestPaid  = _capAmount(totalInterestPaid);
+  totalPrincipalPaid = _capAmount(totalPrincipalPaid);
+  totalRepaid = _capAmount(totalInterestPaid + totalPrincipalPaid);
+  var outBal = _capAmount(totalRepayable - totalRepaid);
+  if (outBal <= BALANCE_TOLERANCE) remaining = 0;
 
   loan.loanSummary = {
     emi:                  +emiAmt.toFixed(2),
@@ -160,6 +270,8 @@ function rebuildSummary(loan) {
     totalInterest:        +totalInterest.toFixed(2),
     outstandingBalance:   +outBal.toFixed(2),
     totalRepaid:          +totalRepaid.toFixed(2),
+    totalInterestPaid:    +totalInterestPaid.toFixed(2),
+    totalPrincipalPaid:   +totalPrincipalPaid.toFixed(2),
     instalmentsRemaining: remaining
   };
 }
@@ -192,8 +304,7 @@ function applyRepayment(loan, amount, date, actor, now) {
   var emiAmt  = nextRow ? (nextRow.emi || 0) : 0;
   var txnType = amount >= emiAmt - BALANCE_TOLERANCE ? 'payment' : 'partial_payment';
 
-  if (!Array.isArray(loan.transactions)) loan.transactions = [];
-  loan.transactions.push({
+  var txn = _appendTransaction(loan, {
     id:         'pmt-' + Date.now(),
     type:       txnType,
     amount:     amount,
@@ -202,8 +313,8 @@ function applyRepayment(loan, amount, date, actor, now) {
     actor:      actor
   });
 
-  var cleared = allocatePaymentToSchedule(loan, amount);
-  loan.loanCore.paidCount = paidIdx + cleared;
+  var allocation = allocatePaymentToSchedule(loan, amount);
+  loan.loanCore.paidCount = _recomputePaidCount(loan);
   syncRowStatuses(loan);
   rebuildSummary(loan);
   runStatusEngine(loan, now);
@@ -215,10 +326,20 @@ function applyRepayment(loan, amount, date, actor, now) {
   }
 
   // Ledger
-  postEntry(loan, ENTRY_TYPES.CASH_RECEIVED, amount, date, actor, loan.transactions[loan.transactions.length - 1].id);
+  txn.allocation = {
+    interestApplied: allocation.interestApplied,
+    principalApplied: allocation.principalApplied,
+    rows: allocation.rowAllocations
+  };
+
+  postEntry(loan, ENTRY_TYPES.CASH_RECEIVED, amount, date, actor, txn.id);
 
   _pushAudit(loan, 'repayment_recorded', {
-    amount: amount, cleared: cleared, txnType: txnType
+    amount: amount,
+    cleared: allocation.cleared,
+    txnType: txnType,
+    interestApplied: allocation.interestApplied,
+    principalApplied: allocation.principalApplied
   }, actor, date);
 
   return { ok: true, loan: loan };
@@ -240,8 +361,7 @@ function applyManualPayment(loan, amount, date, actor, now) {
   actor = actor || 'ops';
   date  = date  || now.toISOString();
 
-  if (!Array.isArray(loan.transactions)) loan.transactions = [];
-  loan.transactions.push({
+  var txn = _appendTransaction(loan, {
     id:         'mpmt-' + Date.now(),
     type:       'manual_payment',
     amount:     amount,
@@ -251,8 +371,8 @@ function applyManualPayment(loan, amount, date, actor, now) {
   });
 
   var paidIdx = (loan.loanCore && loan.loanCore.paidCount) || 0;
-  var cleared = allocatePaymentToSchedule(loan, amount);
-  loan.loanCore.paidCount = paidIdx + cleared;
+  var allocation = allocatePaymentToSchedule(loan, amount);
+  loan.loanCore.paidCount = _recomputePaidCount(loan);
   syncRowStatuses(loan);
   rebuildSummary(loan);
   runStatusEngine(loan, now);
@@ -264,11 +384,92 @@ function applyManualPayment(loan, amount, date, actor, now) {
   }
 
   // Ledger
-  postEntry(loan, ENTRY_TYPES.CASH_RECEIVED, amount, date, actor, loan.transactions[loan.transactions.length - 1].id);
+  txn.allocation = {
+    interestApplied: allocation.interestApplied,
+    principalApplied: allocation.principalApplied,
+    rows: allocation.rowAllocations
+  };
+
+  postEntry(loan, ENTRY_TYPES.CASH_RECEIVED, amount, date, actor, txn.id);
 
   _pushAudit(loan, 'manual_payment_recorded', {
-    amount: amount, cleared: cleared
+    amount: amount,
+    cleared: allocation.cleared,
+    interestApplied: allocation.interestApplied,
+    principalApplied: allocation.principalApplied
   }, actor, date);
+
+  return { ok: true, loan: loan };
+}
+
+function refundPayment(loan, txnId, actor, now, reason) {
+  now = now || new Date();
+  actor = actor || 'ops';
+  reason = (reason || '').trim();
+  var status = evaluateCoreStatus(loan, now).coreStatus;
+  if (status === CS.CLOSED || status === CS.SETTLED || loan.closedAt) {
+    return { ok: false, loan: loan, error: 'Refunds are not allowed on a closed or settled loan.' };
+  }
+
+  var txns = loan.transactions || [];
+  var txn = null;
+  for (var i = txns.length - 1; i >= 0; i--) {
+    if (txns[i].id === txnId) { txn = txns[i]; break; }
+  }
+  if (!txn) return { ok: false, loan: loan, error: 'Payment transaction not found.' };
+  if (txn.refundedAt || txn.refundTxnId) {
+    return { ok: false, loan: loan, error: 'Payment has already been refunded.' };
+  }
+  if (['payment', 'partial_payment', 'manual_payment'].indexOf(txn.type) === -1) {
+    return { ok: false, loan: loan, error: 'Only payment transactions can be refunded.' };
+  }
+  var allocation = txn.allocation;
+  if (!allocation || !Array.isArray(allocation.rows) || !allocation.rows.length) {
+    return { ok: false, loan: loan, error: 'This payment cannot be refunded because its allocation details are unavailable.' };
+  }
+
+  var snap = loan.scheduleSnapshot || [];
+  for (var a = allocation.rows.length - 1; a >= 0; a--) {
+    var alloc = allocation.rows[a];
+    for (var r = 0; r < snap.length; r++) {
+      if (snap[r].n !== alloc.n) continue;
+      _ensureRowTracking(snap[r]);
+      if (alloc.principalApplied) {
+        snap[r].principalPaid = _capAmount((snap[r].principalPaid || 0) - alloc.principalApplied);
+      }
+      if (alloc.interestApplied) {
+        snap[r].interestPaid = _capAmount((snap[r].interestPaid || 0) - alloc.interestApplied);
+      }
+      break;
+    }
+  }
+
+  loan.loanCore.paidCount = _recomputePaidCount(loan);
+  syncRowStatuses(loan);
+  rebuildSummary(loan);
+  runStatusEngine(loan, now);
+
+  var refundTxn = _appendTransaction(loan, {
+    id:         'rfnd-' + Date.now(),
+    type:       'refund',
+    amount:     txn.amount,
+    date:       now.toISOString(),
+    successful: true,
+    actor:      actor,
+    refundFor:  txn.id,
+    reason:     reason
+  });
+  txn.refundedAt = now.toISOString();
+  txn.refundTxnId = refundTxn.id;
+  txn.refundReason = reason;
+
+  postEntry(loan, ENTRY_TYPES.REVERSAL, txn.amount, now.toISOString(), actor, txn.id);
+  _pushAudit(loan, 'payment_refunded', {
+    txnId: txn.id,
+    amount: txn.amount,
+    refundTxnId: refundTxn.id,
+    reason: reason
+  }, actor, now.toISOString());
 
   return { ok: true, loan: loan };
 }
@@ -811,6 +1012,7 @@ module.exports = {
   // Payment mutations
   applyRepayment,
   applyManualPayment,
+  refundPayment,
   recordFailedPayment,
   // Payment holiday
   applyPaymentHoliday,
