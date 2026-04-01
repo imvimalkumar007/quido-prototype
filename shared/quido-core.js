@@ -1093,7 +1093,8 @@
                 amount:     payload.amount || 0,
                 date:       payload.date   || nowIso(),
                 successful: true,
-                actor:      actor
+                actor:      actor,
+                instrument: payload.instrument || null
               });
               // Track payments against an active Payment Arrangement.
               // Use the explicit payment amount if available; otherwise assume

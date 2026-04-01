@@ -574,7 +574,7 @@ AccountService.prototype.applyCommand = function (storageKey, command) {
 
     case 'RECORD_PAYMENT':
       if (loan) {
-        engineResult = applyRepayment(loan, payload.amount || 0, payload.date, actor, now);
+        engineResult = applyRepayment(loan, payload.amount || 0, payload.date, actor, now, payload.instrument);
         if (!engineResult.ok) {
           var pmtErr = new Error(engineResult.error || 'Payment could not be applied.');
           pmtErr.status = 422;

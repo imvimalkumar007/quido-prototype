@@ -288,7 +288,7 @@ function rebuildSummary(loan) {
  * @param {Date}   [now]      — evaluation reference time
  * @returns {{ ok: boolean, loan: Object, error?: string }}
  */
-function applyRepayment(loan, amount, date, actor, now) {
+function applyRepayment(loan, amount, date, actor, now, instrument) {
   now   = now   || new Date();
   actor = actor || 'customer';
   date  = date  || now.toISOString();
@@ -310,7 +310,8 @@ function applyRepayment(loan, amount, date, actor, now) {
     amount:     amount,
     date:       date,
     successful: true,
-    actor:      actor
+    actor:      actor,
+    instrument: instrument || null
   });
 
   var allocation = allocatePaymentToSchedule(loan, amount);
@@ -356,7 +357,7 @@ function applyRepayment(loan, amount, date, actor, now) {
  * @param {Date}   [now]
  * @returns {{ ok, loan, error? }}
  */
-function applyManualPayment(loan, amount, date, actor, now) {
+function applyManualPayment(loan, amount, date, actor, now, instrument) {
   now   = now   || new Date();
   actor = actor || 'ops';
   date  = date  || now.toISOString();
@@ -367,7 +368,8 @@ function applyManualPayment(loan, amount, date, actor, now) {
     amount:     amount,
     date:       date,
     successful: true,
-    actor:      actor
+    actor:      actor,
+    instrument: instrument || null
   });
 
   var paidIdx = (loan.loanCore && loan.loanCore.paidCount) || 0;
