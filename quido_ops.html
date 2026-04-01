@@ -572,7 +572,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
             <div class="card-hdr"><span class="card-title">Amortisation Schedule</span><span style="font-size:11px;color:var(--muted)" id="sched-subtitle"></span></div>
             <div class="tbl-wrap">
               <table class="tbl">
-                <thead><tr><th>#</th><th>Due Date</th><th>EMI</th><th>Principal</th><th>Interest</th><th>Balance</th><th>Status</th><th>Action</th></tr></thead>
+                <thead><tr><th>#</th><th>Due Date</th><th>EMI</th><th>Remaining Due</th><th>Paid So Far</th><th>Principal</th><th>Interest</th><th>Balance</th><th>Status</th><th>Action</th></tr></thead>
                 <tbody id="sched-body"></tbody>
               </table>
             </div>
@@ -1295,12 +1295,16 @@ function firstDefined() {
 }
 function outstandingBal(schedule, paidCount) {
   var t = 0;
-  for (var i = paidCount; i < schedule.length; i++) t += schedule[i].emi;
+  for (var i = paidCount; i < schedule.length; i++) t += rowDueAmount(schedule[i]);
   return t;
 }
 function totalRepaid(schedule, paidCount) {
   var t = 0;
-  for (var i = 0; i < paidCount; i++) t += schedule[i].emi;
+  for (var i = 0; i < schedule.length; i++) {
+    var row = schedule[i] || {};
+    var paidOnRow = Math.max(0, firstDefined(row.emi, 0) - rowDueAmount(row));
+    if (i < paidCount || paidOnRow > 0) t += paidOnRow;
+  }
   return t;
 }
 function rowDueAmount(row) {
@@ -1801,7 +1805,9 @@ function buildSchedTable() {
     var cs  = chips[chipKey]||'';
     var lbl = labels[chipKey] || row.status;
     var act = (row.status==='upcoming'||row.status==='current') ? '<button class="btn btn-xs btn-secondary" onclick="markPaid('+row.n+')">Mark Paid</button>' : row.status==='paid' ? '<button class="btn btn-xs btn-ghost" onclick="unmarkPaid('+row.n+')">Undo</button>' : '';
-    return '<tr class="row-'+row.status+'"><td class="mono">'+row.n+'</td><td>'+shortDate(row.dueDate)+'</td><td class="mono">'+fmt(row.emi)+'</td><td class="mono">'+fmt(row.principal)+'</td><td class="mono" style="color:var(--muted)">'+fmt(row.interest)+'</td><td class="mono">'+fmt(row.balance)+'</td><td><span style="'+cs+';padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:600">'+lbl+'</span></td><td>'+act+'</td></tr>';
+    var remainingDue = rowDueAmount(row);
+    var paidSoFar = Math.max(0, (row.emi || 0) - remainingDue);
+    return '<tr class="row-'+row.status+'"><td class="mono">'+row.n+'</td><td>'+shortDate(row.dueDate)+'</td><td class="mono">'+fmt(row.emi)+'</td><td class="mono">'+fmt(remainingDue)+'</td><td class="mono">'+fmt(paidSoFar)+'</td><td class="mono">'+fmt(row.principal)+'</td><td class="mono" style="color:var(--muted)">'+fmt(row.interest)+'</td><td class="mono">'+fmt(row.balance)+'</td><td><span style="'+cs+';padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:600">'+lbl+'</span></td><td>'+act+'</td></tr>';
   }).join('');
 }
 
@@ -3714,6 +3720,13 @@ function renderStatement() {
   var rows = txns.map(function(txn) {
     var isRefund = txn.type === 'refund';
     var refunded = !!(txn.refundedAt || txn.refundTxnId);
+    var labelMap = {
+      payment: 'Payment received',
+      partial_payment: 'Partial payment received',
+      manual_payment: 'Manual payment applied',
+      refund: 'Payment refunded',
+      failed_payment: 'Payment attempt failed'
+    };
     var allocation = txn.allocation || {};
     var detailBits = [];
     if (allocation.interestApplied) detailBits.push('Interest ' + fmt(allocation.interestApplied));
@@ -3732,7 +3745,7 @@ function renderStatement() {
           ? '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 6h6" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round"/></svg>'
           : '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#059669" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>')
       + '</div>'
-      + '<div style="flex:1"><div style="font-size:12.5px;font-weight:600">' + escHtml(isRefund ? 'Payment refunded' : (txn.type === 'manual_payment' ? 'Manual payment' : 'Payment received')) + '</div>'
+      + '<div style="flex:1"><div style="font-size:12.5px;font-weight:600">' + escHtml(labelMap[txn.type] || 'Account transaction') + '</div>'
       + '<div style="font-size:11px;color:var(--muted)">' + shortDate(txn.date || txn.timestamp) + ' &middot; Ref: ' + escHtml(txn.id || '-') + (detailBits.length ? ' &middot; ' + escHtml(detailBits.join(' | ')) : '') + '</div></div>'
       + '<div style="display:flex;align-items:center;gap:10px"><div style="font-size:13px;font-weight:700;color:' + (isRefund ? 'var(--red)' : 'var(--green)') + '">' + (isRefund ? '+' : '-') + fmt(txn.amount || 0) + '</div>' + actionHtml + '</div>'
       + '</div>';
