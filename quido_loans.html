@@ -937,6 +937,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     totalInterestPaid: 0,
     totalPrincipalPaid: 0,
     instalmentsRemaining: 0,
+    transactions: [],
     // Allowed / blocked servicing actions (populated from resolved state or local engine)
     allowedActions: [],
     blockedActions: [],
@@ -1175,7 +1176,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     for (var i = 0; i < s.length; i++) {
       var e = s[i];
       var chipCls, chipTxt, iconCls;
-      if (e.status === 'paid')    { chipCls='sc-p'; chipTxt='✓ Paid'; iconCls='ii paid'; }
+      if (e.status === 'paid')    { chipCls='sc-p'; chipTxt='Paid'; iconCls='ii paid'; }
       else if (e.status === 'current') { chipCls='sc-d'; chipTxt='Due soon'; iconCls='ii warn'; }
       else if (e.status === 'ph') { chipCls='sc-ph'; chipTxt='Holiday'; iconCls='ii ph'; }
       else                        { chipCls='sc-u'; chipTxt='Upcoming'; iconCls='ii'; }
@@ -1183,12 +1184,21 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       var chevCls  = e.status === 'current' ? 'chev open' : 'chev';
       var isCur    = (e.status === 'current' || e.status === 'ph');
       var phBadge  = e.ph ? '<span style="display:inline-block;width:7px;height:7px;background:#f59e0b;border-radius:50%;margin-left:7px;vertical-align:middle;flex-shrink:0"></span>' : '';
-      var paBadge  = e.pa ? '<span style="font-size:9px;background:#eff6ff;color:#1e40af;border-radius:6px;padding:2px 6px;margin-left:6px;font-weight:600">PA · 0% interest</span>' : '';
+      var paBadge  = e.pa ? '<span style="font-size:9px;background:#eff6ff;color:#1e40af;border-radius:6px;padding:2px 6px;margin-left:6px;font-weight:600">PA | 0% interest</span>' : '';
       var paidTd   = e.status === 'paid'
         ? '<td style="font-size:13px;font-weight:600;color:var(--ok-text);text-align:right;padding-bottom:10px">' + LOAN.shortDate(e.dueDate) + '</td>'
         : '<td style="font-size:13px;font-weight:600;color:var(--dim);text-align:right;padding-bottom:10px">-</td>';
       var iStyle   = e.pa ? ' style="color:var(--ok-text)"' : '';
-      var iVal     = e.pa ? '£0.00 (frozen)' : LOAN.fmt(e.interest);
+      var iVal     = e.pa ? (LOAN.fmt(0) + ' (frozen)') : LOAN.fmt(e.interest);
+      var remainingAmt = instalmentDueAmount(e);
+      var paidSoFar = Math.max(0, (e.emi || 0) - remainingAmt);
+      var dueMeta = '';
+      if (e.status !== 'paid') {
+        dueMeta = '<tr class="dvr"><td>Remaining due</td><td>' + LOAN.fmt(remainingAmt) + '</td></tr>';
+        if (paidSoFar > 0.009) {
+          dueMeta += '<tr><td>Paid so far</td><td>' + LOAN.fmt(paidSoFar) + '</td></tr>';
+        }
+      }
       el.insertAdjacentHTML('beforeend',
         '<div class="ai">'
         + '<div class="at' + (isCur ? ' cur' : '') + '">'
@@ -1204,11 +1214,11 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
         + '<tr><td style="font-size:13px;font-weight:600;color:var(--text);padding-bottom:10px">' + LOAN.shortDate(e.dueDate) + '</td>' + paidTd + '</tr>'
         + '<tr class="dvr"><td>Principal</td><td>' + LOAN.fmt(e.principal) + '</td></tr>'
         + '<tr><td>Interest</td><td' + iStyle + '>' + iVal + '</td></tr>'
+        + dueMeta
         + '<tr class="dvr tot"><td>Total EMI</td><td>' + LOAN.fmt(e.emi) + '</td></tr>'
         + '</table></div></div>'
       );
     }
-    // Wire accordion triggers
     var triggers = el.querySelectorAll('.at');
     for (var t = 0; t < triggers.length; t++) {
       (function(tr) {
@@ -1222,7 +1232,6 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     }
   }
 
-  // ═══════════════════════════════════════════════
   // BUILD STATEMENT LIST
   // ═══════════════════════════════════════════════
   function buildStatementList() {
@@ -1231,15 +1240,41 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     el.innerHTML = '';
     var ctx = getAccountContext();
     var loanTag = ctx.loanId || '00000';
-    for (var i = LOAN.paidCount - 1; i >= 0; i--) {
-      var e = LOAN.schedule[i];
+    var txns = (LOAN.transactions || []).slice().sort(function (a, b) {
+      return new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0);
+    });
+    for (var i = 0; i < txns.length; i++) {
+      var t = txns[i];
+      var tType = t.type || 'payment';
+      var isCredit = tType === 'refund';
+      var amountColor = isCredit ? 'var(--blue)' : (t.successful === false ? 'var(--err)' : 'var(--ok-text)');
+      var amountPrefix = isCredit ? '+' : '-';
+      var iconBg = isCredit ? '#eff6ff' : (t.successful === false ? '#fef2f2' : '#ecfdf5');
+      var iconSvg = isCredit
+        ? '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="#1a56db" stroke-width="1.6" stroke-linecap="round"/></svg>'
+        : (t.successful === false
+          ? '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 4l6 6M10 4 4 10" stroke="#dc2626" stroke-width="1.6" stroke-linecap="round"/></svg>'
+          : '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l4 4 6-6" stroke="#059669" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+      var actionLabel = {
+        payment: 'Payment received',
+        partial_payment: 'Partial payment received',
+        manual_payment: 'Manual payment applied',
+        refund: 'Payment refunded',
+        failed_payment: 'Payment attempt failed'
+      }[tType] || 'Account transaction';
+      var ref = t.id ? String(t.id).slice(-6).toUpperCase() : ('NP-' + loanTag + '-' + (10000 + i));
+      var detail = '';
+      if (t.allocation && (t.allocation.interestApplied || t.allocation.principalApplied)) {
+        detail = '<div style="font-size:10px;color:var(--dim)">Interest ' + LOAN.fmt(t.allocation.interestApplied || 0) + ' | Principal ' + LOAN.fmt(t.allocation.principalApplied || 0) + '</div>';
+      }
       el.insertAdjacentHTML('beforeend',
         '<div class="strow">'
-        + '<div class="stic" style="background:#ecfdf5"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l4 4 6-6" stroke="#059669" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'
-        + '<div><div style="font-size:12px;font-weight:600;color:var(--text)">Instalment ' + e.n + ' paid</div>'
-        + '<div style="font-size:11px;color:var(--muted)">' + LOAN.shortDate(e.dueDate) + '</div>'
-        + '<div style="font-size:10px;color:var(--dim)">Ref: NP-' + loanTag + '-' + String(10000 + e.n * 317).slice(0,5) + '</div></div>'
-        + '<div style="font-size:13px;font-weight:700;margin-left:auto;color:var(--ok-text)">-' + LOAN.fmt(e.emi) + '</div>'
+        + '<div class="stic" style="background:' + iconBg + '">' + iconSvg + '</div>'
+        + '<div><div style="font-size:12px;font-weight:600;color:var(--text)">' + actionLabel + '</div>'
+        + '<div style="font-size:11px;color:var(--muted)">' + LOAN.shortDate(new Date(t.date || t.createdAt || Date.now())) + '</div>'
+        + '<div style="font-size:10px;color:var(--dim)">Ref: ' + ref + '</div>'
+        + detail + '</div>'
+        + '<div style="font-size:13px;font-weight:700;margin-left:auto;color:' + amountColor + '">' + amountPrefix + LOAN.fmt(Math.abs(t.amount || 0)) + '</div>'
         + '</div>'
       );
     }
@@ -1254,11 +1289,6 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     );
   }
 
-  // ═══════════════════════════════════════════════
-  // ENGINE PANEL - removed from customer-facing build
-  // Configuration is handled by the backend.
-  // Loan parameters are set here for the prototype.
-  // ═══════════════════════════════════════════════
   function previewEngine() {} // stub - no UI panel
 
   // ═══════════════════════════════════════════════
@@ -2681,6 +2711,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       LOAN.totalInterestPaid  = al.summary ? al.summary.totalInterestPaid : 0;
       LOAN.totalPrincipalPaid = al.summary ? al.summary.totalPrincipalPaid : 0;
       LOAN.instalmentsRemaining = al.summary ? al.summary.instalmentsRemaining : 0;
+      LOAN.transactions = (al.transactions || []).slice();
       if (al.schedule && al.schedule.length) {
         LOAN.schedule = al.schedule.map(function (r) {
           return {
@@ -2734,6 +2765,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     LOAN.instalmentsRemaining = (loan.loanSummary && loan.loanSummary.instalmentsRemaining !== undefined)
       ? loan.loanSummary.instalmentsRemaining
       : null;
+    LOAN.transactions = (loan.transactions || []).slice();
     var snap = loan.scheduleSnapshot;
     if (snap && snap.length) {
       LOAN.schedule = snap.map(function (r) {
@@ -3085,5 +3117,3 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
 </script>
 </body>
 </html>
-
-
