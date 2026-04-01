@@ -151,7 +151,7 @@
    * @param {Date}   now
    * @returns {{ eligible: boolean, reason?: string, phUsed?: number, phMax?: number }}
    */
-  function checkPHEligibility(loan, coreStatus, derivedFlags, now) {
+  function checkPHEligibility(loan, coreStatus, derivedFlags, now, opts) {
     var SC   = Quido.StatusConfig;
     now      = now || new Date();
     var arrs = loan.arrangements || {};
@@ -183,11 +183,11 @@
       }
     }
 
-    // Count PH uses
+    // Count PH uses (limit is customer-portal only; ops agents bypass it via opts.noLimit)
     var phHistory = arrs.paymentHolidayHistory || [];
     var phMax     = (lc.termMonths <= 6) ? 1 : 2;
     var phUsed    = phHistory.length + (arrs.paymentHoliday && arrs.paymentHoliday.active ? 1 : 0);
-    if (phUsed >= phMax) {
+    if (!(opts && opts.noLimit) && phUsed >= phMax) {
       return {
         eligible: false,
         reason:   'You have used ' + phUsed + ' of ' + phMax + ' payment holiday' + (phMax > 1 ? 's' : '') + ' available on this loan.'

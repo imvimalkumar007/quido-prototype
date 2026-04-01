@@ -77,6 +77,17 @@
     var lc = loan.loanCore;
     if (!lc || !lc.principal || !lc.termMonths) return;
 
+    // Preserve ph/pa flags from the existing snapshot before overwriting it.
+    // builtInEngineFactory generates a clean schedule (ph/pa always false),
+    // so we re-apply any flags that were set by APPLY_PAYMENT_HOLIDAY or
+    // APPLY_PAYMENT_ARRANGEMENT after the rebuild.
+    var phPaByN = {};
+    var existing = loan.scheduleSnapshot || [];
+    for (var _ei = 0; _ei < existing.length; _ei++) {
+      var _er = existing[_ei];
+      if (_er.ph || _er.pa) phPaByN[_er.n] = { ph: !!_er.ph, pa: !!_er.pa };
+    }
+
     var engine = Quido.builtInEngineFactory({
       principal:  lc.principal,
       apr:        lc.apr        || 0,
@@ -87,6 +98,7 @@
     engine.calc();
     var summary           = engine.summary();
     loan.scheduleSnapshot = engine.schedule().map(function (r) {
+      var _flags = phPaByN[r.n] || {};
       return {
         n:         r.n,
         dueDate:   r.dueDate instanceof Date ? r.dueDate.toISOString() : r.dueDate,
@@ -95,8 +107,8 @@
         interest:  r.interest,
         balance:   r.balance,
         status:    r.status,
-        ph:        r.ph || false,
-        pa:        r.pa || false
+        ph:        _flags.ph || false,
+        pa:        _flags.pa || false
       };
     });
     loan.loanSummary = {
@@ -215,7 +227,7 @@
    * @param {Date}   [now]
    * @returns {{ allowedActions: string[], blockedActions: string[], reasons: Object }}
    */
-  function deriveAllowedActions(loan, coreStatus, overlays, derivedFlags, now) {
+  function deriveAllowedActions(loan, coreStatus, overlays, derivedFlags, now, opts) {
     now = now || _now();
     var allowed = [];
     var blocked = [];
@@ -235,7 +247,7 @@
     }
 
     // Payment Holiday
-    var phElig = pe.checkPHEligibility(loan, coreStatus, derivedFlags, now);
+    var phElig = pe.checkPHEligibility(loan, coreStatus, derivedFlags, now, opts);
     if (phElig.eligible) {
       allowed.push('apply_payment_holiday');
     } else {

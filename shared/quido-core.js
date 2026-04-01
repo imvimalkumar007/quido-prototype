@@ -1094,6 +1094,18 @@
                 successful: true,
                 actor:      actor
               });
+              // Track payments against an active Payment Arrangement.
+              // Use the explicit payment amount if available; otherwise assume
+              // the customer paid the arrangement monthly amount (mark-paid flow).
+              var _pa = loan.arrangements && loan.arrangements.paymentArrangement;
+              if (_pa && _pa.active) {
+                var _pmtAmt = payload.amount || _pa.amount || 0;
+                _pa.totalPaid = +((_pa.totalPaid || 0) + _pmtAmt).toFixed(2);
+                // Auto-complete the arrangement once fully paid
+                if (_pa.totalAmount > 0 && _pa.totalPaid >= _pa.totalAmount - 0.01) {
+                  _pa.active = false;
+                }
+              }
             }
             persistAndBroadcast(type, actor);
             break;
