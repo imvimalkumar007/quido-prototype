@@ -1120,7 +1120,11 @@
               loan.partialCredit = 0;
               for (var spi = 0; spi < spSnap.length; spi++) {
                 var spRow = spSnap[spi];
-                if (spi < target || spRow.ph) {
+                if (spRow.ph) {
+                  spRow.status = 'ph';
+                  spRow.interestPaid = 0;
+                  spRow.principalPaid = 0;
+                } else if (spi < target) {
                   spRow.status = 'paid';
                   spRow.interestPaid = spRow.interest || 0;
                   spRow.principalPaid = spRow.principal || 0;
@@ -1166,35 +1170,56 @@
               var phLc      = loan.loanCore;
 
               if (phTarget) {
-                // Mark target row as a PH instalment (no payment due)
+                // Mark target row as a PH instalment while preserving the
+                // contractual EMI for display. No payment is taken on this row.
                 var phSavedEmi     = phTarget.emi || 0;
                 phTarget.ph        = true;
-                phTarget.status    = 'paid';
-                phTarget.emi       = 0;
-                phTarget.principal = 0;
-                phTarget.interest  = 0;
-                // balance carries forward unchanged (interest accrues on next row)
+                phTarget.status    = 'ph';
+                phTarget.interestPaid = 0;
+                phTarget.principalPaid = 0;
+                phTarget.remainingDue = 0;
+                phTarget.interestRemaining = phTarget.interest || 0;
+                phTarget.principalRemaining = phTarget.principal || 0;
 
-                // Extend loan: append a new amortising row at the end
-                var phLastRow  = phSnap[phSnap.length - 1];
-                var phPrevBal  = phLastRow ? (phLastRow.balance || 0) : 0;
+                // Rebuild all subsequent payable rows from the balance at the
+                // start of the holiday month, accruing one month of interest
+                // and extending the term by one extra instalment.
                 var phR        = ((phLc.apr || 0) / 100) / 12;
-                var phNewInt   = +(phPrevBal * phR).toFixed(2);
-                var phNewPrinc = +Math.min(Math.max(0, phSavedEmi - phNewInt), phPrevBal).toFixed(2);
-                var phNewBal   = +Math.max(0, phPrevBal - phNewPrinc).toFixed(2);
-                var phNewN     = phLastRow ? phLastRow.n + 1 : (phLc.termMonths || 0) + 1;
-                var phNewDue;
-                try {
-                  var _phLD = new Date(phLastRow ? phLastRow.dueDate : nowIso());
-                  _phLD.setMonth(_phLD.getMonth() + 1);
-                  phNewDue = _phLD.toISOString();
-                } catch (e) { phNewDue = nowIso(); }
-                phSnap.push({
-                  n: phNewN, dueDate: phNewDue,
-                  emi: +phSavedEmi.toFixed(2), principal: phNewPrinc,
-                  interest: phNewInt, balance: phNewBal,
-                  status: 'upcoming', ph: false, pa: false
-                });
+                var phOpeningBal = phPaidIdx > 0
+                  ? +(((phSnap[phPaidIdx - 1] && phSnap[phPaidIdx - 1].balance) || 0).toFixed(2))
+                  : +((phLc.principal || 0).toFixed(2));
+                var phCarryBal = +((phOpeningBal + (phOpeningBal * phR)).toFixed(2));
+                var phFutureCount = Math.max(0, phSnap.length - phPaidIdx);
+                var phBaseDue = new Date(phTarget.dueDate || nowIso());
+                var phRebuilt = [];
+
+                for (var _phi = 1; _phi <= phFutureCount; _phi++) {
+                  var _interest = +(phCarryBal * phR).toFixed(2);
+                  var _principal = _phi === phFutureCount
+                    ? +phCarryBal.toFixed(2)
+                    : +Math.min(Math.max(0, phSavedEmi - _interest), phCarryBal).toFixed(2);
+                  var _endBal = +Math.max(0, phCarryBal - _principal).toFixed(2);
+                  var _due = new Date(phBaseDue);
+                  _due.setMonth(_due.getMonth() + _phi);
+                  phRebuilt.push({
+                    n: phPaidIdx + 1 + _phi,
+                    dueDate: _due.toISOString(),
+                    emi: +phSavedEmi.toFixed(2),
+                    principal: _principal,
+                    interest: _interest,
+                    balance: _endBal,
+                    status: _phi === 1 ? 'current' : 'upcoming',
+                    ph: false,
+                    pa: false,
+                    interestPaid: 0,
+                    principalPaid: 0,
+                    interestRemaining: _interest,
+                    principalRemaining: _principal,
+                    remainingDue: +phSavedEmi.toFixed(2)
+                  });
+                  phCarryBal = _endBal;
+                }
+                phSnap.splice(phPaidIdx + 1, Math.max(0, phSnap.length - (phPaidIdx + 1)), ...phRebuilt);
                 phLc.termMonths = (phLc.termMonths || 0) + 1;
               } else {
                 // No snapshot row — minimal fallback: extend term only
@@ -1204,6 +1229,7 @@
 
               // Re-sync row status labels
               for (var _pi = 0; _pi < phSnap.length; _pi++) {
+                if (phSnap[_pi].ph) { phSnap[_pi].status = 'ph'; continue; }
                 if (phSnap[_pi].status === 'paid') continue;
                 phSnap[_pi].status = _pi < phLc.paidCount ? 'paid'
                   : _pi === phLc.paidCount ? 'current' : 'upcoming';
@@ -1542,7 +1568,7 @@
       // Find next instalment from snapshot
       var next = null;
       for (var i = lc.paidCount || 0; i < snap.length; i++) {
-        if (snap[i].status !== 'paid') { next = snap[i]; break; }
+        if (snap[i].status !== 'paid' && !snap[i].ph) { next = snap[i]; break; }
       }
       return {
         accountStatus:        se.coreStatus    || 'active',

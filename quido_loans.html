@@ -1063,12 +1063,15 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
   }
   function instalmentDueAmount(row) {
     if (!row) return 0;
+    if (row.ph) return 0;
     if (row.remainingDue !== undefined && row.remainingDue !== null) return row.remainingDue;
     return row.emi || 0;
   }
   function nextInstalment() {
     if (LOAN.paidCount < LOAN.schedule.length) {
-      return LOAN.schedule[LOAN.paidCount];
+      for (var i = LOAN.paidCount; i < LOAN.schedule.length; i++) {
+        if (!LOAN.schedule[i].ph) return LOAN.schedule[i];
+      }
     }
     return null;
   }
@@ -1304,12 +1307,12 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     for (var i = 0; i < s.length; i++) {
       var e = s[i];
       var chipCls, chipTxt, iconCls;
-      if (e.status === 'paid')    { chipCls='sc-p'; chipTxt='Paid'; iconCls='ii paid'; }
+      if (e.ph)                   { chipCls='sc-ph'; chipTxt='Holiday'; iconCls='ii ph'; }
+      else if (e.status === 'paid')    { chipCls='sc-p'; chipTxt='Paid'; iconCls='ii paid'; }
       else if (e.status === 'current') { chipCls='sc-d'; chipTxt='Due soon'; iconCls='ii warn'; }
-      else if (e.status === 'ph') { chipCls='sc-ph'; chipTxt='Holiday'; iconCls='ii ph'; }
       else                        { chipCls='sc-u'; chipTxt='Upcoming'; iconCls='ii'; }
-      var openCls  = e.status === 'current' ? 'open' : '';
-      var chevCls  = e.status === 'current' ? 'chev open' : 'chev';
+      var openCls  = (e.status === 'current' || e.ph) ? 'open' : '';
+      var chevCls  = (e.status === 'current' || e.ph) ? 'chev open' : 'chev';
       var isCur    = (e.status === 'current' || e.status === 'ph');
       var phBadge  = e.ph ? '<span style="display:inline-block;width:7px;height:7px;background:#f59e0b;border-radius:50%;margin-left:7px;vertical-align:middle;flex-shrink:0"></span>' : '';
       var paBadge  = e.pa ? '<span style="font-size:9px;background:#eff6ff;color:#1e40af;border-radius:6px;padding:2px 6px;margin-left:6px;font-weight:600">PA | 0% interest</span>' : '';
@@ -1323,7 +1326,12 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       var dueMeta = '';
       var totalLabel = 'Total EMI';
       var totalValue = e.emi;
-      if (e.status !== 'paid') {
+      if (e.ph) {
+        dueMeta += '<tr class="dvr"><td>Paid so far</td><td>' + LOAN.fmt(0) + '</td></tr>';
+        dueMeta += '<tr><td>Amount due now</td><td>' + LOAN.fmt(0) + '</td></tr>';
+        totalLabel = 'Scheduled EMI';
+        totalValue = e.emi;
+      } else if (e.status !== 'paid') {
         totalLabel = 'Amount due now';
         totalValue = remainingAmt;
         if (paidSoFar > 0.009) {
@@ -1783,21 +1791,29 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
 
   // Apply PH: dispatch intent - the store builds and persists the schedule.
   function applyPaymentHoliday() {
+    var persist = Promise.resolve();
     if (_store) {
-      _store.dispatch({
+      persist = _store.dispatch({
         type:    Quido.CommandTypes.APPLY_PAYMENT_HOLIDAY,
         payload: { instalmentN: LOAN.paidCount + 1, reason: phReason || '' },
         actor:   'customer_ui'
       });
     }
-    updateAllUI();
-    var next2 = nextInstalment();
-    var appliedHtml = '<div class="hcf"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:2px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#059669" stroke-width="1.2"/><path d="M4 6.5l2 2 3-3" stroke="#059669" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-      + '<div>Payment holiday confirmed. Your next payment of '
-      + (next2 ? LOAN.fmt(next2.emi) + ' is due ' + LOAN.shortDate(next2.dueDate) : 'has been updated')
-      + '.</div></div>';
-    document.getElementById('ph-step-applied').innerHTML = appliedHtml;
-    showPHStep('applied');
+    Promise.resolve(persist)
+      .then(function() {
+        if (_store && _store.refreshResolved) return _store.refreshResolved();
+      })
+      .catch(function(){})
+      .finally(function() {
+        updateAllUI();
+        var next2 = nextInstalment();
+        var appliedHtml = '<div class="hcf"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:2px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#059669" stroke-width="1.2"/><path d="M4 6.5l2 2 3-3" stroke="#059669" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+          + '<div>Payment holiday confirmed. Your next payment of '
+          + (next2 ? LOAN.fmt(instalmentDueAmount(next2)) + ' is due ' + LOAN.shortDate(next2.dueDate) : 'has been updated')
+          + '.</div></div>';
+        document.getElementById('ph-step-applied').innerHTML = appliedHtml;
+        showPHStep('applied');
+      });
   }
 
   function buildPHReasonStep() {

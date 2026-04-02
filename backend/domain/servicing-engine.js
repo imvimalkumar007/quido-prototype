@@ -93,7 +93,7 @@ function _recomputePaidCount(loan) {
     var row = snap[idx];
     _ensureRowTracking(row);
     if (row.ph) {
-      row.status = 'paid';
+      row.status = 'ph';
       continue;
     }
     if (_rowRemaining(row) <= BALANCE_TOLERANCE) {
@@ -211,7 +211,11 @@ function syncRowStatuses(loan) {
   var paidIdx = (loan.loanCore && loan.loanCore.paidCount) || 0;
   for (var i = 0; i < snap.length; i++) {
     _ensureRowTracking(snap[i]);
-    if (_rowRemaining(snap[i]) <= BALANCE_TOLERANCE || snap[i].ph) {
+    if (snap[i].ph) {
+      snap[i].status = 'ph';
+      continue;
+    }
+    if (_rowRemaining(snap[i]) <= BALANCE_TOLERANCE) {
       snap[i].status = 'paid';
       continue;
     }
@@ -516,40 +520,61 @@ function applyPaymentHoliday(loan, payload, now, actor) {
     arrs.paymentHolidayHistory.push(Object.assign({}, arrs.paymentHoliday));
   }
 
-  // Mark the target row as a payment holiday instalment
+  // Mark the target row as a payment holiday instalment while preserving the
+  // contractual EMI for display. No payment is taken on this row.
   target.ph      = true;
-  target.status  = 'paid'; // treated as handled
+  target.status  = 'ph';
   var savedEmi   = target.emi || 0;
-  target.emi     = 0;
-  target.principal = 0;
-  target.interest  = 0;
-  // target.balance stays — unpaid principal carries forward
+  target.interestPaid = 0;
+  target.principalPaid = 0;
+  target.remainingDue = 0;
+  target.interestRemaining = target.interest || 0;
+  target.principalRemaining = target.principal || 0;
 
-  // Advance paidCount over the PH row
+  // Advance the next-payable cursor beyond the PH row.
   loan.loanCore.paidCount = paidIdx + 1;
 
-  // Extend term: append a new row at the end of the schedule
+  // Rebuild all subsequent payable rows from the balance at the start of the
+  // holiday month, accruing one month of interest and extending the term by
+  // one extra instalment.
   var lc         = loan.loanCore;
-  var lastRow    = snap[snap.length - 1];
-  var prevBal    = lastRow ? lastRow.balance : 0;
-  var newN       = lastRow ? lastRow.n + 1 : (lc.termMonths || 0) + 1;
   var rMonthly   = ((lc.apr || 0) / 100) / 12;
-  var newInt     = +(prevBal * rMonthly).toFixed(2);
-  var newPrinc   = +Math.min(Math.max(0, savedEmi - newInt), prevBal).toFixed(2);
-  var newBal     = +Math.max(0, prevBal - newPrinc).toFixed(2);
+  var openingBal = paidIdx > 0
+    ? _capAmount((snap[paidIdx - 1] && snap[paidIdx - 1].balance) || 0)
+    : _capAmount(lc.principal || 0);
+  var carryBal   = _capAmount(openingBal + (openingBal * rMonthly));
+  var futureCount = Math.max(0, snap.length - paidIdx);
+  var baseDueDate = new Date(target.dueDate || now);
+  var rebuiltRows = [];
 
-  snap.push({
-    n:         newN,
-    dueDate:   _addMonths(new Date(lastRow ? lastRow.dueDate : now), 1).toISOString(),
-    emi:       +savedEmi.toFixed(2),
-    principal: newPrinc,
-    interest:  newInt,
-    balance:   newBal,
-    status:    'upcoming',
-    ph:        false,
-    pa:        false
-  });
+  for (var rowIdx = 1; rowIdx <= futureCount; rowIdx++) {
+    var interestDue = _capAmount(carryBal * rMonthly);
+    var principalDue = rowIdx === futureCount
+      ? _capAmount(carryBal)
+      : _capAmount(Math.min(Math.max(0, savedEmi - interestDue), carryBal));
+    var endBal = _capAmount(Math.max(0, carryBal - principalDue));
 
+    rebuiltRows.push({
+      n:         paidIdx + 1 + rowIdx,
+      dueDate:   _addMonths(baseDueDate, rowIdx).toISOString(),
+      emi:       _capAmount(savedEmi),
+      principal: principalDue,
+      interest:  interestDue,
+      balance:   endBal,
+      status:    rowIdx === 1 ? 'current' : 'upcoming',
+      ph:        false,
+      pa:        false,
+      interestPaid: 0,
+      principalPaid: 0,
+      interestRemaining: interestDue,
+      principalRemaining: principalDue,
+      remainingDue: _capAmount(savedEmi)
+    });
+
+    carryBal = endBal;
+  }
+
+  snap.splice(paidIdx + 1, Math.max(0, snap.length - (paidIdx + 1)), ...rebuiltRows);
   lc.termMonths = (lc.termMonths || 0) + 1;
 
   var startDate = payload.startDate || target.dueDate || now.toISOString();

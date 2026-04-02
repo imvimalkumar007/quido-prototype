@@ -1302,6 +1302,7 @@ function totalRepaid(schedule, paidCount) {
   var t = 0;
   for (var i = 0; i < schedule.length; i++) {
     var row = schedule[i] || {};
+    if (row.ph) continue;
     var paidOnRow = Math.max(0, firstDefined(row.emi, 0) - rowDueAmount(row));
     if (i < paidCount || paidOnRow > 0) t += paidOnRow;
   }
@@ -1658,7 +1659,10 @@ function renderOverview() {
   var remaining = currentInstalmentsRemaining();
   var outstanding = currentOutstanding();
   var repaid = currentTotalRepaid();
-  var next = OPS.paidCount < OPS.schedule.length ? OPS.schedule[OPS.paidCount] : null;
+  var next = null;
+  for (var ni = OPS.paidCount; ni < OPS.schedule.length; ni++) {
+    if (!OPS.schedule[ni].ph) { next = OPS.schedule[ni]; break; }
+  }
   setText('ov-balance', fmt(outstanding));
   setText('ov-balance-sub', fmt(repaid)+' repaid');
   setText('ov-next-due', next ? shortDate(next.dueDate) : 'Fully repaid');
@@ -1822,7 +1826,7 @@ function buildSchedTable() {
     var lbl = labels[chipKey] || row.status;
     var act = (row.status==='upcoming'||row.status==='current') ? '<button class="btn btn-xs btn-secondary" onclick="markPaid('+row.n+')">Mark Paid</button>' : row.status==='paid' ? '<button class="btn btn-xs btn-ghost" onclick="unmarkPaid('+row.n+')">Undo</button>' : '';
     var remainingDue = rowDueAmount(row);
-    var paidSoFar = Math.max(0, (row.emi || 0) - remainingDue);
+    var paidSoFar = row.ph ? 0 : Math.max(0, (row.emi || 0) - remainingDue);
     return '<tr class="row-'+row.status+'"><td class="mono">'+row.n+'</td><td>'+shortDate(row.dueDate)+'</td><td class="mono">'+fmt(row.emi)+'</td><td class="mono">'+fmt(remainingDue)+'</td><td class="mono">'+fmt(paidSoFar)+'</td><td class="mono">'+fmt(row.principal)+'</td><td class="mono" style="color:var(--muted)">'+fmt(row.interest)+'</td><td class="mono">'+fmt(row.balance)+'</td><td><span style="'+cs+';padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:600">'+lbl+'</span></td><td>'+act+'</td></tr>';
   }).join('');
 }
