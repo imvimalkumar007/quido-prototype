@@ -388,6 +388,23 @@ function buildResolvedAccount(account) {
 
     loanHistory: loanHistory,
 
+    application: (function () {
+      var app = account.application || {};
+      var dec = app.decision || {};
+      return {
+        stage:          app.stage          || null,
+        submittedAt:    app.submittedAt    || null,
+        signedAt:       app.signedAt       || null,
+        quote:          app.quote          || null,
+        approved:       dec.approved       || false,
+        decidedAt:      dec.decidedAt      || null,
+        riskScore:      dec.riskScore      != null ? dec.riskScore : null,
+        scoreBreakdown: dec.scoreBreakdown || [],
+        aprTier:        dec.aprTier        || null,
+        reasons:        dec.reasons        || [],
+      };
+    }()),
+
     ops: {
       notes:             ops.notes             || [],
       contactLog:        ops.contactLog        || [],
@@ -524,12 +541,19 @@ AccountService.prototype.submitApplication = function (storageKey, payload) {
     throw err;
   }
 
+  // Accept I&E both at top-level (public form) and nested under affordability (legacy)
   var aff = payload.affordability || {};
-  account.affordability.incomeExpenditure.raw.monthlyIncome = Number(aff.monthlyIncome || 0);
-  account.affordability.incomeExpenditure.raw.housingCosts = Number(aff.housingCosts || 0);
-  account.affordability.incomeExpenditure.raw.livingCosts = Number(aff.livingCosts || 0);
-  account.affordability.incomeExpenditure.raw.transportCosts = Number(aff.transportCosts || 0);
-  account.affordability.incomeExpenditure.raw.otherDebts = Number(aff.otherDebts || 0);
+  var monthlyIncome  = Number(aff.monthlyIncome  || payload.monthlyIncome  || 0);
+  var housingCosts   = Number(aff.housingCosts   || payload.housingCosts   || 0);
+  var livingCosts    = Number(aff.livingCosts    || payload.livingCosts    || 0);
+  var transportCosts = Number(aff.transportCosts || payload.transportCosts || 0);
+  var otherDebts     = Number(aff.otherDebts     || payload.otherDebts     || 0);
+
+  account.affordability.incomeExpenditure.raw.monthlyIncome  = monthlyIncome;
+  account.affordability.incomeExpenditure.raw.housingCosts   = housingCosts;
+  account.affordability.incomeExpenditure.raw.livingCosts    = livingCosts;
+  account.affordability.incomeExpenditure.raw.transportCosts = transportCosts;
+  account.affordability.incomeExpenditure.raw.otherDebts     = otherDebts;
   recalcAffordabilityDerived(account);
 
   account.profile.personal.dob = payload.dob || account.profile.personal.dob;
@@ -543,17 +567,19 @@ AccountService.prototype.submitApplication = function (storageKey, payload) {
   account.profile.employment.annualIncome = Number(payload.annualIncome || account.profile.employment.annualIncome || 0);
 
   var decision = decisionService.evaluateApplication({
-    amount: payload.amount,
-    termMonths: payload.termMonths,
-    monthlyIncome: aff.monthlyIncome,
-    housingCosts: aff.housingCosts,
-    livingCosts: aff.livingCosts,
-    transportCosts: aff.transportCosts,
-    otherDebts: aff.otherDebts,
-    dob: account.profile.personal.dob,
-    ukResident: !!payload.ukResident,
-    gainfullyEmployed: !!payload.gainfullyEmployed,
-    proxyData: payload.proxyData || {}
+    amount:           payload.amount,
+    termMonths:       payload.termMonths,
+    monthlyIncome:    monthlyIncome,
+    housingCosts:     housingCosts,
+    livingCosts:      livingCosts,
+    transportCosts:   transportCosts,
+    otherDebts:       otherDebts,
+    dob:              account.profile.personal.dob,
+    ukResident:       !!payload.ukResident,
+    gainfullyEmployed:!!payload.gainfullyEmployed,
+    employmentStatus: account.profile.employment.status || '',
+    employmentStart:  account.profile.employment.employmentStart || '',
+    proxyData:        payload.proxyData || {},
   });
 
   account.application.stage = decision.stage;
@@ -572,12 +598,14 @@ AccountService.prototype.submitApplication = function (storageKey, payload) {
   };
   account.application.submittedAt = nowIso();
   account.application.decision = {
-    approved: decision.approved,
-    stage: decision.stage,
-    reasons: decision.reasons,
-    riskScore: decision.riskScore,
-    affordability: decision.affordability,
-    decidedAt: nowIso()
+    approved:       decision.approved,
+    stage:          decision.stage,
+    reasons:        decision.reasons,
+    riskScore:      decision.riskScore,
+    scoreBreakdown: decision.scoreBreakdown,
+    aprTier:        decision.aprTier,
+    affordability:  decision.affordability,
+    decidedAt:      nowIso(),
   };
   account.application.disbursal = {
     status: decision.approved ? 'awaiting_signature' : 'not_requested',

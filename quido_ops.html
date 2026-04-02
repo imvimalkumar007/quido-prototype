@@ -403,6 +403,12 @@ a{text-decoration:none;color:inherit;cursor:pointer}
               <div class="card-body-tight" id="loan-summary"></div>
             </div>
             <div class="card" style="margin-bottom:14px">
+              <div class="card-hdr"><span class="card-title">Risk Assessment</span><span id="ov-risk-apr-tag" style="font-size:11px;color:var(--muted)"></span></div>
+              <div class="card-body-tight" id="ov-risk-body">
+                <div style="color:var(--dim);font-size:12px;padding:8px 0">No decision on record</div>
+              </div>
+            </div>
+            <div class="card" style="margin-bottom:14px">
               <div class="card-hdr"><span class="card-title">Pending Disbursal Queue</span><span id="ov-app-count" style="font-size:11px;color:var(--muted)">Loading</span></div>
               <div class="card-body-tight" id="ov-app-queue"></div>
             </div>
@@ -1454,7 +1460,9 @@ function loadState() {
       // ── Loan-level ops data ──
       opsNotes:   resolved.ops.notes,
       contactLog: resolved.ops.contactLog,
-      history:    resolved.ops.history
+      history:    resolved.ops.history,
+      // ── Application decision data ──
+      application: resolved.application || {}
     };
     // Allowed / blocked actions from backend engine.
     // Override PH count limit for ops context — agents are not subject to customer limits.
@@ -1763,6 +1771,36 @@ function renderOverview() {
     ['Total repaid',fmt(repaid)],['Total interest',fmt(totalInt)],
     ['First payment',shortDate(OPS.startDate)],['Final payment',last]
   ].map(function(r){ return '<div class="kv"><span class="kv-k">'+r[0]+'</span><span class="kv-v">'+r[1]+'</span></div>'; }).join('');
+  // Risk Assessment card
+  var riskEl = document.getElementById('ov-risk-body');
+  var riskTag = document.getElementById('ov-risk-apr-tag');
+  if (riskEl) {
+    var appDec = OPS.account.application || {};
+    if (appDec.riskScore != null) {
+      var sc = appDec.riskScore;
+      var scColor = sc >= 70 ? 'var(--green)' : sc >= 50 ? 'var(--amber,#b45309)' : 'var(--red,#dc2626)';
+      var scLabel = sc >= 70 ? 'Low risk' : sc >= 50 ? 'Medium risk' : sc >= 30 ? 'Higher risk' : 'Declined';
+      var aprLabel = appDec.quote ? appDec.quote.apr + '% APR' : '';
+      var tierLabel = appDec.aprTier === 'preferential' ? 'Preferential rate' : appDec.aprTier === 'standard_plus' ? 'Standard+ rate' : appDec.aprTier === 'standard' ? 'Standard rate' : '';
+      if (riskTag) riskTag.textContent = aprLabel + (tierLabel ? ' \u00b7 ' + tierLabel : '');
+      var breakdown = appDec.scoreBreakdown || [];
+      var bkHtml = breakdown.length
+        ? breakdown.map(function(b){ return '<div class="kv" style="padding:3px 0"><span class="kv-k" style="font-size:11.5px">'+b.factor+'</span><span class="kv-v" style="font-size:11.5px;color:var(--red,#dc2626)">'+b.impact+'</span></div>'; }).join('')
+        : '<div style="font-size:11.5px;color:var(--muted);padding:4px 0">No score deductions.</div>';
+      riskEl.innerHTML = '<div style="display:flex;align-items:center;gap:12px;padding:10px 0 12px">'
+        + '<div style="width:44px;height:44px;border-radius:50%;background:'+scColor+';display:flex;align-items:center;justify-content:center;flex-shrink:0">'
+        + '<span style="font-size:13px;font-weight:800;color:#fff">'+sc+'</span></div>'
+        + '<div><div style="font-size:13px;font-weight:700;color:var(--text)">'+scLabel+'</div>'
+        + '<div style="font-size:11px;color:var(--muted);margin-top:2px">Score out of 100</div></div></div>'
+        + '<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Score factors</div>'
+        + bkHtml
+        + (appDec.reasons && appDec.reasons.length ? '<div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:10px 0 4px">Decline reasons</div>'
+          + appDec.reasons.map(function(r){ return '<div class="kv" style="padding:3px 0"><span class="kv-k" style="font-size:11.5px;color:var(--red,#dc2626)">'+r+'</span></div>'; }).join('') : '');
+    } else {
+      riskEl.innerHTML = '<div style="color:var(--dim);font-size:12px;padding:8px 0">No decision on record for this account.</div>';
+      if (riskTag) riskTag.textContent = '';
+    }
+  }
   // Recent activity
   var hist = (OPS.account.history||[]).slice().reverse().slice(0,7);
   var el = document.getElementById('ov-activity');
