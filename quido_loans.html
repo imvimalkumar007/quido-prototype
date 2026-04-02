@@ -1316,7 +1316,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       var isCur    = (e.status === 'current' || e.status === 'ph');
       var phBadge  = e.ph ? '<span style="display:inline-block;width:7px;height:7px;background:#f59e0b;border-radius:50%;margin-left:7px;vertical-align:middle;flex-shrink:0"></span>' : '';
       var paBadge  = e.pa ? '<span style="font-size:9px;background:#eff6ff;color:#1e40af;border-radius:6px;padding:2px 6px;margin-left:6px;font-weight:600">PA | 0% interest</span>' : '';
-      var paidTd   = e.status === 'paid'
+      var paidTd   = (e.status === 'paid' && !e.ph)
         ? '<td style="font-size:13px;font-weight:600;color:var(--ok-text);text-align:right;padding-bottom:10px">' + LOAN.shortDate(e.dueDate) + '</td>'
         : '<td style="font-size:13px;font-weight:600;color:var(--dim);text-align:right;padding-bottom:10px">-</td>';
       var iStyle   = e.pa ? ' style="color:var(--ok-text)"' : '';
@@ -1327,9 +1327,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       var totalLabel = 'Total EMI';
       var totalValue = e.emi;
       if (e.ph) {
-        dueMeta += '<tr class="dvr"><td>Paid so far</td><td>' + LOAN.fmt(0) + '</td></tr>';
-        dueMeta += '<tr><td>Amount due now</td><td>' + LOAN.fmt(0) + '</td></tr>';
-        totalLabel = 'Scheduled EMI';
+        totalLabel = 'Total EMI';
         totalValue = e.emi;
       } else if (e.status !== 'paid') {
         totalLabel = 'Amount due now';

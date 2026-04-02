@@ -24,6 +24,10 @@ function toNumber(v) {
   return Number(String(v || '0').replace(/[^0-9.]/g, '')) || 0;
 }
 
+function capAmount(v) {
+  return +Math.max(0, v || 0).toFixed(2);
+}
+
 function mergeObj(target, src) {
   if (!src || typeof src !== 'object') return target;
   Object.keys(src).forEach(function (k) { target[k] = src[k]; });
@@ -76,6 +80,90 @@ function hydrateLoanFromCore(loan) {
   return loan;
 }
 
+function repairBrokenPaymentHoliday(loan) {
+  if (!loan || !loan.loanCore || !Array.isArray(loan.scheduleSnapshot)) return false;
+  var arrs = loan.arrangements || {};
+  var ph = arrs.paymentHoliday;
+  if (!ph || !ph.active) return false;
+
+  var snap = loan.scheduleSnapshot;
+  var phIdx = Math.max(0, (ph.instalmentN || 1) - 1);
+  var target = snap[phIdx];
+  if (!target || !target.ph) return false;
+
+  var clearlyBroken = (target.emi || 0) <= 0.009
+    || target.status === 'paid'
+    || (((target.principal || 0) <= 0.009) && ((target.interest || 0) <= 0.009));
+  if (!clearlyBroken) return false;
+
+  var lc = loan.loanCore || {};
+  var savedEmi = 0;
+  for (var i = phIdx + 1; i < snap.length; i++) {
+    if (!snap[i].ph && (snap[i].emi || 0) > 0.009) {
+      savedEmi = snap[i].emi || 0;
+      break;
+    }
+  }
+  if (!savedEmi) savedEmi = (loan.loanSummary && loan.loanSummary.emi) || 0;
+  if (!savedEmi) return false;
+
+  var rMonthly = ((lc.apr || 0) / 100) / 12;
+  var openingBal = phIdx > 0
+    ? capAmount((snap[phIdx - 1] && snap[phIdx - 1].balance) || 0)
+    : capAmount(lc.principal || 0);
+  var holidayInterest = capAmount(openingBal * rMonthly);
+  var holidayPrincipal = capAmount(Math.min(Math.max(0, savedEmi - holidayInterest), openingBal));
+  var carryBal = capAmount(openingBal + holidayInterest);
+  var totalRows = Math.max(lc.termMonths || snap.length, phIdx + 1);
+  var futureCount = Math.max(0, totalRows - (phIdx + 1));
+  var baseDueDate = new Date(target.dueDate || ph.startDate || new Date());
+  var rebuiltRows = [];
+
+  target.emi = capAmount(savedEmi);
+  target.principal = holidayPrincipal;
+  target.interest = holidayInterest;
+  target.status = 'ph';
+  target.ph = true;
+  target.interestPaid = 0;
+  target.principalPaid = 0;
+  target.remainingDue = 0;
+  target.interestRemaining = holidayInterest;
+  target.principalRemaining = holidayPrincipal;
+  target.balance = carryBal;
+
+  for (var rowIdx = 1; rowIdx <= futureCount; rowIdx++) {
+    var interestDue = capAmount(carryBal * rMonthly);
+    var principalDue = rowIdx === futureCount
+      ? capAmount(carryBal)
+      : capAmount(Math.min(Math.max(0, savedEmi - interestDue), carryBal));
+    var endBal = capAmount(Math.max(0, carryBal - principalDue));
+
+    rebuiltRows.push({
+      n: phIdx + 1 + rowIdx,
+      dueDate: new Date(baseDueDate.getFullYear(), baseDueDate.getMonth() + rowIdx, baseDueDate.getDate()).toISOString(),
+      emi: capAmount(savedEmi),
+      principal: principalDue,
+      interest: interestDue,
+      balance: endBal,
+      status: rowIdx === 1 ? 'current' : 'upcoming',
+      ph: false,
+      pa: false,
+      interestPaid: 0,
+      principalPaid: 0,
+      interestRemaining: interestDue,
+      principalRemaining: principalDue,
+      remainingDue: capAmount(savedEmi)
+    });
+
+    carryBal = endBal;
+  }
+
+  snap.splice(phIdx + 1, Math.max(0, snap.length - (phIdx + 1)), ...rebuiltRows);
+  lc.paidCount = Math.max(lc.paidCount || 0, phIdx + 1);
+  lc.termMonths = Math.max(lc.termMonths || 0, phIdx + 1 + rebuiltRows.length);
+  return true;
+}
+
 function repairV3Account(account) {
   if (!account || !Array.isArray(account.loans)) return account;
   for (var i = 0; i < account.loans.length; i++) {
@@ -91,6 +179,11 @@ function repairV3Account(account) {
         loan.closedAt = null;
         loan.closureReason = null;
       }
+    }
+    if (repairBrokenPaymentHoliday(loan)) {
+      try {
+        runStatusEngine(loan, new Date());
+      } catch (e) {}
     }
   }
   return account;

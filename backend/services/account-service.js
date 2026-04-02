@@ -66,6 +66,15 @@ function mergeObj(target, src) {
 }
 
 function paymentBreakdown(row) {
+  if (row && row.ph) {
+    return {
+      interestPaid: 0,
+      principalPaid: 0,
+      interestRemaining: +(row.interest || 0).toFixed(2),
+      principalRemaining: +(row.principal || 0).toFixed(2),
+      remainingDue: 0
+    };
+  }
   var interestPaid = Math.max(0, +(row && row.interestPaid || 0));
   var principalPaid = Math.max(0, +(row && row.principalPaid || 0));
   if (row && row.status === 'paid') {
@@ -385,7 +394,12 @@ function AccountService(store) {
  * @returns {Object|null}
  */
 AccountService.prototype.getAccount = function (storageKey) {
-  return this.store.findByKey(storageKey);
+  var account = this.store.findByKey(storageKey);
+  if (!account) return null;
+  var repaired = normalizeAccount(account);
+  repaired.storageKey = storageKey;
+  this.store.save(repaired);
+  return repaired;
 };
 
 /**
@@ -914,7 +928,7 @@ function applyCommandToState(state, command) {
  * @returns {Object|null}
  */
 AccountService.prototype.resolveAccount = function (storageKey) {
-  var account = this.store.findByKey(storageKey);
+  var account = this.getAccount(storageKey);
   if (!account) return null;
   return buildResolvedAccount(account);
 };
