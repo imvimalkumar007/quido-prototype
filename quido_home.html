@@ -1,176 +1,444 @@
+
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Quido - Apply online</title>
+<title>Quido | Personal loans, clearly handled</title>
 <style>
-:root{--ink:#0f172a;--muted:#64748b;--line:#d7dfec;--panel:#fff;--brand:#1d4ed8;--green:#10b981;--green-bg:#dcfce7;--amber:#d97706;--amber-bg:#fff4db;--red:#dc2626;--red-bg:#fee2e2;--bg:#eef4fb;--navy:#10214f}
-*{box-sizing:border-box}body{margin:0;font-family:"Aptos","Segoe UI",sans-serif;background:linear-gradient(180deg,#f8fbff,#edf4fb);color:var(--ink)}a{text-decoration:none;color:inherit}button,input,select{font:inherit}
-.top{padding:10px 16px;background:#fff8e8;border-bottom:1px solid #f3ddb1;color:#9a5a08;font-size:12px;text-align:center}
-.hdr{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:18px 24px;background:rgba(248,251,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.brand{display:flex;align-items:center;gap:12px}.mark{width:44px;height:44px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#2563eb,#1d4ed8 58%,#0f2f7a);box-shadow:0 14px 28px rgba(37,99,235,.22);position:relative;overflow:hidden}.mark:after{content:'';position:absolute;right:-7px;bottom:-8px;width:18px;height:18px;border-radius:999px;background:linear-gradient(135deg,#6ee7b7,#10b981)}.brand strong{font-size:22px;letter-spacing:-.03em;display:block}.brand span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.18em}
-.nav{display:flex;gap:12px;align-items:center}.nav a,.nav button{border:none;background:none;color:var(--muted);font-weight:700;cursor:pointer}.nav .cta{padding:11px 16px;border-radius:999px;background:var(--brand);color:#fff}
-.wrap{max-width:1180px;margin:0 auto;padding:36px 18px 56px}.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}.hero-card{background:radial-gradient(circle at top left,rgba(110,231,183,.18),transparent 36%),linear-gradient(160deg,#10214f,#1740a3 55%,#2563eb);color:#fff;border-radius:30px;padding:34px;box-shadow:0 22px 60px rgba(15,23,42,.1)}.hero-card h1{margin:16px 0 14px;font-size:50px;line-height:1;letter-spacing:-.05em}.hero-card p{margin:0 0 18px;color:rgba(255,255,255,.86);line-height:1.6;font-size:17px}.eyebrow{display:inline-flex;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.12);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-.hero-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}.hero-pill{padding:14px;border-radius:18px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14)}.hero-pill strong{display:block;font-size:21px;margin-bottom:6px}.hero-pill span{font-size:13px;color:rgba(255,255,255,.82);line-height:1.5}
-.side{display:grid;gap:16px}.panel,.card{background:var(--panel);border:1px solid var(--line);border-radius:24px;box-shadow:0 12px 30px rgba(29,78,216,.08)}.panel{padding:22px}.panel h2,.panel h3,.card h3{margin:0 0 8px;letter-spacing:-.03em}.meta{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px}.tag{display:inline-flex;padding:8px 12px;border-radius:999px;font-size:12px;font-weight:800}.tag.blue{background:#dbeafe;color:#1d4ed8}.tag.green{background:var(--green-bg);color:#047857}.status{padding:16px;border-radius:20px;background:linear-gradient(180deg,#f7fbff,#edf4fb);border:1px solid var(--line)}.status small{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px}.status h4{margin:0 0 8px;font-size:24px;letter-spacing:-.03em}.status p{margin:0;color:var(--muted);line-height:1.6}
-.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.metric{padding:14px;border-radius:18px;background:var(--bg);border:1px solid var(--line)}.metric span{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}.metric strong{font-size:28px;letter-spacing:-.04em}.metric small{display:block;margin-top:6px;color:var(--muted)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:22px}.stack{display:grid;gap:18px}.card{padding:22px}.lead{margin:0 0 18px;color:var(--muted);line-height:1.6}.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}.field input,.field select{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:15px;background:#fff;outline:none}.field input:focus,.field select:focus{border-color:#7aa4ff;box-shadow:0 0 0 4px rgba(37,99,235,.12)}
-.switches{display:flex;flex-wrap:wrap;gap:10px}.switch{display:flex;gap:8px;align-items:center;padding:11px 12px;border-radius:15px;background:var(--bg);border:1px solid var(--line)}.switch input{width:auto;margin:0}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 16px;border:none;border-radius:15px;cursor:pointer;font-weight:800}.btn.brand{background:var(--brand);color:#fff}.btn.soft{background:var(--bg);color:var(--ink);border:1px solid var(--line)}.btn.success{background:var(--green);color:#fff}.btn.outline{background:#fff;color:var(--brand);border:1px solid rgba(37,99,235,.22)}
-.note{padding:14px 15px;border-radius:16px;font-size:14px;line-height:1.6}.note.info{background:#dbeafe;color:#1d4ed8}.note.success{background:var(--green-bg);color:#047857}.note.warn{background:var(--amber-bg);color:#9a5a08}.note.error{background:var(--red-bg);color:#991b1b}.rows{display:grid;gap:10px;margin-top:14px}.row{display:flex;justify-content:space-between;gap:14px;padding:12px 14px;border-radius:15px;background:#f8fbff;border:1px solid var(--line)}.row strong{font-size:15px}
-.footer{margin-top:38px;background:var(--navy);color:#d8e2ff}.footer .inner{max-width:1180px;margin:0 auto;padding:30px 18px 36px;display:grid;grid-template-columns:1.1fr .9fr;gap:24px}.footer h4{margin:0 0 10px;font-size:28px;color:#fff;letter-spacing:-.04em}.footer p{margin:0;line-height:1.7;color:rgba(216,226,255,.82)}.footer-links{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 18px}.footer-links a{font-weight:700;color:#fff}.hidden{display:none!important}
-@media (max-width:1040px){.hero,.grid,.footer .inner{grid-template-columns:1fr}.hero-card h1{font-size:42px}.hero-grid,.metrics{grid-template-columns:1fr 1fr}}
-@media (max-width:720px){.hdr{padding:16px}.nav a{display:none}.wrap{padding:24px 14px 40px}.hero-card{padding:26px}.hero-card h1{font-size:34px}.hero-grid,.metrics,.form,.footer-links{grid-template-columns:1fr}}
+*{box-sizing:border-box}
+:root{
+  --blue:#1a56db;--blue-dark:#0d3b9e;--green:#00b865;--green-dark:#007e3f;
+  --bg:#eef2fa;--surface:#fff;--border:#e2e8f5;--text:#0f1828;--muted:#64748b;--dim:#94a3b8;
+  --warn-bg:#fffbeb;--warn-border:#fde68a;--warn-text:#92400e;--ok-bg:#ecfdf5;--ok-text:#065f46;
+  --shadow:0 20px 50px rgba(15,24,40,.08);--shadow-soft:0 10px 30px rgba(26,86,219,.1);
+  --r:14px;--r-lg:20px;--r-xl:28px
+}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif}
+a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cursor:pointer}
+.topbar{padding:7px 16px;text-align:center;font-size:10.5px;line-height:1.5;color:var(--warn-text);background:var(--warn-bg);border-bottom:1px solid var(--warn-border)}
+.topbar a{color:var(--blue);font-weight:500}
+.site{min-height:100vh;display:flex;flex-direction:column}
+/* Header */
+.header{position:sticky;top:0;z-index:20;background:rgba(238,242,250,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.header-inner{max-width:1120px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand-link{display:inline-flex;align-items:center;gap:10px;background:none;border:none;padding:0;cursor:pointer;text-align:left}
+.brand-lockup{display:flex;align-items:center;gap:10px}.brand-word{display:flex;flex-direction:column;gap:1px}
+.brand-mark{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:linear-gradient(145deg,#2563eb 0%,#1d4ed8 58%,#0f2f7a 100%);box-shadow:0 6px 18px rgba(37,99,235,.22);position:relative;overflow:hidden}
+.brand-mark::after{content:'';position:absolute;inset:auto -5px -7px auto;width:16px;height:16px;border-radius:999px;background:linear-gradient(135deg,#6ee7b7,#10b981);opacity:.96}
+.brand-mark svg{position:relative;z-index:1}.brand-mark .q-tail{stroke:#d9ffec}.brand-mark .q-ring{stroke:#ffffff}
+.brand-name{font-size:17px;font-weight:800;color:var(--blue);letter-spacing:-.4px;line-height:1}
+.brand-tag{font-size:9px;font-weight:600;color:var(--muted);letter-spacing:.01em;line-height:1.3}
+.nav{display:flex;align-items:center;gap:8px}
+.nav-link{border:none;background:none;padding:9px 14px;border-radius:999px;font-size:13px;font-weight:600;color:var(--muted)}
+.nav-link:hover{color:var(--text);background:#f1f5fb}
+.nav-login{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border:none;padding:10px 20px;border-radius:999px;font-size:13px;font-weight:700;box-shadow:var(--shadow-soft)}
+/* Layout */
+.main{flex:1;max-width:1120px;margin:0 auto;padding:40px 20px 64px;width:100%}
+/* Hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(380px,460px);gap:32px;align-items:start}
+.hero-copy{padding:28px 0 10px}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;background:#e8f0fe;color:var(--blue);font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border:1px solid #c7d9f8}
+.hero-copy h1{margin:20px 0 18px;font-size:60px;line-height:.95;letter-spacing:-.06em;font-weight:900;color:var(--text)}
+.h1-accent{background:linear-gradient(135deg,var(--blue),#4f83f5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-copy .lead{margin:0 0 24px;max-width:520px;font-size:17px;line-height:1.72;color:var(--muted)}
+.hero-points{display:grid;gap:12px;margin:0 0 28px}
+.hero-point{display:flex;align-items:flex-start;gap:11px;line-height:1.55;font-size:14.5px;color:#374151}
+.hp-icon{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.btn-hero-primary{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:16px;padding:15px 26px;font-size:15px;font-weight:800;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;box-shadow:0 8px 28px rgba(26,86,219,.26)}
+.btn-hero-secondary{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--border);border-radius:16px;padding:14px 20px;font-size:14px;font-weight:700;background:var(--surface);color:var(--text)}
+.hero-trust{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.ht-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-weight:600}
+.ht-dot{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0}
+/* Calculator card */
+.calc-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:0 28px 64px rgba(26,86,219,.1),0 4px 16px rgba(15,24,40,.06);overflow:hidden}
+.calc-card-head{padding:22px 22px 0}
+.calc-card-head h2{margin:0 0 5px;font-size:22px;font-weight:800;letter-spacing:-.04em}
+.calc-card-head p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+.calc-body{padding:20px 22px 22px;display:grid;gap:18px}
+.quote-top{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.metric{padding:13px 12px;border-radius:14px;background:linear-gradient(160deg,#f6f9ff,#eef4ff);border:1px solid #dce8fb}
+.metric span{display:block;font-size:9.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.metric strong{display:block;font-size:23px;font-weight:800;letter-spacing:-.04em;color:var(--text)}
+.metric small{display:block;margin-top:4px;font-size:10.5px;color:var(--muted);line-height:1.4}
+.slider-stack{display:grid;gap:18px}.slider-group{display:grid;gap:10px}
+.slider-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.slider-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.slider-value{font-size:28px;font-weight:800;letter-spacing:-.05em;color:var(--text)}
+.range-wrap{display:grid;gap:8px}
+.range-input{appearance:none;width:100%;height:8px;border-radius:999px;background:linear-gradient(90deg,var(--blue) 0%,var(--blue) var(--fill,50%),#dbe5f6 var(--fill,50%),#dbe5f6 100%);outline:none}
+.range-input::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));border:3px solid #fff;box-shadow:0 4px 12px rgba(26,86,219,.22)}
+.range-input::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));border:3px solid #fff;box-shadow:0 4px 12px rgba(26,86,219,.22)}
+.slider-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--dim)}
+.calc-cta{display:grid;gap:8px}
+.btn-calc-apply{width:100%;border:none;border-radius:14px;padding:15px;font-size:15px;font-weight:800;background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;box-shadow:0 6px 20px rgba(0,184,101,.22)}
+.calc-rep{font-size:11px;color:var(--dim);text-align:center;line-height:1.55;margin:0}
+/* Trust strip */
+.trust-strip{margin-top:28px}
+.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.trust-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 14px;display:flex;align-items:flex-start;gap:12px}
+.trust-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ti-blue{background:#eff6ff}.ti-green{background:#f0fdf4}.ti-amber{background:#fffbeb}.ti-purple{background:#faf5ff}
+.trust-item strong{display:block;font-size:13px;font-weight:800;margin-bottom:3px;color:var(--text)}
+.trust-item span{display:block;font-size:12px;color:var(--muted);line-height:1.5}
+/* How it works */
+.section{margin-top:28px}
+.how-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow);padding:28px}
+.how-card-head{margin-bottom:22px}
+.how-card-head h3{margin:0 0 7px;font-size:30px;font-weight:800;letter-spacing:-.04em}
+.how-card-head p{margin:0;color:var(--muted);line-height:1.65;max-width:600px;font-size:15px}
+.how-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.how-step{padding:20px;border-radius:18px;background:linear-gradient(160deg,#f8fbff,#eef4ff);border:1px solid #dce8fb}
+.how-step-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--blue),var(--green));color:#fff;font-size:13px;font-weight:800;margin-bottom:14px}
+.how-step strong{display:block;font-size:15px;font-weight:800;margin-bottom:7px;color:var(--text)}
+.how-step span{display:block;font-size:13px;line-height:1.65;color:var(--muted)}
+.apply-cta{margin-top:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.apply-button{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:16px;padding:14px 24px;font-size:14px;font-weight:800;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;box-shadow:var(--shadow-soft)}
+.apply-note{font-size:13px;color:var(--muted)}
+/* Application shell */
+.app-shell{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow);padding:28px}
+.app-head{margin-bottom:22px}
+.app-head h3{margin:0 0 6px;font-size:26px;font-weight:800;letter-spacing:-.04em}
+.app-head>p{margin:0 0 16px;color:var(--muted);line-height:1.65;font-size:14px}
+.stepper{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:8px 14px;border-radius:999px;background:#f4f8ff;border:1px solid var(--border);font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.chip.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.pane{display:none}.pane.active{display:block}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stack{display:grid;gap:12px}
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.summary-card{padding:14px;border-radius:16px;background:#f8fbff;border:1px solid var(--border)}
+.summary-card span{display:block;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.summary-card strong{display:block;font-size:22px;letter-spacing:-.05em}
+.offer-box{padding:20px;border-radius:18px;background:linear-gradient(160deg,#f7faff 0%,#eef4ff 100%);border:1px solid #d6e2fb}
+.offer-box h4{margin:0 0 7px;font-size:19px;font-weight:800}.offer-box p{margin:0;color:var(--muted);line-height:1.65;font-size:14px}
+.field{display:grid;gap:6px}.field.full{grid-column:1/-1}
+.field label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.field input,.field select{width:100%;padding:13px 14px;border:1.5px solid var(--border);border-radius:14px;background:var(--surface);outline:none}
+.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,219,.08)}
+.message{padding:13px 14px;border-radius:14px;font-size:13px;line-height:1.6}
+.message.info{background:#eff6ff;color:#1e40af}.message.success{background:var(--ok-bg);color:var(--ok-text)}
+.message.warn{background:var(--warn-bg);color:var(--warn-text)}.message.error{background:#fee2e2;color:#991b1b}
+.check-grid{display:grid;gap:10px}
+.check{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;background:#f8fbff;border:1px solid var(--border)}
+.check input{width:auto;margin:0}
+.inline{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:none;border-radius:16px;padding:14px 18px;font-size:14px;font-weight:800}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;box-shadow:var(--shadow-soft)}
+.btn-secondary{background:var(--surface);color:var(--text);border:1.5px solid var(--border)}
+/* Footer */
+.ft{background:linear-gradient(155deg,#0f1830 0%,#122447 58%,#143c7a 100%);padding:28px clamp(16px,4vw,32px) 20px;margin:60px calc(50% - 50vw) 0;width:100vw;overflow:hidden;position:relative;color:#fff}
+.ft::before{content:'';position:absolute;top:-60px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.05)}
+.ft::after{content:'';position:absolute;bottom:-70px;left:-50px;width:180px;height:180px;border-radius:50%;background:rgba(52,211,153,.1)}
+.ft-inner{position:relative;width:min(100%,1040px);margin:0 auto}
+.ft-top{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:24px;align-items:start}
+.ft-brand{max-width:360px}.ft-copy{font-size:11.5px;color:rgba(255,255,255,.7);line-height:1.7;margin-top:12px}
+.ft-links{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;align-content:start}
+.ft-links a{font-size:11.5px;color:rgba(255,255,255,.82);padding:4px 0;display:block}
+.ft-links a:hover{color:#fff}
+.fleg{font-size:9.8px;color:rgba(255,255,255,.6);line-height:1.65;border-top:1px solid rgba(255,255,255,.1);padding-top:16px;margin-top:20px}
+@media (max-width:980px){
+  .hero,.ft-top{grid-template-columns:1fr}
+  .hero-copy h1{font-size:48px}
+  .quote-top,.summary-grid,.how-steps,.trust-grid{grid-template-columns:1fr 1fr}
+  .hero-copy{padding-top:16px}
+}
+@media (max-width:720px){
+  .header-inner,.main{padding-left:14px;padding-right:14px}
+  .hero-copy h1{font-size:38px}
+  .quote-top,.grid,.summary-grid,.how-steps,.ft-links,.trust-grid{grid-template-columns:1fr}
+  .calc-card,.how-card,.app-shell{border-radius:20px}
+  .hero-actions{flex-direction:column;align-items:flex-start}
+  .btn-hero-primary,.btn-hero-secondary{width:100%;justify-content:center}
+}
 </style>
 </head>
 <body>
-<div class="top">Representative APR 29.9% - Borrow from �300 to �10,000 over 6 to 24 months. Subject to eligibility, affordability, and Ops approval before disbursal.</div>
-<header class="hdr">
-  <a class="brand" href="/">
-    <span class="mark"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="11.4" cy="10.8" r="6.4" stroke="#fff" stroke-width="3.1"/><path d="M15.2 15.1 18.7 18.6" stroke="#d9ffec" stroke-width="3.1" stroke-linecap="round"/><path d="M17.55 17.2c.94 0 1.75.78 1.75 1.72v.28h-3.72c0-1.02.93-2 1.97-2z" fill="#6ee7b7"/></svg></span>
-    <span><strong>Quido</strong><span>Consumer lending, clearly handled</span></span>
-  </a>
-  <nav class="nav">
-    <a href="#calculator">Calculator</a><a href="#profile">Create profile</a><a href="#application">Apply</a>
-    <button class="cta" onclick="document.getElementById('profile').scrollIntoView({behavior:'smooth'})">Get started</button>
-  </nav>
+<div class="site">
+<div class="topbar">Warning: Late repayments can cause serious money problems. For help, visit <a href="https://www.moneyhelper.org.uk" target="_blank" rel="noreferrer">moneyhelper.org.uk</a>. You can compare our loans at <a href="#" target="_blank" rel="noreferrer">All the Lenders</a>.</div>
+<header class="header">
+  <div class="header-inner">
+    <button class="brand-link" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Go to homepage">
+      <span class="brand-lockup">
+        <span class="brand-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle class="q-ring" cx="12" cy="11" r="6" stroke-width="2.8" fill="none"/><path class="q-tail" d="M15.2 14.8 19 18.6" stroke-width="2.8" stroke-linecap="round"/></svg></span>
+        <span class="brand-word"><span class="brand-name">Quido</span><span class="brand-tag">Personal loans, clearly handled</span></span>
+      </span>
+    </button>
+    <nav class="nav">
+      <button class="nav-link" type="button" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">How it works</button>
+      <a class="nav-login" href="/customer">Log in</a>
+    </nav>
+  </div>
 </header>
-<div class="wrap">
-<section class="hero">
-  <div class="hero-card">
-    <div class="eyebrow">Quido public journey</div>
-    <h1>See your repayments, apply with confidence, and move into servicing without friction.</h1>
-    <p>Build your profile, check whether the loan is a fit, submit an application, review the offer, and sign your documents before our Ops team approves disbursal.</p>
-    <div class="hero-grid">
-      <div class="hero-pill"><strong>2 mins</strong><span>Create your profile and save your progress with an email and 4-digit PIN.</span></div>
-      <div class="hero-pill"><strong>Instant</strong><span>Automatic decisioning using affordability, eligibility, and credit-style proxy checks.</span></div>
-      <div class="hero-pill"><strong>One journey</strong><span>Once disbursed, you continue into the same Quido customer portal already used for repayments and support.</span></div>
-    </div>
-  </div>
-  <div class="side">
-    <div class="panel">
-      <div class="meta"><div><h2>Your progress</h2><p class="lead">We keep the current stage visible so applicants do not need to guess what happens next.</p></div><span class="tag blue" id="stage-chip">No profile yet</span></div>
-      <div class="status"><small>Application stage</small><h4 id="stage-title">Create your profile</h4><p id="stage-copy">Start by creating a secure Quido profile. Once that is in place, we can calculate repayments, assess affordability, and move you into the application flow.</p></div>
-    </div>
-    <div class="panel" id="calculator">
-      <div class="meta"><div><h3>Quick repayment view</h3><p class="lead">Use the same backend quote logic as the application flow.</p></div><span class="tag green">Fixed APR 29.9%</span></div>
-      <div class="metrics">
-        <div class="metric"><span>Amount</span><strong id="quote-amount">&pound;0</strong><small id="quote-term">Choose an amount and term</small></div>
-        <div class="metric"><span>Monthly repayment</span><strong id="quote-emi">&pound;0</strong><small id="quote-extra">Interest shown after calculation</small></div>
-        <div class="metric"><span>Total repayable</span><strong id="quote-total">&pound;0</strong><small id="quote-policy">Product range &pound;300 to &pound;10,000</small></div>
+
+<main class="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#1a56db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        FCA Authorised Lender
       </div>
-      <form id="calc-form" class="form">
-        <div class="field"><label for="calc-amount">Loan amount</label><input id="calc-amount" type="number" min="300" max="10000" step="50" value="1500"></div>
-        <div class="field"><label for="calc-term">Term in months</label><select id="calc-term"><option value="6">6 months</option><option value="9">9 months</option><option value="12" selected>12 months</option><option value="18">18 months</option><option value="24">24 months</option></select></div>
-        <div class="field"><label for="calc-income">Monthly income</label><input id="calc-income" type="number" min="0" step="10" value="2200"></div>
-        <div class="field"><label for="calc-exp">Monthly expenditure</label><input id="calc-exp" type="number" min="0" step="10" value="1100"></div>
-        <div class="field full"><div class="note info" id="calc-feedback">Enter your figures and run the calculator to see the indicative monthly repayment and affordability position.</div></div>
-        <div class="field full"><div class="actions"><button class="btn brand" type="submit">Calculate my repayments</button><button class="btn soft" type="button" onclick="copyQuoteIntoApplication()">Use this in my application</button></div></div>
-      </form>
+      <h1>Personal loans,<br><span class="h1-accent">done properly.</span></h1>
+      <p class="lead">See your exact monthly repayment before you apply. No hidden fees, no surprises — just straightforward lending with flexible support if life gets in the way.</p>
+      <div class="hero-points">
+        <div class="hero-point">
+          <span class="hp-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>Check your monthly repayment instantly — no commitment, no credit footprint.</span>
+        </div>
+        <div class="hero-point">
+          <span class="hp-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>Apply online in minutes and receive a decision the same day.</span>
+        </div>
+        <div class="hero-point">
+          <span class="hp-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span>Payment holidays and flexible arrangements available if you need them.</span>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-hero-primary" type="button" onclick="startApplication()">
+          Apply now
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5 11 7l-3.5 3.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="btn-hero-secondary" type="button" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">How it works</button>
+      </div>
+      <div class="hero-trust">
+        <div class="ht-item"><span class="ht-dot"></span>No hidden fees</div>
+        <div class="ht-item"><span class="ht-dot"></span>Representative 29.9% APR</div>
+        <div class="ht-item"><span class="ht-dot"></span>Borrow £300 – £10,000</div>
+      </div>
     </div>
-  </div>
-</section>
-<section class="grid">
-  <div class="stack">
-    <div class="card" id="signin-card">
-      <h3>Resume an existing profile</h3>
-      <p class="lead">If you have already started with Quido, sign back in using the email address and 4-digit PIN you set during profile creation.</p>
-      <form id="signin-form" class="form">
-        <div class="field"><label for="signin-email">Email address</label><input id="signin-email" type="email"></div>
-        <div class="field"><label for="signin-pin">4-digit PIN</label><input id="signin-pin" type="password" inputmode="numeric" maxlength="4"></div>
-        <div class="field full"><div class="actions"><button class="btn outline" type="submit">Sign in</button></div></div>
-      </form>
+
+    <aside class="calc-card">
+      <div class="calc-card-head">
+        <h2>Get your quote</h2>
+        <p>Adjust the sliders to see your monthly repayment update instantly.</p>
+      </div>
+      <div class="calc-body">
+        <div class="quote-top">
+          <div class="metric"><span>Borrowing</span><strong id="quote-amount">£1,500</strong><small id="quote-term">12 monthly instalments</small></div>
+          <div class="metric"><span>Monthly repayment</span><strong id="quote-emi">£0.00</strong><small id="quote-extra">Updates automatically</small></div>
+          <div class="metric"><span>Total repayable</span><strong id="quote-total">£0.00</strong><small id="quote-policy">Rep. APR 29.9%</small></div>
+        </div>
+        <div class="slider-stack">
+          <div class="slider-group">
+            <div class="slider-head"><span class="slider-label">Amount</span><span class="slider-value" id="amount-display">£1,500</span></div>
+            <div class="range-wrap"><input class="range-input" id="calc-amount" type="range" min="300" max="10000" step="50" value="1500"><div class="slider-scale"><span>£300</span><span>£10,000</span></div></div>
+          </div>
+          <div class="slider-group">
+            <div class="slider-head"><span class="slider-label">Term</span><span class="slider-value" id="term-display">12 months</span></div>
+            <div class="range-wrap"><input class="range-input" id="calc-term" type="range" min="6" max="24" step="1" value="12"><div class="slider-scale"><span>6 months</span><span>24 months</span></div></div>
+          </div>
+          <div class="message info" id="calc-feedback">Rates shown are indicative. Your actual rate may vary based on your circumstances.</div>
+        </div>
+        <div class="calc-cta">
+          <button class="btn-calc-apply" type="button" onclick="startApplication()">Apply for this loan</button>
+          <p class="calc-rep">Representative example: £1,500 over 12 months at 29.9% APR.<br>Monthly repayment £147.85. Total repayable £1,774.20.</p>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- TRUST STRIP -->
+  <section class="trust-strip">
+    <div class="trust-grid">
+      <div class="trust-item">
+        <div class="trust-icon ti-blue">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 2 3 5v4c0 3.5 2.5 6.5 6 7.4C12.5 15.5 15 12.5 15 9V5L9 2z" stroke="#1a56db" stroke-width="1.4" stroke-linejoin="round"/><path d="M6.5 9.5l2 2 3-3.5" stroke="#1a56db" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div><strong>FCA Authorised</strong><span>Authorised and regulated by the Financial Conduct Authority</span></div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon ti-green">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="6.5" stroke="#059669" stroke-width="1.4"/><path d="M6 9l2.5 2.5L12.5 7" stroke="#059669" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div><strong>No hidden fees</strong><span>The rate you see is the rate you pay — nothing added later</span></div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon ti-amber">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="3" y="5" width="12" height="9" rx="2" stroke="#b45309" stroke-width="1.4"/><path d="M3 8h12M7 5V3.5M11 5V3.5" stroke="#b45309" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </div>
+        <div><strong>Flexible repayments</strong><span>Payment holidays and arrangements available when you need them</span></div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon ti-purple">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 2c0 0-6 3-6 7v2.5L9 15l6-3.5V9c0-4-6-7-6-7z" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round"/><path d="M9 7v3.5" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round"/><circle cx="9" cy="12.5" r=".75" fill="#7c3aed"/></svg>
+        </div>
+        <div><strong>Responsible lending</strong><span>We only lend what you can comfortably afford to repay</span></div>
+      </div>
     </div>
-    <div class="card" id="profile">
-      <h3>Create your Quido profile</h3>
-      <p class="lead">We use this as the secure base record for your application and, later, for your customer portal access.</p>
-      <form id="profile-form" class="form">
-        <div class="field"><label for="pf-title">Title</label><select id="pf-title"><option>Mr</option><option selected>Ms</option><option>Mrs</option><option>Miss</option><option>Mx</option></select></div>
-        <div class="field"><label for="pf-dob">Date of birth</label><input id="pf-dob" type="date"></div>
-        <div class="field"><label for="pf-first">First name</label><input id="pf-first" type="text"></div>
-        <div class="field"><label for="pf-last">Last name</label><input id="pf-last" type="text"></div>
-        <div class="field"><label for="pf-email">Email address</label><input id="pf-email" type="email"></div>
-        <div class="field"><label for="pf-pin">Choose a 4-digit PIN</label><input id="pf-pin" type="password" inputmode="numeric" maxlength="4"></div>
-        <div class="field"><label for="pf-phone">Phone number</label><input id="pf-phone" type="tel"></div>
-        <div class="field"><label for="pf-resident">Resident since</label><input id="pf-resident" type="text" placeholder="March 2023"></div>
-        <div class="field full"><label for="pf-address">Home address</label><input id="pf-address" type="text"></div>
-        <div class="field"><label for="pf-emp-status">Employment status</label><select id="pf-emp-status"><option value="Full-time employed" selected>Full-time employed</option><option value="Part-time employed">Part-time employed</option><option value="Self-employed">Self-employed</option><option value="Contractor">Contractor</option></select></div>
-        <div class="field"><label for="pf-employer">Employer</label><input id="pf-employer" type="text"></div>
-        <div class="field"><label for="pf-job-title">Job title</label><input id="pf-job-title" type="text"></div>
-        <div class="field"><label for="pf-emp-start">Employment start</label><input id="pf-emp-start" type="text" placeholder="June 2021"></div>
-        <div class="field"><label for="pf-annual-income">Annual income</label><input id="pf-annual-income" type="number" min="0" step="100"></div>
-        <div class="field"><label for="pf-pay-frequency">Pay frequency</label><select id="pf-pay-frequency"><option selected>Monthly</option><option>Four-weekly</option><option>Weekly</option></select></div>
-        <div class="field"><label for="pf-next-pay">Next pay date</label><input id="pf-next-pay" type="date"></div>
-        <div class="field full"><div class="actions"><button class="btn brand" type="submit">Create my profile</button></div></div>
-      </form>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how-it-works">
+    <div class="how-card">
+      <div class="how-card-head">
+        <h3>How it works</h3>
+        <p>From first quote to funded loan — the entire journey happens online, in one place.</p>
+      </div>
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="how-step-num">1</div>
+          <strong>Get your quote</strong>
+          <span>Use the calculator to set your amount and term. See the exact monthly repayment before committing to anything. No credit check at this stage.</span>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">2</div>
+          <strong>Apply &amp; get a decision</strong>
+          <span>Create your profile, complete the application, and receive an instant decision. We assess affordability to make sure the loan is right for you.</span>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">3</div>
+          <strong>Sign and receive funds</strong>
+          <span>Review your offer documents, sign online, and your application moves to final approval. Once approved, funds are transferred the same day.</span>
+        </div>
+      </div>
+      <div class="apply-cta">
+        <button class="apply-button" type="button" onclick="startApplication()">
+          Start your application
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5 11 7l-3.5 3.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <span class="apply-note">Takes around 5 minutes &middot; No commitment</span>
+      </div>
     </div>
-  </div>
-  <div class="stack">
-    <div class="card" id="application">
-      <h3>Loan application</h3>
-      <p class="lead">Once your profile is created, we use the same affordability and policy inputs here to produce a decision and offer preview.</p>
-      <form id="application-form" class="form">
-        <div class="field"><label for="app-amount">Requested amount</label><input id="app-amount" type="number" min="300" max="10000" step="50" value="1500"></div>
-        <div class="field"><label for="app-term">Requested term</label><select id="app-term"><option value="6">6 months</option><option value="9">9 months</option><option value="12" selected>12 months</option><option value="18">18 months</option><option value="24">24 months</option></select></div>
-        <div class="field full"><label for="app-purpose">Loan purpose</label><input id="app-purpose" type="text" value="Household costs"></div>
-        <div class="field"><label for="app-monthly-income">Monthly income</label><input id="app-monthly-income" type="number" min="0" step="10" value="2200"></div>
-        <div class="field"><label for="app-housing">Housing costs</label><input id="app-housing" type="number" min="0" step="10" value="650"></div>
-        <div class="field"><label for="app-living">Living costs</label><input id="app-living" type="number" min="0" step="10" value="320"></div>
-        <div class="field"><label for="app-transport">Transport costs</label><input id="app-transport" type="number" min="0" step="10" value="120"></div>
-        <div class="field"><label for="app-other-debts">Other debt commitments</label><input id="app-other-debts" type="number" min="0" step="10" value="85"></div>
-        <div class="field"><label for="app-missed">Missed payments in last 6 months</label><input id="app-missed" type="number" min="0" max="12" step="1" value="0"></div>
-        <div class="field"><label for="app-ccj">Active CCJs</label><input id="app-ccj" type="number" min="0" max="10" step="1" value="0"></div>
-        <div class="field"><label for="app-months-address">Months at address</label><input id="app-months-address" type="number" min="0" step="1" value="24"></div>
-        <div class="field full"><label>Eligibility and credit-style proxy checks</label><div class="switches"><label class="switch"><input id="app-uk" type="checkbox" checked> UK resident</label><label class="switch"><input id="app-employed" type="checkbox" checked> Gainfully employed</label><label class="switch"><input id="app-electoral" type="checkbox" checked> On electoral roll</label><label class="switch"><input id="app-defaults" type="checkbox"> Recent defaults</label></div></div>
-        <div class="field full"><div class="actions"><button class="btn brand" type="submit">Run decision and submit application</button></div></div>
-      </form>
-      <div class="rows hidden" id="decision-list"></div>
-    </div>
-    <div class="card" id="signing-card">
-      <h3>Review and sign your offer</h3>
-      <p class="lead">Approved applications move here. You can review the repayment summary and confirm the documentation before Ops approves disbursal.</p>
-      <div class="note info" id="signing-note">No approved offer yet. Complete your profile and run the application decision first.</div>
-      <div id="signing-area" class="hidden">
-        <div class="rows" id="offer-preview"></div>
-        <div class="note warn" style="margin-top:14px">Disbursal does not happen automatically. Your signed offer will move to Ops for approval before funds are released.</div>
-        <form id="sign-form" class="form" style="margin-top:18px">
-          <div class="field full"><label for="sign-name">Signature full name</label><input id="sign-name" type="text"></div>
-          <div class="field full"><label>Confirmations</label><div class="switches"><label class="switch"><input id="sign-terms" type="checkbox"> I have reviewed and accepted the credit agreement and key facts</label><label class="switch"><input id="sign-privacy" type="checkbox"> I understand the privacy notice and data handling for this application</label></div></div>
-          <div class="field full"><div class="actions"><button class="btn success" type="submit">Sign and send for disbursal approval</button></div></div>
+  </section>
+
+  <!-- APPLICATION SHELL -->
+  <section class="section" id="application-shell">
+    <div class="app-shell">
+      <div class="app-head">
+        <h3>Apply online</h3>
+        <p>Complete your application in four simple steps. Your information is held securely and used only to assess your loan.</p>
+        <div class="stepper"><span class="chip active" id="chip-profile">Profile</span><span class="chip" id="chip-application">Application</span><span class="chip" id="chip-decision">Decision</span><span class="chip" id="chip-sign">Sign</span></div>
+      </div>
+
+      <section class="pane active" id="pane-profile">
+        <div class="offer-box" style="margin-bottom:16px"><h4>Create your Quido profile</h4><p>Your profile secures your application and gives you access to the Quido customer portal once you're approved.</p></div>
+        <form id="profile-form" class="grid">
+          <div class="field"><label for="pf-title">Title</label><select id="pf-title"><option>Mr</option><option selected>Ms</option><option>Mrs</option><option>Miss</option><option>Mx</option></select></div>
+          <div class="field"><label for="pf-dob">Date of birth</label><input id="pf-dob" type="date"></div>
+          <div class="field"><label for="pf-first">First name</label><input id="pf-first" type="text"></div>
+          <div class="field"><label for="pf-last">Last name</label><input id="pf-last" type="text"></div>
+          <div class="field"><label for="pf-email">Email address</label><input id="pf-email" type="email"></div>
+          <div class="field"><label for="pf-pin">Choose a 4-digit PIN</label><input id="pf-pin" type="password" inputmode="numeric" maxlength="4"></div>
+          <div class="field"><label for="pf-phone">Phone number</label><input id="pf-phone" type="tel"></div>
+          <div class="field"><label for="pf-resident">Resident since</label><input id="pf-resident" type="text" placeholder="March 2023"></div>
+          <div class="field full"><label for="pf-address">Home address</label><input id="pf-address" type="text"></div>
+          <div class="field"><label for="pf-emp-status">Employment status</label><select id="pf-emp-status"><option value="Full-time employed" selected>Full-time employed</option><option value="Part-time employed">Part-time employed</option><option value="Self-employed">Self-employed</option><option value="Contractor">Contractor</option></select></div>
+          <div class="field"><label for="pf-employer">Employer</label><input id="pf-employer" type="text"></div>
+          <div class="field"><label for="pf-job-title">Job title</label><input id="pf-job-title" type="text"></div>
+          <div class="field"><label for="pf-employment-start">Employment start</label><input id="pf-employment-start" type="text" placeholder="June 2021"></div>
+          <div class="field"><label for="pf-annual-income">Annual income</label><input id="pf-annual-income" type="number" min="0" step="100"></div>
+          <div class="field"><label for="pf-pay-frequency">Pay frequency</label><select id="pf-pay-frequency"><option selected>Monthly</option><option>Four-weekly</option><option>Weekly</option></select></div>
+          <div class="field"><label for="pf-next-pay">Next pay date</label><input id="pf-next-pay" type="date"></div>
+          <div class="field full"><button class="btn btn-primary" type="button" onclick="document.getElementById('profile-form').requestSubmit()">Create profile and continue</button></div>
         </form>
+        <div class="message info" id="profile-note" style="margin-top:14px">Create your profile first, then we'll take you straight into the application.</div>
+      </section>
+
+      <section class="pane" id="pane-application">
+        <div class="summary-grid">
+          <div class="summary-card"><span>Profile</span><strong id="app-summary-name">Not started</strong></div>
+          <div class="summary-card"><span>Email</span><strong id="app-summary-email">-</strong></div>
+          <div class="summary-card"><span>Indicative quote</span><strong id="app-summary-quote">Choose amount</strong></div>
+        </div>
+        <form id="application-form" class="grid">
+          <div class="field"><label for="app-amount">Amount requested</label><input id="app-amount" type="number" min="300" max="10000" step="50"></div>
+          <div class="field"><label for="app-term">Term</label><select id="app-term"><option value="6">6 months</option><option value="7">7 months</option><option value="8">8 months</option><option value="9">9 months</option><option value="10">10 months</option><option value="11">11 months</option><option value="12">12 months</option><option value="13">13 months</option><option value="14">14 months</option><option value="15">15 months</option><option value="16">16 months</option><option value="17">17 months</option><option value="18">18 months</option><option value="19">19 months</option><option value="20">20 months</option><option value="21">21 months</option><option value="22">22 months</option><option value="23">23 months</option><option value="24">24 months</option></select></div>
+          <div class="field full"><label for="app-purpose">What is the loan for?</label><input id="app-purpose" type="text" placeholder="Home repairs, travel, car costs"></div>
+          <div class="field"><label for="app-income">Monthly income</label><input id="app-income" type="number" min="0" step="10"></div>
+          <div class="field"><label for="app-housing">Housing costs</label><input id="app-housing" type="number" min="0" step="10" value="0"></div>
+          <div class="field"><label for="app-living">Living costs</label><input id="app-living" type="number" min="0" step="10"></div>
+          <div class="field"><label for="app-transport">Transport costs</label><input id="app-transport" type="number" min="0" step="10" value="0"></div>
+          <div class="field"><label for="app-other-debts">Other credit payments</label><input id="app-other-debts" type="number" min="0" step="10" value="0"></div>
+          <div class="field"><label for="app-months-address">Months at address</label><input id="app-months-address" type="number" min="0" step="1" value="24"></div>
+          <div class="field"><label for="app-missed-payments">Missed payments in last 6 months</label><input id="app-missed-payments" type="number" min="0" step="1" value="0"></div>
+          <div class="field"><label for="app-ccj-count">CCJ count</label><input id="app-ccj-count" type="number" min="0" step="1" value="0"></div>
+          <div class="field full"><div class="check-grid"><label class="check"><input id="app-uk-resident" type="checkbox" checked><span>I am a UK resident</span></label><label class="check"><input id="app-employed" type="checkbox" checked><span>I am gainfully employed</span></label><label class="check"><input id="app-electoral" type="checkbox" checked><span>I am on the electoral roll</span></label><label class="check"><input id="app-defaults" type="checkbox"><span>I have recent defaults</span></label></div></div>
+          <div class="field full"><div class="inline"><button class="btn btn-primary" type="button" onclick="document.getElementById('application-form').requestSubmit()">Submit application</button><button class="btn btn-secondary" type="button" onclick="goToPane('profile')">Back</button></div></div>
+        </form>
+        <div class="message info" id="application-note" style="margin-top:14px">We'll assess your affordability and eligibility to ensure this loan is right for you.</div>
+      </section>
+
+      <section class="pane" id="pane-decision">
+        <div class="summary-grid">
+          <div class="summary-card"><span>Amount</span><strong id="decision-amount">£0.00</strong></div>
+          <div class="summary-card"><span>Monthly repayment</span><strong id="decision-emi">£0.00</strong></div>
+          <div class="summary-card"><span>Total repayable</span><strong id="decision-total">£0.00</strong></div>
+        </div>
+        <div class="offer-box" style="margin-bottom:16px"><h4 id="decision-title">Decision ready</h4><p id="decision-copy">Your application outcome will appear here.</p></div>
+        <div class="message info" id="decision-note">If approved, the next step is reviewing and signing your documents.</div>
+        <div class="inline" style="margin-top:16px"><button class="btn btn-primary" type="button" id="decision-sign-btn" style="display:none" onclick="goToPane('sign')">Review and sign</button><button class="btn btn-secondary" type="button" onclick="goToPane('application')">Edit application</button><a class="btn btn-secondary" href="/customer">Log in</a></div>
+      </section>
+
+      <section class="pane" id="pane-sign">
+        <div class="offer-box" style="margin-bottom:16px"><h4>Review and sign your offer</h4><p>Read through the terms carefully. By signing, you confirm that you understand and accept the loan agreement.</p></div>
+        <div class="summary-grid">
+          <div class="summary-card"><span>Loan amount</span><strong id="sign-amount">£0.00</strong></div>
+          <div class="summary-card"><span>Term</span><strong id="sign-term">0 months</strong></div>
+          <div class="summary-card"><span>APR</span><strong id="sign-apr">29.9%</strong></div>
+        </div>
+        <form id="sign-form" class="stack">
+          <div class="field"><label for="sign-full-name">Full name</label><input id="sign-full-name" type="text"></div>
+          <div class="check-grid"><label class="check"><input id="sign-terms" type="checkbox"><span>I have reviewed the agreement and accept the terms.</span></label><label class="check"><input id="sign-privacy" type="checkbox"><span>I have reviewed the privacy notice.</span></label></div>
+          <div class="inline"><button class="btn btn-primary" type="submit">Sign and submit</button><button class="btn btn-secondary" type="button" onclick="goToPane('decision')">Back</button></div>
+        </form>
+        <div class="message info" id="sign-note" style="margin-top:14px">Once signed, your application moves to final approval before funds are transferred.</div>
+      </section>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<div class="ft">
+  <div class="ft-inner">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <button class="brand-link" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Go to homepage">
+          <span class="brand-lockup">
+            <span class="brand-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle class="q-ring" cx="12" cy="11" r="6" stroke-width="2.8" fill="none"/><path class="q-tail" d="M15.2 14.8 19 18.6" stroke-width="2.8" stroke-linecap="round"/></svg></span>
+            <span class="brand-word"><span class="brand-name" style="color:#fff">Quido</span></span>
+          </span>
+        </button>
+        <div class="ft-copy">Clear repayment journeys, flexible support, and fair treatment when life changes.</div>
+      </div>
+      <div class="ft-links">
+        <a href="#">Loan</a><a href="#">About Us</a><a href="#">FAQs</a><a href="#">Careers</a>
+        <a href="#">Beware of Loan Sharks</a><a href="#">Terms of Use</a><a href="#">Contact Us</a><a href="#">Privacy Policy</a>
+        <a href="#">File a Complaint</a><a href="#">Fraud Disclaimer</a><a href="#">Insights</a><a href="#">Cookies Policy</a>
       </div>
     </div>
+    <div class="fleg">We are a lender and may pay commissions to credit brokers or other intermediaries. This commission does not affect the total cost of your loan.<br><br><strong>Responsible lending:</strong> Take a moment to decide if Quido is right for you. Short term loans are an expensive form of borrowing.<br><br>Quido Ltd. Authorised and regulated by the Financial Conduct Authority. Registration number 900001.</div>
   </div>
-</section>
 </div>
-<footer class="footer"><div class="inner"><div><h4>Quido is built to make borrowing and servicing clearer.</h4><p>Build your profile, see whether the product is affordable, review documentation before funding, and move into the same secure portal once your loan is live.</p></div><div class="footer-links"><a href="#calculator">Loan calculator</a><a href="#profile">Create profile</a><a href="#application">Apply for a loan</a><a href="/customer">Customer portal</a><a href="/ops">Ops prototype</a><a href="mailto:info@quido.co.uk">Contact Quido</a></div></div></footer>
+
 <script>
 (function(){
-'use strict';
-var API_BASE=(location.protocol==='file:'?'http://localhost:3001':location.origin)+'/api';
-var SESSION_KEY='quido_public_session';
-var state={account:null,resolved:null};
-function el(id){return document.getElementById(id);} 
-function api(path,method,body){return fetch(API_BASE+path,{method:method||'GET',headers:{'Content-Type':'application/json','Accept':'application/json'},body:body?JSON.stringify(body):undefined}).then(function(res){if(!res.ok){return res.json().catch(function(){return {};}).then(function(data){throw new Error(data.error||('Request failed: '+res.status));});}return res.json();});}
-function pounds(v){return '�'+Number(v||0).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function text(id,v){if(el(id)) el(id).textContent=v;}
-function msg(id,kind,m){if(!el(id)) return; el(id).className='note '+kind; el(id).textContent=m;}
-function saveSession(email,pin,key){localStorage.setItem(SESSION_KEY,JSON.stringify({email:email,pin:pin,storageKey:key}));}
-function loadSession(){try{return JSON.parse(localStorage.getItem(SESSION_KEY)||'null');}catch(e){return null;}}
-function clearSession(){try{localStorage.removeItem(SESSION_KEY);}catch(e){}}
-function syncProfile(account){if(!account)return;var p=account.profile||{},per=p.personal||{},con=p.contact||{},emp=p.employment||{};el('pf-title').value=per.title||'Ms';el('pf-dob').value=per.dob||'';el('pf-first').value=per.firstName||'';el('pf-last').value=per.lastName||'';el('pf-email').value=(account.auth&&account.auth.email)||con.email||'';el('pf-phone').value=con.phone||'';el('pf-address').value=con.address||'';el('pf-resident').value=con.residentSince||'';el('pf-emp-status').value=emp.status||'Full-time employed';el('pf-employer').value=emp.employer||'';el('pf-job-title').value=emp.jobTitle||'';el('pf-emp-start').value=emp.employmentStart||'';el('pf-annual-income').value=emp.annualIncome||'';el('pf-pay-frequency').value=emp.payFrequency||'Monthly';el('pf-next-pay').value=emp.nextPayDate||'';el('sign-name').value=((per.firstName||'')+' '+(per.lastName||'')).trim();}
-function renderStage(account){var app=account&&account.application||{},stage=app.stage||'profile_created';var map={profile_created:['Profile created','Your profile is ready. Next we need your affordability details and requested loan terms.'],approved_pending_signature:['Approved - signature needed','Your application met the current prototype rules. Review the documents and sign before Ops can approve disbursal.'],signed_pending_disbursal:['Signed - awaiting Ops approval','Your documents are signed. Ops now needs to approve disbursal before the loan becomes active.'],disbursed:['Loan live','Your application has been approved, signed, and disbursed. Continue in the customer portal to manage repayments and documents.'],declined:['Application declined','The current affordability or policy rules did not support approval. Review the decision detail and adjust your request if needed.']};var item=map[stage]||['Create your profile','Start by creating a secure Quido profile. Once that is in place, we can calculate repayments, assess affordability, and move you into the application flow.'];text('stage-chip',item[0]);text('stage-title',item[0]);text('stage-copy',item[1]);}
-function renderDecision(decision){var box=el('decision-list');if(!box)return;var rows=[];if(decision&&decision.quote){rows.push('<div class="row"><span>Requested amount</span><strong>'+pounds(decision.quote.amount)+'</strong></div>');rows.push('<div class="row"><span>Term</span><strong>'+decision.quote.termMonths+' months</strong></div>');rows.push('<div class="row"><span>Monthly repayment</span><strong>'+pounds(decision.quote.emi)+'</strong></div>');rows.push('<div class="row"><span>Total repayable</span><strong>'+pounds(decision.quote.totalRepayable)+'</strong></div>');rows.push('<div class="row"><span>Disposable income</span><strong>'+pounds(decision.affordability.disposableIncome)+'</strong></div>');rows.push('<div class="row"><span>Risk score</span><strong>'+decision.riskScore+'</strong></div>');}if(decision&&decision.reasons&&decision.reasons.length){rows.push('<div class="note error">'+decision.reasons.join(' ')+'</div>');}else if(decision&&decision.approved){rows.push('<div class="note success">Approved subject to document review, signature, and Ops disbursal approval.</div>');}box.innerHTML=rows.join('');box.classList.remove('hidden');}
-function renderOffer(account){var area=el('signing-area'),note=el('signing-note'),preview=el('offer-preview');var app=account&&account.application||{},quote=app.quote||{},stage=app.stage||'profile_created';if(stage==='approved_pending_signature'){area.classList.remove('hidden');note.className='note info';note.textContent='Your application is approved. Review the offer below, then sign to move into Ops disbursal approval.';preview.innerHTML=[['Loan amount',pounds(quote.amount)],['Term',(quote.termMonths||'-')+' months'],['APR',(quote.apr||29.9)+'%'],['Monthly repayment',pounds(quote.emi)],['Total repayable',pounds(quote.totalRepayable)],['Status','Awaiting signature']].map(function(r){return '<div class="row"><span>'+r[0]+'</span><strong>'+r[1]+'</strong></div>';}).join('');return;}area.classList.add('hidden');if(stage==='signed_pending_disbursal'){note.className='note warn';note.textContent='Signed and waiting for Ops approval before disbursal. We will move you into the customer portal once your loan is live.';}else if(stage==='disbursed'){note.className='note success';note.innerHTML='Your loan has been disbursed. You can now continue in the <a href="/customer" style="font-weight:700;text-decoration:underline">customer portal</a> using your email and PIN.';}else if(stage==='declined'){note.className='note error';note.textContent='This application was declined under the current prototype rules. You can review the policy reasons above and adjust your request if needed.';}else{note.className='note info';note.textContent='No approved offer yet. Complete your profile and run the application decision first.';}}
-function applyState(account,resolved){state.account=account||null;state.resolved=resolved||null;renderStage(account);renderOffer(account);if(account){syncProfile(account);var auth=account.auth||{};if(auth.email) el('signin-email').value=auth.email;}}
-function publicLogin(email,pin){return api('/public/auth/login','POST',{email:email,pin:pin}).then(function(data){saveSession(email,pin,data.account.storageKey);applyState(data.account,data.resolved||null);return data;});}
-el('calc-form').addEventListener('submit',function(e){e.preventDefault();var amount=Number(el('calc-amount').value||0),termMonths=Number(el('calc-term').value||0),monthlyIncome=Number(el('calc-income').value||0),totalExp=Number(el('calc-exp').value||0);api('/public/quote','POST',{amount:amount,termMonths:termMonths,monthlyIncome:monthlyIncome,housingCosts:totalExp*.5,livingCosts:totalExp*.3,transportCosts:totalExp*.15,otherDebts:totalExp*.05,dob:el('pf-dob').value||'1995-01-01',ukResident:true,gainfullyEmployed:true,proxyData:{onElectoralRoll:true,recentDefaults:false,ccjCount:0,missedPaymentsLast6m:0,monthsAtAddress:24}}).then(function(data){var d=data.decision;text('quote-amount',pounds(d.quote.amount));text('quote-term',d.quote.termMonths+' months at '+d.quote.apr+'% APR');text('quote-emi',pounds(d.quote.emi));text('quote-extra','Disposable income: '+pounds(d.affordability.disposableIncome));text('quote-total',pounds(d.quote.totalRepayable));text('quote-policy',d.approved?'Indicatively affordable under current policy':'This request does not currently meet policy');msg('calc-feedback',d.approved?'success':'warn',d.approved?'Indicative quote generated. If you create a profile, we can use these figures in the full application journey.':(d.reasons.join(' ')||'This quote does not currently meet policy.'));}).catch(function(err){msg('calc-feedback','error',err.message);});});
-el('profile-form').addEventListener('submit',function(e){e.preventDefault();var payload={title:el('pf-title').value,firstName:el('pf-first').value,lastName:el('pf-last').value,dob:el('pf-dob').value,email:el('pf-email').value,pin:el('pf-pin').value,phone:el('pf-phone').value,address:el('pf-address').value,residentSince:el('pf-resident').value,employmentStatus:el('pf-emp-status').value,employer:el('pf-employer').value,jobTitle:el('pf-job-title').value,employmentStart:el('pf-emp-start').value,annualIncome:el('pf-annual-income').value,payFrequency:el('pf-pay-frequency').value,nextPayDate:el('pf-next-pay').value};api('/public/profiles','POST',payload).then(function(data){saveSession(payload.email,payload.pin,data.account.storageKey);applyState(data.account,null);msg('signing-note','success',data.created?'Profile created. You can now complete the application below using the same account.':'Existing profile loaded. You can continue the application below.');el('application').scrollIntoView({behavior:'smooth'});}).catch(function(err){msg('signing-note','error',err.message);});});
-el('signin-form').addEventListener('submit',function(e){e.preventDefault();publicLogin(el('signin-email').value,el('signin-pin').value).then(function(){msg('signing-note','success','Profile loaded. Continue where you left off.');}).catch(function(err){msg('signing-note','error',err.message);});});
-el('application-form').addEventListener('submit',function(e){e.preventDefault();if(!state.account||!state.account.storageKey){msg('signing-note','warn','Create or sign into a profile first so we know where to save the application.');el('profile').scrollIntoView({behavior:'smooth'});return;}var payload={storageKey:state.account.storageKey,amount:Number(el('app-amount').value||0),termMonths:Number(el('app-term').value||0),purpose:el('app-purpose').value,dob:el('pf-dob').value,email:el('pf-email').value,phone:el('pf-phone').value,address:el('pf-address').value,employmentStatus:el('pf-emp-status').value,employer:el('pf-employer').value,jobTitle:el('pf-job-title').value,employmentStart:el('pf-emp-start').value,annualIncome:Number(el('pf-annual-income').value||0),ukResident:el('app-uk').checked,gainfullyEmployed:el('app-employed').checked,affordability:{monthlyIncome:Number(el('app-monthly-income').value||0),housingCosts:Number(el('app-housing').value||0),livingCosts:Number(el('app-living').value||0),transportCosts:Number(el('app-transport').value||0),otherDebts:Number(el('app-other-debts').value||0)},proxyData:{onElectoralRoll:el('app-electoral').checked,recentDefaults:el('app-defaults').checked,ccjCount:Number(el('app-ccj').value||0),missedPaymentsLast6m:Number(el('app-missed').value||0),monthsAtAddress:Number(el('app-months-address').value||0)}};api('/public/applications','POST',payload).then(function(data){applyState(data.account,null);renderDecision(data.decision);if(data.decision.approved) el('signing-card').scrollIntoView({behavior:'smooth'});}).catch(function(err){renderDecision({reasons:[err.message]});msg('signing-note','error',err.message);});});
-el('sign-form').addEventListener('submit',function(e){e.preventDefault();if(!state.account||!state.account.storageKey)return;api('/public/applications/'+state.account.storageKey+'/sign','POST',{fullName:el('sign-name').value,acceptedTerms:el('sign-terms').checked,acceptedPrivacy:el('sign-privacy').checked}).then(function(data){applyState(data.account,null);msg('signing-note','warn','Signed successfully. Your application is now waiting for Ops approval and disbursal.');}).catch(function(err){msg('signing-note','error',err.message);});});
-window.copyQuoteIntoApplication=function(){el('app-amount').value=el('calc-amount').value;el('app-term').value=el('calc-term').value;el('app-monthly-income').value=el('calc-income').value;var exp=Number(el('calc-exp').value||0);el('app-housing').value=Math.round(exp*.5);el('app-living').value=Math.round(exp*.3);el('app-transport').value=Math.round(exp*.15);el('app-other-debts').value=Math.round(exp*.05);el('application').scrollIntoView({behavior:'smooth'});};
-var sess=loadSession();if(sess&&sess.email&&sess.pin){publicLogin(sess.email,sess.pin).catch(function(){clearSession();});}
+  var state = { quote:null, account:null, resolved:null, decision:null };
+  function money(value){ return new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(Number(value || 0)); }
+  function setMessage(id, kind, text){ var el = document.getElementById(id); if (!el) return; el.className = 'message ' + kind; el.textContent = text; }
+  function setActive(name){ ['profile','application','decision','sign'].forEach(function(key){ var pane = document.getElementById('pane-' + key); var chip = document.getElementById('chip-' + key); if (pane) pane.classList.toggle('active', key === name); if (chip) chip.classList.toggle('active', key === name); }); }
+  window.goToPane = function(name){ setActive(name); document.getElementById('application-shell').scrollIntoView({behavior:'smooth', block:'start'}); };
+  window.startApplication = function(){ hydrateApplicationFromQuote(); setActive(state.account ? 'application' : 'profile'); document.getElementById('application-shell').scrollIntoView({behavior:'smooth', block:'start'}); };
+  function patchRangeFill(el){ var min = Number(el.min || 0); var max = Number(el.max || 100); var val = Number(el.value || 0); var pct = ((val - min) / (max - min)) * 100; el.style.setProperty('--fill', pct + '%'); }
+  function patchQuote(decision){ if (!decision || !decision.quote) return; state.quote = decision; document.getElementById('quote-amount').textContent = money(decision.quote.amount); document.getElementById('quote-term').textContent = decision.quote.termMonths + ' monthly instalments'; document.getElementById('quote-emi').textContent = money(decision.quote.emi); document.getElementById('quote-total').textContent = money(decision.quote.totalRepayable); document.getElementById('quote-policy').textContent = 'Rep. APR ' + decision.policy.apr + '%'; document.getElementById('quote-extra').textContent = 'Updates automatically'; document.getElementById('amount-display').textContent = money(decision.quote.amount); document.getElementById('term-display').textContent = decision.quote.termMonths + ' months'; }
+  async function runCalculator(){ var payload = { amount:Number(document.getElementById('calc-amount').value || 0), termMonths:Number(document.getElementById('calc-term').value || 0), monthlyIncome:2600, housingCosts:0, livingCosts:1100, transportCosts:0, otherDebts:0, dob:'1993-01-01', ukResident:true, gainfullyEmployed:true, proxyData:{ recentDefaults:false, ccjCount:0, missedPaymentsLast6m:0, onElectoralRoll:true, monthsAtAddress:24 } }; try { var result = await postJson('/api/public/quote', payload); patchQuote(result.decision); hydrateApplicationFromQuote(); } catch (err) { setMessage('calc-feedback','error',err.message || 'We could not update the calculator.'); } }
+  function hydrateApplicationFromQuote(){ document.getElementById('app-amount').value = document.getElementById('calc-amount').value; document.getElementById('app-term').value = document.getElementById('calc-term').value; }
+  function updateApplicationSummary(){ var name = state.account ? [state.account.profile.personal.firstName, state.account.profile.personal.lastName].filter(Boolean).join(' ') : 'Not started'; var email = state.account ? ((state.account.auth && state.account.auth.email) || (state.account.profile.contact && state.account.profile.contact.email) || '-') : '-'; document.getElementById('app-summary-name').textContent = name || 'Not started'; document.getElementById('app-summary-email').textContent = email || '-'; if (state.decision && state.decision.quote) document.getElementById('app-summary-quote').textContent = money(state.decision.quote.amount) + ' over ' + state.decision.quote.termMonths + ' months'; else if (state.quote && state.quote.quote) document.getElementById('app-summary-quote').textContent = money(state.quote.quote.amount) + ' over ' + state.quote.quote.termMonths + ' months'; else if (state.quote && state.quote.amount) document.getElementById('app-summary-quote').textContent = money(state.quote.amount) + ' over ' + state.quote.termMonths + ' months'; }
+  function populateFromProfile(account){ if (!account) return; var personal = account.profile.personal || {}; var employment = account.profile.employment || {}; document.getElementById('sign-full-name').value = [personal.firstName, personal.lastName].filter(Boolean).join(' '); if (account.application && account.application.quote) { document.getElementById('app-amount').value = account.application.quote.amount || document.getElementById('app-amount').value; document.getElementById('app-term').value = account.application.quote.termMonths || document.getElementById('app-term').value; }
+    document.getElementById('app-income').value = employment.annualIncome ? Math.round(Number(employment.annualIncome) / 12) : document.getElementById('app-income').value;
+    updateApplicationSummary(); }
+  function reflectDecision(decision){ if (!decision || !decision.quote) return; state.decision = decision; document.getElementById('decision-amount').textContent = money(decision.quote.amount); document.getElementById('decision-emi').textContent = money(decision.quote.emi); document.getElementById('decision-total').textContent = money(decision.quote.totalRepayable); document.getElementById('sign-amount').textContent = money(decision.quote.amount); document.getElementById('sign-term').textContent = decision.quote.termMonths + ' months'; document.getElementById('sign-apr').textContent = decision.quote.apr + '%'; var btn = document.getElementById('decision-sign-btn'); if (decision.approved) { document.getElementById('decision-title').textContent = 'You are approved, subject to signing'; document.getElementById('decision-copy').textContent = 'Your application has been assessed and approved. Review the offer and sign to move forward.'; btn.style.display = 'inline-flex'; setMessage('decision-note','success','Approved. The next step is to review and sign your offer.'); } else { document.getElementById('decision-title').textContent = 'We cannot approve this application right now'; document.getElementById('decision-copy').textContent = (decision.reasons || []).join(' ') || 'This application does not meet our current lending criteria.'; btn.style.display = 'none'; setMessage('decision-note','warn',document.getElementById('decision-copy').textContent); } }
+  async function postJson(url,payload){ var res = await fetch(url,{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload || {}) }); var data = await res.json().catch(function(){ return {}; }); if (!res.ok) throw new Error(data.error || 'Request failed.'); return data; }
+  document.getElementById('profile-form').addEventListener('submit', async function(event){ event.preventDefault(); var payload = { title:document.getElementById('pf-title').value, dob:document.getElementById('pf-dob').value, firstName:document.getElementById('pf-first').value.trim(), lastName:document.getElementById('pf-last').value.trim(), email:document.getElementById('pf-email').value.trim(), pin:document.getElementById('pf-pin').value.trim(), phone:document.getElementById('pf-phone').value.trim(), residentSince:document.getElementById('pf-resident').value.trim(), address:document.getElementById('pf-address').value.trim(), employmentStatus:document.getElementById('pf-emp-status').value, employer:document.getElementById('pf-employer').value.trim(), jobTitle:document.getElementById('pf-job-title').value.trim(), employmentStart:document.getElementById('pf-employment-start').value.trim(), annualIncome:Number(document.getElementById('pf-annual-income').value || 0), payFrequency:document.getElementById('pf-pay-frequency').value, nextPayDate:document.getElementById('pf-next-pay').value }; try { setMessage('profile-note','info','Creating your profile...'); var result = await postJson('/api/public/profiles', payload); state.account = result.account; populateFromProfile(result.account); hydrateApplicationFromQuote(); setMessage('profile-note','success', result.created ? 'Profile created. You can continue straight into the application.' : 'That profile already exists. You can continue the application now.'); setActive('application'); document.getElementById('application-shell').scrollIntoView({behavior:'smooth', block:'start'}); } catch (err) { setMessage('profile-note','error',err.message || 'We could not create your profile.'); } });
+  document.getElementById('application-form').addEventListener('submit', async function(event){ event.preventDefault(); try { if (!state.account || !state.account.storageKey) { setMessage('application-note','warn','Create your profile first, then continue with the application.'); setActive('profile'); return; } var personal = (((state.account || {}).profile || {}).personal) || {}; var payload = { storageKey:state.account.storageKey, amount:Number(document.getElementById('app-amount').value || 0), termMonths:Number(document.getElementById('app-term').value || 0), purpose:document.getElementById('app-purpose').value.trim() || 'Personal loan', monthlyIncome:Number(document.getElementById('app-income').value || 0), housingCosts:Number(document.getElementById('app-housing').value || 0), livingCosts:Number(document.getElementById('app-living').value || 0), transportCosts:Number(document.getElementById('app-transport').value || 0), otherDebts:Number(document.getElementById('app-other-debts').value || 0), dob:personal.dob || '', ukResident:document.getElementById('app-uk-resident').checked, gainfullyEmployed:document.getElementById('app-employed').checked, proxyData:{ recentDefaults:document.getElementById('app-defaults').checked, ccjCount:Number(document.getElementById('app-ccj-count').value || 0), missedPaymentsLast6m:Number(document.getElementById('app-missed-payments').value || 0), onElectoralRoll:document.getElementById('app-electoral').checked, monthsAtAddress:Number(document.getElementById('app-months-address').value || 0) } }; setMessage('application-note','info','Submitting your application...'); var result = await postJson('/api/public/applications', payload); state.account = result.account; reflectDecision(result.decision); updateApplicationSummary(); setMessage('application-note','success','Application submitted. Your decision is ready below.'); setActive('decision'); document.getElementById('application-shell').scrollIntoView({behavior:'smooth', block:'start'}); } catch (err) { setMessage('application-note','error',err.message || 'We could not submit your application.'); } });
+  document.getElementById('sign-form').addEventListener('submit', async function(event){ event.preventDefault(); if (!state.account || !state.account.storageKey) { setMessage('sign-note','warn','We need your application before signing can continue.'); setActive('application'); return; } try { setMessage('sign-note','info','Submitting your signature...'); var result = await postJson('/api/public/applications/' + encodeURIComponent(state.account.storageKey) + '/sign', { fullName:document.getElementById('sign-full-name').value.trim(), acceptedTerms:document.getElementById('sign-terms').checked, acceptedPrivacy:document.getElementById('sign-privacy').checked }); state.account = result.account; setMessage('sign-note','success','Signed. Your application is now awaiting final approval before funds are transferred.'); setActive('decision'); setMessage('decision-note','info','Signed and awaiting final approval. Once approved, you can access the customer portal.'); } catch (err) { setMessage('sign-note','error',err.message || 'We could not record your signature.'); } });
+  var amountRange = document.getElementById('calc-amount');
+  var termRange = document.getElementById('calc-term');
+  [amountRange, termRange].forEach(function(el){ patchRangeFill(el); el.addEventListener('input', function(){ patchRangeFill(el); runCalculator(); }); });
+  runCalculator(); updateApplicationSummary();
 })();
 </script>
 </body>
