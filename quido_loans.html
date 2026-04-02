@@ -3043,7 +3043,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       applyLoanOverrides();
       updateAllUI();
       showOpsNotice('Your account status has been updated by Quido');
-    } else if (type === CT.RECORD_PAYMENT || type === CT.SET_PAID_COUNT || type === CT.REFUND_PAYMENT || type === CT.RECALCULATE_LOAN || type === CT.APPLY_PAYMENT_HOLIDAY || type === CT.APPLY_PAYMENT_ARRANGEMENT || type === CT.BREAK_PAYMENT_ARRANGEMENT || type === CT.CHANGE_PAY_DATE || type === CT.EXTEND_TERM || type === CT.WAIVE_INTEREST) {
+    } else if (type === CT.RECORD_PAYMENT || type === CT.SET_PAID_COUNT || type === CT.REFUND_PAYMENT || type === CT.RECALCULATE_LOAN || type === CT.APPLY_PAYMENT_HOLIDAY || type === CT.COMPLETE_PAYMENT_HOLIDAY || type === CT.APPLY_PAYMENT_ARRANGEMENT || type === CT.BREAK_PAYMENT_ARRANGEMENT || type === CT.CHANGE_PAY_DATE || type === CT.EXTEND_TERM || type === CT.WAIVE_INTEREST) {
       applyLoanOverrides();
       calcLoan();
       renderPaymentDetails();
@@ -3054,6 +3054,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       else if (type === CT.SET_PAID_COUNT)       showOpsNotice('Your repayment schedule has been updated by Quido');
       else if (type === CT.REFUND_PAYMENT)       showOpsNotice('A payment has been refunded on your account by Quido');
       else if (type === CT.APPLY_PAYMENT_HOLIDAY) showOpsNotice('A payment holiday has been applied to your account');
+      else if (type === CT.COMPLETE_PAYMENT_HOLIDAY) showOpsNotice('Your payment holiday has been removed and the skipped instalment is due again');
       else if (type === CT.BREAK_PAYMENT_ARRANGEMENT) showOpsNotice('Your payment arrangement has been removed and your account has returned to its original status');
       else if (type === CT.EXTEND_TERM)           showOpsNotice('Your loan term has been extended. New monthly payment: \u00a3' + LOAN.emi.toFixed(2));
       else if (type === CT.CHANGE_PAY_DATE)       showOpsNotice('Your monthly payment date has been updated');

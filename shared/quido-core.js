@@ -59,6 +59,7 @@
     SET_PAID_COUNT:            'SET_PAID_COUNT',
     REFUND_PAYMENT:            'REFUND_PAYMENT',
     APPLY_PAYMENT_HOLIDAY:     'APPLY_PAYMENT_HOLIDAY',
+    COMPLETE_PAYMENT_HOLIDAY:  'COMPLETE_PAYMENT_HOLIDAY',
     APPLY_PAYMENT_ARRANGEMENT: 'APPLY_PAYMENT_ARRANGEMENT',
     BREAK_PAYMENT_ARRANGEMENT: 'BREAK_PAYMENT_ARRANGEMENT',
     CHANGE_ACCOUNT_STATUS:     'CHANGE_ACCOUNT_STATUS',
@@ -1240,8 +1241,64 @@
                 startDate:   payload.startDate || (phTarget && phTarget.dueDate) || nowIso(),
                 endDate:     payload.endDate   || (phTarget && phTarget.dueDate) || null,
                 instalmentN: phPaidIdx + 1,
-                reason:      payload.reason || ''
+                reason:      payload.reason || '',
+                createdAt:   nowIso(),
+                originalPaidCount: phPaidIdx,
+                originalTermMonths: (phLc.termMonths || 0) - 1
               };
+            }
+            persistAndBroadcast(type, actor);
+            break;
+
+          case CommandTypes.COMPLETE_PAYMENT_HOLIDAY:
+            if (loan) {
+              var arrsPHDone = loan.arrangements || {};
+              var activePH = arrsPHDone.paymentHoliday;
+              if (activePH && activePH.active) {
+                var doneLc = loan.loanCore || {};
+                var restoredPaidCount = activePH.originalPaidCount;
+                if (restoredPaidCount === undefined || restoredPaidCount === null) {
+                  restoredPaidCount = Math.max(0, (activePH.instalmentN || 1) - 1);
+                }
+                var restoredTermMonths = activePH.originalTermMonths;
+                if (restoredTermMonths === undefined || restoredTermMonths === null) {
+                  restoredTermMonths = Math.max(restoredPaidCount + 1, (doneLc.termMonths || 0) - 1);
+                }
+                var restoredEngine = builtInEngineFactory({
+                  principal: doneLc.principal || 0,
+                  apr: doneLc.apr || 0,
+                  termMonths: restoredTermMonths,
+                  startDate: doneLc.startDate || nowIso(),
+                  paidCount: restoredPaidCount
+                });
+                restoredEngine.calc();
+                loan.scheduleSnapshot = restoredEngine.schedule().map(function(r) {
+                  return {
+                    n: r.n,
+                    dueDate: r.dueDate instanceof Date ? r.dueDate.toISOString() : r.dueDate,
+                    emi: r.emi,
+                    principal: r.principal,
+                    interest: r.interest,
+                    balance: r.balance,
+                    status: r.status,
+                    ph: false,
+                    pa: false,
+                    interestPaid: r.status === 'paid' ? r.interest : 0,
+                    principalPaid: r.status === 'paid' ? r.principal : 0,
+                    interestRemaining: r.status === 'paid' ? 0 : r.interest,
+                    principalRemaining: r.status === 'paid' ? 0 : r.principal,
+                    remainingDue: r.status === 'paid' ? 0 : r.emi
+                  };
+                });
+                doneLc.termMonths = restoredTermMonths;
+                doneLc.paidCount = restoredPaidCount;
+                loan.partialCredit = 0;
+                activePH.active = false;
+                activePH.removedAt = nowIso();
+                if (!Array.isArray(arrsPHDone.paymentHolidayHistory)) arrsPHDone.paymentHolidayHistory = [];
+                arrsPHDone.paymentHolidayHistory.push(activePH);
+                arrsPHDone.paymentHoliday = null;
+              }
             }
             persistAndBroadcast(type, actor);
             break;

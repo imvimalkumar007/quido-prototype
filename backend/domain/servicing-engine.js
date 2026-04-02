@@ -18,7 +18,7 @@
  */
 'use strict';
 
-const { computeOutstandingBalance } = require('./loan-engine');
+const { computeOutstandingBalance, buildSchedule } = require('./loan-engine');
 const {
   CS,
   FOV,
@@ -585,7 +585,10 @@ function applyPaymentHoliday(loan, payload, now, actor) {
     startDate:   startDate,
     endDate:     endDate,
     instalmentN: paidIdx + 1, // 1-indexed
-    reason:      payload.reason || ''
+    reason:      payload.reason || '',
+    createdAt:   now.toISOString(),
+    originalPaidCount: paidIdx,
+    originalTermMonths: lc.termMonths - 1
   };
 
   syncRowStatuses(loan);
@@ -620,13 +623,59 @@ function completePaymentHoliday(loan, now, actor) {
   }
 
   var ph = Object.assign({}, arrs.paymentHoliday, { active: false });
+  var lc = loan.loanCore || {};
+  var originalPaidCount = ph.originalPaidCount;
+  if (originalPaidCount === undefined || originalPaidCount === null) {
+    originalPaidCount = Math.max(0, (ph.instalmentN || 1) - 1);
+  }
+  var originalTermMonths = ph.originalTermMonths;
+  if (originalTermMonths === undefined || originalTermMonths === null) {
+    originalTermMonths = Math.max(originalPaidCount + 1, (lc.termMonths || 0) - 1);
+  }
+
+  var rebuilt = buildSchedule(
+    lc.principal || 0,
+    lc.apr || 0,
+    originalTermMonths,
+    lc.startDate || now.toISOString(),
+    originalPaidCount
+  );
+
+  loan.scheduleSnapshot = rebuilt.schedule.map(function (row) {
+    return {
+      n: row.n,
+      dueDate: row.dueDate,
+      emi: row.emi,
+      principal: row.principal,
+      interest: row.interest,
+      balance: row.balance,
+      status: row.status,
+      ph: false,
+      pa: false,
+      interestPaid: row.status === 'paid' ? row.interest : 0,
+      principalPaid: row.status === 'paid' ? row.principal : 0,
+      interestRemaining: row.status === 'paid' ? 0 : row.interest,
+      principalRemaining: row.status === 'paid' ? 0 : row.principal,
+      remainingDue: row.status === 'paid' ? 0 : row.emi
+    };
+  });
+  lc.termMonths = originalTermMonths;
+  lc.paidCount = originalPaidCount;
+  loan.partialCredit = 0;
+
+  ph.removedAt = now.toISOString();
   if (!Array.isArray(arrs.paymentHolidayHistory)) arrs.paymentHolidayHistory = [];
   arrs.paymentHolidayHistory.push(ph);
   arrs.paymentHoliday = null;
 
+  rebuildSummary(loan);
   runStatusEngine(loan, now);
 
-  _pushAudit(loan, 'payment_holiday_completed', {}, actor, now.toISOString());
+  _pushAudit(loan, 'payment_holiday_completed', {
+    reinstatedInstalmentN: (ph.instalmentN || 1),
+    restoredPaidCount: originalPaidCount,
+    restoredTermMonths: originalTermMonths
+  }, actor, now.toISOString());
 
   return { ok: true, loan: loan };
 }

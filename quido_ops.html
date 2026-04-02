@@ -1588,6 +1588,8 @@ function _actionToCommand(action, details) {
     return { type: CT.CHANGE_PAY_DATE, payload: { day: d.newDay, contract: { startDate: d.newStartDate } } };
   if (action === 'payment_holiday_granted')
     return { type: CT.APPLY_PAYMENT_HOLIDAY, payload: d };
+  if (action === 'payment_holiday_removed')
+    return { type: CT.COMPLETE_PAYMENT_HOLIDAY, payload: d };
   if (action === 'term_extended')
     return { type: CT.EXTEND_TERM, payload: { extraMonths: d.extraMonths, newTerm: d.newTerm } };
   if (action === 'payment_arrangement')
@@ -2003,6 +2005,18 @@ function opsShowPHStep(name) {
 function opsInitPHFlow() {
   opsPHReason = '';
   loadState();
+  var activePH = OPS.account && OPS.account.arrangements && OPS.account.arrangements.paymentHoliday;
+  if (activePH && activePH.active) {
+    document.getElementById('ops-ph-ineligible-msg').innerHTML =
+      '<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;margin-bottom:12px;text-align:left">'
+      + '<div class="kv"><span class="kv-k">Holiday instalment</span><span class="kv-v">Instalment ' + (activePH.instalmentN || OPS.paidCount) + '</span></div>'
+      + '<div class="kv"><span class="kv-k">Holiday month</span><span class="kv-v">' + shortDate(activePH.startDate || activePH.endDate || new Date()) + '</span></div>'
+      + '<div class="kv"><span class="kv-k">Reason</span><span class="kv-v">' + escHtml(activePH.reason || 'Not recorded') + '</span></div>'
+      + '</div>'
+      + '<button class="btn btn-danger btn-sm btn-block" onclick="opsRemovePH()">Remove Payment Holiday</button>'
+      + '<div style="font-size:11px;color:var(--muted);margin-top:8px;text-align:left">This restores the skipped instalment and reverts the account to its underlying status. If that instalment is already overdue, the account will move back into arrears automatically.</div>';
+    opsShowPHStep('ineligible'); return;
+  }
   if (OPS.blockedActions && OPS.blockedActions.indexOf('apply_payment_holiday') !== -1) {
     document.getElementById('ops-ph-ineligible-msg').textContent =
       OPS.actionReasons['apply_payment_holiday'] || 'Payment holiday is not available on this account.';
@@ -2072,6 +2086,13 @@ function opsApplyPH() {
     + '<div style="font-size:11px;color:var(--muted)">Reason: ' + opsPHReason + '</div>';
   opsShowPHStep('applied');
   toast('Payment holiday applied to instalment ' + (idx + 1) + '. Loan extended by 1 month.', 'success');
+}
+function opsRemovePH() {
+  syncToCustomer('payment_holiday_removed', {});
+  refreshOpsWorkspace();
+  document.getElementById('ops-ph-ineligible-msg').textContent = 'Payment holiday removed. The skipped instalment is due again.';
+  opsShowPHStep('ineligible');
+  toast('Payment holiday removed. The skipped instalment is due again.', 'success');
 }
 function changePayDate() {
   var day = parseInt(document.getElementById('cpd-day').value);
@@ -2608,12 +2629,12 @@ var ACTION_LABELS = {
   chat_message:'Chat message', profile_edit:'Profile updated (customer)',
   account_status_change:'Status changed', payment_recorded:'Payment recorded',
   pay_date_change:'Pay date changed', loan_recalculated:'Loan recalculated', term_extended:'Term extended',
-  payment_holiday_granted:'Payment holiday granted', manual_payment:'Manual payment recorded',
+  payment_holiday_granted:'Payment holiday granted', payment_holiday_removed:'Payment holiday removed', manual_payment:'Manual payment recorded',
   interest_waived:'Interest waived', loan_restructure:'Loan restructured', profile_updated:'Profile updated (ops)',
   account_closed:'Account closed', flagged_collections:'Flagged for collections', payment_arrangement:'Payment arrangement set', break_payment_arrangement:'Payment arrangement removed',
   // Canonical CommandTypes (from store.dispatch commands)
   CHANGE_ACCOUNT_STATUS:'Status changed', RECORD_PAYMENT:'Payment recorded',
-  RECALCULATE_LOAN:'Loan recalculated', APPLY_PAYMENT_HOLIDAY:'Payment holiday granted',
+  RECALCULATE_LOAN:'Loan recalculated', APPLY_PAYMENT_HOLIDAY:'Payment holiday granted', COMPLETE_PAYMENT_HOLIDAY:'Payment holiday removed',
   APPLY_PAYMENT_ARRANGEMENT:'Payment arrangement set', BREAK_PAYMENT_ARRANGEMENT:'Payment arrangement removed', CHANGE_PAY_DATE:'Pay date changed',
   EXTEND_TERM:'Term extended', WAIVE_INTEREST:'Interest waived',
   CLOSE_ACCOUNT:'Account closed', FLAG_COLLECTIONS:'Flagged for collections',
@@ -2627,11 +2648,11 @@ var ACT_COLORS = {
   chat_message:'#dcfce7', profile_edit:'#fef9c3', profile_updated:'#fef9c3',
   account_status_change:'#fee2e2',
   payment_recorded:'#dcfce7', manual_payment:'#dcfce7', pay_date_change:'#fef9c3',
-  loan_recalculated:'#e0f2fe', term_extended:'#fef3c7', payment_holiday_granted:'#ede9fe',
+  loan_recalculated:'#e0f2fe', term_extended:'#fef3c7', payment_holiday_granted:'#ede9fe', payment_holiday_removed:'#fee2e2',
   interest_waived:'#fef3c7', account_closed:'#fee2e2', flagged_collections:'#fee2e2', payment_arrangement:'#fef3c7', break_payment_arrangement:'#fee2e2',
   // Canonical CommandTypes
   CHANGE_ACCOUNT_STATUS:'#fee2e2', RECORD_PAYMENT:'#dcfce7', RECALCULATE_LOAN:'#e0f2fe',
-  APPLY_PAYMENT_HOLIDAY:'#ede9fe', APPLY_PAYMENT_ARRANGEMENT:'#fef3c7', BREAK_PAYMENT_ARRANGEMENT:'#fee2e2', CHANGE_PAY_DATE:'#fef9c3',
+  APPLY_PAYMENT_HOLIDAY:'#ede9fe', COMPLETE_PAYMENT_HOLIDAY:'#fee2e2', APPLY_PAYMENT_ARRANGEMENT:'#fef3c7', BREAK_PAYMENT_ARRANGEMENT:'#fee2e2', CHANGE_PAY_DATE:'#fef9c3',
   EXTEND_TERM:'#fef3c7', WAIVE_INTEREST:'#fef3c7', CLOSE_ACCOUNT:'#fee2e2',
   REFUND_PAYMENT:'#fee2e2', payment_refunded:'#fee2e2',
   FLAG_COLLECTIONS:'#fee2e2', ADD_OPS_NOTE:'#fef9c3', ADD_CONTACT_ATTEMPT:'#e0f2fe',
