@@ -184,6 +184,35 @@
         }
       },
 
+      auth: {
+        email: '',
+        pin: '',
+        createdAt: now,
+        lastLoginAt: null,
+        portalEnabled: false
+      },
+
+      application: {
+        stage: 'profile_incomplete',
+        eligibility: null,
+        quote: null,
+        requestedLoan: null,
+        proxyData: null,
+        submittedAt: null,
+        reviewedAt: null,
+        signedAt: null,
+        signature: null,
+        decision: null,
+        disbursal: {
+          status: 'not_requested',
+          approvedAt: null,
+          approvedBy: null,
+          disbursedAt: null,
+          disbursedBy: null
+        },
+        statusHistory: []
+      },
+
       paymentDetails: {
         card: { type: '', last4: '', expiry: '', collectionDayOfMonth: null, active: false },
         bank: { accountHolder: '', bankName: '', sortCodeMasked: '', accountNumberMasked: '', fundedToDate: '' }
@@ -805,6 +834,13 @@
       email: spc.email || '', phone: spc.phone || '',
       address: spc.address || '', residentSince: spc.residentSince || ''
     };
+    account.auth = {
+      email: (seed.credentials && seed.credentials.email) || spc.email || '',
+      pin: (seed.credentials && seed.credentials.pin) || '',
+      createdAt: now,
+      lastLoginAt: null,
+      portalEnabled: true
+    };
 
     account.affordability.incomeExpenditure.raw = {
       monthlyIncome:  sie.monthlyIncome  || 0,
@@ -854,6 +890,8 @@
 
     account.loans           = [loan];
     account.activeLoanId    = loanId;
+    account.application.stage = 'disbursed';
+    account.application.statusHistory = [{ stage: 'disbursed', at: now, by: 'seed' }];
     // Fresh account — mark as fully migrated so loadLegacy never re-runs migrations.
     account.migrationVersion = CURRENT_MIGRATION_VERSION;
 

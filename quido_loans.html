@@ -2811,12 +2811,49 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     }
   ];
   var PORTAL_CUSTOMER_ACCOUNTS = CUSTOMER_REGISTRY.slice();
+  function mapLiveAccountToPortalCustomer(account, resolved) {
+    if (!account) return null;
+    var personal = (account.profile && account.profile.personal) || {};
+    var contact = (account.profile && account.profile.contact) || {};
+    var employment = (account.profile && account.profile.employment) || {};
+    var affordability = (account.affordability && account.affordability.incomeExpenditure && account.affordability.incomeExpenditure.raw) || {};
+    var auth = account.auth || {};
+    var activeLoan = (resolved && resolved.activeLoan) || null;
+    var quote = (account.application && account.application.quote) || {};
+    return {
+      id: account.customerId || account.storageKey,
+      storageKey: account.storageKey,
+      loanId: (activeLoan && activeLoan.loanId) || account.activeLoanId || '',
+      initials: personal.initials || ((personal.firstName || '').charAt(0) + (personal.lastName || '').charAt(0)).toUpperCase(),
+      name: [personal.firstName, personal.lastName].filter(Boolean).join(' ') || auth.email || 'Quido customer',
+      memberSince: personal.memberSince || '',
+      credentials: { email: auth.email || contact.email || '', pin: auth.pin || '' },
+      profile: { personal: personal, contact: contact, employment: employment },
+      incomeExpenditure: {
+        monthlyIncome: affordability.monthlyIncome || 0,
+        housingCosts: affordability.housingCosts || 0,
+        transportCosts: affordability.transportCosts || 0,
+        livingCosts: affordability.livingCosts || 0,
+        otherDebts: affordability.otherDebts || 0,
+        granular: affordability.granular || {}
+      },
+      loan: {
+        principal: (activeLoan && activeLoan.core && activeLoan.core.principal) || (quote.amount || 0),
+        apr: (activeLoan && activeLoan.core && activeLoan.core.apr) || (quote.apr || 29.9),
+        term: (activeLoan && activeLoan.core && activeLoan.core.termMonths) || (quote.termMonths || 12),
+        startDate: (activeLoan && activeLoan.core && activeLoan.core.startDate) || '',
+        paidCount: (activeLoan && activeLoan.core && activeLoan.core.paidCount) || 0,
+        accountStatus: (activeLoan && activeLoan.status && (activeLoan.status.resolvedDisplayStatus || activeLoan.status.displayStatus || activeLoan.status.coreStatus)) || ((account.application && account.application.stage) || 'profile_created')
+      },
+      paymentDetails: account.paymentDetails || {}
+    };
+  }
   function mergePortalCustomerAccounts(accounts) {
     var byKey = {};
     (accounts || []).forEach(function(a) {
       if (a && a.storageKey) byKey[a.storageKey] = a;
     });
-    PORTAL_CUSTOMER_ACCOUNTS = CUSTOMER_REGISTRY.map(function(seed) {
+    var mergedSeeds = CUSTOMER_REGISTRY.map(function(seed) {
       var live = byKey[seed.storageKey] || {};
       var merged = JSON.parse(JSON.stringify(seed));
       if (live.name) merged.name = live.name;
@@ -2829,6 +2866,15 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       if (live.loanStatus && merged.loan) merged.loan.accountStatus = live.loanStatus;
       return merged;
     });
+    var seen = {};
+    mergedSeeds.forEach(function(item) { seen[item.storageKey] = true; });
+    (accounts || []).forEach(function(account) {
+      if (!account || !account.storageKey || seen[account.storageKey]) return;
+      if (!account.auth || !account.auth.email || !account.auth.pin) return;
+      var mapped = mapLiveAccountToPortalCustomer(account);
+      if (mapped) mergedSeeds.push(mapped);
+    });
+    PORTAL_CUSTOMER_ACCOUNTS = mergedSeeds;
   }
   function renderDemoAccounts() {
     var list = document.getElementById('ln-demos'); if (!list) return;
@@ -2883,6 +2929,45 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       if (PORTAL_CUSTOMER_ACCOUNTS[i].credentials.email === email && PORTAL_CUSTOMER_ACCOUNTS[i].credentials.pin === pin) return PORTAL_CUSTOMER_ACCOUNTS[i];
     }
     return null;
+  }
+  function fetchLivePortalCustomerByStorageKey(storageKey) {
+    if (!USE_API || !window.fetch || !storageKey) return Promise.resolve(null);
+    return window.fetch(API_BASE.replace(/\/$/, '') + '/accounts/' + storageKey, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' }
+    }).then(function(res) {
+      if (!res.ok) throw new Error('Account request failed: ' + res.status);
+      return res.json();
+    }).then(function(data) {
+      return mapLiveAccountToPortalCustomer(data && data.account);
+    }).catch(function() { return null; });
+  }
+  function authenticatePortalCustomer(email, pin) {
+    var local = findPortalCustomerByCredentials(email, pin);
+    if (local) return Promise.resolve(local);
+    if (!USE_API || !window.fetch) return Promise.resolve(null);
+    return window.fetch(API_BASE.replace(/\/$/, '') + '/public/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ email: email, pin: pin })
+    }).then(function(res) {
+      if (!res.ok) throw new Error('Email or PIN not recognised. Please try again.');
+      return res.json();
+    }).then(function(data) {
+      var account = data && data.account;
+      if (!account) return null;
+      if (!account.auth || !account.auth.portalEnabled) {
+        var stage = account.application && account.application.stage;
+        var blocked = new Error(stage === 'signed_pending_disbursal'
+          ? 'Your application is signed and waiting for Ops approval before portal access is enabled.'
+          : 'Portal access will be available once your loan has been disbursed.');
+        blocked.portalBlocked = true;
+        throw blocked;
+      }
+      var mapped = mapLiveAccountToPortalCustomer(account, data && data.resolved);
+      if (mapped) PORTAL_CUSTOMER_ACCOUNTS.push(mapped);
+      return mapped;
+    });
   }
 
   var ACTIVE_CUSTOMER = null; // registry entry for the logged-in customer
@@ -3225,10 +3310,18 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     var pin   = (document.getElementById('ln-pin').value||'').trim();
     var errEl = document.getElementById('ln-error');
     if (!email || !pin) { errEl.textContent = 'Please enter your email address and PIN.'; errEl.style.display='block'; return; }
-    var customer = findPortalCustomerByCredentials(email, pin);
-    if (!customer) { errEl.textContent = 'Email or PIN not recognised. Please try again.'; errEl.style.display='block'; return; }
-    errEl.style.display = 'none';
-    initCustomerSession(customer);
+    authenticatePortalCustomer(email, pin).then(function(customer) {
+      if (!customer) {
+        errEl.textContent = 'Email or PIN not recognised. Please try again.';
+        errEl.style.display='block';
+        return;
+      }
+      errEl.style.display = 'none';
+      initCustomerSession(customer);
+    }).catch(function(err) {
+      errEl.textContent = err && err.message ? err.message : 'Unable to sign you in right now.';
+      errEl.style.display='block';
+    });
   }
 
   function initCustomerSession(customer) {
@@ -3314,14 +3407,18 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     }
     if (!sess || !sess.storageKey) return;
     var customer = findPortalCustomerByStorageKey(sess.storageKey);
-    if (!customer) {
-      // Session key references an unknown customer - clear it and stay on login
-      try { localStorage.removeItem(LOANS_SESSION_KEY); } catch(e) {}
+    if (customer) {
+      initCustomerSession(customer);
       return;
     }
-    // initCustomerSession navigates to s-home internally; any render errors are
-    // caught individually inside the function and do not block navigation.
-    initCustomerSession(customer);
+    fetchLivePortalCustomerByStorageKey(sess.storageKey).then(function(liveCustomer) {
+      if (!liveCustomer) {
+        try { localStorage.removeItem(LOANS_SESSION_KEY); } catch(e) {}
+        return;
+      }
+      PORTAL_CUSTOMER_ACCOUNTS.push(liveCustomer);
+      initCustomerSession(liveCustomer);
+    });
   })();
   // All loan/account initialisation happens inside initCustomerSession() after login
 

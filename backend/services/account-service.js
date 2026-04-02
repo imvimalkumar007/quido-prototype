@@ -27,6 +27,7 @@
 'use strict';
 
 const {
+  createEmptyLoan,
   createAccountFromSeed,
   createEmptyCustomerAccount,
   normalizeAccount,
@@ -39,8 +40,12 @@ const {
 } = require('../domain/status-engine');
 
 const {
-  deriveOperativeSchedule
+  deriveOperativeSchedule,
+  buildSchedule
 } = require('../domain/loan-engine');
+
+const decisionService = require('./decision-service');
+const { disburseApprovedApplication } = require('./disbursal-service');
 
 const {
   applyRepayment,
@@ -63,6 +68,22 @@ function mergeObj(target, src) {
   if (!src || typeof src !== 'object') return target;
   Object.keys(src).forEach(function (k) { target[k] = src[k]; });
   return target;
+}
+
+function slugify(value) {
+  return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '') || 'customer';
+}
+
+function createStorageKey(firstName, lastName) {
+  return 'np_public_' + slugify(firstName + '_' + lastName) + '_' + Date.now().toString().slice(-6);
+}
+
+function createCustomerId() {
+  return 'customer_' + Date.now().toString().slice(-8);
+}
+
+function createApplicationLoanId() {
+  return 'APP-' + String(Date.now()).slice(-6);
 }
 
 function paymentBreakdown(row) {
@@ -408,6 +429,278 @@ AccountService.prototype.getAccount = function (storageKey) {
  */
 AccountService.prototype.listAccounts = function () {
   return this.store.listAll();
+};
+
+AccountService.prototype.findByAuth = function (email, pin) {
+  var accounts = this.store.listAll();
+  var needle = String(email || '').trim().toLowerCase();
+  for (var i = 0; i < accounts.length; i++) {
+    var account = normalizeAccount(accounts[i]);
+    var auth = account.auth || {};
+    if (String(auth.email || '').trim().toLowerCase() === needle && String(auth.pin || '') === String(pin || '')) {
+      auth.lastLoginAt = nowIso();
+      account.auth = auth;
+      this.store.save(account);
+      return account;
+    }
+  }
+  return null;
+};
+
+AccountService.prototype.createPublicProfile = function (payload) {
+  var email = String(payload.email || '').trim().toLowerCase();
+  var pin = String(payload.pin || '').trim();
+  if (!email || !pin) {
+    var err = new Error('Email and PIN are required.');
+    err.status = 400;
+    throw err;
+  }
+  if (pin.length !== 4) {
+    var pinErr = new Error('PIN must be 4 digits.');
+    pinErr.status = 400;
+    throw pinErr;
+  }
+  var existing = this.findByAuth(email, pin);
+  if (existing) return { account: existing, created: false };
+
+  var all = this.store.listAll();
+  for (var i = 0; i < all.length; i++) {
+    var existingAuth = (normalizeAccount(all[i]).auth || {});
+    if (String(existingAuth.email || '').trim().toLowerCase() === email) {
+      var dupErr = new Error('An account with this email already exists.');
+      dupErr.status = 409;
+      throw dupErr;
+    }
+  }
+
+  var account = createEmptyCustomerAccount();
+  account.customerId = createCustomerId();
+  account.storageKey = createStorageKey(payload.firstName, payload.lastName);
+  account.profile.personal = {
+    title: payload.title || '',
+    firstName: payload.firstName || '',
+    lastName: payload.lastName || '',
+    dob: payload.dob || '',
+    initials: ((payload.firstName || '').charAt(0) + (payload.lastName || '').charAt(0)).toUpperCase(),
+    memberSince: ''
+  };
+  account.profile.contact = {
+    email: email,
+    phone: payload.phone || '',
+    address: payload.address || '',
+    residentSince: payload.residentSince || ''
+  };
+  account.profile.employment = {
+    status: payload.employmentStatus || '',
+    employer: payload.employer || '',
+    jobTitle: payload.jobTitle || '',
+    employmentStart: payload.employmentStart || '',
+    annualIncome: Number(payload.annualIncome || 0),
+    payFrequency: payload.payFrequency || 'Monthly',
+    nextPayDate: payload.nextPayDate || ''
+  };
+  account.auth = {
+    email: email,
+    pin: pin,
+    createdAt: nowIso(),
+    lastLoginAt: null,
+    portalEnabled: false
+  };
+  account.application.stage = 'profile_created';
+  account.application.statusHistory = [{ stage: 'profile_created', at: nowIso(), by: 'public_site' }];
+  this.store.save(account);
+  return { account: account, created: true };
+};
+
+AccountService.prototype.calculatePublicQuote = function (payload) {
+  return decisionService.evaluateApplication(payload);
+};
+
+AccountService.prototype.submitApplication = function (storageKey, payload) {
+  var account = this.getAccount(storageKey);
+  if (!account) {
+    var err = new Error('Account not found: ' + storageKey);
+    err.status = 404;
+    throw err;
+  }
+
+  var aff = payload.affordability || {};
+  account.affordability.incomeExpenditure.raw.monthlyIncome = Number(aff.monthlyIncome || 0);
+  account.affordability.incomeExpenditure.raw.housingCosts = Number(aff.housingCosts || 0);
+  account.affordability.incomeExpenditure.raw.livingCosts = Number(aff.livingCosts || 0);
+  account.affordability.incomeExpenditure.raw.transportCosts = Number(aff.transportCosts || 0);
+  account.affordability.incomeExpenditure.raw.otherDebts = Number(aff.otherDebts || 0);
+  recalcAffordabilityDerived(account);
+
+  account.profile.personal.dob = payload.dob || account.profile.personal.dob;
+  account.profile.contact.address = payload.address || account.profile.contact.address;
+  account.profile.contact.email = payload.email || account.profile.contact.email;
+  account.profile.contact.phone = payload.phone || account.profile.contact.phone;
+  account.profile.employment.status = payload.employmentStatus || account.profile.employment.status;
+  account.profile.employment.employer = payload.employer || account.profile.employment.employer;
+  account.profile.employment.jobTitle = payload.jobTitle || account.profile.employment.jobTitle;
+  account.profile.employment.employmentStart = payload.employmentStart || account.profile.employment.employmentStart;
+  account.profile.employment.annualIncome = Number(payload.annualIncome || account.profile.employment.annualIncome || 0);
+
+  var decision = decisionService.evaluateApplication({
+    amount: payload.amount,
+    termMonths: payload.termMonths,
+    monthlyIncome: aff.monthlyIncome,
+    housingCosts: aff.housingCosts,
+    livingCosts: aff.livingCosts,
+    transportCosts: aff.transportCosts,
+    otherDebts: aff.otherDebts,
+    dob: account.profile.personal.dob,
+    ukResident: !!payload.ukResident,
+    gainfullyEmployed: !!payload.gainfullyEmployed,
+    proxyData: payload.proxyData || {}
+  });
+
+  account.application.stage = decision.stage;
+  account.application.eligibility = {
+    ukResident: !!payload.ukResident,
+    gainfullyEmployed: !!payload.gainfullyEmployed,
+    age: account.profile.personal.dob
+  };
+  account.application.proxyData = payload.proxyData || {};
+  account.application.quote = decision.quote;
+  account.application.requestedLoan = {
+    amount: decision.quote.amount,
+    termMonths: decision.quote.termMonths,
+    apr: decision.quote.apr,
+    purpose: payload.purpose || 'Personal loan'
+  };
+  account.application.submittedAt = nowIso();
+  account.application.decision = {
+    approved: decision.approved,
+    stage: decision.stage,
+    reasons: decision.reasons,
+    riskScore: decision.riskScore,
+    affordability: decision.affordability,
+    decidedAt: nowIso()
+  };
+  account.application.disbursal = {
+    status: decision.approved ? 'awaiting_signature' : 'not_requested',
+    approvedAt: null,
+    approvedBy: null,
+    disbursedAt: null,
+    disbursedBy: null
+  };
+  account.application.statusHistory = account.application.statusHistory || [];
+  account.application.statusHistory.push({ stage: decision.stage, at: nowIso(), by: 'decision_engine' });
+
+  if (decision.approved) {
+    var offerLoan = createEmptyLoan(createApplicationLoanId());
+    offerLoan.loanCore = {
+      principal: decision.quote.amount,
+      apr: decision.quote.apr,
+      termMonths: decision.quote.termMonths,
+      startDate: nowIso(),
+      paidCount: 0
+    };
+    var built = buildSchedule(decision.quote.amount, decision.quote.apr, decision.quote.termMonths, offerLoan.loanCore.startDate, 0);
+    offerLoan.scheduleSnapshot = built.schedule.map(function (row) {
+      return {
+        n: row.n,
+        dueDate: row.dueDate,
+        emi: row.emi,
+        principal: row.principal,
+        interest: row.interest,
+        balance: row.balance,
+        status: row.status,
+        ph: false,
+        pa: false,
+        interestPaid: 0,
+        principalPaid: 0,
+        interestRemaining: row.interest,
+        principalRemaining: row.principal,
+        remainingDue: row.emi
+      };
+    });
+    offerLoan.loanSummary = {
+      emi: built.summary.emi,
+      totalRepayable: built.summary.totalRepayable,
+      totalInterest: built.summary.totalInterest,
+      outstandingBalance: built.summary.outstandingBalance,
+      totalRepaid: 0,
+      totalInterestPaid: 0,
+      totalPrincipalPaid: 0,
+      instalmentsRemaining: built.summary.instalmentsRemaining
+    };
+    account.application.offerPreview = {
+      loanId: offerLoan.loanId,
+      schedule: offerLoan.scheduleSnapshot,
+      summary: offerLoan.loanSummary
+    };
+  } else {
+    account.application.offerPreview = null;
+  }
+
+  this.store.save(account);
+  return { account: account, decision: decision };
+};
+
+AccountService.prototype.signApplication = function (storageKey, payload) {
+  var account = this.getAccount(storageKey);
+  if (!account) {
+    var err = new Error('Account not found: ' + storageKey);
+    err.status = 404;
+    throw err;
+  }
+  if (!account.application || !account.application.decision || !account.application.decision.approved) {
+    var appErr = new Error('No approved application is available to sign.');
+    appErr.status = 422;
+    throw appErr;
+  }
+  if (!payload.acceptedTerms || !payload.acceptedPrivacy) {
+    var consentErr = new Error('Terms and privacy acknowledgements are required.');
+    consentErr.status = 422;
+    throw consentErr;
+  }
+  if (!String(payload.fullName || '').trim()) {
+    var nameErr = new Error('Full name is required to sign the application.');
+    nameErr.status = 422;
+    throw nameErr;
+  }
+  account.application.reviewedAt = nowIso();
+  account.application.signedAt = nowIso();
+  account.application.signature = {
+    fullName: payload.fullName || '',
+    acceptedTerms: !!payload.acceptedTerms,
+    acceptedPrivacy: !!payload.acceptedPrivacy,
+    ipAddress: payload.ipAddress || '',
+    signedAt: nowIso()
+  };
+  account.application.stage = 'signed_pending_disbursal';
+  account.application.disbursal.status = 'pending_ops_approval';
+  account.application.statusHistory = account.application.statusHistory || [];
+  account.application.statusHistory.push({ stage: 'signed_pending_disbursal', at: nowIso(), by: 'customer' });
+  this.store.save(account);
+  return { account: account };
+};
+
+AccountService.prototype.listApplications = function (stage) {
+  return this.store.listAll().map(normalizeAccount).filter(function (account) {
+    if (!account.application || !account.application.stage) return false;
+    return stage ? account.application.stage === stage : true;
+  });
+};
+
+AccountService.prototype.approveDisbursal = function (storageKey, actor) {
+  var account = this.getAccount(storageKey);
+  if (!account) {
+    var err = new Error('Account not found: ' + storageKey);
+    err.status = 404;
+    throw err;
+  }
+  if (!account.application || account.application.stage !== 'signed_pending_disbursal') {
+    var stageErr = new Error('Application is not ready for disbursal approval.');
+    stageErr.status = 422;
+    throw stageErr;
+  }
+  disburseApprovedApplication(account, actor || 'ops_ui');
+  this.store.save(account);
+  return { account: account };
 };
 
 // ── Domain-specific read operations ───────────────────────────────────────

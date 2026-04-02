@@ -14,7 +14,9 @@ function svc(req) {
 
 router.get('/', function (req, res, next) {
   try {
-    var accounts = svc(req).listAccounts();
+    var accounts = svc(req).listAccounts().filter(function (a) {
+      return !!(a.activeLoanId || (a.loans && a.loans.length));
+    });
     var summaries = accounts.map(function (a) {
       var loan = getActiveLoanFromAccount(a);
       var lc = (loan && loan.loanCore) || {};
@@ -34,6 +36,7 @@ router.get('/', function (req, res, next) {
         address: pc.address || '',
         loanId: a.activeLoanId || '',
         loanStatus: se.displayStatus || se.coreStatus || 'active',
+        applicationStage: (a.application && a.application.stage) || '',
         outstanding: (loan && loan.loanSummary && loan.loanSummary.outstandingBalance) || lc.principal || 0,
         originatedAt: (loan && loan.originatedAt) || ''
       };

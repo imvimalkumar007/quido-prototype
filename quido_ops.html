@@ -400,6 +400,10 @@ a{text-decoration:none;color:inherit;cursor:pointer}
               <div class="card-hdr"><span class="card-title">Loan Summary</span></div>
               <div class="card-body-tight" id="loan-summary"></div>
             </div>
+            <div class="card" style="margin-bottom:14px">
+              <div class="card-hdr"><span class="card-title">Pending Disbursal Queue</span><span id="ov-app-count" style="font-size:11px;color:var(--muted)">Loading</span></div>
+              <div class="card-body-tight" id="ov-app-queue"></div>
+            </div>
             <div class="card">
               <div class="card-hdr"><span class="card-title">Quick Actions</span></div>
               <div class="card-body">
@@ -1234,6 +1238,7 @@ var OPS = {
   paidCount: 2, accountStatus: 'active', closedAt: null,
   emi: 0, schedule: [], transactions: [], account: null,
   totalRepaid: 0, outstandingBalance: 0, totalRepayable: 0, instalmentsRemaining: 0,
+  pendingApplications: [],
   activeFilter: 'all',
   allowedActions: [],
   blockedActions: [],
@@ -1653,11 +1658,77 @@ function gotoSec(id) {
   if (renders[id]) renders[id]();
 }
 
+function fetchPendingApplications() {
+  if (!USE_API || !window.fetch) return Promise.resolve([]);
+  return window.fetch(API_BASE.replace(/\/$/, '') + '/public/applications?stage=signed_pending_disbursal', {
+    method: 'GET',
+    headers: { 'Accept': 'application/json' }
+  }).then(function(res) {
+    if (!res.ok) throw new Error('Pending applications request failed: ' + res.status);
+    return res.json();
+  }).then(function(data) {
+    OPS.pendingApplications = (data && data.applications) || [];
+    renderPendingApplications();
+    return OPS.pendingApplications;
+  }).catch(function() {
+    OPS.pendingApplications = [];
+    renderPendingApplications();
+    return [];
+  });
+}
+
+function renderPendingApplications() {
+  var box = document.getElementById('ov-app-queue');
+  var count = document.getElementById('ov-app-count');
+  if (!box || !count) return;
+  count.textContent = OPS.pendingApplications.length ? (OPS.pendingApplications.length + ' waiting') : 'No approvals waiting';
+  if (!OPS.pendingApplications.length) {
+    box.innerHTML = '<div style="padding:8px 0;color:var(--muted);font-size:12px">No signed applications are waiting for disbursal approval right now.</div>';
+    return;
+  }
+  box.innerHTML = OPS.pendingApplications.map(function(app) {
+    var submitted = app.submittedAt ? fmtTs(app.submittedAt) : 'Not submitted';
+    var signed = app.signedAt ? fmtTs(app.signedAt) : 'Awaiting signature';
+    var quote = app.quote || {};
+    return '<div style="padding:12px 0;border-bottom:1px solid #eef2f7">'
+      + '<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">'
+      + '<div>'
+      + '<div style="font-size:12.5px;font-weight:700;color:var(--text)">' + escHtml(app.name || app.email || app.storageKey) + '</div>'
+      + '<div style="font-size:11px;color:var(--muted);margin-top:3px">' + escHtml(app.email || '') + ' · ' + submitted + '</div>'
+      + '<div style="font-size:11px;color:var(--muted);margin-top:2px">Signed: ' + signed + '</div>'
+      + '<div style="font-size:11px;color:var(--text);margin-top:6px;font-weight:600">' + fmt(quote.amount || 0) + ' over ' + (quote.termMonths || '-') + ' months · ' + fmt(quote.emi || 0) + '/month</div>'
+      + '</div>'
+      + '<button class="btn btn-primary btn-xs" onclick="approvePublicDisbursal(\'' + app.storageKey + '\')">Approve</button>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function approvePublicDisbursal(storageKey) {
+  if (!USE_API || !window.fetch || !storageKey) return;
+  window.fetch(API_BASE.replace(/\/$/, '') + '/public/applications/' + storageKey + '/disbursal/approve', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({ actor: 'ops_ui' })
+  }).then(function(res) {
+    if (!res.ok) throw new Error('Approval request failed: ' + res.status);
+    return res.json();
+  }).then(function() {
+    fetchPendingApplications();
+    loadCustomerDirectory();
+    toast('Application approved and disbursed', 'success');
+  }).catch(function(err) {
+    toast(err && err.message ? err.message : 'Unable to approve disbursal right now.', 'error');
+  });
+}
+
 // ═══════════════════════════════════════════════════════
 // RENDER: OVERVIEW
 // ═══════════════════════════════════════════════════════
 function renderOverview() {
   loadState();
+  renderPendingApplications();
+  fetchPendingApplications();
   var remaining = currentInstalmentsRemaining();
   var outstanding = currentOutstanding();
   var repaid = currentTotalRepaid();

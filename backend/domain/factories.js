@@ -304,6 +304,35 @@ function createEmptyCustomerAccount() {
       }
     },
 
+    auth: {
+      email: '',
+      pin: '',
+      createdAt: now,
+      lastLoginAt: null,
+      portalEnabled: false
+    },
+
+    application: {
+      stage: 'profile_incomplete',
+      eligibility: null,
+      quote: null,
+      requestedLoan: null,
+      proxyData: null,
+      submittedAt: null,
+      reviewedAt: null,
+      signedAt: null,
+      signature: null,
+      decision: null,
+      disbursal: {
+        status: 'not_requested',
+        approvedAt: null,
+        approvedBy: null,
+        disbursedAt: null,
+        disbursedBy: null
+      },
+      statusHistory: []
+    },
+
     paymentDetails: {
       card: { type: '', last4: '', expiry: '', collectionDayOfMonth: null, active: false },
       bank: { accountHolder: '', bankName: '', sortCodeMasked: '', accountNumberMasked: '', fundedToDate: '' }
@@ -404,6 +433,13 @@ function createAccountFromSeed(seed) {
     address:       spc.address       || '',
     residentSince: spc.residentSince || ''
   };
+  account.auth = {
+    email:         (seed.credentials && seed.credentials.email) || spc.email || '',
+    pin:           (seed.credentials && seed.credentials.pin) || '',
+    createdAt:     now,
+    lastLoginAt:   null,
+    portalEnabled: true
+  };
 
   var sg = sie.granular || {};
   account.affordability.incomeExpenditure.raw = {
@@ -461,6 +497,12 @@ function createAccountFromSeed(seed) {
 
   account.loans        = [loan];
   account.activeLoanId = loanId;
+  account.application.stage = 'disbursed';
+  account.application.statusHistory = [{
+    stage: 'disbursed',
+    at: now,
+    by: 'seed'
+  }];
 
   return account;
 }

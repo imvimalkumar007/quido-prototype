@@ -6,10 +6,12 @@
 
 const express         = require('express');
 const accountsRouter  = require('./routes/accounts');
+const publicRouter  = require('./routes/public');
 
 const router = express.Router();
 
 router.use('/accounts', accountsRouter);
+router.use('/public', publicRouter);
 
 // Health check
 router.get('/health', function (req, res) {

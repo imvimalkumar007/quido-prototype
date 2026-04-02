@@ -8,6 +8,7 @@ const ROOT_DIR = path.join(BACKEND_DIR, '..');
 const PUBLIC_DIR = path.join(BACKEND_DIR, 'public');
 
 const FILES_TO_COPY = [
+  [path.join(ROOT_DIR, 'quido_home.html'), path.join(PUBLIC_DIR, 'home.html')],
   [path.join(ROOT_DIR, 'quido_loans.html'), path.join(PUBLIC_DIR, 'customer.html')],
   [path.join(ROOT_DIR, 'quido_ops.html'), path.join(PUBLIC_DIR, 'ops.html')]
 ];

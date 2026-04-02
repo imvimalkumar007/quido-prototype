@@ -30,6 +30,7 @@ const accountService = new AccountService(store);
 
 // ── Express setup ───────────────────────────────────────────────────────────
 const app = express();
+const HOME_PAGE = path.join(PUBLIC_DIR, 'home.html');
 const CUSTOMER_PORTAL = path.join(PUBLIC_DIR, 'customer.html');
 const OPS_PORTAL = path.join(PUBLIC_DIR, 'ops.html');
 
@@ -47,7 +48,7 @@ app.use('/api', apiRouter);
 // Public prototype routes
 app.get('/', function (req, res) {
   res.set('Cache-Control', 'no-store');
-  res.sendFile(CUSTOMER_PORTAL);
+  res.sendFile(HOME_PAGE);
 });
 
 app.get('/customer', function (req, res) {
