@@ -138,7 +138,7 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
 .ft-links a:hover{color:#fff}
 .fleg{font-size:9.8px;color:rgba(255,255,255,.6);line-height:1.65;border-top:1px solid rgba(255,255,255,.1);padding-top:16px;margin-top:20px}
 @media (max-width:980px){
-  .hero,.ft-top{grid-template-columns:1fr}
+  .hero{grid-template-columns:1fr}
   .hero-copy h1{font-size:48px}
   .quote-top,.summary-grid,.how-steps,.trust-grid{grid-template-columns:1fr 1fr}
   .hero-copy{padding-top:16px}
@@ -146,10 +146,14 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
 @media (max-width:720px){
   .header-inner,.main{padding-left:14px;padding-right:14px}
   .hero-copy h1{font-size:38px}
-  .quote-top,.grid,.summary-grid,.how-steps,.ft-links,.trust-grid{grid-template-columns:1fr}
+  .quote-top,.grid,.summary-grid,.how-steps,.trust-grid{grid-template-columns:1fr}
   .calc-card,.how-card,.app-shell{border-radius:20px}
   .hero-actions{flex-direction:column;align-items:flex-start}
   .btn-hero-primary,.btn-hero-secondary{width:100%;justify-content:center}
+}
+@media (max-width:480px){
+  .ft-top{grid-template-columns:1fr;gap:18px}
+  .ft-links{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
@@ -294,18 +298,11 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
           <span>Review your offer documents, sign online, and your application moves to final approval. Once approved, funds are transferred the same day.</span>
         </div>
       </div>
-      <div class="apply-cta">
-        <button class="apply-button" type="button" onclick="startApplication()">
-          Start your application
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7.5 3.5 11 7l-3.5 3.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <span class="apply-note">Takes around 5 minutes &middot; No commitment</span>
-      </div>
     </div>
   </section>
 
   <!-- APPLICATION SHELL -->
-  <section class="section" id="application-shell">
+  <section class="section" id="application-shell" style="display:none">
     <div class="app-shell">
       <div class="app-head">
         <h3>Apply online</h3>
@@ -421,10 +418,10 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
   function setMessage(id, kind, text){ var el = document.getElementById(id); if (!el) return; el.className = 'message ' + kind; el.textContent = text; }
   function setActive(name){ ['profile','application','decision','sign'].forEach(function(key){ var pane = document.getElementById('pane-' + key); var chip = document.getElementById('chip-' + key); if (pane) pane.classList.toggle('active', key === name); if (chip) chip.classList.toggle('active', key === name); }); }
   window.goToPane = function(name){ setActive(name); document.getElementById('application-shell').scrollIntoView({behavior:'smooth', block:'start'}); };
-  window.startApplication = function(){ hydrateApplicationFromQuote(); setActive(state.account ? 'application' : 'profile'); document.getElementById('application-shell').scrollIntoView({behavior:'smooth', block:'start'}); };
+  window.startApplication = function(){ var shell = document.getElementById('application-shell'); shell.style.display = 'block'; hydrateApplicationFromQuote(); setActive(state.account ? 'application' : 'profile'); shell.scrollIntoView({behavior:'smooth', block:'start'}); };
   function patchRangeFill(el){ var min = Number(el.min || 0); var max = Number(el.max || 100); var val = Number(el.value || 0); var pct = ((val - min) / (max - min)) * 100; el.style.setProperty('--fill', pct + '%'); }
   function patchQuote(decision){ if (!decision || !decision.quote) return; state.quote = decision; document.getElementById('quote-amount').textContent = money(decision.quote.amount); document.getElementById('quote-term').textContent = decision.quote.termMonths + ' monthly instalments'; document.getElementById('quote-emi').textContent = money(decision.quote.emi); document.getElementById('quote-total').textContent = money(decision.quote.totalRepayable); document.getElementById('quote-policy').textContent = 'Rep. APR ' + decision.policy.apr + '%'; document.getElementById('quote-extra').textContent = 'Updates automatically'; document.getElementById('amount-display').textContent = money(decision.quote.amount); document.getElementById('term-display').textContent = decision.quote.termMonths + ' months'; }
-  async function runCalculator(){ var payload = { amount:Number(document.getElementById('calc-amount').value || 0), termMonths:Number(document.getElementById('calc-term').value || 0), monthlyIncome:2600, housingCosts:0, livingCosts:1100, transportCosts:0, otherDebts:0, dob:'1993-01-01', ukResident:true, gainfullyEmployed:true, proxyData:{ recentDefaults:false, ccjCount:0, missedPaymentsLast6m:0, onElectoralRoll:true, monthsAtAddress:24 } }; try { var result = await postJson('/api/public/quote', payload); patchQuote(result.decision); hydrateApplicationFromQuote(); } catch (err) { setMessage('calc-feedback','error',err.message || 'We could not update the calculator.'); } }
+  function runCalculator(){ var P = Number(document.getElementById('calc-amount').value || 0); var n = Number(document.getElementById('calc-term').value || 0); var apr = 29.9; var r = apr / 1200; var emi = (n > 0 && r > 0) ? (P * r * Math.pow(1+r,n) / (Math.pow(1+r,n)-1)) : (n > 0 ? P/n : 0); var total = emi * n; patchQuote({ quote:{ amount:P, termMonths:n, emi:emi, totalRepayable:total, apr:apr }, policy:{ apr:apr } }); hydrateApplicationFromQuote(); }
   function hydrateApplicationFromQuote(){ document.getElementById('app-amount').value = document.getElementById('calc-amount').value; document.getElementById('app-term').value = document.getElementById('calc-term').value; }
   function updateApplicationSummary(){ var name = state.account ? [state.account.profile.personal.firstName, state.account.profile.personal.lastName].filter(Boolean).join(' ') : 'Not started'; var email = state.account ? ((state.account.auth && state.account.auth.email) || (state.account.profile.contact && state.account.profile.contact.email) || '-') : '-'; document.getElementById('app-summary-name').textContent = name || 'Not started'; document.getElementById('app-summary-email').textContent = email || '-'; if (state.decision && state.decision.quote) document.getElementById('app-summary-quote').textContent = money(state.decision.quote.amount) + ' over ' + state.decision.quote.termMonths + ' months'; else if (state.quote && state.quote.quote) document.getElementById('app-summary-quote').textContent = money(state.quote.quote.amount) + ' over ' + state.quote.quote.termMonths + ' months'; else if (state.quote && state.quote.amount) document.getElementById('app-summary-quote').textContent = money(state.quote.amount) + ' over ' + state.quote.termMonths + ' months'; }
   function populateFromProfile(account){ if (!account) return; var personal = account.profile.personal || {}; var employment = account.profile.employment || {}; document.getElementById('sign-full-name').value = [personal.firstName, personal.lastName].filter(Boolean).join(' '); if (account.application && account.application.quote) { document.getElementById('app-amount').value = account.application.quote.amount || document.getElementById('app-amount').value; document.getElementById('app-term').value = account.application.quote.termMonths || document.getElementById('app-term').value; }
