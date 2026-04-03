@@ -1253,4 +1253,38 @@ AccountService.prototype.resolveAccount = function (storageKey) {
   return buildResolvedAccount(account);
 };
 
+/**
+ * Returns a live-computed summary for every account that has a loan.
+ * Uses buildResolvedAccount (which runs the status engine) rather than
+ * reading stale stored statusEngineState — so the status always reflects
+ * the current state of the loan.
+ */
+AccountService.prototype.listAccountSummaries = function () {
+  return this.listAccounts()
+    .filter(function (a) { return !!(a.activeLoanId || (a.loans && a.loans.length)); })
+    .map(function (a) {
+      var r  = buildResolvedAccount(a);
+      var al = r.activeLoan  || {};
+      var pp = r.profile     || {};
+      var pc = r.contact     || {};
+      return {
+        storageKey:       a.storageKey,
+        customerId:       a.customerId,
+        version:          a.version   || 0,
+        updatedAt:        a.updatedAt || '',
+        name:             pp.fullName || [pp.firstName, pp.lastName].filter(Boolean).join(' '),
+        initials:         pp.initials || '',
+        email:            pc.email    || '',
+        phone:            pc.phone    || '',
+        dob:              pp.dob      || '',
+        address:          pc.address  || '',
+        loanId:           a.activeLoanId || '',
+        loanStatus:       (al.status && al.status.resolvedDisplayStatus) || 'active',
+        applicationStage: (a.application && a.application.stage) || '',
+        outstanding:      (al.summary && al.summary.outstandingBalance) || 0,
+        originatedAt:     al.originatedAt || ''
+      };
+    });
+};
+
 module.exports = AccountService;

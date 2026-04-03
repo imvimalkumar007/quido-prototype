@@ -14,33 +14,7 @@ function svc(req) {
 
 router.get('/', function (req, res, next) {
   try {
-    var accounts = svc(req).listAccounts().filter(function (a) {
-      return !!(a.activeLoanId || (a.loans && a.loans.length));
-    });
-    var summaries = accounts.map(function (a) {
-      var loan = getActiveLoanFromAccount(a);
-      var lc = (loan && loan.loanCore) || {};
-      var se = (loan && loan.statusEngineState) || {};
-      var pp = (a.profile && a.profile.personal) || {};
-      var pc = (a.profile && a.profile.contact) || {};
-      return {
-        storageKey: a.storageKey,
-        customerId: a.customerId,
-        version: a.version || 0,
-        updatedAt: a.updatedAt || '',
-        name: [pp.firstName, pp.lastName].filter(Boolean).join(' '),
-        initials: pp.initials || '',
-        email: pc.email || '',
-        phone: pc.phone || '',
-        dob: pp.dob || '',
-        address: pc.address || '',
-        loanId: a.activeLoanId || '',
-        loanStatus: se.displayStatus || se.coreStatus || 'active',
-        applicationStage: (a.application && a.application.stage) || '',
-        outstanding: (loan && loan.loanSummary && loan.loanSummary.outstandingBalance) || lc.principal || 0,
-        originatedAt: (loan && loan.originatedAt) || ''
-      };
-    });
+    var summaries = svc(req).listAccountSummaries();
     res.json({ accounts: summaries });
   } catch (err) {
     next(err);
@@ -166,13 +140,5 @@ router.post('/:key/commands', function (req, res, next) {
     next(err);
   }
 });
-
-function getActiveLoanFromAccount(account) {
-  var loans = account.loans || [];
-  for (var i = 0; i < loans.length; i++) {
-    if (loans[i].loanId === account.activeLoanId) return loans[i];
-  }
-  return loans[0] || null;
-}
 
 module.exports = router;
