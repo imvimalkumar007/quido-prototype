@@ -161,7 +161,6 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
   .calc-card,.how-card,.app-shell{border-radius:20px}
   .hero-actions{flex-direction:column;align-items:flex-start}
   .btn-hero-primary,.btn-hero-secondary{width:100%;justify-content:center}
-  .contact-strips{grid-template-columns:1fr}
 }
 @media (max-width:480px){
   .hero-copy h1{font-size:30px}
@@ -172,6 +171,7 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
 /* Contact strips */
 .contact-section{margin-top:32px}
 .contact-strips{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:720px){.contact-strips{grid-template-columns:1fr}}
 .cstrip{display:flex;align-items:center;gap:14px;padding:20px 18px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:var(--r-lg);color:#fff;border:none;width:100%;text-align:left;cursor:default;box-shadow:0 6px 20px rgba(26,86,219,.2);text-decoration:none;transition:transform .18s,box-shadow .18s}
 .cstrip:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(26,86,219,.28)}
 .cstrip-icon{width:42px;height:42px;border-radius:11px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0}
