@@ -24,7 +24,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
 .screen{height:100%;display:none;flex-direction:column;background:var(--bg)}
 .screen.active{display:flex}
 .si{display:flex;flex-direction:column;flex:1;overflow-y:hidden;overflow-x:visible}
-.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:8px}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:16px}
 .scroll::-webkit-scrollbar{display:none}
 .scroll.fullbleed-scroll{max-width:none !important;margin-left:0 !important;margin-right:0 !important;width:100%}
 .content-stack{max-width:600px;margin:0 auto;width:100%}
@@ -72,6 +72,25 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
 .sp.sp--arrangement .sd{background:#d97706}
 .sp.sp--forbearance{background:rgba(180,83,9,.15);border-color:rgba(180,83,9,.35);color:#7c2d12}
 .sp.sp--forbearance .sd{background:#b45309}
+/* Badges on the dark blue loan summary card — use opaque backgrounds + white text */
+.hero .sp{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.3);color:#fff}
+.hero .sp .sd{background:#fff}
+.hero .sp.sp--arrears{background:rgba(245,158,11,.75);border-color:rgba(245,158,11,.9)}
+.hero .sp.sp--arrears .sd{background:#fef3c7}
+.hero .sp.sp--default{background:rgba(239,68,68,.8);border-color:rgba(239,68,68,.95)}
+.hero .sp.sp--default .sd{background:#fee2e2}
+.hero .sp.sp--terminated{background:rgba(185,28,28,.8);border-color:rgba(185,28,28,.95)}
+.hero .sp.sp--terminated .sd{background:#fecaca}
+.hero .sp.sp--settled{background:rgba(6,182,212,.7);border-color:rgba(6,182,212,.9)}
+.hero .sp.sp--settled .sd{background:#cffafe}
+.hero .sp.sp--closed{background:rgba(100,116,139,.6);border-color:rgba(100,116,139,.8)}
+.hero .sp.sp--closed .sd{background:#e2e8f0}
+.hero .sp.sp--holiday{background:rgba(139,92,246,.75);border-color:rgba(139,92,246,.9)}
+.hero .sp.sp--holiday .sd{background:#e9d5ff}
+.hero .sp.sp--arrangement{background:rgba(217,119,6,.75);border-color:rgba(217,119,6,.9)}
+.hero .sp.sp--arrangement .sd{background:#fef3c7}
+.hero .sp.sp--forbearance{background:rgba(180,83,9,.75);border-color:rgba(180,83,9,.9)}
+.hero .sp.sp--forbearance .sd{background:#fed7aa}
 .hl{font-size:11px;color:rgba(255,255,255,0.6);text-align:center;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;position:relative}
 .ha{font-size:42px;font-weight:800;text-align:center;color:#fff;margin-bottom:20px;letter-spacing:-1px;position:relative}
 .dr{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative}
