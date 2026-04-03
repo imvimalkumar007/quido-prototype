@@ -41,7 +41,7 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
 .nav-link:hover{color:var(--text);background:#f1f5fb}
 .nav-login{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border:none;padding:10px 20px;border-radius:999px;font-size:13px;font-weight:700;box-shadow:var(--shadow-soft)}
 /* Layout */
-.main{flex:1;max-width:1120px;margin:0 auto;padding:16px 20px 64px;width:100%}
+.main{flex:1;max-width:1120px;margin:0 auto;padding:6px 20px 64px;width:100%}
 /* Hero */
 .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(380px,460px);gap:32px;align-items:start}
 .hero-copy{padding:4px 0 10px}
@@ -232,15 +232,15 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
       <div class="hero-points">
         <div class="hero-point">
           <span class="hp-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#00b865" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span>Check your monthly repayment instantly. No commitment, no credit footprint.</span>
+          <span>Instant repayment check — no commitment, no credit footprint.</span>
         </div>
         <div class="hero-point">
           <span class="hp-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#00b865" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span>Apply online in minutes and receive a decision the same day.</span>
+          <span>Apply in minutes and get a decision the same day.</span>
         </div>
         <div class="hero-point">
           <span class="hp-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#00b865" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span>Funds transferred the same day you're approved, straight to your account.</span>
+          <span>Funds in your account the same day you're approved.</span>
         </div>
       </div>
       <div class="hero-trust">
@@ -494,7 +494,7 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
   function setActive(name){ ['profile','application','decision','sign'].forEach(function(key){ var pane = document.getElementById('pane-' + key); var chip = document.getElementById('chip-' + key); if (pane) pane.classList.toggle('active', key === name); if (chip) chip.classList.toggle('active', key === name); }); }
   window.goToPane = function(name){ setActive(name); document.getElementById('application-shell').scrollIntoView({behavior:'smooth', block:'start'}); };
   window.startApplication = function(){ var shell = document.getElementById('application-shell'); shell.style.display = 'block'; hydrateApplicationFromQuote(); setActive(state.account ? 'application' : 'profile'); shell.scrollIntoView({behavior:'smooth', block:'start'}); };
-  function patchRangeFill(el){ var min = Number(el.min || 0); var max = Number(el.max || 100); var val = Number(el.value || 0); var pct = ((val - min) / (max - min)) * 100; var p = pct.toFixed(2) + '%'; el.style.setProperty('--fill', p); el.style.background = 'linear-gradient(90deg,#00b865 0%,#00b865 ' + p + ',rgba(255,255,255,.22) ' + p + ',rgba(255,255,255,.22) 100%)'; }
+  function patchRangeFill(el){ var min = Number(el.min || 0); var max = Number(el.max || 100); var val = Number(el.value || 0); var pct = ((val - min) / (max - min)) * 100; var p = pct.toFixed(2) + '%'; requestAnimationFrame(function(){ el.style.setProperty('--fill', p); el.style.background = 'linear-gradient(90deg,#00b865 0%,#00b865 ' + p + ',rgba(255,255,255,.22) ' + p + ',rgba(255,255,255,.22) 100%)'; }); }
   var calcRequestId = 0;
   function patchQuote(decision){ if (!decision || !decision.quote) return; state.quote = decision; var repApr = (((decision.policy || {}).repAPR) != null ? decision.policy.repAPR : ((decision.policy || {}).apr)); document.getElementById('quote-amount').textContent = money(decision.quote.amount); document.getElementById('quote-term').textContent = decision.quote.termMonths + ' monthly instalments'; document.getElementById('quote-emi').textContent = money(decision.quote.emi); document.getElementById('quote-total').textContent = money(decision.quote.totalRepayable); document.getElementById('quote-policy').textContent = 'Rep. APR ' + Number(repApr || 0).toFixed(1) + '%'; document.getElementById('quote-extra').textContent = 'Updates automatically'; document.getElementById('amount-display').textContent = money(decision.quote.amount); document.getElementById('term-display').textContent = decision.quote.termMonths + ' months'; }
   async function runCalculator(){ var P = Number(document.getElementById('calc-amount').value || 0); var n = Number(document.getElementById('calc-term').value || 0); var requestId = ++calcRequestId; document.getElementById('quote-extra').textContent = 'Updating quote...'; try { var result = await postJson('/api/public/quote', { amount:P, termMonths:n }); if (requestId !== calcRequestId) return; patchQuote(result.decision || result); hydrateApplicationFromQuote(); } catch (err) { if (requestId !== calcRequestId) return; document.getElementById('quote-extra').textContent = 'We could not update the quote right now.'; } }
