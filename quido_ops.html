@@ -284,6 +284,11 @@ a{text-decoration:none;color:inherit;cursor:pointer}
         Change Customer
       </div>
       <div class="sb-group">Workspace</div>
+      <div class="sb-item" data-sec="sec-pending">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="2" width="11" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 5.5h5M4.5 8h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="11" cy="3" r="2.5" fill="#f59e0b" stroke="var(--sb)" stroke-width="1"/></svg>
+        Pending Applications
+        <span class="sb-badge" id="sb-pending-badge" style="display:none">0</span>
+      </div>
       <div class="sb-item active" data-sec="sec-overview">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1.2" stroke="#93c5fd" stroke-width="1.3"/><rect x="8" y="1" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="8" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/><rect x="8" y="8" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/></svg>
         Overview
@@ -367,6 +372,17 @@ a{text-decoration:none;color:inherit;cursor:pointer}
     </div>
 
     <div class="content">
+
+      <!-- ══ PENDING APPLICATIONS ══ -->
+      <section id="sec-pending" class="section">
+        <div class="sec-hdr">
+          <div class="sec-hdr-left"><h2>Pending Applications</h2><p>Signed applications awaiting disbursal approval</p></div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">Disbursal Queue</span><span id="pending-sec-count" style="font-size:11px;color:var(--muted)">Loading…</span></div>
+          <div class="card-body-tight" id="pending-sec-queue" style="padding:0 18px 12px"></div>
+        </div>
+      </section>
 
       <!-- ══ OVERVIEW ══ -->
       <section id="sec-overview" class="section active">
@@ -1700,31 +1716,40 @@ function fetchPendingApplications() {
   });
 }
 
+function _buildPendingAppHtml(app) {
+  var submitted = app.submittedAt ? fmtTs(app.submittedAt) : 'Not submitted';
+  var signed = app.signedAt ? fmtTs(app.signedAt) : 'Awaiting signature';
+  var quote = app.quote || {};
+  return '<div style="padding:14px 0;border-bottom:1px solid #eef2f7">'
+    + '<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">'
+    + '<div>'
+    + '<div style="font-size:13px;font-weight:700;color:var(--text)">' + escHtml(app.name || app.email || app.storageKey) + '</div>'
+    + '<div style="font-size:11px;color:var(--muted);margin-top:3px">' + escHtml(app.email || '') + ' · Submitted: ' + submitted + '</div>'
+    + '<div style="font-size:11px;color:var(--muted);margin-top:2px">Signed: ' + signed + '</div>'
+    + '<div style="font-size:11.5px;color:var(--text);margin-top:6px;font-weight:600">' + fmt(quote.amount || 0) + ' over ' + (quote.termMonths || '-') + ' months · ' + fmt(quote.emi || 0) + '/month</div>'
+    + '</div>'
+    + '<button class="btn btn-primary btn-xs" onclick="approvePublicDisbursal(\'' + app.storageKey + '\')">Approve</button>'
+    + '</div>'
+    + '</div>';
+}
 function renderPendingApplications() {
+  var n = OPS.pendingApplications.length;
+  var emptyHtml = '<div style="padding:10px 0;color:var(--muted);font-size:12px">No signed applications are waiting for disbursal approval right now.</div>';
+  var listHtml = n ? OPS.pendingApplications.map(_buildPendingAppHtml).join('') : emptyHtml;
+  var countText = n ? (n + ' waiting') : 'None waiting';
+  // Overview card
   var box = document.getElementById('ov-app-queue');
   var count = document.getElementById('ov-app-count');
-  if (!box || !count) return;
-  count.textContent = OPS.pendingApplications.length ? (OPS.pendingApplications.length + ' waiting') : 'No approvals waiting';
-  if (!OPS.pendingApplications.length) {
-    box.innerHTML = '<div style="padding:8px 0;color:var(--muted);font-size:12px">No signed applications are waiting for disbursal approval right now.</div>';
-    return;
-  }
-  box.innerHTML = OPS.pendingApplications.map(function(app) {
-    var submitted = app.submittedAt ? fmtTs(app.submittedAt) : 'Not submitted';
-    var signed = app.signedAt ? fmtTs(app.signedAt) : 'Awaiting signature';
-    var quote = app.quote || {};
-    return '<div style="padding:12px 0;border-bottom:1px solid #eef2f7">'
-      + '<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">'
-      + '<div>'
-      + '<div style="font-size:12.5px;font-weight:700;color:var(--text)">' + escHtml(app.name || app.email || app.storageKey) + '</div>'
-      + '<div style="font-size:11px;color:var(--muted);margin-top:3px">' + escHtml(app.email || '') + ' · ' + submitted + '</div>'
-      + '<div style="font-size:11px;color:var(--muted);margin-top:2px">Signed: ' + signed + '</div>'
-      + '<div style="font-size:11px;color:var(--text);margin-top:6px;font-weight:600">' + fmt(quote.amount || 0) + ' over ' + (quote.termMonths || '-') + ' months · ' + fmt(quote.emi || 0) + '/month</div>'
-      + '</div>'
-      + '<button class="btn btn-primary btn-xs" onclick="approvePublicDisbursal(\'' + app.storageKey + '\')">Approve</button>'
-      + '</div>'
-      + '</div>';
-  }).join('');
+  if (box) box.innerHTML = listHtml;
+  if (count) count.textContent = countText;
+  // Dedicated section
+  var secBox = document.getElementById('pending-sec-queue');
+  var secCount = document.getElementById('pending-sec-count');
+  if (secBox) secBox.innerHTML = listHtml;
+  if (secCount) secCount.textContent = countText;
+  // Sidebar badge
+  var badge = document.getElementById('sb-pending-badge');
+  if (badge) { badge.textContent = n; badge.style.display = n ? '' : 'none'; }
 }
 
 function approvePublicDisbursal(storageKey) {
@@ -1738,8 +1763,11 @@ function approvePublicDisbursal(storageKey) {
     return res.json();
   }).then(function() {
     fetchPendingApplications();
-    loadCustomerDirectory();
     toast('Application approved and disbursed', 'success');
+    // Refresh directory then auto-open the newly disbursed customer
+    loadCustomerDirectory().then(function() {
+      selectCustomer(storageKey);
+    });
   }).catch(function(err) {
     toast(err && err.message ? err.message : 'Unable to approve disbursal right now.', 'error');
   });

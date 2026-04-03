@@ -554,6 +554,15 @@ AccountService.prototype.submitApplication = function (storageKey, payload) {
   account.affordability.incomeExpenditure.raw.livingCosts    = livingCosts;
   account.affordability.incomeExpenditure.raw.transportCosts = transportCosts;
   account.affordability.incomeExpenditure.raw.otherDebts     = otherDebts;
+  // Persist granular I&E if supplied from the application form
+  var gran = payload.granular || {};
+  if (Object.keys(gran).length) {
+    var raw = account.affordability.incomeExpenditure.raw;
+    if (!raw.granular) raw.granular = {};
+    var g = raw.granular;
+    var gKeys = ['incSalary','incSecondary','incBenefits','incOther','expRent','expCouncil','expUtilities','expFood','expTransport','expChildcare','expMobile','expLoans','expCards','expBnpl','expInsurance','expSubs'];
+    gKeys.forEach(function(k){ if (gran[k] !== undefined) g[k] = Number(gran[k]) || 0; });
+  }
   recalcAffordabilityDerived(account);
 
   account.profile.personal.dob = payload.dob || account.profile.personal.dob;
