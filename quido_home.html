@@ -46,12 +46,12 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
 .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(380px,460px);gap:32px;align-items:start}
 .hero-copy{padding:28px 0 10px}
 .eyebrow{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;background:linear-gradient(135deg,#e8f0fe,#dce9fe);color:var(--blue);font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border:1px solid #bfd3f8;box-shadow:0 2px 8px rgba(26,86,219,.1)}
-.hero-copy h1{margin:20px 0 18px;font-size:60px;line-height:.95;letter-spacing:-.06em;font-weight:900;color:var(--text)}
-.h1-accent{background:linear-gradient(135deg,var(--blue),#4f83f5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-copy .lead{margin:0 0 24px;max-width:520px;font-size:17px;line-height:1.72;color:var(--muted)}
+.hero-copy h1{margin:20px 0 18px;font-size:60px;line-height:.95;letter-spacing:-.06em;font-weight:900}.h1-primary{color:var(--blue)}
+.h1-accent{color:var(--green)}
+.hero-copy .lead{margin:0 0 24px;max-width:520px;font-size:15px;line-height:1.65;color:var(--muted)}
 .hero-points{display:grid;gap:12px;margin:0 0 28px}
-.hero-point{display:flex;align-items:flex-start;gap:11px;line-height:1.55;font-size:14.5px;color:#374151}
-.hp-icon{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.hero-point{display:flex;align-items:flex-start;gap:11px;line-height:1.5;font-size:13px;color:#4b5563}
+.hp-icon{width:20px;height:20px;border-radius:50%;background:rgba(0,184,101,.14);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
 .hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
 .btn-hero-primary{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:16px;padding:15px 26px;font-size:15px;font-weight:800;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;box-shadow:0 8px 28px rgba(26,86,219,.26)}
 .btn-hero-secondary{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--border);border-radius:16px;padding:14px 20px;font-size:14px;font-weight:700;background:var(--surface);color:var(--text)}
@@ -59,30 +59,30 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
 .ht-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-weight:600}
 .ht-dot{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0}
 /* Calculator card */
-.calc-card{background:var(--surface);border:1px solid #d8e5fa;border-radius:var(--r-xl);box-shadow:0 32px 80px rgba(26,86,219,.14),0 4px 20px rgba(15,24,40,.07);overflow:hidden;position:relative}
-.calc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:var(--r-xl) var(--r-xl) 0 0}
+.calc-card{background:linear-gradient(160deg,var(--blue) 0%,var(--blue-dark) 78%);border:1px solid rgba(13,59,158,.7);border-radius:var(--r-xl);box-shadow:0 32px 80px rgba(26,86,219,.18),0 4px 20px rgba(15,24,40,.08);overflow:hidden;position:relative}
+.calc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),#8df0bf);border-radius:var(--r-xl) var(--r-xl) 0 0}
 .calc-card-head{padding:22px 22px 0}
-.calc-card-head h2{margin:0 0 5px;font-size:22px;font-weight:800;letter-spacing:-.04em}
-.calc-card-head p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+.calc-card-head h2{margin:0 0 5px;font-size:22px;font-weight:800;letter-spacing:-.04em;color:#fff}
+.calc-card-head p{margin:0;color:rgba(255,255,255,.76);font-size:13px;line-height:1.5}
 .calc-body{padding:20px 22px 22px;display:grid;gap:18px}
 .quote-top{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.metric{padding:13px 12px;border-radius:14px;background:linear-gradient(160deg,#f6f9ff,#eef4ff);border:1px solid #dce8fb}
-.metric{display:flex;flex-direction:column}.metric span{display:block;font-size:9.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;min-height:26px}
-.metric strong{display:block;font-size:23px;font-weight:800;letter-spacing:-.04em;color:var(--text)}
-.metric small{display:block;margin-top:4px;font-size:10.5px;color:var(--muted);line-height:1.4}
+.metric{padding:13px 12px;border-radius:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18)}
+.metric{display:flex;flex-direction:column}.metric span{display:block;font-size:9.5px;font-weight:800;color:rgba(255,255,255,.72);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;min-height:26px}
+.metric strong{display:block;font-size:23px;font-weight:800;letter-spacing:-.04em;color:#fff}
+.metric small{display:block;margin-top:4px;font-size:10.5px;color:rgba(255,255,255,.68);line-height:1.4}
 .slider-stack{display:grid;gap:18px}.slider-group{display:grid;gap:10px}
 .slider-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
-.slider-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-.slider-value{font-size:28px;font-weight:800;letter-spacing:-.05em;color:var(--text)}
+.slider-label{font-size:11px;font-weight:800;color:rgba(255,255,255,.8);text-transform:uppercase;letter-spacing:.08em}
+.slider-value{font-size:28px;font-weight:800;letter-spacing:-.05em;color:#fff}
 .range-wrap{display:grid;gap:8px}
-.range-input{appearance:none;width:100%;height:8px;border-radius:999px;background:linear-gradient(90deg,var(--blue) 0%,var(--blue) var(--fill,50%),#dbe5f6 var(--fill,50%),#dbe5f6 100%);outline:none;touch-action:pan-y;cursor:pointer}
-.range-input::-webkit-slider-thumb{appearance:none;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));border:3px solid #fff;box-shadow:0 4px 12px rgba(26,86,219,.22)}
-.range-input::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));border:3px solid #fff;box-shadow:0 4px 12px rgba(26,86,219,.22)}
-.slider-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--dim)}
-.calc-cta{display:grid;gap:8px}
-.btn-calc-apply{width:100%;border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:800;background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;box-shadow:0 8px 24px rgba(0,184,101,.28);transition:transform .15s,box-shadow .15s}
+.range-input{appearance:none;width:100%;height:8px;border-radius:999px;background:linear-gradient(90deg,var(--green) 0%,var(--green) var(--fill,50%),rgba(255,255,255,.22) var(--fill,50%),rgba(255,255,255,.22) 100%);outline:none;touch-action:pan-y;cursor:pointer}
+.range-input::-webkit-slider-thumb{appearance:none;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-dark));border:3px solid #fff;box-shadow:0 4px 12px rgba(0,184,101,.28)}
+.range-input::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-dark));border:3px solid #fff;box-shadow:0 4px 12px rgba(0,184,101,.28)}
+.slider-scale{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.62)}
+.calc-cta{display:grid;gap:10px;justify-items:center;text-align:center}
+.btn-calc-apply{width:min(100%,240px);border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:800;background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;box-shadow:0 8px 24px rgba(0,184,101,.28);transition:transform .15s,box-shadow .15s}
 .btn-calc-apply:hover{transform:translateY(-1px);box-shadow:0 12px 32px rgba(0,184,101,.36)}
-.calc-rep{font-size:11px;color:var(--dim);text-align:center;line-height:1.55;margin:0}
+.calc-rep{font-size:11px;color:rgba(255,255,255,.68);text-align:center;line-height:1.55;margin:0}
 /* Trust strip */
 .trust-strip{margin-top:28px}
 .trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
@@ -104,7 +104,7 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
 .how-step-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--blue),var(--green));color:#fff;font-size:13px;font-weight:800;margin-bottom:14px}
 .how-step strong{display:block;font-size:15px;font-weight:800;margin-bottom:7px;color:var(--text)}
 .how-step span{display:block;font-size:13px;line-height:1.65;color:var(--muted)}
-.apply-cta{margin-top:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.apply-cta{display:none}
 .apply-button{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:16px;padding:14px 24px;font-size:14px;font-weight:800;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;box-shadow:var(--shadow-soft)}
 .apply-note{font-size:13px;color:var(--muted)}
 /* Application shell */
@@ -232,19 +232,19 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
         <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#1a56db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         FCA Authorised Lender
       </div>
-      <h1>Personal loans,<br><span class="h1-accent">done right.</span></h1>
+      <h1><span class="h1-primary">Personal loans,</span><br><span class="h1-accent">done right.</span></h1>
       <p class="lead">See your exact monthly repayment before you apply. No hidden fees, no surprises. Clear pricing, fast decisions, and a straightforward experience from start to finish.</p>
       <div class="hero-points">
         <div class="hero-point">
-          <span class="hp-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="hp-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#00b865" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <span>Check your monthly repayment instantly. No commitment, no credit footprint.</span>
         </div>
         <div class="hero-point">
-          <span class="hp-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="hp-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#00b865" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <span>Apply online in minutes and receive a decision the same day.</span>
         </div>
         <div class="hero-point">
-          <span class="hp-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="hp-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#00b865" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <span>Funds transferred the same day you're approved, straight to your account.</span>
         </div>
       </div>
@@ -278,7 +278,7 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
           
         </div>
         <div class="calc-cta">
-          
+          <button class="btn-calc-apply" type="button" onclick="startApplication()">Apply now</button>
           <p class="calc-rep">Representative example: £1,500 over 12 months at 29.9% APR.<br>Monthly repayment £147.85. Total repayable £1,774.20.</p>
         </div>
       </div>
