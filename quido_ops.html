@@ -1781,8 +1781,7 @@ function renderOverview() {
       var scColor = sc >= 70 ? 'var(--green)' : sc >= 50 ? 'var(--amber,#b45309)' : 'var(--red,#dc2626)';
       var scLabel = sc >= 70 ? 'Low risk' : sc >= 50 ? 'Medium risk' : sc >= 30 ? 'Higher risk' : 'Declined';
       var aprLabel = appDec.quote ? appDec.quote.apr + '% APR' : '';
-      var tierLabel = appDec.aprTier === 'preferential' ? 'Preferential rate' : appDec.aprTier === 'standard_plus' ? 'Standard+ rate' : appDec.aprTier === 'standard' ? 'Standard rate' : '';
-      if (riskTag) riskTag.textContent = aprLabel + (tierLabel ? ' \u00b7 ' + tierLabel : '');
+      if (riskTag) riskTag.textContent = aprLabel;
       var breakdown = appDec.scoreBreakdown || [];
       var bkHtml = breakdown.length
         ? breakdown.map(function(b){ return '<div class="kv" style="padding:3px 0"><span class="kv-k" style="font-size:11.5px">'+b.factor+'</span><span class="kv-v" style="font-size:11.5px;color:var(--red,#dc2626)">'+b.impact+'</span></div>'; }).join('')

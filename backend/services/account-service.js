@@ -603,7 +603,6 @@ AccountService.prototype.submitApplication = function (storageKey, payload) {
     reasons:        decision.reasons,
     riskScore:      decision.riskScore,
     scoreBreakdown: decision.scoreBreakdown,
-    aprTier:        decision.aprTier,
     affordability:  decision.affordability,
     decidedAt:      nowIso(),
   };

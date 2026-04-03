@@ -16,16 +16,8 @@ const MIN_POST_EMI_RESIDUAL  = 150;   // £/month left after paying EMI
 const MAX_EMI_TO_DISPOSABLE  = 0.45;  // EMI / disposable income hard cap
 const MIN_EMPLOYMENT_MONTHS  = 3;     // must have been in role ≥ 3 months
 
-// ── Representative APR (used in marketing and fallback display) ───────────────
-const REP_APR = 29.9;
-
-// ── Risk-based APR tiers (applied on approval, descending score order) ────────
-const APR_TIERS = [
-  { minScore: 70, apr: 24.9, label: 'preferential' },
-  { minScore: 50, apr: 29.9, label: 'standard'     },
-  { minScore: 30, apr: 34.9, label: 'standard_plus' },
-  // score < 30 → no tier offered → decline
-];
+// ── Fixed APR ─────────────────────────────────────────────────────────────────
+const REP_APR = 29.9;   // single fixed rate applied to all approved loans
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -79,13 +71,6 @@ function buildQuote(amount, termMonths, apr) {
     totalRepayable: built.summary.totalRepayable,
     totalInterest:  built.summary.totalInterest,
   };
-}
-
-function selectAPR(riskScore) {
-  for (var i = 0; i < APR_TIERS.length; i++) {
-    if (riskScore >= APR_TIERS[i].minScore) return APR_TIERS[i];
-  }
-  return null; // score too low — no rate can be offered
 }
 
 // ── Risk scoring ──────────────────────────────────────────────────────────────
@@ -207,15 +192,8 @@ function evaluateApplication(input) {
     postEmiResidual:      postEmiResidual,
   });
 
-  // ── APR selection ─────────────────────────────────────────────────────────
-  var aprTierObj = selectAPR(scored.score);
-  if (reasons.length === 0 && aprTierObj === null) {
-    decline('Risk profile does not currently meet our lending criteria.');
-  }
-
   var approved = reasons.length === 0;
-  var finalAPR = approved ? aprTierObj.apr : REP_APR;
-  var quote    = buildQuote(amount, termMonths, finalAPR);
+  var quote    = buildQuote(amount, termMonths, REP_APR);
 
   return {
     stage:          approved ? 'approved_pending_signature' : 'declined',
@@ -225,7 +203,6 @@ function evaluateApplication(input) {
     affordability:  aff,
     riskScore:      scored.score,
     scoreBreakdown: scored.breakdown,
-    aprTier:        approved ? aprTierObj.label : null,
     policy: {
       minAmount:      MIN_AMOUNT,
       maxAmount:      MAX_AMOUNT,
