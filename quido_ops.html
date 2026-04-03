@@ -617,7 +617,20 @@ a{text-decoration:none;color:inherit;cursor:pointer}
             <div class="action-card-desc">Pause the next instalment. Interest accrues and is added to the outstanding balance.</div>
 
             <div id="ops-ph-step-init">
-              <button class="btn btn-warning btn-sm btn-block" onclick="opsInitPHFlow()">Grant Payment Holiday</button>
+              <div id="ops-ph-active-panel" style="display:none;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;margin-bottom:10px">
+                <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:8px">
+                  <div>
+                    <div style="font-size:12px;font-weight:700;color:#7c3aed;margin-bottom:3px">Active payment holiday</div>
+                    <div id="ops-ph-active-summary" style="font-size:12px;color:var(--text);font-weight:600"></div>
+                  </div>
+                  <span style="padding:4px 8px;border-radius:999px;background:#ede9fe;color:#5b21b6;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em">Live</span>
+                </div>
+                <div id="ops-ph-active-meta" style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:12px"></div>
+                <button class="btn btn-danger btn-sm btn-block" onclick="opsRemovePH()">Remove Payment Holiday</button>
+              </div>
+              <div id="ops-ph-empty-panel">
+                <button class="btn btn-warning btn-sm btn-block" onclick="opsInitPHFlow()">Grant Payment Holiday</button>
+              </div>
             </div>
 
             <div id="ops-ph-step-ineligible" style="display:none">
@@ -2117,16 +2130,24 @@ function opsInitPHFlow() {
   loadState();
   var activePH = OPS.account && OPS.account.arrangements && OPS.account.arrangements.paymentHoliday;
   if (activePH && activePH.active) {
-    document.getElementById('ops-ph-ineligible-msg').innerHTML =
-      '<div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;margin-bottom:12px;text-align:left">'
-      + '<div class="kv"><span class="kv-k">Holiday instalment</span><span class="kv-v">Instalment ' + (activePH.instalmentN || OPS.paidCount) + '</span></div>'
-      + '<div class="kv"><span class="kv-k">Holiday month</span><span class="kv-v">' + shortDate(activePH.startDate || activePH.endDate || new Date()) + '</span></div>'
-      + '<div class="kv"><span class="kv-k">Reason</span><span class="kv-v">' + escHtml(activePH.reason || 'Not recorded') + '</span></div>'
-      + '</div>'
-      + '<button class="btn btn-danger btn-sm btn-block" onclick="opsRemovePH()">Remove Payment Holiday</button>'
-      + '<div style="font-size:11px;color:var(--muted);margin-top:8px;text-align:left">This restores the skipped instalment and reverts the account to its underlying status. If that instalment is already overdue, the account will move back into arrears automatically.</div>';
-    opsShowPHStep('ineligible'); return;
+    var summaryEl = document.getElementById('ops-ph-active-summary');
+    var metaEl    = document.getElementById('ops-ph-active-meta');
+    if (summaryEl) summaryEl.textContent = 'Instalment ' + (activePH.instalmentN || OPS.paidCount) + ' paused';
+    if (metaEl) metaEl.innerHTML =
+        'Holiday month: <strong>' + shortDate(activePH.startDate || activePH.endDate || new Date()) + '</strong><br>'
+      + 'Reason: <strong>' + escHtml(activePH.reason || 'Not recorded') + '</strong><br>'
+      + '<span style="color:var(--muted);font-size:10.5px">Removing this holiday restores the skipped instalment. If it is already overdue the account will move back into arrears.</span>';
+    var activePanel = document.getElementById('ops-ph-active-panel');
+    var emptyPanel  = document.getElementById('ops-ph-empty-panel');
+    if (activePanel) activePanel.style.display = '';
+    if (emptyPanel)  emptyPanel.style.display  = 'none';
+    opsShowPHStep('init'); return;
   }
+  // No active PH — reset to grant flow
+  var activePanel2 = document.getElementById('ops-ph-active-panel');
+  var emptyPanel2  = document.getElementById('ops-ph-empty-panel');
+  if (activePanel2) activePanel2.style.display = 'none';
+  if (emptyPanel2)  emptyPanel2.style.display  = '';
   if (OPS.blockedActions && OPS.blockedActions.indexOf('apply_payment_holiday') !== -1) {
     document.getElementById('ops-ph-ineligible-msg').textContent =
       OPS.actionReasons['apply_payment_holiday'] || 'Payment holiday is not available on this account.';
@@ -2198,10 +2219,14 @@ function opsApplyPH() {
   toast('Payment holiday applied to instalment ' + (idx + 1) + '. Loan extended by 1 month.', 'success');
 }
 function opsRemovePH() {
+  if (!window.confirm('Remove the active payment holiday? The skipped instalment will become due again.')) return;
   syncToCustomer('payment_holiday_removed', {});
   refreshOpsWorkspace();
-  document.getElementById('ops-ph-ineligible-msg').textContent = 'Payment holiday removed. The skipped instalment is due again.';
-  opsShowPHStep('ineligible');
+  var activePanel = document.getElementById('ops-ph-active-panel');
+  var emptyPanel  = document.getElementById('ops-ph-empty-panel');
+  if (activePanel) activePanel.style.display = 'none';
+  if (emptyPanel)  emptyPanel.style.display  = '';
+  opsShowPHStep('init');
   toast('Payment holiday removed. The skipped instalment is due again.', 'success');
 }
 function changePayDate() {

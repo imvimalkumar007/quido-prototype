@@ -828,53 +828,68 @@ AccountService.prototype.getSchedule = function (storageKey, loanId) {
  * @returns {{ account: Object, source: 'backend'|'client'|'seed' }}
  */
 AccountService.prototype.syncAccount = function (storageKey, clientAccount, seed) {
+  var now = new Date();
   var backendAccount = this.store.findByKey(storageKey);
 
   if (backendAccount) {
     var repairedBackend = normalizeAccount(backendAccount, seed);
     repairedBackend.storageKey = storageKey;
     backendAccount = repairedBackend;
-    this.store.save(repairedBackend);
+    // Note: do not save yet — we save the final winner below with fresh status
   }
+
+  var winner;
+  var source;
 
   // Case 1: backend has nothing
   if (!backendAccount) {
     if (clientAccount && clientAccount.storageKey) {
-      // Normalise to v3, ensure storageKey is set
-      var normalised = normalizeAccount(clientAccount, seed);
-      normalised.storageKey = storageKey;
-      this.store.save(normalised);
-      return { account: normalised, source: 'client' };
+      winner = normalizeAccount(clientAccount, seed);
+      winner.storageKey = storageKey;
+      source = 'client';
+    } else if (seed) {
+      winner = createAccountFromSeed(seed);
+      winner.storageKey = storageKey;
+      source = 'seed';
+    } else {
+      winner = createEmptyCustomerAccount();
+      winner.storageKey = storageKey;
+      source = 'seed';
     }
-    if (seed) {
-      var fromSeed = createAccountFromSeed(seed);
-      fromSeed.storageKey = storageKey;
-      this.store.save(fromSeed);
-      return { account: fromSeed, source: 'seed' };
+  } else {
+    // Case 2: backend has a newer or equal version
+    var backendVer = backendAccount.version || 0;
+    var clientVer  = clientAccount ? (clientAccount.version || 0) : -1;
+
+    if (backendVer >= clientVer) {
+      winner = backendAccount;
+      source = 'backend';
+    } else if (clientAccount && clientAccount.storageKey) {
+      // Case 3: client is newer — accept client
+      winner = normalizeAccount(clientAccount, seed);
+      winner.storageKey = storageKey;
+      source = 'client';
+    } else {
+      winner = backendAccount;
+      source = 'backend';
     }
-    var empty = createEmptyCustomerAccount();
-    empty.storageKey = storageKey;
-    this.store.save(empty);
-    return { account: empty, source: 'seed' };
   }
 
-  // Case 2: backend has a newer or equal version
-  var backendVer = backendAccount.version || 0;
-  var clientVer  = clientAccount ? (clientAccount.version || 0) : -1;
-
-  if (backendVer >= clientVer) {
-    return { account: backendAccount, source: 'backend' };
+  // Always refresh status engine on every loan so the stored state is never stale.
+  // This is the single source of truth — the frontend must never rely on cached
+  // statusEngineState from a previous write.
+  var winnerLoans      = winner.loans || [];
+  var winnerActiveLoanId = winner.activeLoanId;
+  for (var i = 0; i < winnerLoans.length; i++) {
+    var l = winnerLoans[i];
+    if (!winnerActiveLoanId || l.loanId === winnerActiveLoanId) {
+      try { runStatusEngine(l, now); } catch (e) { /* degrade gracefully */ }
+      if (!winnerActiveLoanId) break;
+    }
   }
 
-  // Case 3: client is newer — accept client, persist to backend
-  if (clientAccount && clientAccount.storageKey) {
-    var accepted = normalizeAccount(clientAccount, seed);
-    accepted.storageKey = storageKey;
-    this.store.save(accepted);
-    return { account: accepted, source: 'client' };
-  }
-
-  return { account: backendAccount, source: 'backend' };
+  this.store.save(winner);
+  return { account: winner, source: source };
 };
 
 // ── Command dispatch ──────────────────────────────────────────────────────
