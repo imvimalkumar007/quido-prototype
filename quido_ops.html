@@ -1967,6 +1967,7 @@ function renderActions() {
   loadState();
   document.querySelectorAll('input[name="acct-status"]').forEach(function(r){ r.checked=(r.value===OPS.accountStatus); });
   opsRenderPAState();
+  opsRenderPHState();
 }
 
 // ═══════════════════════════════════════════════════════
@@ -2118,7 +2119,44 @@ var OPS_PH_REASONS = [
 var opsPHReason = '';
 var OPS_PH_STEPS = ['init','ineligible','reason','credit','confirm','applied'];
 
+function opsGetActivePH() {
+  if (!_store || !_store.getState) return null;
+  try {
+    var st = _store.getState();
+    if (!st) return null;
+    var loan = (Quido.accountStateResolver && Quido.accountStateResolver.getActiveLoan)
+      ? Quido.accountStateResolver.getActiveLoan(st)
+      : ((st.loans && st.loans[0]) || null);
+    var ph = loan && loan.arrangements && loan.arrangements.paymentHoliday;
+    return (ph && ph.active) ? ph : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function opsRenderPHState() {
+  var activePanel = document.getElementById('ops-ph-active-panel');
+  var emptyPanel  = document.getElementById('ops-ph-empty-panel');
+  var summaryEl   = document.getElementById('ops-ph-active-summary');
+  var metaEl      = document.getElementById('ops-ph-active-meta');
+  if (!activePanel || !emptyPanel) return;
+  var ph = opsGetActivePH();
+  if (!ph) {
+    activePanel.style.display = 'none';
+    emptyPanel.style.display = '';
+    return;
+  }
+  activePanel.style.display = '';
+  emptyPanel.style.display = 'none';
+  if (summaryEl) summaryEl.textContent = 'Instalment ' + (ph.instalmentN || OPS.paidCount) + ' paused';
+  if (metaEl) metaEl.innerHTML =
+      'Holiday month: <strong>' + shortDate(ph.startDate || ph.endDate || new Date()) + '</strong><br>'
+    + 'Reason: <strong>' + escHtml(ph.reason || 'Not recorded') + '</strong><br>'
+    + '<span style="color:var(--muted);font-size:10.5px">Removing this holiday restores the skipped instalment. If it is already overdue the account will move back into arrears.</span>';
+}
+
 function opsShowPHStep(name) {
+  if (name === 'init') opsRenderPHState();
   for (var i = 0; i < OPS_PH_STEPS.length; i++) {
     var el = document.getElementById('ops-ph-step-' + OPS_PH_STEPS[i]);
     if (el) el.style.display = OPS_PH_STEPS[i] === name ? '' : 'none';
@@ -2128,21 +2166,8 @@ function opsShowPHStep(name) {
 function opsInitPHFlow() {
   opsPHReason = '';
   loadState();
-  var activePH = OPS.account && OPS.account.arrangements && OPS.account.arrangements.paymentHoliday;
-  if (activePH && activePH.active) {
-    var summaryEl = document.getElementById('ops-ph-active-summary');
-    var metaEl    = document.getElementById('ops-ph-active-meta');
-    if (summaryEl) summaryEl.textContent = 'Instalment ' + (activePH.instalmentN || OPS.paidCount) + ' paused';
-    if (metaEl) metaEl.innerHTML =
-        'Holiday month: <strong>' + shortDate(activePH.startDate || activePH.endDate || new Date()) + '</strong><br>'
-      + 'Reason: <strong>' + escHtml(activePH.reason || 'Not recorded') + '</strong><br>'
-      + '<span style="color:var(--muted);font-size:10.5px">Removing this holiday restores the skipped instalment. If it is already overdue the account will move back into arrears.</span>';
-    var activePanel = document.getElementById('ops-ph-active-panel');
-    var emptyPanel  = document.getElementById('ops-ph-empty-panel');
-    if (activePanel) activePanel.style.display = '';
-    if (emptyPanel)  emptyPanel.style.display  = 'none';
-    opsShowPHStep('init'); return;
-  }
+  opsRenderPHState();
+  if (opsGetActivePH()) { opsShowPHStep('init'); return; }
   // No active PH — reset to grant flow
   var activePanel2 = document.getElementById('ops-ph-active-panel');
   var emptyPanel2  = document.getElementById('ops-ph-empty-panel');
