@@ -240,6 +240,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
     </button>
     <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
       <span id="ops-agent-badge" style="font-size:11px;color:var(--sb-text);background:rgba(255,255,255,.06);border-radius:6px;padding:4px 10px"></span>
+      <button onclick="document.getElementById('ops-cust-selector').style.display='none';gotoSec('sec-pending');" style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.35);border-radius:6px;color:#fbbf24;font-size:11px;font-weight:700;padding:5px 12px;cursor:pointer;display:flex;align-items:center;gap:6px"><svg width="12" height="12" viewBox="0 0 14 14" fill="none" style="flex-shrink:0"><rect x="1.5" y="2" width="11" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 5.5h5M4.5 8h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Pending Applications<span id="sel-pending-badge" style="display:none;background:#f59e0b;color:#fff;border-radius:4px;padding:0 5px;font-size:10px">0</span></button>
       <button onclick="opsLogout()" style="background:transparent;border:1px solid rgba(255,255,255,.18);border-radius:6px;color:var(--sb-text);font-size:11px;padding:5px 12px;cursor:pointer;transition:color .15s" onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='var(--sb-text)'">Sign out</button>
     </div>
   </div>
@@ -1750,6 +1751,9 @@ function renderPendingApplications() {
   // Sidebar badge
   var badge = document.getElementById('sb-pending-badge');
   if (badge) { badge.textContent = n; badge.style.display = n ? '' : 'none'; }
+  // Selector overlay badge
+  var selBadge = document.getElementById('sel-pending-badge');
+  if (selBadge) { selBadge.textContent = n; selBadge.style.display = n ? '' : 'none'; }
 }
 
 function approvePublicDisbursal(storageKey) {
@@ -2961,7 +2965,12 @@ function loadCustomerDirectory() {
     return res.json();
   }).then(function(data) {
     var accounts = (data && data.accounts) || [];
-    if (!accounts.length) accounts = getFallbackDirectoryAccounts();
+    // Always supplement with CUSTOMER_REGISTRY seed entries not present in the API response
+    var fallback = getFallbackDirectoryAccounts();
+    var apiKeys = {};
+    accounts.forEach(function(a){ if (a.storageKey) apiKeys[a.storageKey] = true; });
+    fallback.forEach(function(f){ if (!apiKeys[f.storageKey]) accounts.push(f); });
+    if (!accounts.length) accounts = fallback;
     setDirectoryAccounts(accounts);
     buildCustDirectory();
     return DIRECTORY_ACCOUNTS;
