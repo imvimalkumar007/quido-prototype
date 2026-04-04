@@ -91,7 +91,7 @@ function buildSchedule(principal, apr, termMonths, startDate, paidCount) {
 
   var outstandingBalance = rows
     .filter(function (r) { return r.status !== 'paid'; })
-    .reduce(function (acc, r) { return acc + r.principal; }, 0);
+    .reduce(function (acc, r) { return acc + r.emi; }, 0);
 
   var instalmentsRemaining = rows.filter(function (r) { return r.status !== 'paid'; }).length;
   var totalRepayable       = emi * termMonths;

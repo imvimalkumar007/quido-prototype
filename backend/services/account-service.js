@@ -707,10 +707,42 @@ AccountService.prototype.signApplication = function (storageKey, payload) {
     ipAddress: payload.ipAddress || '',
     signedAt: nowIso()
   };
+  // Store bank details provided at signing
+  if (payload.bank && payload.bank.accountNumber) {
+    account.paymentDetails = account.paymentDetails || {};
+    account.paymentDetails.bank = Object.assign(account.paymentDetails.bank || {}, {
+      accountHolder:       String(payload.bank.accountHolder || '').trim(),
+      bankName:            String(payload.bank.bankName || '').trim(),
+      sortCode:            String(payload.bank.sortCode || '').trim(),
+      accountNumber:       String(payload.bank.accountNumber || '').trim(),
+      accountNumberMasked: '····' + String(payload.bank.accountNumber || '').slice(-4),
+      sortCodeMasked:      String(payload.bank.sortCode || '').replace(/\d(?=\d{2})/g, '·'),
+      fundedToDate:        null
+    });
+  }
   account.application.stage = 'signed_pending_disbursal';
   account.application.disbursal.status = 'pending_ops_approval';
   account.application.statusHistory = account.application.statusHistory || [];
   account.application.statusHistory.push({ stage: 'signed_pending_disbursal', at: nowIso(), by: 'customer' });
+  this.store.save(account);
+  return { account: account };
+};
+
+AccountService.prototype.saveCardDetails = function (storageKey, card) {
+  var account = this.getAccount(storageKey);
+  if (!account) { var e = new Error('Account not found.'); e.status = 404; throw e; }
+  var raw = String(card.cardNumber || '').replace(/\s/g, '');
+  if (!raw || raw.length < 13) { var e2 = new Error('A valid card number is required.'); e2.status = 400; throw e2; }
+  account.paymentDetails = account.paymentDetails || {};
+  account.paymentDetails.card = {
+    type:                card.cardType || 'Debit',
+    last4:               raw.slice(-4),
+    cardNumberMasked:    '····  ····  ····  ' + raw.slice(-4),
+    expiry:              String(card.expiry || '').trim(),
+    cardHolder:          String(card.cardHolder || '').trim(),
+    collectionDayOfMonth: 1,
+    active:              true
+  };
   this.store.save(account);
   return { account: account };
 };

@@ -85,6 +85,12 @@ router.post('/applications/:key/sign', function (req, res, next) {
   }
 });
 
+router.post('/applications/:key/card', function (req, res, next) {
+  try {
+    res.json(svc(req).saveCardDetails(req.params.key, req.body || {}));
+  } catch (err) { next(err); }
+});
+
 router.post('/applications/:key/disbursal/approve', function (req, res, next) {
   try {
     res.json(svc(req).approveDisbursal(req.params.key, (req.body && req.body.actor) || 'ops_ui'));
