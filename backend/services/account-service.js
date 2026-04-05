@@ -466,61 +466,155 @@ AccountService.prototype.findByAuth = function (email, pin) {
 
 AccountService.prototype.createPublicProfile = function (payload) {
   var email = String(payload.email || '').trim().toLowerCase();
-  var pin = String(payload.pin || '').trim();
-  if (!email || !pin) {
-    var err = new Error('Email and PIN are required.');
+  // Accept either password (new 3-step form) or legacy pin
+  var password = String(payload.password || '').trim();
+  var pin      = String(payload.pin || '').trim();
+
+  if (!email) {
+    var err = new Error('Email is required.');
     err.status = 400;
     throw err;
   }
-  if (pin.length !== 4) {
-    var pinErr = new Error('PIN must be 4 digits.');
-    pinErr.status = 400;
-    throw pinErr;
+  if (!password && !pin) {
+    var credErr = new Error('A password or PIN is required.');
+    credErr.status = 400;
+    throw credErr;
   }
-  var existing = this.findByAuth(email, pin);
-  if (existing) return { account: existing, created: false };
+  if (password) {
+    if (password.length < 8 || !/\d/.test(password)) {
+      var pwErr = new Error('Password must be at least 8 characters and contain at least one digit.');
+      pwErr.status = 400;
+      throw pwErr;
+    }
+  } else {
+    if (pin.length !== 4) {
+      var pinErr = new Error('PIN must be 4 digits.');
+      pinErr.status = 400;
+      throw pinErr;
+    }
+  }
 
+  // Check if email already exists; return existing account if credentials match
   var all = this.store.listAll();
   for (var i = 0; i < all.length; i++) {
-    var existingAuth = (normalizeAccount(all[i]).auth || {});
-    if (String(existingAuth.email || '').trim().toLowerCase() === email) {
-      var dupErr = new Error('An account with this email already exists.');
-      dupErr.status = 409;
-      throw dupErr;
-    }
+    var norm = normalizeAccount(all[i]);
+    var auth = norm.auth || {};
+    var storedEmail = String(auth.email || '').trim().toLowerCase();
+    if (storedEmail !== email) continue;
+    var credMatch = password
+      ? (String(auth.passwordHash || '') === password || String(auth.pin || '') === password)
+      : (String(auth.pin || '') === pin);
+    if (credMatch) return { account: norm, created: false };
+    var dupErr2 = new Error('An account with this email already exists.');
+    dupErr2.status = 409;
+    throw dupErr2;
   }
 
   var account = createEmptyCustomerAccount();
   account.customerId = createCustomerId();
   account.storageKey = createStorageKey(payload.firstName, payload.lastName);
+
+  // Personal identity
   account.profile.personal = {
-    title: payload.title || '',
-    firstName: payload.firstName || '',
-    lastName: payload.lastName || '',
-    dob: payload.dob || '',
-    initials: ((payload.firstName || '').charAt(0) + (payload.lastName || '').charAt(0)).toUpperCase(),
-    memberSince: ''
+    title:        payload.title        || '',
+    firstName:    payload.firstName    || '',
+    lastName:     payload.lastName     || '',
+    dob:          payload.dateOfBirth  || payload.dob || '',
+    maritalStatus:payload.maritalStatus || '',
+    initials:     ((payload.firstName || '').charAt(0) + (payload.lastName || '').charAt(0)).toUpperCase(),
+    memberSince:  ''
   };
+
+  // Contact — structured address fields from 3-step form, fallback to legacy single-field
+  var addrLine = [payload.houseNumber, payload.flatNumber, payload.street, payload.city, payload.county, payload.postCode].filter(Boolean).join(', ');
   account.profile.contact = {
-    email: email,
-    phone: payload.phone || '',
-    address: payload.address || '',
-    residentSince: payload.residentSince || ''
+    email:           email,
+    phone:           payload.mobileNumber || payload.phone || '',
+    mobileNumber:    payload.mobileNumber || payload.phone || '',
+    // Structured address
+    homeOwnerStatus: payload.homeOwnerStatus  || '',
+    houseNumber:     payload.houseNumber      || '',
+    flatNumber:      payload.flatNumber       || null,
+    street:          payload.street           || '',
+    city:            payload.city             || '',
+    county:          payload.county           || '',
+    postCode:        payload.postCode         || '',
+    timeAtAddress:   payload.timeAtAddress    || '',
+    previousAddress: payload.previousAddress  || null,
+    // Legacy single-line fallback for existing code that reads contact.address
+    address:         payload.address || addrLine,
+    residentSince:   payload.residentSince || ''
   };
+
+  // Employment
   account.profile.employment = {
-    status: payload.employmentStatus || '',
-    employer: payload.employer || '',
-    jobTitle: payload.jobTitle || '',
-    employmentStart: payload.employmentStart || '',
-    annualIncome: Number(payload.annualIncome || 0),
-    payFrequency: payload.payFrequency || 'Monthly',
-    nextPayDate: payload.nextPayDate || ''
+    status:           payload.employmentStatus || '',
+    employer:         payload.employer         || '',
+    employerPhone:    payload.employerPhone     || '',
+    jobTitle:         payload.jobTitle          || '',
+    lengthOfService:  payload.lengthOfService   || '',
+    employmentStart:  payload.employmentStart   || '',
+    netMonthlyIncome: Number(payload.netMonthlyIncome || 0),
+    totalNetMonthlyIncome: Number(payload.totalNetMonthlyIncome || 0),
+    howOftenGetPaid:  payload.howOftenGetPaid   || '',
+    whenGetPaid:      payload.whenGetPaid        || '',
+    // Legacy fields
+    annualIncome:     Number(payload.annualIncome || (payload.netMonthlyIncome || 0) * 12),
+    payFrequency:     payload.payFrequency || payload.howOftenGetPaid || 'Monthly',
+    nextPayDate:      payload.nextPayDate || ''
   };
+
+  // Expenses — store in affordability and in a dedicated expenses block
+  var exp = payload.expenses || {};
+  var rentMortgage      = Number(exp.rentMortgage      || 0);
+  var utilitiesBills    = Number(exp.utilitiesBills    || 0);
+  var councilTax        = Number(exp.councilTax        || 0);
+  var creditCommitments = Number(exp.creditCommitments || 0);
+  var travelTransport   = Number(exp.travelTransport   || 0);
+  var subscriptions     = Number(exp.subscriptions     || 0);
+  var householdExpenses = Number(exp.householdExpenses || 0);
+  var otherExpenses     = Number(exp.otherExpenses     || 0);
+  var housingCosts   = rentMortgage + utilitiesBills + councilTax;
+  var livingCosts    = subscriptions + householdExpenses + otherExpenses;
+  var transportCosts = travelTransport;
+  var otherDebts     = creditCommitments;
+  var netMonthly     = Number(payload.netMonthlyIncome || 0);
+
+  account.profile.expenses = {
+    rentMortgage, utilitiesBills, councilTax, creditCommitments,
+    travelTransport, subscriptions, householdExpenses, otherExpenses,
+    numberOfDependents:      Number(payload.numberOfDependents || 0),
+    incomeExpensesConfirmed: !!payload.incomeExpensesConfirmed
+  };
+
+  account.affordability.incomeExpenditure.raw.monthlyIncome  = netMonthly;
+  account.affordability.incomeExpenditure.raw.housingCosts   = housingCosts;
+  account.affordability.incomeExpenditure.raw.livingCosts    = livingCosts;
+  account.affordability.incomeExpenditure.raw.transportCosts = transportCosts;
+  account.affordability.incomeExpenditure.raw.otherDebts     = otherDebts;
+  account.affordability.incomeExpenditure.raw.granular = {
+    expRent: rentMortgage, expUtilities: utilitiesBills, expCouncil: councilTax,
+    expLoans: creditCommitments, expTransport: travelTransport, expSubs: subscriptions,
+    expHousehold: householdExpenses, expOther: otherExpenses,
+    incSalary: netMonthly, incSecondary: 0, incBenefits: 0, incOther: 0
+  };
+  recalcAffordabilityDerived(account);
+
+  // Consents
+  account.consents = {
+    marketingPhone: !!(payload.marketingConsents && payload.marketingConsents.phone),
+    marketingEmail: !!(payload.marketingConsents && payload.marketingConsents.email),
+    marketingSms:   !!(payload.marketingConsents && payload.marketingConsents.sms),
+    privacyConsent: !!payload.privacyConsent,
+    consentedAt:    nowIso()
+  };
+
   account.auth = {
-    email: email,
-    pin: pin,
-    createdAt: nowIso(),
-    lastLoginAt: null,
+    email:        email,
+    pin:          pin || '',
+    passwordHash: password || '',
+    createdAt:    nowIso(),
+    lastLoginAt:  null,
     portalEnabled: false
   };
   account.application.stage = 'profile_created';
@@ -541,13 +635,14 @@ AccountService.prototype.submitApplication = function (storageKey, payload) {
     throw err;
   }
 
-  // Accept I&E both at top-level (public form) and nested under affordability (legacy)
+  // Accept I&E at top-level, nested under affordability, or fall back to stored account values
+  var storedRaw = (account.affordability && account.affordability.incomeExpenditure && account.affordability.incomeExpenditure.raw) || {};
   var aff = payload.affordability || {};
-  var monthlyIncome  = Number(aff.monthlyIncome  || payload.monthlyIncome  || 0);
-  var housingCosts   = Number(aff.housingCosts   || payload.housingCosts   || 0);
-  var livingCosts    = Number(aff.livingCosts    || payload.livingCosts    || 0);
-  var transportCosts = Number(aff.transportCosts || payload.transportCosts || 0);
-  var otherDebts     = Number(aff.otherDebts     || payload.otherDebts     || 0);
+  var monthlyIncome  = Number(aff.monthlyIncome  || payload.monthlyIncome  || storedRaw.monthlyIncome  || 0);
+  var housingCosts   = Number(aff.housingCosts   || payload.housingCosts   || storedRaw.housingCosts   || 0);
+  var livingCosts    = Number(aff.livingCosts    || payload.livingCosts    || storedRaw.livingCosts    || 0);
+  var transportCosts = Number(aff.transportCosts || payload.transportCosts || storedRaw.transportCosts || 0);
+  var otherDebts     = Number(aff.otherDebts     || payload.otherDebts     || storedRaw.otherDebts     || 0);
 
   account.affordability.incomeExpenditure.raw.monthlyIncome  = monthlyIncome;
   account.affordability.incomeExpenditure.raw.housingCosts   = housingCosts;

@@ -352,28 +352,101 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
         
       </div>
 
-      <section class="pane active" id="pane-profile">
-        <div class="offer-box" style="margin-bottom:16px"><h4>Create your Quido profile</h4><p>Your profile secures your application and gives you access to the Quido customer portal once you're approved.</p></div>
-        <form id="profile-form" class="grid">
-          <div class="field"><label for="pf-title">Title</label><select id="pf-title" required><option>Mr</option><option selected>Ms</option><option>Mrs</option><option>Miss</option><option>Mx</option></select></div>
+      <!-- STEP 1 OF 3: Account & Identity -->
+      <section class="pane active" id="pane-step1">
+        <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px">Step 1 of 3 &mdash; Account &amp; Identity</div>
+        <div class="offer-box" style="margin-bottom:16px"><h4>Create your Quido account</h4><p>Your account secures your application and gives you access to your Quido customer portal once approved.</p></div>
+        <form id="step1-form" class="grid">
+          <div class="field"><label for="pf-title">Title</label><select id="pf-title" required><option value="MR">Mr</option><option value="MRS">Mrs</option><option value="MS" selected>Ms</option><option value="MISS">Miss</option></select></div>
+          <div class="field"><label for="pf-marital">Marital status</label><select id="pf-marital" required><option value="SINGLE" selected>Single</option><option value="MARRIED">Married</option><option value="PARTNER">Partner</option><option value="COHABITING">Cohabiting</option><option value="SEPARATED">Separated</option><option value="DIVORCED">Divorced</option><option value="CIVIL_UNION">Civil union</option><option value="WIDOWED">Widowed</option></select></div>
+          <div class="field"><label for="pf-first">First name</label><input id="pf-first" type="text" required minlength="2" maxlength="50"></div>
+          <div class="field"><label for="pf-last">Last name</label><input id="pf-last" type="text" required minlength="2" maxlength="50"></div>
+          <div class="field"><label for="pf-email">Email address</label><input id="pf-email" type="email" required maxlength="254"></div>
+          <div class="field"><label for="pf-mobile">Mobile number</label><input id="pf-mobile" type="tel" required placeholder="07xxx xxxxxx"></div>
+          <div class="field"><label for="pf-password">Password</label><input id="pf-password" type="password" required minlength="8" placeholder="Min 8 characters, at least 1 digit"></div>
           <div class="field"><label for="pf-dob">Date of birth</label><input id="pf-dob" type="date" required></div>
-          <div class="field"><label for="pf-first">First name</label><input id="pf-first" type="text" required></div>
-          <div class="field"><label for="pf-last">Last name</label><input id="pf-last" type="text" required></div>
-          <div class="field"><label for="pf-email">Email address</label><input id="pf-email" type="email" required></div>
-          <div class="field"><label for="pf-pin">Choose a 4-digit PIN</label><input id="pf-pin" type="password" inputmode="numeric" maxlength="4" minlength="4" pattern="\d{4}" required></div>
-          <div class="field"><label for="pf-phone">Phone number</label><input id="pf-phone" type="tel" required></div>
-          <div class="field"><label for="pf-resident">Resident since</label><input id="pf-resident" type="month" required></div>
-          <div class="field full"><label for="pf-address">Home address</label><input id="pf-address" type="text" required></div>
-          <div class="field"><label for="pf-emp-status">Employment status</label><select id="pf-emp-status" required><option value="Full-time employed" selected>Full-time employed</option><option value="Part-time employed">Part-time employed</option><option value="Self-employed">Self-employed</option><option value="Contractor">Contractor</option></select></div>
-          <div class="field"><label for="pf-employer">Employer</label><input id="pf-employer" type="text" required></div>
-          <div class="field"><label for="pf-job-title">Job title</label><input id="pf-job-title" type="text" required></div>
-          <div class="field"><label for="pf-employment-start">Employment start date</label><input id="pf-employment-start" type="month" required></div>
-          <div class="field"><label for="pf-annual-income">Annual income (£)</label><input id="pf-annual-income" type="number" min="1" step="1" required></div>
-          <div class="field"><label for="pf-pay-frequency">Pay frequency</label><select id="pf-pay-frequency" required><option selected>Monthly</option><option>Four-weekly</option><option>Weekly</option></select></div>
-          <div class="field"><label for="pf-next-pay">Next pay date</label><input id="pf-next-pay" type="date" required></div>
-          <div class="field full"><button class="btn btn-primary" type="submit">Create profile and continue</button></div>
+          <div class="field full" style="margin-top:4px">
+            <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Marketing &amp; Consent</div>
+            <div class="check-grid">
+              <label class="check"><input id="pf-mkt-phone" type="checkbox"><span>I agree to be contacted by phone for marketing purposes</span></label>
+              <label class="check"><input id="pf-mkt-email" type="checkbox"><span>I agree to receive marketing emails</span></label>
+              <label class="check"><input id="pf-mkt-sms" type="checkbox"><span>I agree to receive marketing SMS messages</span></label>
+              <label class="check"><input id="pf-privacy" type="checkbox" required><span>I have read and accept the <a href="#" style="color:var(--blue)">Privacy Policy</a>. <strong>(Required to proceed)</strong></span></label>
+            </div>
+          </div>
+          <div class="field full"><button class="btn btn-primary" type="submit">Continue to address &rarr;</button></div>
         </form>
-        <div class="message info" id="profile-note" style="margin-top:14px"></div>
+        <div class="message" id="step1-note" style="margin-top:14px"></div>
+      </section>
+
+      <!-- STEP 2 OF 3: Address -->
+      <section class="pane" id="pane-step2">
+        <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px">Step 2 of 3 &mdash; Residential Address</div>
+        <div class="offer-box" style="margin-bottom:16px"><h4>Your current address</h4><p>We use your address to verify your identity and process your application.</p></div>
+        <form id="step2-form" class="grid">
+          <div class="field"><label for="pf-home-status">Home owner status</label><select id="pf-home-status" required><option value="HOME_OWNER">Home owner</option><option value="JOINT_OWNER">Joint owner</option><option value="RENT" selected>Renting</option><option value="COUNCIL_TENANT">Council tenant</option><option value="RENT_FREE">Living rent-free</option><option value="OTHER">Other</option></select></div>
+          <div class="field"><label for="pf-time-address">Time at this address</label><select id="pf-time-address" required><option value="LESS_3M">Less than 3 months</option><option value="3_6M">3 &ndash; 6 months</option><option value="6_12M">6 &ndash; 12 months</option><option value="1_3Y" selected>1 &ndash; 3 years</option><option value="3_5Y">3 &ndash; 5 years</option><option value="OVER_5Y">Over 5 years</option></select></div>
+          <div class="field"><label for="pf-house-num">House / building number</label><input id="pf-house-num" type="text" required maxlength="20" placeholder="e.g. 12A"></div>
+          <div class="field"><label for="pf-flat-num">Flat number <span style="font-weight:400;text-transform:none">(optional)</span></label><input id="pf-flat-num" type="text" maxlength="20"></div>
+          <div class="field full"><label for="pf-street">Street</label><input id="pf-street" type="text" required maxlength="100"></div>
+          <div class="field"><label for="pf-city">City / town</label><input id="pf-city" type="text" required maxlength="100"></div>
+          <div class="field"><label for="pf-county">County</label><input id="pf-county" type="text" required maxlength="100"></div>
+          <div class="field"><label for="pf-postcode">Post code</label><input id="pf-postcode" type="text" required maxlength="10" placeholder="e.g. SW1A 1AA" style="text-transform:uppercase"></div>
+          <!-- Previous address (shown when time at address < 6 months) -->
+          <div class="field full" id="prev-address-group" style="display:none">
+            <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Previous address</div>
+            <div class="grid" style="gap:10px">
+              <div class="field"><label for="pf-prev-home-status">Home owner status</label><select id="pf-prev-home-status"><option value="HOME_OWNER">Home owner</option><option value="JOINT_OWNER">Joint owner</option><option value="RENT" selected>Renting</option><option value="COUNCIL_TENANT">Council tenant</option><option value="RENT_FREE">Living rent-free</option><option value="OTHER">Other</option></select></div>
+              <div class="field"><label for="pf-prev-house-num">House / building number</label><input id="pf-prev-house-num" type="text" maxlength="20"></div>
+              <div class="field"><label for="pf-prev-flat-num">Flat number <span style="font-weight:400;text-transform:none">(optional)</span></label><input id="pf-prev-flat-num" type="text" maxlength="20"></div>
+              <div class="field full"><label for="pf-prev-street">Street</label><input id="pf-prev-street" type="text" maxlength="100"></div>
+              <div class="field"><label for="pf-prev-city">City / town</label><input id="pf-prev-city" type="text" maxlength="100"></div>
+              <div class="field"><label for="pf-prev-county">County</label><input id="pf-prev-county" type="text" maxlength="100"></div>
+              <div class="field"><label for="pf-prev-postcode">Post code</label><input id="pf-prev-postcode" type="text" maxlength="10" placeholder="e.g. SW1A 1AA" style="text-transform:uppercase"></div>
+            </div>
+          </div>
+          <div class="field full"><div class="inline"><button class="btn btn-primary" type="submit">Continue to employment &rarr;</button><button class="btn btn-secondary" type="button" onclick="goToPane('step1')">Back</button></div></div>
+        </form>
+        <div class="message" id="step2-note" style="margin-top:14px"></div>
+      </section>
+
+      <!-- STEP 3 OF 3: Employment & Expenses -->
+      <section class="pane" id="pane-step3">
+        <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px">Step 3 of 3 &mdash; Employment &amp; Expenses</div>
+        <form id="step3-form" class="stack">
+          <div class="grid" style="align-items:start">
+            <div class="stack">
+              <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:2px">Employment</div>
+              <div class="field"><label for="pf-emp-status">Employment status</label><select id="pf-emp-status" required><option value="FULL_TIME" selected>Full-time employed</option><option value="PART_TIME">Part-time employed</option><option value="TEMPORARY">Temporary / contract</option><option value="SELF_EMPLOYED">Self-employed</option><option value="STUDENT">Student</option><option value="DISABILITY">Disability / incapacity</option><option value="PENSION">Retired / pension</option><option value="UNEMPLOYED">Unemployed</option></select></div>
+              <div id="employer-group" class="stack" style="gap:10px">
+                <div class="field"><label for="pf-employer">Employer name</label><input id="pf-employer" type="text" maxlength="100" placeholder="Your employer's name"></div>
+                <div class="field"><label for="pf-employer-phone">Employer phone</label><input id="pf-employer-phone" type="tel" maxlength="20" placeholder="Employer contact number"></div>
+              </div>
+              <div class="field" id="length-service-group"><label for="pf-length-service">Length of service</label><select id="pf-length-service"><option value="1_3M">1 &ndash; 3 months</option><option value="4_6M">4 &ndash; 6 months</option><option value="7_12M">7 &ndash; 12 months</option><option value="1_2Y" selected>1 &ndash; 2 years</option><option value="2_4Y">2 &ndash; 4 years</option><option value="OVER_4Y">Over 4 years</option></select></div>
+              <div class="field"><label for="pf-net-income">Net monthly income (£)</label><input id="pf-net-income" type="number" min="1" step="0.01" required placeholder="Take-home pay after tax"></div>
+              <div class="field"><label for="pf-total-income">Total net monthly income (£)</label><input id="pf-total-income" type="number" min="1" step="0.01" required placeholder="All income sources combined"></div>
+              <div class="field"><label for="pf-pay-freq">How often are you paid?</label><select id="pf-pay-freq" required><option value="MONTHLY" selected>Monthly</option><option value="BI_WEEKLY">Bi-weekly (every 2 weeks)</option><option value="WEEKLY">Weekly</option></select></div>
+              <div class="field"><label for="pf-when-paid">Date you get paid</label><select id="pf-when-paid" required></select></div>
+            </div>
+            <div class="stack">
+              <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:2px">Monthly expenses</div>
+              <div class="field"><label for="pf-exp-rent">Rent / mortgage (£)</label><input id="pf-exp-rent" type="number" min="0" step="0.01" value="0" required></div>
+              <div class="field"><label for="pf-exp-utilities">Utilities bills (£)</label><input id="pf-exp-utilities" type="number" min="0" step="0.01" value="0" required></div>
+              <div class="field"><label for="pf-exp-council">Council tax (£)</label><input id="pf-exp-council" type="number" min="0" step="0.01" value="0" required></div>
+              <div class="field"><label for="pf-exp-credit">Credit commitments (£)</label><input id="pf-exp-credit" type="number" min="0" step="0.01" value="0" required></div>
+              <div class="field"><label for="pf-exp-travel">Travel &amp; transport (£)</label><input id="pf-exp-travel" type="number" min="0" step="0.01" value="0" required></div>
+              <div class="field"><label for="pf-exp-subs">Subscriptions (£)</label><input id="pf-exp-subs" type="number" min="0" step="0.01" value="0" required></div>
+              <div class="field"><label for="pf-exp-household">Household expenses (£)</label><input id="pf-exp-household" type="number" min="0" step="0.01" value="0" required></div>
+              <div class="field"><label for="pf-exp-other">Other expenses (£)</label><input id="pf-exp-other" type="number" min="0" step="0.01" value="0" required></div>
+              <div class="field"><label for="pf-dependents">Number of dependants</label><input id="pf-dependents" type="number" min="0" max="20" value="0" required></div>
+            </div>
+          </div>
+          <div class="check-grid">
+            <label class="check"><input id="pf-ie-confirmed" type="checkbox" required><span>I confirm the income and expense figures I have provided are accurate and complete. <strong>(Required)</strong></span></label>
+          </div>
+          <div class="inline"><button class="btn btn-primary" type="submit">Create profile and continue</button><button class="btn btn-secondary" type="button" onclick="goToPane('step2')">Back</button></div>
+        </form>
+        <div class="message" id="step3-note" style="margin-top:14px"></div>
       </section>
 
       <section class="pane" id="pane-application">
@@ -386,31 +459,10 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
         <form id="application-form" class="grid">
           <div class="field"><label for="app-amount">Amount requested (£)</label><input id="app-amount" type="number" min="300" max="10000" step="50" required></div>
           <div class="field"><label for="app-term">Term</label><select id="app-term" required><option value="6">6 months</option><option value="7">7 months</option><option value="8">8 months</option><option value="9">9 months</option><option value="10">10 months</option><option value="11">11 months</option><option value="12" selected>12 months</option><option value="13">13 months</option><option value="14">14 months</option><option value="15">15 months</option><option value="16">16 months</option><option value="17">17 months</option><option value="18">18 months</option><option value="19">19 months</option><option value="20">20 months</option><option value="21">21 months</option><option value="22">22 months</option><option value="23">23 months</option><option value="24">24 months</option></select></div>
-          <div class="field full"><label for="app-purpose">What is the loan for?</label><input id="app-purpose" type="text" placeholder="Home repairs, travel, car costs" required></div>
-          <div class="field full" style="margin-top:4px"><div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Monthly income</div><div class="grid" style="gap:10px">
-            <div class="field"><label for="app-inc-salary">Primary income (net)</label><input id="app-inc-salary" type="number" min="0" step="1" value="0" required></div>
-            <div class="field"><label for="app-inc-secondary">Secondary income</label><input id="app-inc-secondary" type="number" min="0" step="1" value="0"></div>
-            <div class="field"><label for="app-inc-benefits">Benefits / Universal Credit</label><input id="app-inc-benefits" type="number" min="0" step="1" value="0"></div>
-            <div class="field"><label for="app-inc-other">Other income</label><input id="app-inc-other" type="number" min="0" step="1" value="0"></div>
-          </div></div>
-          <div class="field full"><div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Monthly outgoings</div><div class="grid" style="gap:10px">
-            <div class="field"><label for="app-exp-rent">Rent / mortgage</label><input id="app-exp-rent" type="number" min="0" step="1" value="0"></div>
-            <div class="field"><label for="app-exp-council">Council tax</label><input id="app-exp-council" type="number" min="0" step="1" value="0"></div>
-            <div class="field"><label for="app-exp-utilities">Utilities</label><input id="app-exp-utilities" type="number" min="0" step="1" value="0"></div>
-            <div class="field"><label for="app-exp-food">Food &amp; groceries</label><input id="app-exp-food" type="number" min="0" step="1" value="0"></div>
-            <div class="field"><label for="app-exp-transport">Transport</label><input id="app-exp-transport" type="number" min="0" step="1" value="0"></div>
-            <div class="field"><label for="app-exp-childcare">Childcare / dependants</label><input id="app-exp-childcare" type="number" min="0" step="1" value="0"></div>
-            <div class="field"><label for="app-exp-mobile">Mobile phone</label><input id="app-exp-mobile" type="number" min="0" step="1" value="0"></div>
-            <div class="field"><label for="app-exp-loans">Other loan repayments</label><input id="app-exp-loans" type="number" min="0" step="1" value="0"></div>
-            <div class="field"><label for="app-exp-cards">Credit card minimums</label><input id="app-exp-cards" type="number" min="0" step="1" value="0"></div>
-            <div class="field"><label for="app-exp-bnpl">Buy now pay later</label><input id="app-exp-bnpl" type="number" min="0" step="1" value="0"></div>
-            <div class="field"><label for="app-exp-insurance">Insurance</label><input id="app-exp-insurance" type="number" min="0" step="1" value="0"></div>
-            <div class="field"><label for="app-exp-subs">Subscriptions</label><input id="app-exp-subs" type="number" min="0" step="1" value="0"></div>
-          </div></div>
-          <div class="field full"><div class="check-grid"><label class="check"><input id="app-uk-resident" type="checkbox" checked><span>I am a UK resident</span></label><label class="check"><input id="app-employed" type="checkbox" checked><span>I am gainfully employed</span></label><label class="check"><input id="app-electoral" type="checkbox" checked><span>I am on the electoral roll</span></label></div></div>
-          <div class="field full"><div class="inline"><button class="btn btn-primary" type="submit">Submit application</button><button class="btn btn-secondary" type="button" onclick="goToPane('profile')">Back</button></div></div>
+          <div class="field full"><label for="app-purpose">What is the loan for?</label><input id="app-purpose" type="text" placeholder="e.g. Home repairs, travel, car costs" required></div>
+          <div class="field full"><div class="inline"><button class="btn btn-primary" type="submit">Submit application</button><button class="btn btn-secondary" type="button" onclick="goToPane('step3')">Back</button></div></div>
         </form>
-        <div class="message info" id="application-note" style="margin-top:14px">We'll assess your affordability and eligibility to ensure this loan is right for you.</div>
+        <div class="message info" id="application-note" style="margin-top:14px">We'll assess your affordability and eligibility based on the details you provided.</div>
       </section>
 
       <section class="pane" id="pane-decision">
@@ -525,87 +577,208 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
 
 <script>
 (function(){
-  var state = { quote:null, account:null, resolved:null, decision:null };
-  function money(value){ return new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(Number(value || 0)); }
-  function setMessage(id, kind, text){ var el = document.getElementById(id); if (!el) return; el.className = 'message ' + kind; el.textContent = text; }
-  function setActive(name){ ['profile','application','decision','sign','card'].forEach(function(key){ var pane = document.getElementById('pane-' + key); var chip = document.getElementById('chip-' + key); if (pane) pane.classList.toggle('active', key === name); if (chip) chip.classList.toggle('active', key === name); }); }
-  window.goToPane = function(name){ setActive(name); document.getElementById('application-shell').scrollIntoView({behavior:'smooth', block:'start'}); };
-  window.startApplication = function(){ var shell = document.getElementById('application-shell'); shell.style.display = 'block'; hydrateApplicationFromQuote(); setActive(state.account ? 'application' : 'profile'); shell.scrollIntoView({behavior:'smooth', block:'start'}); };
-  function patchRangeFill(el){ var min = Number(el.min || 0); var max = Number(el.max || 100); var val = Number(el.value || 0); var pct = ((val - min) / (max - min)) * 100; var p = pct.toFixed(2) + '%'; requestAnimationFrame(function(){ el.style.setProperty('--fill', p); el.style.background = 'linear-gradient(90deg,#00b865 0%,#00b865 ' + p + ',rgba(255,255,255,.22) ' + p + ',rgba(255,255,255,.22) 100%)'; }); }
-  var calcRequestId = 0;
-  function patchQuote(decision){ if (!decision || !decision.quote) return; state.quote = decision; var repApr = (((decision.policy || {}).repAPR) != null ? decision.policy.repAPR : ((decision.policy || {}).apr)); document.getElementById('quote-amount').textContent = money(decision.quote.amount); document.getElementById('quote-term').textContent = decision.quote.termMonths + ' monthly instalments'; document.getElementById('quote-emi').textContent = money(decision.quote.emi); document.getElementById('quote-total').textContent = money(decision.quote.totalRepayable); document.getElementById('quote-policy').textContent = 'Rep. APR ' + Number(repApr || 0).toFixed(1) + '%'; document.getElementById('quote-extra').textContent = 'Updates automatically'; document.getElementById('amount-display').textContent = money(decision.quote.amount); document.getElementById('term-display').textContent = decision.quote.termMonths + ' months'; }
-  async function runCalculator(){ var P = Number(document.getElementById('calc-amount').value || 0); var n = Number(document.getElementById('calc-term').value || 0); var requestId = ++calcRequestId; document.getElementById('quote-extra').textContent = 'Updating quote...'; try { var result = await postJson('/api/public/quote', { amount:P, termMonths:n }); if (requestId !== calcRequestId) return; patchQuote(result.decision || result); hydrateApplicationFromQuote(); } catch (err) { if (requestId !== calcRequestId) return; document.getElementById('quote-extra').textContent = 'We could not update the quote right now.'; } }
-  function hydrateApplicationFromQuote(){ document.getElementById('app-amount').value = document.getElementById('calc-amount').value; document.getElementById('app-term').value = document.getElementById('calc-term').value; }
-  function updateApplicationSummary(){ var q=null; if(state.decision&&state.decision.quote) q=state.decision.quote; else if(state.quote&&state.quote.quote) q=state.quote.quote; else if(state.quote&&state.quote.amount) q=state.quote; var amtEl=document.getElementById('app-summary-amount'); var intEl=document.getElementById('app-summary-interest'); var emiEl=document.getElementById('app-summary-emi'); var repayEl=document.getElementById('app-summary-repay'); if(q){if(amtEl)amtEl.textContent=money(q.amount);if(intEl)intEl.textContent=money(q.totalInterest);if(emiEl)emiEl.textContent=money(q.emi)+'/mo';if(repayEl){var d=new Date();d.setMonth(d.getMonth()+1);repayEl.textContent=d.getDate()+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+' '+d.getFullYear();}}else{if(amtEl)amtEl.textContent='-';if(intEl)intEl.textContent='-';if(emiEl)emiEl.textContent='-';if(repayEl)repayEl.textContent='-';} }
-  function populateFromProfile(account){ if (!account) return; var personal = account.profile.personal || {}; var employment = account.profile.employment || {}; document.getElementById('sign-full-name').value = [personal.firstName, personal.lastName].filter(Boolean).join(' '); if (account.application && account.application.quote) { document.getElementById('app-amount').value = account.application.quote.amount || document.getElementById('app-amount').value; document.getElementById('app-term').value = account.application.quote.termMonths || document.getElementById('app-term').value; }
-    if (employment.annualIncome) { document.getElementById('app-inc-salary').value = Math.round(Number(employment.annualIncome) / 12); }
-    updateApplicationSummary(); }
-  function reflectDecision(decision){ if (!decision || !decision.quote) return; state.decision = decision; document.getElementById('decision-amount').textContent = money(decision.quote.amount); document.getElementById('decision-emi').textContent = money(decision.quote.emi); document.getElementById('decision-total').textContent = money(decision.quote.totalRepayable); document.getElementById('sign-amount').textContent = money(decision.quote.amount); document.getElementById('sign-term').textContent = decision.quote.termMonths + ' months'; document.getElementById('sign-apr').textContent = decision.quote.apr + '%'; var btn = document.getElementById('decision-sign-btn'); if (decision.approved) { document.getElementById('decision-title').textContent = 'You are approved, subject to signing'; document.getElementById('decision-copy').textContent = 'Your loan of ' + money(decision.quote.amount) + ' over ' + decision.quote.termMonths + ' months at ' + decision.quote.apr + '% APR is ready. Review and sign to move forward.'; btn.style.display = 'inline-flex'; setMessage('decision-note','success','Approved at ' + decision.quote.apr + '% APR. Review and sign your offer to proceed.'); } else { document.getElementById('decision-title').textContent = 'We cannot approve this application right now'; document.getElementById('decision-copy').textContent = (decision.reasons || []).join(' ') || 'This application does not meet our current lending criteria.'; btn.style.display = 'none'; setMessage('decision-note','warn',document.getElementById('decision-copy').textContent); } }
-  async function postJson(url,payload){ var res = await fetch(url,{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload || {}) }); var data = await res.json().catch(function(){ return {}; }); if (!res.ok) throw new Error(data.error || 'Request failed.'); return data; }
-  document.getElementById('profile-form').addEventListener('submit', async function(event){ event.preventDefault(); var payload = { title:document.getElementById('pf-title').value, dob:document.getElementById('pf-dob').value, firstName:document.getElementById('pf-first').value.trim(), lastName:document.getElementById('pf-last').value.trim(), email:document.getElementById('pf-email').value.trim(), pin:document.getElementById('pf-pin').value.trim(), phone:document.getElementById('pf-phone').value.trim(), residentSince:document.getElementById('pf-resident').value.trim(), address:document.getElementById('pf-address').value.trim(), employmentStatus:document.getElementById('pf-emp-status').value, employer:document.getElementById('pf-employer').value.trim(), jobTitle:document.getElementById('pf-job-title').value.trim(), employmentStart:document.getElementById('pf-employment-start').value.trim(), annualIncome:Number(document.getElementById('pf-annual-income').value || 0), payFrequency:document.getElementById('pf-pay-frequency').value, nextPayDate:document.getElementById('pf-next-pay').value }; try { setMessage('profile-note','info','Creating your profile...'); var result = await postJson('/api/public/profiles', payload); state.account = result.account; populateFromProfile(result.account); hydrateApplicationFromQuote(); setMessage('profile-note','success', result.created ? 'Profile created. Continue with your application below.' : 'That profile already exists. Continue with your application below.'); setActive('application'); document.getElementById('application-shell').scrollIntoView({behavior:'smooth', block:'start'}); } catch (err) { setMessage('profile-note','error',err.message || 'We could not create your profile.'); } });
-  document.getElementById('application-form').addEventListener('submit', async function(event){ event.preventDefault(); try { if (!state.account || !state.account.storageKey) { setMessage('application-note','warn','Create your profile first, then continue with the application.'); setActive('profile'); return; } var personal = (((state.account || {}).profile || {}).personal) || {}; var n = function(id){ return Number(document.getElementById(id).value || 0); }; var incSalary=n('app-inc-salary'),incSecondary=n('app-inc-secondary'),incBenefits=n('app-inc-benefits'),incOther=n('app-inc-other'); var expRent=n('app-exp-rent'),expCouncil=n('app-exp-council'),expUtilities=n('app-exp-utilities'),expFood=n('app-exp-food'),expTransport=n('app-exp-transport'),expChildcare=n('app-exp-childcare'),expMobile=n('app-exp-mobile'),expLoans=n('app-exp-loans'),expCards=n('app-exp-cards'),expBnpl=n('app-exp-bnpl'),expInsurance=n('app-exp-insurance'),expSubs=n('app-exp-subs'); var monthlyIncome=incSalary+incSecondary+incBenefits+incOther; var housingCosts=expRent+expCouncil+expUtilities; var livingCosts=expFood+expChildcare+expMobile+expInsurance+expSubs+expBnpl; var transportCosts=expTransport; var otherDebts=expLoans+expCards; var payload = { storageKey:state.account.storageKey, amount:n('app-amount'), termMonths:Number(document.getElementById('app-term').value || 0), purpose:document.getElementById('app-purpose').value.trim() || 'Personal loan', monthlyIncome:monthlyIncome, housingCosts:housingCosts, livingCosts:livingCosts, transportCosts:transportCosts, otherDebts:otherDebts, granular:{incSalary:incSalary,incSecondary:incSecondary,incBenefits:incBenefits,incOther:incOther,expRent:expRent,expCouncil:expCouncil,expUtilities:expUtilities,expFood:expFood,expTransport:expTransport,expChildcare:expChildcare,expMobile:expMobile,expLoans:expLoans,expCards:expCards,expBnpl:expBnpl,expInsurance:expInsurance,expSubs:expSubs}, dob:personal.dob || '', employmentStatus:document.getElementById('pf-emp-status').value, employmentStart:document.getElementById('pf-employment-start').value, ukResident:document.getElementById('app-uk-resident').checked, gainfullyEmployed:document.getElementById('app-employed').checked, proxyData:{ recentDefaults:false, ccjCount:0, missedPaymentsLast6m:0, onElectoralRoll:document.getElementById('app-electoral').checked, monthsAtAddress:(function(){var v=document.getElementById('pf-resident').value;if(!v)return 0;var p=v.split('-');var s=new Date(+p[0],+p[1]-1);var nd=new Date();return Math.max(0,(nd.getFullYear()-s.getFullYear())*12+nd.getMonth()-s.getMonth());}()) } }; setMessage('application-note','info','Submitting your application...'); var result = await postJson('/api/public/applications', payload); state.account = result.account; reflectDecision(result.decision); updateApplicationSummary(); setMessage('application-note','success','Application submitted. Your decision is ready below.'); setActive('decision'); document.getElementById('application-shell').scrollIntoView({behavior:'smooth', block:'start'}); } catch (err) { setMessage('application-note','error',err.message || 'We could not submit your application.'); } });
-  document.getElementById('sign-form').addEventListener('submit', async function(event){ event.preventDefault(); if (!state.account || !state.account.storageKey) { setMessage('sign-note','warn','We need your application before signing can continue.'); setActive('application'); return; } try { setMessage('sign-note','info','Submitting your signature...'); var result = await postJson('/api/public/applications/' + encodeURIComponent(state.account.storageKey) + '/sign', { fullName:document.getElementById('sign-full-name').value.trim(), acceptedTerms:document.getElementById('sign-terms').checked, acceptedPrivacy:document.getElementById('sign-privacy').checked, bank:{ accountHolder:document.getElementById('sign-bank-holder').value.trim(), bankName:document.getElementById('sign-bank-name').value.trim(), sortCode:document.getElementById('sign-sort-code').value.trim(), accountNumber:document.getElementById('sign-account-number').value.trim() } }); state.account = result.account; document.getElementById('card-holder').value = document.getElementById('sign-full-name').value.trim(); setMessage('sign-note','success','Signed. Now add your payment card to complete the process.'); setActive('card'); document.getElementById('application-shell').scrollIntoView({behavior:'smooth', block:'start'}); } catch (err) { setMessage('sign-note','error',err.message || 'We could not record your signature.'); } });
-  document.getElementById('card-form').addEventListener('submit', async function(event){ event.preventDefault(); if (!state.account || !state.account.storageKey) { setMessage('card-note','warn','Please complete signing first.'); setActive('sign'); return; } try { setMessage('card-note','info','Saving your card details...'); var raw = document.getElementById('card-number').value.replace(/\s/g,''); var result = await postJson('/api/public/applications/' + encodeURIComponent(state.account.storageKey) + '/card', { cardHolder:document.getElementById('card-holder').value.trim(), cardNumber:raw, expiry:document.getElementById('card-expiry').value.trim(), cardType:document.getElementById('card-type').value }); state.account = result.account; setMessage('card-note','success','Card saved. Your application is now awaiting final approval before funds are transferred.'); setActive('decision'); setMessage('decision-note','info','Signed and awaiting final approval. Once approved, you can access the customer portal.'); document.getElementById('application-shell').scrollIntoView({behavior:'smooth', block:'start'}); } catch (err) { setMessage('card-note','error',err.message || 'We could not save your card details.'); } });
-  var amountRange = document.getElementById('calc-amount');
-  var termRange = document.getElementById('calc-term');
-  [amountRange, termRange].forEach(function(el){
-    patchRangeFill(el);
-    function onUpdate(){ patchRangeFill(el); runCalculator(); }
-    el.addEventListener('input', onUpdate);
-    el.addEventListener('change', onUpdate);
-    el.addEventListener('touchmove', function(){ onUpdate(); }, { passive: true });
+  var state = { quote:null, account:null, resolved:null, decision:null, draft:{} };
+  var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function money(v){ return new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(Number(v||0)); }
+  function setMessage(id,kind,text){ var el=document.getElementById(id); if(!el)return; el.className='message'+(kind?' '+kind:''); el.textContent=text; }
+  function setActive(name){
+    ['step1','step2','step3','application','decision','sign','card'].forEach(function(key){
+      var pane=document.getElementById('pane-'+key);
+      if(pane) pane.classList.toggle('active',key===name);
+    });
+  }
+  window.goToPane = function(name){ setActive(name); document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'}); };
+  window.startApplication = function(){
+    var shell=document.getElementById('application-shell');
+    shell.style.display='block';
+    hydrateApplicationFromQuote();
+    setActive(state.account?'application':'step1');
+    shell.scrollIntoView({behavior:'smooth',block:'start'});
+  };
+  function patchRangeFill(el){ var min=Number(el.min||0),max=Number(el.max||100),val=Number(el.value||0),pct=((val-min)/(max-min))*100,p=pct.toFixed(2)+'%'; requestAnimationFrame(function(){ el.style.setProperty('--fill',p); el.style.background='linear-gradient(90deg,#00b865 0%,#00b865 '+p+',rgba(255,255,255,.22) '+p+',rgba(255,255,255,.22) 100%)'; }); }
+  var calcRequestId=0;
+  function patchQuote(decision){ if(!decision||!decision.quote)return; state.quote=decision; var repApr=((decision.policy||{}).repAPR!=null?(decision.policy||{}).repAPR:(decision.policy||{}).apr); document.getElementById('quote-amount').textContent=money(decision.quote.amount); document.getElementById('quote-term').textContent=decision.quote.termMonths+' monthly instalments'; document.getElementById('quote-emi').textContent=money(decision.quote.emi); document.getElementById('quote-total').textContent=money(decision.quote.totalRepayable); document.getElementById('quote-policy').textContent='Rep. APR '+Number(repApr||0).toFixed(1)+'%'; document.getElementById('quote-extra').textContent='Updates automatically'; document.getElementById('amount-display').textContent=money(decision.quote.amount); document.getElementById('term-display').textContent=decision.quote.termMonths+' months'; }
+  async function runCalculator(){ var P=Number(document.getElementById('calc-amount').value||0),n=Number(document.getElementById('calc-term').value||0),requestId=++calcRequestId; document.getElementById('quote-extra').textContent='Updating quote...'; try{ var result=await postJson('/api/public/quote',{amount:P,termMonths:n}); if(requestId!==calcRequestId)return; patchQuote(result.decision||result); hydrateApplicationFromQuote(); }catch(err){ if(requestId!==calcRequestId)return; document.getElementById('quote-extra').textContent='We could not update the quote right now.'; } }
+  function hydrateApplicationFromQuote(){ document.getElementById('app-amount').value=document.getElementById('calc-amount').value; document.getElementById('app-term').value=document.getElementById('calc-term').value; }
+  function updateApplicationSummary(){ var q=null; if(state.decision&&state.decision.quote)q=state.decision.quote; else if(state.quote&&state.quote.quote)q=state.quote.quote; else if(state.quote&&state.quote.amount)q=state.quote; var amtEl=document.getElementById('app-summary-amount'),intEl=document.getElementById('app-summary-interest'),emiEl=document.getElementById('app-summary-emi'),repayEl=document.getElementById('app-summary-repay'); if(q){ if(amtEl)amtEl.textContent=money(q.amount); if(intEl)intEl.textContent=money(q.totalInterest); if(emiEl)emiEl.textContent=money(q.emi)+'/mo'; if(repayEl){var d=new Date();d.setMonth(d.getMonth()+1);repayEl.textContent=d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear();} }else{ if(amtEl)amtEl.textContent='-'; if(intEl)intEl.textContent='-'; if(emiEl)emiEl.textContent='-'; if(repayEl)repayEl.textContent='-'; } }
+  function populateFromProfile(account){ if(!account)return; var personal=(account.profile&&account.profile.personal)||{}; document.getElementById('sign-full-name').value=[personal.firstName,personal.lastName].filter(Boolean).join(' '); if(account.application&&account.application.quote){ document.getElementById('app-amount').value=account.application.quote.amount||document.getElementById('app-amount').value; document.getElementById('app-term').value=account.application.quote.termMonths||document.getElementById('app-term').value; } updateApplicationSummary(); }
+  function reflectDecision(decision){ if(!decision||!decision.quote)return; state.decision=decision; document.getElementById('decision-amount').textContent=money(decision.quote.amount); document.getElementById('decision-emi').textContent=money(decision.quote.emi); document.getElementById('decision-total').textContent=money(decision.quote.totalRepayable); document.getElementById('sign-amount').textContent=money(decision.quote.amount); document.getElementById('sign-term').textContent=decision.quote.termMonths+' months'; document.getElementById('sign-apr').textContent=decision.quote.apr+'%'; var btn=document.getElementById('decision-sign-btn'); if(decision.approved){ document.getElementById('decision-title').textContent='You are approved, subject to signing'; document.getElementById('decision-copy').textContent='Your loan of '+money(decision.quote.amount)+' over '+decision.quote.termMonths+' months at '+decision.quote.apr+'% APR is ready. Review and sign to move forward.'; btn.style.display='inline-flex'; setMessage('decision-note','success','Approved at '+decision.quote.apr+'% APR. Review and sign your offer to proceed.'); }else{ document.getElementById('decision-title').textContent='We cannot approve this application right now'; document.getElementById('decision-copy').textContent=(decision.reasons||[]).join(' ')||'This application does not meet our current lending criteria.'; btn.style.display='none'; setMessage('decision-note','warn',document.getElementById('decision-copy').textContent); } }
+  async function postJson(url,payload){ var res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload||{})}); var data=await res.json().catch(function(){return{};}); if(!res.ok)throw new Error(data.error||'Request failed.'); return data; }
+
+  // ── whenGetPaid reactive options ──────────────────────────────────────────
+  function buildWhenGetPaidOptions(freq){
+    var sel=document.getElementById('pf-when-paid'); if(!sel)return;
+    var prev=sel.value; sel.innerHTML='';
+    if(freq==='MONTHLY'){
+      for(var d=1;d<=28;d++){ var o=document.createElement('option'); o.value=String(d).padStart(2,'0'); o.textContent=d+(d===1?'st':d===2?'nd':d===3?'rd':'th')+' of month'; sel.appendChild(o); }
+      var last=document.createElement('option'); last.value='LAST'; last.textContent='Last day of month'; sel.appendChild(last);
+    }else{
+      ['MON','TUE','WED','THU','FRI','SAT','SUN'].forEach(function(v,i){ var o=document.createElement('option'); o.value=v; o.textContent=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'][i]; sel.appendChild(o); });
+    }
+    sel.value=prev; if(!sel.value&&sel.options.length)sel.value=sel.options[0].value;
+  }
+  buildWhenGetPaidOptions('MONTHLY');
+  document.getElementById('pf-pay-freq').addEventListener('change',function(){ buildWhenGetPaidOptions(this.value); });
+
+  // ── Employment conditional fields ─────────────────────────────────────────
+  function updateEmploymentConditionals(status){
+    var isEmployed=['FULL_TIME','PART_TIME','TEMPORARY'].indexOf(status)>-1;
+    var hasLength=['STUDENT','DISABILITY','PENSION','UNEMPLOYED'].indexOf(status)===-1;
+    var eg=document.getElementById('employer-group'),ls=document.getElementById('length-service-group');
+    if(eg)eg.style.display=isEmployed?'':'none';
+    var empEl=document.getElementById('pf-employer'),empPhEl=document.getElementById('pf-employer-phone');
+    if(empEl)empEl.required=isEmployed;
+    if(empPhEl)empPhEl.required=isEmployed;
+    if(ls)ls.style.display=hasLength?'':'none';
+    var lsEl=document.getElementById('pf-length-service');
+    if(lsEl)lsEl.required=hasLength;
+  }
+  updateEmploymentConditionals('FULL_TIME');
+  document.getElementById('pf-emp-status').addEventListener('change',function(){ updateEmploymentConditionals(this.value); });
+
+  // ── Previous address conditional ──────────────────────────────────────────
+  function updatePrevAddressVisibility(timeVal){
+    var show=['LESS_3M','3_6M'].indexOf(timeVal)>-1;
+    var grp=document.getElementById('prev-address-group'); if(!grp)return;
+    grp.style.display=show?'':'none';
+    var prevFields=['pf-prev-house-num','pf-prev-street','pf-prev-city','pf-prev-county','pf-prev-postcode'];
+    prevFields.forEach(function(id){ var el=document.getElementById(id); if(el)el.required=show; });
+  }
+  document.getElementById('pf-time-address').addEventListener('change',function(){ updatePrevAddressVisibility(this.value); });
+
+  // ── Step 1 submit: collect & validate, advance to step 2 ─────────────────
+  document.getElementById('step1-form').addEventListener('submit',function(event){
+    event.preventDefault();
+    var dob=document.getElementById('pf-dob').value;
+    if(dob){ var age=(new Date()-new Date(dob))/(1000*60*60*24*365.25); if(age<18){ setMessage('step1-note','error','You must be at least 18 years old to apply.'); return; } }
+    var pwd=document.getElementById('pf-password').value;
+    if(pwd.length<8||!/\d/.test(pwd)){ setMessage('step1-note','error','Password must be at least 8 characters and contain at least one digit.'); return; }
+    state.draft.title=document.getElementById('pf-title').value;
+    state.draft.maritalStatus=document.getElementById('pf-marital').value;
+    state.draft.firstName=document.getElementById('pf-first').value.trim();
+    state.draft.lastName=document.getElementById('pf-last').value.trim();
+    state.draft.email=document.getElementById('pf-email').value.trim();
+    state.draft.mobileNumber=document.getElementById('pf-mobile').value.trim();
+    state.draft.password=pwd;
+    state.draft.dateOfBirth=dob;
+    state.draft.marketingConsents={ phone:document.getElementById('pf-mkt-phone').checked, email:document.getElementById('pf-mkt-email').checked, sms:document.getElementById('pf-mkt-sms').checked };
+    state.draft.privacyConsent=document.getElementById('pf-privacy').checked;
+    setMessage('step1-note','','');
+    goToPane('step2');
   });
+
+  // ── Step 2 submit: collect address, advance to step 3 ────────────────────
+  document.getElementById('step2-form').addEventListener('submit',function(event){
+    event.preventDefault();
+    state.draft.homeOwnerStatus=document.getElementById('pf-home-status').value;
+    state.draft.timeAtAddress=document.getElementById('pf-time-address').value;
+    state.draft.houseNumber=document.getElementById('pf-house-num').value.trim();
+    state.draft.flatNumber=document.getElementById('pf-flat-num').value.trim()||null;
+    state.draft.street=document.getElementById('pf-street').value.trim();
+    state.draft.city=document.getElementById('pf-city').value.trim();
+    state.draft.county=document.getElementById('pf-county').value.trim();
+    state.draft.postCode=document.getElementById('pf-postcode').value.trim().toUpperCase();
+    var needsPrev=['LESS_3M','3_6M'].indexOf(state.draft.timeAtAddress)>-1;
+    state.draft.previousAddress=needsPrev?{
+      homeOwnerStatus:document.getElementById('pf-prev-home-status').value,
+      houseNumber:document.getElementById('pf-prev-house-num').value.trim(),
+      flatNumber:document.getElementById('pf-prev-flat-num').value.trim()||null,
+      street:document.getElementById('pf-prev-street').value.trim(),
+      city:document.getElementById('pf-prev-city').value.trim(),
+      county:document.getElementById('pf-prev-county').value.trim(),
+      postCode:document.getElementById('pf-prev-postcode').value.trim().toUpperCase()
+    }:null;
+    setMessage('step2-note','','');
+    goToPane('step3');
+  });
+
+  // ── Step 3 submit: collect employment & expenses, POST profile to API ─────
+  document.getElementById('step3-form').addEventListener('submit',async function(event){
+    event.preventDefault();
+    var status=document.getElementById('pf-emp-status').value;
+    var isEmployed=['FULL_TIME','PART_TIME','TEMPORARY'].indexOf(status)>-1;
+    var hasLength=['STUDENT','DISABILITY','PENSION','UNEMPLOYED'].indexOf(status)===-1;
+    var net=Number(document.getElementById('pf-net-income').value||0);
+    var total=Number(document.getElementById('pf-total-income').value||0);
+    if(total<net){ setMessage('step3-note','error','Total net monthly income must be equal to or greater than net monthly income.'); return; }
+    state.draft.employmentStatus=status;
+    state.draft.employer=isEmployed?document.getElementById('pf-employer').value.trim():null;
+    state.draft.employerPhone=isEmployed?document.getElementById('pf-employer-phone').value.trim():null;
+    state.draft.lengthOfService=hasLength?document.getElementById('pf-length-service').value:null;
+    state.draft.netMonthlyIncome=net;
+    state.draft.totalNetMonthlyIncome=total;
+    state.draft.howOftenGetPaid=document.getElementById('pf-pay-freq').value;
+    state.draft.whenGetPaid=document.getElementById('pf-when-paid').value;
+    state.draft.expenses={
+      rentMortgage:Number(document.getElementById('pf-exp-rent').value||0),
+      utilitiesBills:Number(document.getElementById('pf-exp-utilities').value||0),
+      councilTax:Number(document.getElementById('pf-exp-council').value||0),
+      creditCommitments:Number(document.getElementById('pf-exp-credit').value||0),
+      travelTransport:Number(document.getElementById('pf-exp-travel').value||0),
+      subscriptions:Number(document.getElementById('pf-exp-subs').value||0),
+      householdExpenses:Number(document.getElementById('pf-exp-household').value||0),
+      otherExpenses:Number(document.getElementById('pf-exp-other').value||0)
+    };
+    state.draft.numberOfDependents=Number(document.getElementById('pf-dependents').value||0);
+    state.draft.incomeExpensesConfirmed=document.getElementById('pf-ie-confirmed').checked;
+    try{
+      setMessage('step3-note','info','Creating your profile...');
+      var result=await postJson('/api/public/profiles',state.draft);
+      state.account=result.account;
+      populateFromProfile(result.account);
+      hydrateApplicationFromQuote();
+      setMessage('step3-note','success',result.created?'Profile created. Continue with your loan details below.':'Welcome back. Continue with your loan details below.');
+      goToPane('application');
+    }catch(err){ setMessage('step3-note','error',err.message||'We could not create your profile.'); }
+  });
+
+  // ── Application form submit (loan details only, I&E comes from stored profile) ──
+  document.getElementById('application-form').addEventListener('submit',async function(event){
+    event.preventDefault();
+    if(!state.account||!state.account.storageKey){ setMessage('application-note','warn','Please complete your profile first.'); goToPane('step1'); return; }
+    var payload={
+      storageKey:state.account.storageKey,
+      amount:Number(document.getElementById('app-amount').value||0),
+      termMonths:Number(document.getElementById('app-term').value||0),
+      purpose:document.getElementById('app-purpose').value.trim()||'Personal loan',
+      ukResident:true,
+      gainfullyEmployed:true,
+      proxyData:{ recentDefaults:false, ccjCount:0, missedPaymentsLast6m:0, onElectoralRoll:true, monthsAtAddress:12 }
+    };
+    setMessage('application-note','info','Submitting your application...');
+    try{
+      var result=await postJson('/api/public/applications',payload);
+      state.account=result.account;
+      reflectDecision(result.decision);
+      updateApplicationSummary();
+      setMessage('application-note','success','Application submitted. Your decision is ready below.');
+      goToPane('decision');
+    }catch(err){ setMessage('application-note','error',err.message||'We could not submit your application.'); }
+  });
+
+  document.getElementById('sign-form').addEventListener('submit',async function(event){ event.preventDefault(); if(!state.account||!state.account.storageKey){ setMessage('sign-note','warn','We need your application before signing can continue.'); goToPane('application'); return; } try{ setMessage('sign-note','info','Submitting your signature...'); var result=await postJson('/api/public/applications/'+encodeURIComponent(state.account.storageKey)+'/sign',{fullName:document.getElementById('sign-full-name').value.trim(),acceptedTerms:document.getElementById('sign-terms').checked,acceptedPrivacy:document.getElementById('sign-privacy').checked,bank:{accountHolder:document.getElementById('sign-bank-holder').value.trim(),bankName:document.getElementById('sign-bank-name').value.trim(),sortCode:document.getElementById('sign-sort-code').value.trim(),accountNumber:document.getElementById('sign-account-number').value.trim()}}); state.account=result.account; document.getElementById('card-holder').value=document.getElementById('sign-full-name').value.trim(); setMessage('sign-note','success','Signed. Now add your payment card to complete the process.'); setActive('card'); document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'}); }catch(err){ setMessage('sign-note','error',err.message||'We could not record your signature.'); } });
+  document.getElementById('card-form').addEventListener('submit',async function(event){ event.preventDefault(); if(!state.account||!state.account.storageKey){ setMessage('card-note','warn','Please complete signing first.'); setActive('sign'); return; } try{ setMessage('card-note','info','Saving your card details...'); var raw=document.getElementById('card-number').value.replace(/\s/g,''); var result=await postJson('/api/public/applications/'+encodeURIComponent(state.account.storageKey)+'/card',{cardHolder:document.getElementById('card-holder').value.trim(),cardNumber:raw,expiry:document.getElementById('card-expiry').value.trim(),cardType:document.getElementById('card-type').value}); state.account=result.account; setMessage('card-note','success','Card saved. Your application is now awaiting final approval before funds are transferred.'); setActive('decision'); setMessage('decision-note','info','Signed and awaiting final approval. Once approved, you can access the customer portal.'); document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'}); }catch(err){ setMessage('card-note','error',err.message||'We could not save your card details.'); } });
+
+  var amountRange=document.getElementById('calc-amount'),termRange=document.getElementById('calc-term');
+  [amountRange,termRange].forEach(function(el){ patchRangeFill(el); function onUpdate(){ patchRangeFill(el); runCalculator(); } el.addEventListener('input',onUpdate); el.addEventListener('change',onUpdate); el.addEventListener('touchmove',function(){onUpdate();},{passive:true}); });
   runCalculator(); updateApplicationSummary();
 
-  // ── Chat widget
+  // ── Chat widget ───────────────────────────────────────────────────────────
   (function(){
-    var cpanel = document.getElementById('cpanel');
-    var cmsgs  = document.getElementById('cmsgs');
-    var cinp   = document.getElementById('cinp');
-    var cnb    = document.getElementById('cnb');
-    function appendCMsg(txt, type) {
-      var now = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-      var w = document.createElement('div');
-      w.innerHTML = '<div class="msg '+type+'">'+txt+'</div><div class="mtime'+(type==='user'?' r':'')+'">'+now+'</div>';
-      cmsgs.appendChild(w); cmsgs.scrollTop = cmsgs.scrollHeight;
-    }
-    function chatReply(msg) {
-      var m = msg.toLowerCase();
-      if (m.indexOf('rate') > -1 || m.indexOf('apr') > -1) return 'Our representative APR is 29.9%. Your actual rate may vary based on your circumstances.';
-      if (m.indexOf('amount') > -1 || m.indexOf('borrow') > -1) return 'You can borrow between £300 and £10,000 over 6 to 24 months. Use the calculator on the page to see your monthly repayment.';
-      if (m.indexOf('apply') > -1 || m.indexOf('application') > -1) return 'You can apply online in minutes. Click Apply now and we will guide you through each step.';
-      if (m.indexOf('credit') > -1 || m.indexOf('check') > -1) return 'Checking your quote does not affect your credit score. A full credit check is only performed when you submit a full application.';
-      if (m.indexOf('decision') > -1 || m.indexOf('long') > -1) return 'Most decisions are made the same day. Once approved, funds are transferred to your account on the same day.';
-      if (m.indexOf('complaint') > -1) return 'We are sorry to hear that. Please email complaints@quido.co.uk and we will respond within 5 business days.';
-      var replies = ['Happy to help. Could you tell me a bit more?','Thanks for reaching out. You can also call us on 0800 123 4567.','Good question. Is there anything specific about the loan you would like to know?'];
-      return replies[Math.floor(Math.random()*replies.length)];
-    }
-    function sendMsg() {
-      var txt = cinp.value.replace(/^\s+|\s+$/g,'');
-      if (!txt) return;
-      appendCMsg(txt, 'user'); cinp.value = '';
-      setTimeout(function(){ appendCMsg(chatReply(txt), 'agent'); }, 800);
-    }
-    document.getElementById('cfab').addEventListener('click', function(){
-      var open = cpanel.classList.toggle('open');
-      if (cnb) cnb.style.display = open ? 'none' : 'flex';
-    });
-    document.getElementById('cclose').addEventListener('click', function(){ cpanel.classList.remove('open'); if (cnb) cnb.style.display = 'flex'; });
-    Array.prototype.forEach.call(document.querySelectorAll('.qp'), function(btn){
-      btn.addEventListener('click', function(){
-        cinp.value = btn.getAttribute('data-msg') || btn.textContent;
-        sendMsg();
-      });
-    });
-    document.getElementById('csend').addEventListener('click', sendMsg);
-    cinp.addEventListener('keydown', function(e){ if(e.key==='Enter') sendMsg(); });
+    var cpanel=document.getElementById('cpanel'),cmsgs=document.getElementById('cmsgs'),cinp=document.getElementById('cinp'),cnb=document.getElementById('cnb');
+    function appendCMsg(txt,type){ var now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),w=document.createElement('div'); w.innerHTML='<div class="msg '+type+'">'+txt+'</div><div class="mtime'+(type==='user'?' r':'')+'">'+now+'</div>'; cmsgs.appendChild(w); cmsgs.scrollTop=cmsgs.scrollHeight; }
+    function chatReply(msg){ var m=msg.toLowerCase(); if(m.indexOf('rate')>-1||m.indexOf('apr')>-1)return'Our representative APR is 29.9%. Your actual rate may vary based on your circumstances.'; if(m.indexOf('amount')>-1||m.indexOf('borrow')>-1)return'You can borrow between £300 and £10,000 over 6 to 24 months. Use the calculator on the page to see your monthly repayment.'; if(m.indexOf('apply')>-1||m.indexOf('application')>-1)return'You can apply online in minutes. Click Apply now and we will guide you through each step.'; if(m.indexOf('credit')>-1||m.indexOf('check')>-1)return'Checking your quote does not affect your credit score. A full credit check is only performed when you submit a full application.'; if(m.indexOf('decision')>-1||m.indexOf('long')>-1)return'Most decisions are made the same day. Once approved, funds are transferred to your account on the same day.'; if(m.indexOf('complaint')>-1)return'We are sorry to hear that. Please email complaints@quido.co.uk and we will respond within 5 business days.'; var replies=['Happy to help. Could you tell me a bit more?','Thanks for reaching out. You can also call us on 0800 123 4567.','Good question. Is there anything specific about the loan you would like to know?']; return replies[Math.floor(Math.random()*replies.length)]; }
+    function sendMsg(){ var txt=cinp.value.replace(/^\s+|\s+$/g,''); if(!txt)return; appendCMsg(txt,'user'); cinp.value=''; setTimeout(function(){appendCMsg(chatReply(txt),'agent');},800); }
+    document.getElementById('cfab').addEventListener('click',function(){ var open=cpanel.classList.toggle('open'); if(cnb)cnb.style.display=open?'none':'flex'; });
+    document.getElementById('cclose').addEventListener('click',function(){ cpanel.classList.remove('open'); if(cnb)cnb.style.display='flex'; });
+    Array.prototype.forEach.call(document.querySelectorAll('.qp'),function(btn){ btn.addEventListener('click',function(){ cinp.value=btn.getAttribute('data-msg')||btn.textContent; sendMsg(); }); });
+    document.getElementById('csend').addEventListener('click',sendMsg);
+    cinp.addEventListener('keydown',function(e){if(e.key==='Enter')sendMsg();});
   })();
-  // Format card number with spaces as user types
-  var cardNumEl = document.getElementById('card-number');
-  if (cardNumEl) { cardNumEl.addEventListener('input', function(){ var v = this.value.replace(/\D/g,'').slice(0,16); this.value = v.replace(/(.{4})/g,'$1  ').trim(); }); }
-  // Format sort code with dashes
-  var scEl = document.getElementById('sign-sort-code');
-  if (scEl) { scEl.addEventListener('input', function(){ var v = this.value.replace(/\D/g,'').slice(0,6); this.value = v.replace(/(\d{2})(?=\d)/g,'$1-'); }); }
+  var cardNumEl=document.getElementById('card-number');
+  if(cardNumEl){cardNumEl.addEventListener('input',function(){var v=this.value.replace(/\D/g,'').slice(0,16);this.value=v.replace(/(.{4})/g,'$1  ').trim();});}
+  var scEl=document.getElementById('sign-sort-code');
+  if(scEl){scEl.addEventListener('input',function(){var v=this.value.replace(/\D/g,'').slice(0,6);this.value=v.replace(/(\d{2})(?=\d)/g,'$1-');});}
 })();
 </script>
 </body>
