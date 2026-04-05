@@ -26,6 +26,8 @@
  */
 'use strict';
 
+const crypto = require('crypto');
+
 const {
   createEmptyLoan,
   createAccountFromSeed,
@@ -63,6 +65,10 @@ const {
 } = require('../domain/servicing-engine');
 
 function nowIso() { return new Date().toISOString(); }
+
+function hashPassword(plain) {
+  return crypto.createHash('sha256').update(String(plain)).digest('hex');
+}
 
 function mergeObj(target, src) {
   if (!src || typeof src !== 'object') return target;
@@ -275,34 +281,78 @@ function buildResolvedAccount(account) {
     updatedAt:  account.updatedAt || '',
 
     profile: {
-      fullName:    [pp.firstName, pp.lastName].filter(Boolean).join(' '),
-      title:       pp.title       || '',
-      firstName:   pp.firstName   || '',
-      lastName:    pp.lastName    || '',
-      initials:    pp.initials    || '',
-      dob:         pp.dob         || '',
-      memberSince: pp.memberSince || '',
-      loanId:      account.activeLoanId || ''
+      fullName:      [pp.firstName, pp.lastName].filter(Boolean).join(' '),
+      title:         pp.title         || '',
+      firstName:     pp.firstName     || '',
+      lastName:      pp.lastName      || '',
+      initials:      pp.initials      || '',
+      dob:           pp.dob           || '',
+      maritalStatus: pp.maritalStatus || '',
+      memberSince:   pp.memberSince   || '',
+      loanId:        account.activeLoanId || ''
     },
 
     contact: {
-      email:        pc.email         || '',
-      phone:        pc.phone         || '',
-      address:      pc.address       || '',
-      residentSince: pc.residentSince || ''
+      email:           pc.email           || '',
+      phone:           pc.phone           || '',
+      mobileNumber:    pc.mobileNumber    || pc.phone || '',
+      address:         pc.address         || '',
+      residentSince:   pc.residentSince   || '',
+      homeOwnerStatus: pc.homeOwnerStatus || '',
+      houseNumber:     pc.houseNumber     || '',
+      flatNumber:      pc.flatNumber      || null,
+      street:          pc.street          || '',
+      city:            pc.city            || '',
+      county:          pc.county          || '',
+      postCode:        pc.postCode        || '',
+      timeAtAddress:   pc.timeAtAddress   || '',
+      previousAddress: pc.previousAddress || null
     },
 
     employment: {
-      status:          pe.status          || '',
-      employer:        pe.employer        || '',
-      jobTitle:        pe.jobTitle        || '',
-      employmentStart: pe.employmentStart || '',
-      annualIncome:    pe.annualIncome    || 0,
-      payFrequency:    pe.payFrequency    || '',
-      nextPayDate:     pe.nextPayDate     || ''
+      status:                pe.status                || '',
+      employer:              pe.employer              || '',
+      employerPhone:         pe.employerPhone         || '',
+      jobTitle:              pe.jobTitle              || '',
+      lengthOfService:       pe.lengthOfService       || '',
+      employmentStart:       pe.employmentStart       || '',
+      netMonthlyIncome:      pe.netMonthlyIncome      || 0,
+      totalNetMonthlyIncome: pe.totalNetMonthlyIncome || 0,
+      annualIncome:          pe.annualIncome          || 0,
+      howOftenGetPaid:       pe.howOftenGetPaid       || pe.payFrequency || '',
+      whenGetPaid:           pe.whenGetPaid           || pe.nextPayDate  || '',
+      payFrequency:          pe.payFrequency          || '',
+      nextPayDate:           pe.nextPayDate           || ''
     },
 
     paymentDetails: pd,
+
+    expenses: (function () {
+      var ex = (account.profile && account.profile.expenses) || {};
+      return {
+        rentMortgage:            ex.rentMortgage            || 0,
+        utilitiesBills:          ex.utilitiesBills          || 0,
+        councilTax:              ex.councilTax              || 0,
+        creditCommitments:       ex.creditCommitments       || 0,
+        travelTransport:         ex.travelTransport         || 0,
+        subscriptions:           ex.subscriptions           || 0,
+        householdExpenses:       ex.householdExpenses       || 0,
+        otherExpenses:           ex.otherExpenses           || 0,
+        numberOfDependents:      ex.numberOfDependents      || 0,
+        incomeExpensesConfirmed: !!ex.incomeExpensesConfirmed
+      };
+    }()),
+
+    consents: (function () {
+      var co = account.consents || {};
+      return {
+        marketingPhone: !!co.marketingPhone,
+        marketingEmail: !!co.marketingEmail,
+        marketingSms:   !!co.marketingSms,
+        privacyConsent: !!co.privacyConsent,
+        consentedAt:    co.consentedAt || null
+      };
+    }()),
 
     affordability: {
       monthlyIncome:    pickValue(raw.monthlyIncome, 0),
@@ -448,13 +498,18 @@ AccountService.prototype.listAccounts = function () {
   return this.store.listAll();
 };
 
-AccountService.prototype.findByAuth = function (email, pin) {
+AccountService.prototype.findByAuth = function (email, credential) {
   var accounts = this.store.listAll();
   var needle = String(email || '').trim().toLowerCase();
+  var credStr = String(credential || '');
   for (var i = 0; i < accounts.length; i++) {
     var account = normalizeAccount(accounts[i]);
     var auth = account.auth || {};
-    if (String(auth.email || '').trim().toLowerCase() === needle && String(auth.pin || '') === String(pin || '')) {
+    if (String(auth.email || '').trim().toLowerCase() !== needle) continue;
+    // Accept legacy plain PIN match, or SHA-256 password hash match
+    var pinMatch  = credStr && String(auth.pin || '') === credStr;
+    var hashMatch = credStr && auth.passwordHash && hashPassword(credStr) === String(auth.passwordHash);
+    if (pinMatch || hashMatch) {
       auth.lastLoginAt = nowIso();
       account.auth = auth;
       this.store.save(account);
@@ -612,7 +667,7 @@ AccountService.prototype.createPublicProfile = function (payload) {
   account.auth = {
     email:        email,
     pin:          pin || '',
-    passwordHash: password || '',
+    passwordHash: password ? hashPassword(password) : '',
     createdAt:    nowIso(),
     lastLoginAt:  null,
     portalEnabled: false

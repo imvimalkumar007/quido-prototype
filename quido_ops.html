@@ -461,32 +461,57 @@ a{text-decoration:none;color:inherit;cursor:pointer}
                 <div class="field-row" style="margin-bottom:10px">
                   <div class="field" style="flex:0 0 72px"><label>Title</label><input type="text" id="cust-title" style="background:var(--bg)" readonly></div>
                   <div class="field"><label>First Name</label><input type="text" id="cust-firstname" style="background:var(--bg)" readonly></div>
-                  <div class="field"><label>Last Name</label><input type="text" id="cust-name" placeholder="Mitchell"></div>
+                  <div class="field"><label>Last Name</label><input type="text" id="cust-name"></div>
+                </div>
+                <div class="field-row" style="margin-bottom:10px">
+                  <div class="field"><label>Date of Birth</label><input type="date" id="cust-dob"></div>
+                  <div class="field"><label>Marital Status</label><input type="text" id="cust-marital" style="background:var(--bg)" readonly></div>
                 </div>
                 <div class="field"><label>Email Address</label><input type="email" id="cust-email"></div>
-                <div class="field"><label>Phone Number</label><input type="tel" id="cust-phone"></div>
-                <div class="field"><label>Home Address</label><input type="text" id="cust-address"></div>
+                <div class="field"><label>Mobile Number</label><input type="tel" id="cust-phone"></div>
+              </div>
+            </div>
+            <div class="card" style="margin-bottom:14px">
+              <div class="card-hdr"><span class="card-title">Residential Address</span></div>
+              <div class="card-body">
+                <div class="field-row" style="margin-bottom:10px">
+                  <div class="field" style="flex:0 0 100px"><label>House No.</label><input type="text" id="cust-house-num" style="background:var(--bg)" readonly></div>
+                  <div class="field" style="flex:0 0 100px"><label>Flat No.</label><input type="text" id="cust-flat-num" style="background:var(--bg)" readonly></div>
+                  <div class="field"><label>Street</label><input type="text" id="cust-street"></div>
+                </div>
+                <div class="field-row" style="margin-bottom:10px">
+                  <div class="field"><label>City / Town</label><input type="text" id="cust-city"></div>
+                  <div class="field"><label>County</label><input type="text" id="cust-county"></div>
+                  <div class="field" style="flex:0 0 120px"><label>Post Code</label><input type="text" id="cust-postcode"></div>
+                </div>
                 <div class="field-row" style="margin-bottom:0">
-                  <div class="field"><label>Date of Birth</label><input type="date" id="cust-dob"></div>
-                  <div class="field"><label>Resident Since</label><input type="text" id="cust-resident-since"></div>
+                  <div class="field"><label>Ownership Status</label><input type="text" id="cust-home-status" style="background:var(--bg)" readonly></div>
+                  <div class="field"><label>Time at Address</label><input type="text" id="cust-time-address" style="background:var(--bg)" readonly></div>
                 </div>
               </div>
             </div>
             <div class="card">
               <div class="card-hdr"><span class="card-title">Employment</span></div>
               <div class="card-body">
-                <div class="field"><label>Employment Status</label><input type="text" id="cust-empstatus"></div>
+                <div class="field-row" style="margin-bottom:10px">
+                  <div class="field"><label>Employment Status</label><input type="text" id="cust-empstatus"></div>
+                  <div class="field"><label>Length of Service</label><input type="text" id="cust-length-service" style="background:var(--bg)" readonly></div>
+                </div>
                 <div class="field-row" style="margin-bottom:10px">
                   <div class="field"><label>Employer</label><input type="text" id="cust-employer"></div>
+                  <div class="field"><label>Employer Phone</label><input type="tel" id="cust-employer-phone" style="background:var(--bg)" readonly></div>
+                </div>
+                <div class="field-row" style="margin-bottom:10px">
                   <div class="field"><label>Job Title</label><input type="text" id="cust-jobtitle"></div>
-                </div>
-                <div class="field-row" style="margin-bottom:0">
                   <div class="field"><label>Start Date</label><input type="text" id="cust-empstart"></div>
-                  <div class="field"><label>Annual Income</label><input type="text" id="cust-income"></div>
+                </div>
+                <div class="field-row" style="margin-bottom:10px">
+                  <div class="field"><label>Net Monthly Income</label><input type="number" id="cust-net-income" step="10"></div>
+                  <div class="field"><label>Total Monthly Income</label><input type="number" id="cust-total-income" step="10"></div>
                 </div>
                 <div class="field-row" style="margin-bottom:0">
-                  <div class="field"><label>Pay Frequency</label><input type="text" id="cust-payfreq"></div>
-                  <div class="field"><label>Next Pay Date</label><input type="text" id="cust-payday"></div>
+                  <div class="field"><label>How Often Paid</label><input type="text" id="cust-how-paid" style="background:var(--bg)" readonly></div>
+                  <div class="field"><label>Date / Day Paid</label><input type="text" id="cust-when-paid" style="background:var(--bg)" readonly></div>
                 </div>
               </div>
             </div>
@@ -548,6 +573,39 @@ a{text-decoration:none;color:inherit;cursor:pointer}
             <div class="kv"><span class="kv-k">Subscriptions</span><span class="kv-v mono" id="ops-g-exp-subs">-</span></div>
             <div class="kv" style="border-top:1px solid var(--border);margin-top:4px;padding-top:8px"><span class="kv-k" style="font-weight:700">Total expenditure</span><span class="kv-v mono" style="font-weight:700;color:var(--red,#dc2626)" id="ops-g-exp-total">-</span></div>
             <div class="kv" style="margin-bottom:8px"><span class="kv-k" style="font-weight:700">Monthly surplus</span><span class="kv-v mono" style="font-weight:700" id="ops-g-surplus">-</span></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:14px">
+          <div class="card-hdr"><span class="card-title">Monthly Expenses</span><span style="font-size:11px;color:var(--muted)">Declared at application — read only</span></div>
+          <div class="card-body" style="padding-bottom:4px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+              <div class="kv"><span class="kv-k">Rent / mortgage</span><span class="kv-v mono" id="ops-exp-rent">-</span></div>
+              <div class="kv"><span class="kv-k">Utilities bills</span><span class="kv-v mono" id="ops-exp-utilities">-</span></div>
+              <div class="kv"><span class="kv-k">Council tax</span><span class="kv-v mono" id="ops-exp-council">-</span></div>
+              <div class="kv"><span class="kv-k">Credit commitments</span><span class="kv-v mono" id="ops-exp-credit">-</span></div>
+              <div class="kv"><span class="kv-k">Travel &amp; transport</span><span class="kv-v mono" id="ops-exp-travel">-</span></div>
+              <div class="kv"><span class="kv-k">Subscriptions</span><span class="kv-v mono" id="ops-exp-subs">-</span></div>
+              <div class="kv"><span class="kv-k">Household expenses</span><span class="kv-v mono" id="ops-exp-household">-</span></div>
+              <div class="kv"><span class="kv-k">Other expenses</span><span class="kv-v mono" id="ops-exp-other">-</span></div>
+            </div>
+            <div class="kv" style="border-top:1px solid var(--border);margin-top:4px;padding-top:8px">
+              <span class="kv-k">Number of dependants</span><span class="kv-v mono" id="ops-exp-dependents">-</span>
+            </div>
+            <div class="kv" style="margin-bottom:8px">
+              <span class="kv-k">Income &amp; expenses confirmed</span><span class="kv-v mono" id="ops-exp-confirmed">-</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:14px">
+          <div class="card-hdr"><span class="card-title">Marketing &amp; Privacy Consents</span><span style="font-size:11px;color:var(--muted)">Declared at registration — read only</span></div>
+          <div class="card-body-tight">
+            <div class="kv"><span class="kv-k">Phone marketing</span><span class="kv-v" id="ops-consent-phone">-</span></div>
+            <div class="kv"><span class="kv-k">Email marketing</span><span class="kv-v" id="ops-consent-email">-</span></div>
+            <div class="kv"><span class="kv-k">SMS marketing</span><span class="kv-v" id="ops-consent-sms">-</span></div>
+            <div class="kv"><span class="kv-k">Privacy consent</span><span class="kv-v" id="ops-consent-privacy">-</span></div>
+            <div class="kv"><span class="kv-k">Consented at</span><span class="kv-v" id="ops-consent-at">-</span></div>
           </div>
         </div>
 
@@ -1190,10 +1248,18 @@ var CUSTOMER_REGISTRY = [
     credentials:{ email:'sarah.mitchell@email.co.uk', pin:'1234' },
     loan:{ principal:1000, apr:29.9, term:12, startDate:'2026-01-24', paidCount:2, accountStatus:'active' },
     profile:{
-      personal:   { title:'Ms', firstName:'Sarah', lastName:'Mitchell', dob:'1989-03-14' },
-      contact:    { email:'sarah.mitchell@email.co.uk', phone:'+44 7700 900 7821', address:'42 Elm Grove, Brighton, BN2 3FA', residentSince:'January 2020' },
-      employment: { status:'Full-time employed', employer:'Mitchell & Co Ltd', jobTitle:'Senior Analyst', employmentStart:'March 2019', annualIncome:'£42,000', payFrequency:'Monthly', nextPayDate:'28 Mar 2026' }
+      personal:   { title:'MS', firstName:'Sarah', lastName:'Mitchell', dob:'1989-03-14', maritalStatus:'MARRIED' },
+      contact:    { email:'sarah.mitchell@email.co.uk', phone:'+44 7700 900 7821', mobileNumber:'+44 7700 900 7821',
+                    address:'42 Elm Grove, Brighton, BN2 3FB', residentSince:'January 2020',
+                    homeOwnerStatus:'HOME_OWNER', houseNumber:'42', flatNumber:null, street:'Elm Grove',
+                    city:'Brighton', county:'East Sussex', postCode:'BN2 3FB', timeAtAddress:'OVER_5Y', previousAddress:null },
+      employment: { status:'FULL_TIME', employer:'Mitchell & Co Ltd', employerPhone:'01273 882200',
+                    jobTitle:'Senior Analyst', lengthOfService:'2_4Y', employmentStart:'March 2019',
+                    netMonthlyIncome:2900, totalNetMonthlyIncome:3200, annualIncome:38400,
+                    howOftenGetPaid:'MONTHLY', whenGetPaid:'28', payFrequency:'Monthly', nextPayDate:'28 Apr 2026' }
     },
+    expenses:{ rentMortgage:850, utilitiesBills:120, councilTax:0, creditCommitments:150, travelTransport:120, subscriptions:45, householdExpenses:200, otherExpenses:65, numberOfDependents:0, incomeExpensesConfirmed:true },
+    consents:{ marketingPhone:false, marketingEmail:true, marketingSms:false, privacyConsent:true },
     incomeExpenditure:{ monthlyIncome:2800, housingCosts:850, transportCosts:120, livingCosts:450, otherDebts:150 },
     paymentDetails:{
       card:{ type:'Visa Debit', last4:'4821', expiry:'09/27', collectionDayOfMonth:22, active:true },
@@ -1206,10 +1272,18 @@ var CUSTOMER_REGISTRY = [
     credentials:{ email:'j.okafor@email.co.uk', pin:'5678' },
     loan:{ principal:3500, apr:29.9, term:18, startDate:'2025-09-15', paidCount:5, accountStatus:'arrears' },
     profile:{
-      personal:   { title:'Mr', firstName:'James', lastName:'Okafor', dob:'1985-11-22' },
-      contact:    { email:'j.okafor@email.co.uk', phone:'+44 7912 345 678', address:'17 Birchwood Drive, Manchester, M14 6PQ', residentSince:'March 2018' },
-      employment: { status:'Self-employed', employer:'Okafor Consulting Ltd', jobTitle:'IT Consultant', employmentStart:'January 2015', annualIncome:'£38,000', payFrequency:'Monthly', nextPayDate:'15 Apr 2026' }
+      personal:   { title:'MR', firstName:'James', lastName:'Okafor', dob:'1985-11-22', maritalStatus:'SINGLE' },
+      contact:    { email:'j.okafor@email.co.uk', phone:'+44 7912 345 678', mobileNumber:'+44 7912 345 678',
+                    address:'17 Birchwood Drive, Manchester, M14 6PQ', residentSince:'March 2018',
+                    homeOwnerStatus:'RENT', houseNumber:'17', flatNumber:null, street:'Birchwood Drive',
+                    city:'Manchester', county:'Greater Manchester', postCode:'M14 6PQ', timeAtAddress:'OVER_5Y', previousAddress:null },
+      employment: { status:'SELF_EMPLOYED', employer:'Okafor Consulting Ltd', employerPhone:null,
+                    jobTitle:'IT Consultant', lengthOfService:'OVER_4Y', employmentStart:'January 2015',
+                    netMonthlyIncome:3167, totalNetMonthlyIncome:3167, annualIncome:38000,
+                    howOftenGetPaid:'MONTHLY', whenGetPaid:'15', payFrequency:'Monthly', nextPayDate:'15 Apr 2026' }
     },
+    expenses:{ rentMortgage:950, utilitiesBills:130, councilTax:0, creditCommitments:280, travelTransport:180, subscriptions:60, householdExpenses:250, otherExpenses:0, numberOfDependents:0, incomeExpensesConfirmed:true },
+    consents:{ marketingPhone:false, marketingEmail:false, marketingSms:false, privacyConsent:true },
     incomeExpenditure:{ monthlyIncome:3200, housingCosts:950, transportCosts:180, livingCosts:520, otherDebts:280 },
     paymentDetails:{
       card:{ type:'Mastercard Debit', last4:'7743', expiry:'03/26', collectionDayOfMonth:15, active:true },
@@ -1222,10 +1296,18 @@ var CUSTOMER_REGISTRY = [
     credentials:{ email:'priya.patel@email.co.uk', pin:'9012' },
     loan:{ principal:750, apr:29.9, term:6, startDate:'2026-03-01', paidCount:0, accountStatus:'active' },
     profile:{
-      personal:   { title:'Ms', firstName:'Priya', lastName:'Patel', dob:'1994-07-08' },
-      contact:    { email:'priya.patel@email.co.uk', phone:'+44 7881 223 344', address:'9 Rosewood Close, Birmingham, B15 2TG', residentSince:'June 2021' },
-      employment: { status:'Full-time employed', employer:'Midlands NHS Trust', jobTitle:'Staff Nurse', employmentStart:'September 2019', annualIncome:'£31,500', payFrequency:'Monthly', nextPayDate:'01 Apr 2026' }
+      personal:   { title:'MS', firstName:'Priya', lastName:'Patel', dob:'1994-07-08', maritalStatus:'SINGLE' },
+      contact:    { email:'priya.patel@email.co.uk', phone:'+44 7881 223 344', mobileNumber:'+44 7881 223 344',
+                    address:'9 Rosewood Close, Birmingham, B15 2TG', residentSince:'June 2021',
+                    homeOwnerStatus:'RENT', houseNumber:'9', flatNumber:null, street:'Rosewood Close',
+                    city:'Birmingham', county:'West Midlands', postCode:'B15 2TG', timeAtAddress:'3_5Y', previousAddress:null },
+      employment: { status:'FULL_TIME', employer:'Midlands NHS Trust', employerPhone:'0121 333 4444',
+                    jobTitle:'Staff Nurse', lengthOfService:'2_4Y', employmentStart:'September 2019',
+                    netMonthlyIncome:2188, totalNetMonthlyIncome:2625, annualIncome:31500,
+                    howOftenGetPaid:'MONTHLY', whenGetPaid:'01', payFrequency:'Monthly', nextPayDate:'01 Apr 2026' }
     },
+    expenses:{ rentMortgage:780, utilitiesBills:100, councilTax:0, creditCommitments:0, travelTransport:90, subscriptions:30, householdExpenses:180, otherExpenses:30, numberOfDependents:0, incomeExpensesConfirmed:true },
+    consents:{ marketingPhone:false, marketingEmail:true, marketingSms:true, privacyConsent:true },
     incomeExpenditure:{ monthlyIncome:2625, housingCosts:780, transportCosts:90, livingCosts:380, otherDebts:0 },
     paymentDetails:{
       card:{ type:'Visa Debit', last4:'2201', expiry:'11/28', collectionDayOfMonth:1, active:true },
@@ -1238,10 +1320,18 @@ var CUSTOMER_REGISTRY = [
     credentials:{ email:'d.chen@email.co.uk', pin:'3456' },
     loan:{ principal:5000, apr:29.9, term:24, startDate:'2025-12-10', paidCount:3, accountStatus:'default' },
     profile:{
-      personal:   { title:'Mr', firstName:'David', lastName:'Chen', dob:'1979-04-30' },
-      contact:    { email:'d.chen@email.co.uk', phone:'+44 7700 556 789', address:'31 Harbour View, Liverpool, L1 0AX', residentSince:'November 2015' },
-      employment: { status:'Part-time employed', employer:'City Catering Ltd', jobTitle:'Catering Manager', employmentStart:'July 2021', annualIncome:'£22,000', payFrequency:'Monthly', nextPayDate:'10 Apr 2026' }
+      personal:   { title:'MR', firstName:'David', lastName:'Chen', dob:'1979-04-30', maritalStatus:'PARTNER' },
+      contact:    { email:'d.chen@email.co.uk', phone:'+44 7700 556 789', mobileNumber:'+44 7700 556 789',
+                    address:'31 Harbour View, Liverpool, L1 0AX', residentSince:'November 2015',
+                    homeOwnerStatus:'RENT', houseNumber:'31', flatNumber:null, street:'Harbour View',
+                    city:'Liverpool', county:'Merseyside', postCode:'L1 0AX', timeAtAddress:'OVER_5Y', previousAddress:null },
+      employment: { status:'PART_TIME', employer:'City Catering Ltd', employerPhone:'0151 771 9900',
+                    jobTitle:'Catering Manager', lengthOfService:'1_2Y', employmentStart:'July 2021',
+                    netMonthlyIncome:1542, totalNetMonthlyIncome:1833, annualIncome:22000,
+                    howOftenGetPaid:'MONTHLY', whenGetPaid:'10', payFrequency:'Monthly', nextPayDate:'10 Apr 2026' }
     },
+    expenses:{ rentMortgage:650, utilitiesBills:110, councilTax:0, creditCommitments:350, travelTransport:200, subscriptions:20, householdExpenses:350, otherExpenses:30, numberOfDependents:2, incomeExpensesConfirmed:true },
+    consents:{ marketingPhone:false, marketingEmail:false, marketingSms:false, privacyConsent:true },
     incomeExpenditure:{ monthlyIncome:1833, housingCosts:650, transportCosts:200, livingCosts:600, otherDebts:350 },
     paymentDetails:{
       card:{ type:'Mastercard Debit', last4:'6654', expiry:'07/26', collectionDayOfMonth:10, active:true },
@@ -1254,10 +1344,18 @@ var CUSTOMER_REGISTRY = [
     credentials:{ email:'emma.thompson@email.co.uk', pin:'7890' },
     loan:{ principal:2500, apr:29.9, term:12, startDate:'2025-02-20', paidCount:12, accountStatus:'terminated' },
     profile:{
-      personal:   { title:'Ms', firstName:'Emma', lastName:'Thompson', dob:'1991-09-16' },
-      contact:    { email:'emma.thompson@email.co.uk', phone:'+44 7799 123 456', address:'5 Oak Street, Leeds, LS1 5DT', residentSince:'February 2019' },
-      employment: { status:'Full-time employed', employer:'Northern Finance Ltd', jobTitle:'Finance Analyst', employmentStart:'May 2017', annualIncome:'£36,000', payFrequency:'Monthly', nextPayDate:'N/A (loan closed)' }
+      personal:   { title:'MS', firstName:'Emma', lastName:'Thompson', dob:'1991-09-16', maritalStatus:'DIVORCED' },
+      contact:    { email:'emma.thompson@email.co.uk', phone:'+44 7799 123 456', mobileNumber:'+44 7799 123 456',
+                    address:'5 Oak Street, Leeds, LS1 5DT', residentSince:'February 2019',
+                    homeOwnerStatus:'JOINT_OWNER', houseNumber:'5', flatNumber:null, street:'Oak Street',
+                    city:'Leeds', county:'West Yorkshire', postCode:'LS1 5DT', timeAtAddress:'3_5Y', previousAddress:null },
+      employment: { status:'FULL_TIME', employer:'Northern Finance Ltd', employerPhone:'0113 445 6789',
+                    jobTitle:'Finance Analyst', lengthOfService:'OVER_4Y', employmentStart:'May 2017',
+                    netMonthlyIncome:3000, totalNetMonthlyIncome:3000, annualIncome:36000,
+                    howOftenGetPaid:'MONTHLY', whenGetPaid:'20', payFrequency:'Monthly', nextPayDate:'N/A (loan closed)' }
     },
+    expenses:{ rentMortgage:800, utilitiesBills:115, councilTax:0, creditCommitments:0, travelTransport:140, subscriptions:50, householdExpenses:220, otherExpenses:0, numberOfDependents:1, incomeExpensesConfirmed:true },
+    consents:{ marketingPhone:false, marketingEmail:true, marketingSms:false, privacyConsent:true },
     incomeExpenditure:{ monthlyIncome:3000, housingCosts:800, transportCosts:140, livingCosts:420, otherDebts:0 },
     paymentDetails:{
       card:{ type:'Visa Debit', last4:'3398', expiry:'06/27', collectionDayOfMonth:20, active:true },
@@ -1447,26 +1545,44 @@ function loadState() {
       lastActive: resolved.updatedAt,
       // ── Customer-level sub-objects (parallel to v3 schema sections) ──
       personal: {
-        title:     resolved.profile.title,
-        firstName: resolved.profile.firstName,
-        lastName:  resolved.profile.lastName,
-        dob:       resolved.profile.dob
+        title:         resolved.profile.title,
+        firstName:     resolved.profile.firstName,
+        lastName:      resolved.profile.lastName,
+        dob:           resolved.profile.dob,
+        maritalStatus: resolved.profile.maritalStatus || ''
       },
       contact: {
-        email:         resolved.contact.email,
-        phone:         resolved.contact.phone,
-        address:       resolved.contact.address,
-        residentSince: resolved.contact.residentSince
+        email:           resolved.contact.email,
+        phone:           resolved.contact.phone,
+        mobileNumber:    resolved.contact.mobileNumber    || resolved.contact.phone || '',
+        address:         resolved.contact.address,
+        residentSince:   resolved.contact.residentSince,
+        homeOwnerStatus: resolved.contact.homeOwnerStatus || '',
+        houseNumber:     resolved.contact.houseNumber     || '',
+        flatNumber:      resolved.contact.flatNumber      || '',
+        street:          resolved.contact.street          || '',
+        city:            resolved.contact.city            || '',
+        county:          resolved.contact.county          || '',
+        postCode:        resolved.contact.postCode        || '',
+        timeAtAddress:   resolved.contact.timeAtAddress   || ''
       },
       employment: {
-        status:          resolved.employment.status,
-        employer:        resolved.employment.employer,
-        jobTitle:        resolved.employment.jobTitle,
-        employmentStart: resolved.employment.employmentStart,
-        annualIncome:    resolved.employment.annualIncome,
-        payFrequency:    resolved.employment.payFrequency,
-        nextPayDate:     resolved.employment.nextPayDate
+        status:                resolved.employment.status,
+        employer:              resolved.employment.employer,
+        employerPhone:         resolved.employment.employerPhone         || '',
+        jobTitle:              resolved.employment.jobTitle,
+        lengthOfService:       resolved.employment.lengthOfService       || '',
+        employmentStart:       resolved.employment.employmentStart,
+        netMonthlyIncome:      resolved.employment.netMonthlyIncome      || 0,
+        totalNetMonthlyIncome: resolved.employment.totalNetMonthlyIncome || 0,
+        annualIncome:          resolved.employment.annualIncome,
+        howOftenGetPaid:       resolved.employment.howOftenGetPaid       || '',
+        whenGetPaid:           resolved.employment.whenGetPaid           || '',
+        payFrequency:          resolved.employment.payFrequency,
+        nextPayDate:           resolved.employment.nextPayDate
       },
+      expenses:  resolved.expenses  || {},
+      consents:  resolved.consents  || {},
       affordability: {
         monthlyIncome:   firstDefined(aff.monthlyIncome, rawIEA.monthlyIncome, 0),
         housingCosts:    firstDefined(aff.housingCosts, rawIEA.housingCosts, 0),
@@ -1559,23 +1675,55 @@ function loadState() {
   var rawIE   = (st.affordability && st.affordability.incomeExpenditure && st.affordability.incomeExpenditure.raw) || {};
   var derivIE = (st.affordability && st.affordability.incomeExpenditure && st.affordability.incomeExpenditure.derived) || {};
   var canonPdB = st.paymentDetails || {};
+  var profExp = (st.profile && st.profile.expenses) || {};
+  var profCo  = (st.profile && st.profile.contact)  || {};
+  var profEm  = (st.profile && st.profile.employment) || {};
   OPS.account = {
     id: st.customerId, name: prof.fullName, loanId: prof.loanId,
     createdAt: loan.originatedAt, lastActive: st.updatedAt,
     // ── Customer-level sub-objects (parallel to v3 schema sections) ──
     personal: {
-      title: prof.title, firstName: prof.firstName, lastName: prof.lastName, dob: prof.dob
+      title: prof.title, firstName: prof.firstName, lastName: prof.lastName, dob: prof.dob,
+      maritalStatus: (st.profile && st.profile.personal && st.profile.personal.maritalStatus) || ''
     },
     contact: {
       email: prof.email, phone: prof.phone,
-      address: prof.address, residentSince: prof.residentSince
+      mobileNumber:    profCo.mobileNumber    || prof.phone || '',
+      address: prof.address, residentSince: prof.residentSince,
+      homeOwnerStatus: profCo.homeOwnerStatus || '',
+      houseNumber:     profCo.houseNumber     || '',
+      flatNumber:      profCo.flatNumber      || '',
+      street:          profCo.street          || '',
+      city:            profCo.city            || '',
+      county:          profCo.county          || '',
+      postCode:        profCo.postCode        || '',
+      timeAtAddress:   profCo.timeAtAddress   || ''
     },
     employment: {
       status: prof.employmentStatus, employer: prof.employer,
-      jobTitle: prof.jobTitle, employmentStart: prof.employmentStart,
-      annualIncome: prof.annualIncome, payFrequency: prof.payFrequency,
-      nextPayDate: prof.nextPayDate
+      employerPhone:         profEm.employerPhone         || '',
+      jobTitle:              prof.jobTitle, employmentStart: prof.employmentStart,
+      lengthOfService:       profEm.lengthOfService       || '',
+      netMonthlyIncome:      profEm.netMonthlyIncome      || 0,
+      totalNetMonthlyIncome: profEm.totalNetMonthlyIncome || 0,
+      annualIncome:          prof.annualIncome,
+      howOftenGetPaid:       profEm.howOftenGetPaid       || prof.payFrequency || '',
+      whenGetPaid:           profEm.whenGetPaid           || prof.nextPayDate  || '',
+      payFrequency: prof.payFrequency, nextPayDate: prof.nextPayDate
     },
+    expenses: {
+      rentMortgage:      profExp.rentMortgage      || 0,
+      utilitiesBills:    profExp.utilitiesBills    || 0,
+      councilTax:        profExp.councilTax        || 0,
+      creditCommitments: profExp.creditCommitments || 0,
+      travelTransport:   profExp.travelTransport   || 0,
+      subscriptions:     profExp.subscriptions     || 0,
+      householdExpenses: profExp.householdExpenses || 0,
+      otherExpenses:     profExp.otherExpenses     || 0,
+      numberOfDependents: profExp.numberOfDependents || 0,
+      incomeExpensesConfirmed: !!profExp.incomeExpensesConfirmed
+    },
+    consents: (function(){ var co=st.consents||{}; return { marketingPhone:!!co.marketingPhone, marketingEmail:!!co.marketingEmail, marketingSms:!!co.marketingSms, privacyConsent:!!co.privacyConsent, consentedAt:co.consentedAt||null }; }()),
     affordability: {
       monthlyIncome:   rawIE.monthlyIncome  || 0,
       housingCosts:    rawIE.housingCosts   || 0,
@@ -1866,28 +2014,63 @@ function renderCustomer() {
   var con  = acct.contact     || {};
   var emp  = acct.employment  || {};
   var aff  = acct.affordability || {};
+  var exp  = acct.expenses    || {};
+  var cons = acct.consents    || {};
   var displayName = ((per.firstName||'') + ' ' + (per.lastName||'')).trim() || acct.name || '';
-  setVal('cust-title',          per.title        || '');
-  setVal('cust-firstname',      per.firstName    || '');
-  setVal('cust-name',           per.lastName     || (acct.name||'').split(' ').slice(1).join(' ') || acct.name || '');
-  setVal('cust-email',          con.email        || '');
-  setVal('cust-phone',          con.phone        || '');
-  setVal('cust-address',        con.address      || '');
-  setVal('cust-dob',            per.dob          || '');
-  setVal('cust-resident-since', con.residentSince|| '');
-  setVal('cust-empstatus',      emp.status       || '');
-  setVal('cust-employer',       emp.employer     || '');
-  setVal('cust-jobtitle',       emp.jobTitle     || '');
-  setVal('cust-empstart',       emp.employmentStart || '');
-  setVal('cust-income',         emp.annualIncome || '');
-  setVal('cust-payfreq',        emp.payFrequency || '');
-  setVal('cust-payday',         emp.nextPayDate  || '');
+  // Personal
+  setVal('cust-title',     per.title     || '');
+  setVal('cust-firstname', per.firstName || '');
+  setVal('cust-name',      per.lastName  || (acct.name||'').split(' ').slice(1).join(' ') || acct.name || '');
+  setVal('cust-dob',       per.dob       || '');
+  setVal('cust-marital',   per.maritalStatus || '');
+  // Contact
+  setVal('cust-email', con.email || '');
+  setVal('cust-phone', con.mobileNumber || con.phone || '');
+  // Structured address
+  setVal('cust-house-num',    con.houseNumber     || '');
+  setVal('cust-flat-num',     con.flatNumber      || '');
+  setVal('cust-street',       con.street          || con.address || '');
+  setVal('cust-city',         con.city            || '');
+  setVal('cust-county',       con.county          || '');
+  setVal('cust-postcode',     con.postCode        || '');
+  setVal('cust-home-status',  con.homeOwnerStatus || '');
+  setVal('cust-time-address', con.timeAtAddress   || '');
+  // Employment
+  setVal('cust-empstatus',        emp.status              || '');
+  setVal('cust-employer',         emp.employer            || '');
+  setVal('cust-employer-phone',   emp.employerPhone       || '');
+  setVal('cust-jobtitle',         emp.jobTitle            || '');
+  setVal('cust-length-service',   emp.lengthOfService     || '');
+  setVal('cust-empstart',         emp.employmentStart     || '');
+  setVal('cust-net-income',       emp.netMonthlyIncome    || emp.annualIncome && Math.round(emp.annualIncome/12) || 0);
+  setVal('cust-total-income',     emp.totalNetMonthlyIncome || emp.netMonthlyIncome || 0);
+  setVal('cust-how-paid',         emp.howOftenGetPaid     || emp.payFrequency || '');
+  setVal('cust-when-paid',        emp.whenGetPaid         || emp.nextPayDate  || '');
+  // I&E summary (editable buckets)
   setVal('cust-ie-income',      aff.monthlyIncome  || 0);
   setVal('cust-ie-housing',     aff.housingCosts   || 0);
   setVal('cust-ie-transport',   aff.transportCosts || 0);
   setVal('cust-ie-living',      aff.livingCosts    || 0);
   setVal('cust-ie-debts',       aff.otherDebts     || 0);
   setText('cust-ie-disposable', fmt(Math.max(0, aff.disposableIncome || 0)) + '/month');
+  // Expenses (read-only)
+  setText('ops-exp-rent',       fmt(exp.rentMortgage      || 0));
+  setText('ops-exp-utilities',  fmt(exp.utilitiesBills    || 0));
+  setText('ops-exp-council',    fmt(exp.councilTax        || 0));
+  setText('ops-exp-credit',     fmt(exp.creditCommitments || 0));
+  setText('ops-exp-travel',     fmt(exp.travelTransport   || 0));
+  setText('ops-exp-subs',       fmt(exp.subscriptions     || 0));
+  setText('ops-exp-household',  fmt(exp.householdExpenses || 0));
+  setText('ops-exp-other',      fmt(exp.otherExpenses     || 0));
+  setText('ops-exp-dependents', String(exp.numberOfDependents || 0));
+  setText('ops-exp-confirmed',  exp.incomeExpensesConfirmed ? 'Yes' : 'No');
+  // Consents (read-only)
+  function yesNo(v){ return v ? '<span style="color:var(--green);font-weight:700">Yes</span>' : '<span style="color:#dc2626;font-weight:700">No</span>'; }
+  var phoneEl=document.getElementById('ops-consent-phone'); if(phoneEl) phoneEl.innerHTML=yesNo(cons.marketingPhone);
+  var emailEl=document.getElementById('ops-consent-email'); if(emailEl) emailEl.innerHTML=yesNo(cons.marketingEmail);
+  var smsEl=document.getElementById('ops-consent-sms');     if(smsEl)   smsEl.innerHTML=yesNo(cons.marketingSms);
+  var privEl=document.getElementById('ops-consent-privacy');if(privEl)  privEl.innerHTML=yesNo(cons.privacyConsent);
+  setText('ops-consent-at', cons.consentedAt ? shortDate(cons.consentedAt) : '-');
   // Granular I&E panel - read-only display of all 16 line items
   var g = aff.granular || {};
   // Fallback: derive from flat buckets if granular is absent/all-zero
@@ -2646,10 +2829,12 @@ function saveCustomerProfile() {
         dob:      document.getElementById('cust-dob').value || per.dob
       },
       contact: {
-        email:         newEmail || con.email,
-        phone:         newPhone || con.phone,
-        address:       document.getElementById('cust-address').value        || con.address,
-        residentSince: document.getElementById('cust-resident-since').value || con.residentSince
+        email:    newEmail || con.email,
+        phone:    newPhone || con.phone,
+        street:   document.getElementById('cust-street').value   || con.street,
+        city:     document.getElementById('cust-city').value     || con.city,
+        county:   document.getElementById('cust-county').value   || con.county,
+        postCode: document.getElementById('cust-postcode').value || con.postCode
       }
     },
     actor: 'ops_ui'
@@ -2657,13 +2842,15 @@ function saveCustomerProfile() {
   _store.dispatch({
     type: Quido.CommandTypes.UPDATE_EMPLOYMENT,
     payload: {
-      status:          document.getElementById('cust-empstatus').value || emp.status,
-      employer:        document.getElementById('cust-employer').value  || emp.employer,
-      jobTitle:        document.getElementById('cust-jobtitle').value  || emp.jobTitle,
-      employmentStart: document.getElementById('cust-empstart').value  || emp.employmentStart,
-      annualIncome:    document.getElementById('cust-income').value    || emp.annualIncome,
-      payFrequency:    document.getElementById('cust-payfreq').value   || emp.payFrequency,
-      nextPayDate:     document.getElementById('cust-payday').value    || emp.nextPayDate
+      status:                document.getElementById('cust-empstatus').value    || emp.status,
+      employer:              document.getElementById('cust-employer').value     || emp.employer,
+      jobTitle:              document.getElementById('cust-jobtitle').value     || emp.jobTitle,
+      employmentStart:       document.getElementById('cust-empstart').value     || emp.employmentStart,
+      netMonthlyIncome:      parseFloat(document.getElementById('cust-net-income').value)   || emp.netMonthlyIncome,
+      totalNetMonthlyIncome: parseFloat(document.getElementById('cust-total-income').value) || emp.totalNetMonthlyIncome,
+      annualIncome:          emp.annualIncome,
+      payFrequency:          emp.payFrequency,
+      nextPayDate:           emp.nextPayDate
     },
     actor: 'ops_ui'
   });
