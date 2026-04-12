@@ -89,12 +89,13 @@
       closureReason:  null,
 
       statusEngineState: {
-        coreStatus:      'active',
-        overlays:        {},
-        displayStatus:   'active',
-        reasonCodes:     [],
-        derivedFlags:    {},
-        lastEvaluatedAt: now
+        coreStatus:            'active',
+        overlays:              {},
+        displayStatus:         'active',
+        resolvedDisplayStatus: 'active',
+        reasonCodes:           [],
+        derivedFlags:          {},
+        lastEvaluatedAt:       now
       },
 
       loanCore: {
@@ -1068,6 +1069,22 @@
         var actor   = command.actor   || 'system';
         var loan    = activeLoan();
 
+        // ── Status engine helpers ────────────────────────────────────
+        // All three fields move together so resolvedDisplayStatus is
+        // always the single authoritative value for external consumers.
+        function _setAllStatus(se, s) {
+          se.coreStatus = se.displayStatus = se.resolvedDisplayStatus = s;
+        }
+        // For overlays: coreStatus (base) is preserved; display fields
+        // reflect the overlay (e.g. 'holiday', 'arrangement', 'dmp').
+        function _setOverlayStatus(se, overlayStatus) {
+          se.displayStatus = se.resolvedDisplayStatus = overlayStatus;
+        }
+        // Restore display fields to coreStatus when an overlay ends.
+        function _clearOverlayStatus(se) {
+          se.displayStatus = se.resolvedDisplayStatus = se.coreStatus;
+        }
+
         switch (type) {
 
           // ── Customer-level mutations ────────────────────────────
@@ -1112,7 +1129,7 @@
               if (payload.contract)  merge(loan.loanCore, payload.contract);
               if (payload.servicing) {
                 if (payload.servicing.paidCount  !== undefined) loan.loanCore.paidCount  = payload.servicing.paidCount;
-                if (payload.servicing.accountStatus)            loan.statusEngineState.coreStatus = payload.servicing.accountStatus;
+                if (payload.servicing.accountStatus)            _setAllStatus(loan.statusEngineState, payload.servicing.accountStatus);
               }
               if (payload.principal  !== undefined) loan.loanCore.principal  = payload.principal;
               if (payload.apr        !== undefined) loan.loanCore.apr        = payload.apr;
@@ -1149,6 +1166,7 @@
                 // Auto-complete the arrangement once fully paid
                 if (_pa.totalAmount > 0 && _pa.totalPaid >= _pa.totalAmount - 0.01) {
                   _pa.active = false;
+                  if (loan.statusEngineState) _clearOverlayStatus(loan.statusEngineState);
                 }
               }
             }
@@ -1288,6 +1306,7 @@
                 originalPaidCount: phPaidIdx,
                 originalTermMonths: (phLc.termMonths || 0) - 1
               };
+              _setOverlayStatus(loan.statusEngineState, 'holiday');
             }
             persistAndBroadcast(type, actor);
             break;
@@ -1340,6 +1359,7 @@
                 if (!Array.isArray(arrsPHDone.paymentHolidayHistory)) arrsPHDone.paymentHolidayHistory = [];
                 arrsPHDone.paymentHolidayHistory.push(activePH);
                 arrsPHDone.paymentHoliday = null;
+                _clearOverlayStatus(loan.statusEngineState);
               }
             }
             persistAndBroadcast(type, actor);
@@ -1381,6 +1401,7 @@
               for (var _pai = paPaidIdx; _pai < paSnap.length && _pai < paPaidIdx + paMonths; _pai++) {
                 paSnap[_pai].pa = true;
               }
+              _setOverlayStatus(loan.statusEngineState, 'arrangement');
             }
             persistAndBroadcast(type, actor);
             break;
@@ -1398,6 +1419,7 @@
                 for (var _bpi = breakPaidIdx; _bpi < breakSnap.length; _bpi++) {
                   if (breakSnap[_bpi].pa) breakSnap[_bpi].pa = false;
                 }
+                if (loan.statusEngineState) _clearOverlayStatus(loan.statusEngineState);
               }
             }
             persistAndBroadcast(type, actor);
@@ -1405,11 +1427,11 @@
 
           case CommandTypes.CHANGE_ACCOUNT_STATUS:
             if (loan) {
-              var newSt = payload.status || 'active';
-              loan.statusEngineState.coreStatus    = newSt;
-              loan.statusEngineState.displayStatus = newSt;
+              var newSt  = payload.status || 'active';
+              var prevSt = loan.statusEngineState.coreStatus || 'active';
+              _setAllStatus(loan.statusEngineState, newSt);
               loan.adjustments.statusChanges.push({
-                from: (loan.statusEngineState.coreStatus), to: newSt,
+                from: prevSt, to: newSt,
                 timestamp: nowIso(), actor: actor
               });
             }
@@ -1479,8 +1501,7 @@
 
           case CommandTypes.CLOSE_ACCOUNT:
             if (loan) {
-              loan.statusEngineState.coreStatus    = 'terminated';
-              loan.statusEngineState.displayStatus = 'terminated';
+              _setAllStatus(loan.statusEngineState, 'terminated');
               loan.closedAt      = nowIso();
               loan.closureReason = 'terminated';
               loan.adjustments.statusChanges.push({
@@ -1521,6 +1542,7 @@
                 payload: { type: payload.type, reference: payload.reference || '' },
                 source: actor, timestamp: nowIso()
               });
+              _setOverlayStatus(loan.statusEngineState, payload.type);
             }
             persistAndBroadcast(type, actor);
             break;
@@ -1541,16 +1563,14 @@
               // Seed status for outcome
               var fovOrig = fovEx.originalContext || {};
               var fovSE2  = loan.statusEngineState || {};
-              if (fovOutcome === 'settled') {
-                fovSE2.baseStatus = fovSE2.coreStatus = fovSE2.displayStatus = 'settled';
-              } else if (fovOutcome === 'closed') {
-                fovSE2.baseStatus = fovSE2.coreStatus = fovSE2.displayStatus = 'closed';
-              } else if (fovOutcome === 'terminated') {
-                fovSE2.baseStatus = fovSE2.coreStatus = fovSE2.displayStatus = 'terminated';
-              } else {
+              if (fovOutcome === 'settled')         { _setAllStatus(fovSE2, 'settled');    fovSE2.baseStatus = 'settled'; }
+              else if (fovOutcome === 'closed')     { _setAllStatus(fovSE2, 'closed');     fovSE2.baseStatus = 'closed'; }
+              else if (fovOutcome === 'terminated') { _setAllStatus(fovSE2, 'terminated'); fovSE2.baseStatus = 'terminated'; }
+              else {
                 // pullback / restored — restore original base status
                 var restBase = fovOrig.baseStatus || 'active';
-                fovSE2.baseStatus = fovSE2.coreStatus = fovSE2.displayStatus = restBase;
+                _setAllStatus(fovSE2, restBase);
+                fovSE2.baseStatus = restBase;
               }
               loan.auditTrail.push({
                 id: 'fov-exit-' + Date.now(), action: 'forbearance_overlay_exited',
