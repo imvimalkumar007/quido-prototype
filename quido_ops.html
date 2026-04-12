@@ -228,6 +228,25 @@ a{text-decoration:none;color:inherit;cursor:pointer}
   </div>
 </div>
 
+<!-- ═══════ FORBEARANCE EXIT MODAL ═══════ -->
+<div id="fov-exit-modal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:9500;align-items:center;justify-content:center">
+  <div style="width:460px;background:var(--surface);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden">
+    <div style="padding:18px 20px 0">
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px" id="fov-exit-modal-title">Exit Overlay</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px" id="fov-exit-modal-desc"></div>
+      <div style="padding:10px 14px;background:var(--amber-bg);border:1px solid var(--border);border-radius:var(--r-sm);font-size:12px;color:var(--amber);margin-bottom:14px" id="fov-exit-modal-consequence"></div>
+      <div class="field" style="margin-bottom:16px">
+        <label>Notes <span style="font-weight:400;color:var(--muted)">(optional — will be logged)</span></label>
+        <textarea id="fov-exit-modal-notes" rows="3" placeholder="Add any relevant notes for the audit trail…" style="resize:vertical"></textarea>
+      </div>
+    </div>
+    <div style="padding:12px 20px 18px;display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--border)">
+      <button class="btn btn-secondary btn-sm" onclick="closeFovExitModal()">Cancel</button>
+      <button class="btn btn-sm" id="fov-exit-modal-confirm" onclick="executeFovExit()">Confirm</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════ OPS CUSTOMER SELECTOR ═══════ -->
 <div id="ops-cust-selector" style="position:fixed;inset:0;background:var(--bg);z-index:9800;display:none;flex-direction:column;overflow:hidden">
   <div style="background:var(--sb);padding:16px 24px;display:flex;align-items:center;gap:14px;flex-shrink:0;border-bottom:1px solid var(--sb-border)">
@@ -286,7 +305,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
       </div>
       <div class="sb-group">Workspace</div>
       <div class="sb-item" data-sec="sec-pending">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="2" width="11" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 5.5h5M4.5 8h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="11" cy="3" r="2.5" fill="#f59e0b" stroke="var(--sb)" stroke-width="1"/></svg>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="2" width="11" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 5.5h5M4.5 8h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle id="sb-pending-dot" cx="11" cy="3" r="2.5" fill="#f59e0b" stroke="var(--sb)" stroke-width="1" style="display:none"/></svg>
         Pending Applications
         <span class="sb-badge" id="sb-pending-badge" style="display:none">0</span>
       </div>
@@ -577,23 +596,32 @@ a{text-decoration:none;color:inherit;cursor:pointer}
         </div>
 
         <div class="card" style="margin-bottom:14px">
-          <div class="card-hdr"><span class="card-title">Monthly Expenses</span><span style="font-size:11px;color:var(--muted)">Declared at application — read only</span></div>
-          <div class="card-body" style="padding-bottom:4px">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
-              <div class="kv"><span class="kv-k">Rent / mortgage</span><span class="kv-v mono" id="ops-exp-rent">-</span></div>
-              <div class="kv"><span class="kv-k">Utilities bills</span><span class="kv-v mono" id="ops-exp-utilities">-</span></div>
-              <div class="kv"><span class="kv-k">Council tax</span><span class="kv-v mono" id="ops-exp-council">-</span></div>
-              <div class="kv"><span class="kv-k">Credit commitments</span><span class="kv-v mono" id="ops-exp-credit">-</span></div>
-              <div class="kv"><span class="kv-k">Travel &amp; transport</span><span class="kv-v mono" id="ops-exp-travel">-</span></div>
-              <div class="kv"><span class="kv-k">Subscriptions</span><span class="kv-v mono" id="ops-exp-subs">-</span></div>
-              <div class="kv"><span class="kv-k">Household expenses</span><span class="kv-v mono" id="ops-exp-household">-</span></div>
-              <div class="kv"><span class="kv-k">Other expenses</span><span class="kv-v mono" id="ops-exp-other">-</span></div>
+          <div class="card-hdr"><span class="card-title">Monthly Expenses</span><span style="font-size:11px;color:var(--muted)">Agent-editable — saved with profile</span></div>
+          <div class="card-body" style="padding-bottom:10px">
+            <div class="field-row" style="margin-bottom:10px">
+              <div class="field"><label>Rent / mortgage</label><input type="number" id="ops-exp-rent" step="10" min="0"></div>
+              <div class="field"><label>Utilities bills</label><input type="number" id="ops-exp-utilities" step="10" min="0"></div>
             </div>
-            <div class="kv" style="border-top:1px solid var(--border);margin-top:4px;padding-top:8px">
-              <span class="kv-k">Number of dependants</span><span class="kv-v mono" id="ops-exp-dependents">-</span>
+            <div class="field-row" style="margin-bottom:10px">
+              <div class="field"><label>Council tax</label><input type="number" id="ops-exp-council" step="10" min="0"></div>
+              <div class="field"><label>Credit commitments</label><input type="number" id="ops-exp-credit" step="10" min="0"></div>
             </div>
-            <div class="kv" style="margin-bottom:8px">
-              <span class="kv-k">Income &amp; expenses confirmed</span><span class="kv-v mono" id="ops-exp-confirmed">-</span>
+            <div class="field-row" style="margin-bottom:10px">
+              <div class="field"><label>Travel &amp; transport</label><input type="number" id="ops-exp-travel" step="10" min="0"></div>
+              <div class="field"><label>Subscriptions</label><input type="number" id="ops-exp-subs" step="10" min="0"></div>
+            </div>
+            <div class="field-row" style="margin-bottom:10px">
+              <div class="field"><label>Household expenses</label><input type="number" id="ops-exp-household" step="10" min="0"></div>
+              <div class="field"><label>Other expenses</label><input type="number" id="ops-exp-other" step="10" min="0"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Number of dependants</label><input type="number" id="ops-exp-dependents" step="1" min="0"></div>
+              <div class="field"><label>I&amp;E confirmed by customer</label>
+                <select id="ops-exp-confirmed">
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -1897,9 +1925,11 @@ function renderPendingApplications() {
   var secCount = document.getElementById('pending-sec-count');
   if (secBox) secBox.innerHTML = listHtml;
   if (secCount) secCount.textContent = countText;
-  // Sidebar badge
+  // Sidebar badge + dot
   var badge = document.getElementById('sb-pending-badge');
   if (badge) { badge.textContent = n; badge.style.display = n ? '' : 'none'; }
+  var dot = document.getElementById('sb-pending-dot');
+  if (dot) dot.style.display = n ? '' : 'none';
   // Selector overlay badge
   var selBadge = document.getElementById('sel-pending-badge');
   if (selBadge) { selBadge.textContent = n; selBadge.style.display = n ? '' : 'none'; }
@@ -2053,17 +2083,18 @@ function renderCustomer() {
   setVal('cust-ie-living',      aff.livingCosts    || 0);
   setVal('cust-ie-debts',       aff.otherDebts     || 0);
   setText('cust-ie-disposable', fmt(Math.max(0, aff.disposableIncome || 0)) + '/month');
-  // Expenses (read-only)
-  setText('ops-exp-rent',       fmt(exp.rentMortgage      || 0));
-  setText('ops-exp-utilities',  fmt(exp.utilitiesBills    || 0));
-  setText('ops-exp-council',    fmt(exp.councilTax        || 0));
-  setText('ops-exp-credit',     fmt(exp.creditCommitments || 0));
-  setText('ops-exp-travel',     fmt(exp.travelTransport   || 0));
-  setText('ops-exp-subs',       fmt(exp.subscriptions     || 0));
-  setText('ops-exp-household',  fmt(exp.householdExpenses || 0));
-  setText('ops-exp-other',      fmt(exp.otherExpenses     || 0));
-  setText('ops-exp-dependents', String(exp.numberOfDependents || 0));
-  setText('ops-exp-confirmed',  exp.incomeExpensesConfirmed ? 'Yes' : 'No');
+  // Expenses (now editable)
+  setVal('ops-exp-rent',       exp.rentMortgage      || 0);
+  setVal('ops-exp-utilities',  exp.utilitiesBills    || 0);
+  setVal('ops-exp-council',    exp.councilTax        || 0);
+  setVal('ops-exp-credit',     exp.creditCommitments || 0);
+  setVal('ops-exp-travel',     exp.travelTransport   || 0);
+  setVal('ops-exp-subs',       exp.subscriptions     || 0);
+  setVal('ops-exp-household',  exp.householdExpenses || 0);
+  setVal('ops-exp-other',      exp.otherExpenses     || 0);
+  setVal('ops-exp-dependents', exp.numberOfDependents || 0);
+  var expConfEl = document.getElementById('ops-exp-confirmed');
+  if (expConfEl) expConfEl.value = exp.incomeExpensesConfirmed ? 'yes' : 'no';
   // Consents (read-only)
   function yesNo(v){ return v ? '<span style="color:var(--green);font-weight:700">Yes</span>' : '<span style="color:#dc2626;font-weight:700">No</span>'; }
   var phoneEl=document.getElementById('ops-consent-phone'); if(phoneEl) phoneEl.innerHTML=yesNo(cons.marketingPhone);
@@ -2746,6 +2777,37 @@ function opsApplyPA(amount, startDateStr) {
     reason:             opsPAReason,
     outstandingBalance: bal
   });
+  // Save the I&E declared during the PA setup back to the account affordability record
+  if (_store && opsPAIEData) {
+    var _g = {};
+    OPS_PA_INC_KEYS.forEach(function(k) {
+      var el = document.getElementById('ops-pa-ie-' + k); _g[k] = el ? (parseFloat(el.value)||0) : 0;
+    });
+    OPS_PA_EXP_KEYS.forEach(function(k) {
+      var el = document.getElementById('ops-pa-ie-' + k); _g[k] = el ? (parseFloat(el.value)||0) : 0;
+    });
+    _store.dispatch({
+      type: Quido.CommandTypes.UPDATE_AFFORDABILITY,
+      payload: {
+        monthlyIncome:  _g['inc-salary'] + _g['inc-secondary'] + _g['inc-benefits'] + _g['inc-other'],
+        housingCosts:   _g['exp-rent'],
+        transportCosts: _g['exp-transport'],
+        livingCosts:    _g['exp-food'],
+        otherDebts:     _g['exp-loans'] + _g['exp-cards'],
+        granular: {
+          incSalary:    _g['inc-salary'],    incSecondary: _g['inc-secondary'],
+          incBenefits:  _g['inc-benefits'],  incOther:     _g['inc-other'],
+          expRent:      _g['exp-rent'],      expCouncil:   _g['exp-council'],
+          expUtilities: _g['exp-utilities'], expFood:      _g['exp-food'],
+          expTransport: _g['exp-transport'], expChildcare: _g['exp-childcare'],
+          expMobile:    _g['exp-mobile'],    expLoans:     _g['exp-loans'],
+          expCards:     _g['exp-cards'],     expBnpl:      _g['exp-bnpl'],
+          expInsurance: _g['exp-insurance'], expSubs:      _g['exp-subs']
+        }
+      },
+      actor: 'ops_ui'
+    });
+  }
   document.getElementById('ops-pa-applied-msg').innerHTML =
     '<div style="background:var(--green-bg);border-radius:var(--r-sm);padding:12px;font-size:12px;color:var(--green);font-weight:600;margin-bottom:8px">'
     + '&#10003; Arrangement confirmed. ' + fmt(amount) + '/month from ' + shortDate(new Date(startDateStr)) + '. Interest frozen at 0%.</div>'
@@ -2879,6 +2941,25 @@ function saveCustomerProfile() {
         expBnpl:      0,
         expInsurance: 0,
         expSubs:      0
+      }
+    },
+    actor: 'ops_ui'
+  });
+  var expConfSel = document.getElementById('ops-exp-confirmed');
+  _store.dispatch({
+    type: Quido.CommandTypes.UPDATE_PROFILE,
+    payload: {
+      expenses: {
+        rentMortgage:           parseFloat(document.getElementById('ops-exp-rent').value)      || 0,
+        utilitiesBills:         parseFloat(document.getElementById('ops-exp-utilities').value) || 0,
+        councilTax:             parseFloat(document.getElementById('ops-exp-council').value)   || 0,
+        creditCommitments:      parseFloat(document.getElementById('ops-exp-credit').value)    || 0,
+        travelTransport:        parseFloat(document.getElementById('ops-exp-travel').value)    || 0,
+        subscriptions:          parseFloat(document.getElementById('ops-exp-subs').value)      || 0,
+        householdExpenses:      parseFloat(document.getElementById('ops-exp-household').value) || 0,
+        otherExpenses:          parseFloat(document.getElementById('ops-exp-other').value)     || 0,
+        numberOfDependents:     parseInt(document.getElementById('ops-exp-dependents').value)  || 0,
+        incomeExpensesConfirmed: expConfSel ? expConfSel.value === 'yes' : false
       }
     },
     actor: 'ops_ui'
@@ -3721,7 +3802,9 @@ function applyForbearanceOverlay() {
   renderForbearance();
 }
 
-// Show confirmation modal and exit the active overlay
+// Show in-page modal and exit the active overlay
+var _fovExitPending = null; // { outcome, label, resultingStatus }
+
 function confirmFovExit(outcome, label) {
   var loan = _fovGetActiveLoan();
   var fov  = loan && loan.forbearanceOverlay;
@@ -3731,22 +3814,48 @@ function confirmFovExit(outcome, label) {
     settled:    'Settled',
     closed:     'Closed',
     terminated: 'Terminated',
-    pullback:   'Original status restored and recalculated',
-    restored:   'Original status restored and recalculated'
+    pullback:   'Original status restored',
+    restored:   'Original status restored'
   }[outcome] || outcome;
 
-  var notes = window.prompt(
-    label + '\n\nResulting status: ' + resultingStatus
-    + '\n\nOptional notes (leave blank to skip):', ''
-  );
-  if (notes === null) return; // cancelled
+  _fovExitPending = { outcome: outcome, label: label, resultingStatus: resultingStatus };
+
+  var modal = document.getElementById('fov-exit-modal');
+  var title = document.getElementById('fov-exit-modal-title');
+  var desc  = document.getElementById('fov-exit-modal-desc');
+  var cons  = document.getElementById('fov-exit-modal-consequence');
+  var btn   = document.getElementById('fov-exit-modal-confirm');
+  var notes = document.getElementById('fov-exit-modal-notes');
+
+  if (title) title.textContent = label;
+  if (desc)  desc.textContent  = 'You are about to exit the active ' + (_fovFmt(fov.type)) + ' overlay.';
+  if (cons)  cons.textContent  = 'Resulting account status: ' + resultingStatus + '. This action will be permanently logged in the forbearance audit trail.';
+  if (btn) {
+    btn.className = 'btn btn-sm ' + ({ settled:'btn-success', closed:'btn-success', terminated:'btn-danger', pullback:'btn-primary', restored:'btn-primary' }[outcome] || 'btn-warning');
+    btn.textContent = label;
+  }
+  if (notes) notes.value = '';
+  if (modal) { modal.style.display = 'flex'; setTimeout(function(){ if (notes) notes.focus(); }, 60); }
+}
+
+function closeFovExitModal() {
+  var modal = document.getElementById('fov-exit-modal');
+  if (modal) modal.style.display = 'none';
+  _fovExitPending = null;
+}
+
+function executeFovExit() {
+  if (!_fovExitPending) return;
+  var notes = (document.getElementById('fov-exit-modal-notes') || {}).value || '';
+  var p = _fovExitPending;
+  closeFovExitModal();
 
   syncToCustomer('exit_forbearance_overlay', {
-    outcome: outcome,
-    reason:  notes || label
+    outcome: p.outcome,
+    reason:  notes.trim() || p.label
   });
 
-  toast(label + ' - account status updated to ' + resultingStatus + '.', 'success');
+  toast(p.label + ' — account status updated to ' + p.resultingStatus + '.', 'success');
   renderForbearance();
   updateTopbar();
 }

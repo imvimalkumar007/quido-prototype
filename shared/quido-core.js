@@ -1077,6 +1077,10 @@
             var personalFields = payload.personal || payload.identity;
             if (personalFields) merge(state.profile.personal, personalFields);
             if (payload.contact) merge(state.profile.contact, payload.contact);
+            if (payload.expenses) {
+              if (!state.profile.expenses) state.profile.expenses = {};
+              merge(state.profile.expenses, payload.expenses);
+            }
             persistAndBroadcast(type, actor);
             break;
 

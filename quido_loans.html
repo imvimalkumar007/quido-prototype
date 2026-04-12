@@ -2921,6 +2921,24 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       paymentDetails: account.paymentDetails || {}
     };
   }
+  function _lsAccountStatus(storageKey) {
+    // Read current loan status from localStorage for a seed account not yet in the API
+    try {
+      var raw = localStorage.getItem(storageKey);
+      if (!raw) return null;
+      var stored = JSON.parse(raw);
+      if (!stored) return null;
+      var loans = stored.loans || [];
+      var activeLoan = null;
+      for (var li = 0; li < loans.length; li++) {
+        if (loans[li].loanId === stored.activeLoanId) { activeLoan = loans[li]; break; }
+      }
+      if (!activeLoan && loans.length) activeLoan = loans[loans.length - 1];
+      if (!activeLoan) return null;
+      var se = activeLoan.statusEngineState || {};
+      return se.resolvedDisplayStatus || se.displayStatus || se.coreStatus || null;
+    } catch(e) { return null; }
+  }
   function mergePortalCustomerAccounts(accounts) {
     var byKey = {};
     (accounts || []).forEach(function(a) {
@@ -2936,7 +2954,9 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       if (live.phone && merged.profile && merged.profile.contact) merged.profile.contact.phone = live.phone;
       if (live.address && merged.profile && merged.profile.contact) merged.profile.contact.address = live.address;
       if (live.dob && merged.profile && merged.profile.personal) merged.profile.personal.dob = live.dob;
-      if (live.loanStatus && merged.loan) merged.loan.accountStatus = live.loanStatus;
+      // API response is authoritative; fall back to localStorage for seed accounts not yet in backend
+      var resolvedStatus = live.loanStatus || _lsAccountStatus(seed.storageKey);
+      if (resolvedStatus && merged.loan) merged.loan.accountStatus = resolvedStatus;
       return merged;
     });
     var seen = {};
@@ -2949,12 +2969,32 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
     });
     PORTAL_CUSTOMER_ACCOUNTS = mergedSeeds;
   }
+  function _demoStatusClass(status) {
+    var s = (status || 'active').toLowerCase();
+    if (s === 'arrears')          return 'sp--arrears';
+    if (s === 'default')          return 'sp--default';
+    if (s === 'terminated')       return 'sp--terminated';
+    if (s === 'settled')          return 'sp--settled';
+    if (s === 'closed')           return 'sp--closed';
+    if (s === 'holiday' || s === 'payment_holiday')         return 'sp--holiday';
+    if (s === 'arrangement' || s === 'payment_arrangement') return 'sp--arrangement';
+    if (s === 'forbearance' || s === 'dmp' || s === 'iva' || s === 'dro' ||
+        s === 'bankruptcy' || s === 'trust_deed' || s === 'breathing_space') return 'sp--forbearance';
+    return '';
+  }
+  function _demoStatusLabel(status) {
+    var labels = { active:'Active', arrears:'Arrears', default:'Default', terminated:'Closed',
+      settled:'Settled', closed:'Closed', payment_holiday:'Holiday', holiday:'Holiday',
+      payment_arrangement:'Arrangement', arrangement:'Arrangement', forbearance:'Forbearance',
+      dmp:'DMP', iva:'IVA', dro:'DRO', bankruptcy:'Bankruptcy', trust_deed:'Trust Deed',
+      breathing_space:'Breathing Space' };
+    return labels[(status||'active').toLowerCase()] || (status||'Active');
+  }
   function renderDemoAccounts() {
     var list = document.getElementById('ln-demos'); if (!list) return;
     list.innerHTML = '';
-    var statusClr = { active:'#00b865', arrears:'#d97706', default:'#dc2626', terminated:'#64748b' };
     PORTAL_CUSTOMER_ACCOUNTS.forEach(function(c) {
-      var clr = statusClr[c.loan.accountStatus] || '#64748b';
+      var spCls = _demoStatusClass(c.loan.accountStatus);
       var btn = document.createElement('button');
       btn.style.cssText = 'display:flex;align-items:center;gap:10px;width:100%;background:#fff;border:1px solid #e2e8f5;border-radius:10px;padding:10px 13px;cursor:pointer;text-align:left;transition:border-color .15s,background .15s';
       btn.onmouseover = function(){ this.style.borderColor='#1a56db'; this.style.background='#f8faff'; };
@@ -2962,7 +3002,8 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
       btn.innerHTML = '<div style="width:36px;height:36px;background:linear-gradient(135deg,#60a5fa,#1a56db);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0">'+c.initials+'</div>'
         +'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;color:#0f1828">'+c.name+'</div>'
         +'<div style="font-size:11px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+c.credentials.email+' &middot; PIN: '+c.credentials.pin+'</div></div>'
-        +'<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:12px;background:'+clr+'1a;color:'+clr+';flex-shrink:0">'+c.loan.accountStatus.charAt(0).toUpperCase()+c.loan.accountStatus.slice(1)+'</span>';
+        +'<span class="sp '+(spCls||'')+'" style="flex-shrink:0;font-size:10px;padding:2px 8px">'
+        +'<span class="sd"></span>'+_demoStatusLabel(c.loan.accountStatus)+'</span>';
       btn.onclick = function() {
         document.getElementById('ln-email').value = c.credentials.email;
         document.getElementById('ln-pin').value   = c.credentials.pin;
@@ -3464,6 +3505,9 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
   // Expose login handler to global scope (called from inline onclick attribute)
   window.attemptLogin = attemptLogin;
 
+  // Render immediately using seed data merged with any localStorage state,
+  // then loadPortalCustomerAccounts overwrites with live API statuses.
+  mergePortalCustomerAccounts([]);
   renderDemoAccounts();
   loadPortalCustomerAccounts();
 
