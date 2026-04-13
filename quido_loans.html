@@ -536,13 +536,8 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'DM Sans'
           </div>
         </div>
         <div class="card"><div class="ch"><span class="ct">Loan Summary</span><span class="cb" id="emi-badge">- instalments</span></div><div id="emi-list"></div></div>
-        <div class="contact-section loan-contact-wrap"><div class="contact-strips">
-        <a class="cstrip" href="/customer#faq"><div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="1.5"/><path d="M7.5 7.5a2.5 2.5 0 1 1 4.25 1.77c-.82.82-1.5 1.28-1.5 2.23" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="14.25" r=".8" fill="#fff"/></svg></div><div class="cstrip-text"><strong>Frequently Asked Questions</strong><span>Find answers to common queries</span></div></a>
-        <a class="cstrip" href="tel:08001234567"><div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4a1 1 0 011-1h2.5l1.2 3.5-1.8 1.8a10 10 0 005.3 5.3l1.8-1.8L17 14v2.5a1 1 0 01-1 1C8.2 17.5 2 11.8 4 4z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="cstrip-text"><strong>Call us</strong><span>0800 123 4567 &middot; Mon-Fri 9:00-17:00</span></div></a>
-        <a class="cstrip" href="mailto:info@quido.co.uk"><div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="#fff" stroke-width="1.5"/><path d="M2 7l8 5 8-5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="cstrip-text"><strong>Write to us</strong><span>info@quido.co.uk</span></div></a>
-        <a class="cstrip" href="mailto:complaints@quido.co.uk"><div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="1.5"/><path d="M10 6v4.5M10 13.5v.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></div><div class="cstrip-text"><strong>Make a complaint</strong><span>complaints@quido.co.uk</span></div></a>
-        </div></div>
         </div>
+
         <div class="ft">
           <div class="ft-inner">
           <div class="ft-top">
@@ -555,7 +550,7 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'DM Sans'
                   <span class="brand-word"><span class="brand-name" style="color:#fff">Quido</span></span>
                 </span>
               </button>
-              <div class="ft-copy">Personal loans, done right.</div>
+              <div class="ft-copy">Clear repayment journeys, flexible support, and fair treatment when life changes.</div>
             </div>
             <div class="ft-links">
               <a href="#">Loan</a>
@@ -2738,18 +2733,11 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'DM Sans'
   }
 
   // ═══════════════════════════════════════════════
-  // SHARED CONTACT BLOCK - injected into sub-screens
-  // ═══════════════════════════════════════════════
+  // Shared footer injected into sub-screens
   (function() {
-    var faqBtn  = '<a class="cstrip" href="/customer#faq"><div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="1.5"/><path d="M7.5 7.5a2.5 2.5 0 1 1 4.25 1.77c-.82.82-1.5 1.28-1.5 2.23" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="14.25" r=".8" fill="#fff"/></svg></div><div class="cstrip-text"><strong>Frequently Asked Questions</strong><span>Find answers to common queries</span></div></a>';
-    var callBtn = '<a class="cstrip" href="tel:08001234567"><div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4a1 1 0 011-1h2.5l1.2 3.5-1.8 1.8a10 10 0 005.3 5.3l1.8-1.8L17 14v2.5a1 1 0 01-1 1C8.2 17.5 2 11.8 4 4z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="cstrip-text"><strong>Call us</strong><span>0800 123 4567 &middot; Mon-Fri 9:00-17:00</span></div></a>';
-    var writeBtn= '<a class="cstrip" href="mailto:info@quido.co.uk"><div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="#fff" stroke-width="1.5"/><path d="M2 7l8 5 8-5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="cstrip-text"><strong>Write to us</strong><span>info@quido.co.uk</span></div></a>';
-    var cmpBtn  = '<a class="cstrip" href="mailto:complaints@quido.co.uk"><div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="1.5"/><path d="M10 6v4.5M10 13.5v.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></div><div class="cstrip-text"><strong>Make a complaint</strong><span>complaints@quido.co.uk</span></div></a>';
-    var wrapO   = '<div class="contact-section loan-contact-wrap"><div class="contact-strips">';
-    var wrapC   = '</div></div>';
-    var footer  = '<div class="ft"><div class="ft-inner"><div class="ft-top"><div class="ft-brand"><button class="brand-link" type="button" data-goto="s-home" aria-label="Go to homepage"><span class="brand-lockup"><div class="logo-box" style="width:30px;height:30px"><span class="logo-q" style="font-size:15px">Q</span></div><span class="brand-word"><span class="brand-name" style="color:#fff">Quido</span></span></span></button><div class="ft-copy">Personal loans, done right.</div></div><div class="ft-links"><a href="#">Loan</a><a href="#">About Us</a><a href="#">FAQs</a><a href="#">Careers</a><a href="#">Beware of Loan Sharks</a><a href="#">Terms of Use</a><a href="#">Contact Us</a><a href="#">Privacy Policy</a><a href="#">File a Complaint</a><a href="#">Fraud Disclaimer</a><a href="#">Insights</a><a href="#">Cookies Policy</a></div></div><div class="fleg">We are a lender and may pay commissions to credit brokers or other intermediaries. This commission does not affect the total cost of your loan.<br><br><strong>Responsible lending:</strong> Take a moment to decide if Quido is right for you. Short term loans are an expensive form of borrowing.<br><br>Quido Ltd. Authorised and regulated by the Financial Conduct Authority. Registration number 900001.</div></div></div>';
-    var full  = wrapO + faqBtn + callBtn + writeBtn + cmpBtn + wrapC + footer;
-    var noFaq = wrapO + callBtn + writeBtn + cmpBtn + wrapC + footer;
+    var footer = `<div class="ft"><div class="ft-inner"><div class="ft-top"><div class="ft-brand"><button class="brand-link" type="button" data-goto="s-home" aria-label="Go to homepage"><span class="brand-lockup"><div class="logo-box" style="width:30px;height:30px"><span class="logo-q" style="font-size:15px">Q</span></div><span class="brand-word"><span class="brand-name" style="color:#fff">Quido</span></span></span></button><div class="ft-copy">Clear repayment journeys, flexible support, and fair treatment when life changes.</div></div><div class="ft-links"><a href="#">Loan</a><a href="#">About Us</a><a href="#">FAQs</a><a href="#">Careers</a><a href="#">Beware of Loan Sharks</a><a href="#">Terms of Use</a><a href="#">Contact Us</a><a href="#">Privacy Policy</a><a href="#">File a Complaint</a><a href="#">Fraud Disclaimer</a><a href="#">Insights</a><a href="#">Cookies Policy</a></div></div><div class="fleg">We are a lender and may pay commissions to credit brokers or other intermediaries. This commission does not affect the total cost of your loan.<br><br><strong>Responsible lending:</strong> Take a moment to decide if Quido is right for you. Short term loans are an expensive form of borrowing.<br><br>Quido Ltd. Authorised and regulated by the Financial Conduct Authority. Registration number 900001.</div></div></div>`;
+    var full  = footer;
+    var noFaq = footer;
     var screens = [
       { id: 's-options', html: full },
       { id: 's-faq',     html: noFaq },

@@ -422,6 +422,133 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 /* ════════════════════════════════════════
    APP SECTION WRAPPER
 ════════════════════════════════════════ */
+
+
+/* Modern bento trust mosaic */
+.bento { background: var(--navy); padding: 72px 24px 80px; position: relative; overflow: hidden; }
+.bento::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 55% 55% at 85% 5%, rgba(0,201,167,0.12) 0%, transparent 60%), radial-gradient(ellipse 45% 55% at 5% 95%, rgba(28,56,146,0.35) 0%, transparent 60%); pointer-events: none; }
+.bento-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+.bento-eyebrow { font-family: var(--fb); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em; color: var(--teal); margin-bottom: 28px; }
+.bento-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.bc-4 { grid-column: 1 / 3; }
+.bc-5 { grid-column: 3 / 4; }
+.bc-4, .bc-5 { margin-top: 8px; }
+.bc { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 28px 26px; position: relative; overflow: hidden; transform: translateY(24px); opacity: 0; transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1), box-shadow .3s, background .2s; }
+.bc.in { opacity: 1; transform: translateY(0); }
+.bc:hover { box-shadow: 0 0 0 1px rgba(0,201,167,0.3); background: rgba(255,255,255,0.08); }
+.bc-1::after { content: ''; position: absolute; top: -40px; right: -40px; width: 130px; height: 130px; background: radial-gradient(circle, rgba(0,201,167,0.18) 0%, transparent 70%); pointer-events: none; }
+.bc-4::after { content: ''; position: absolute; bottom: -40px; left: -40px; width: 160px; height: 160px; background: radial-gradient(circle, rgba(28,56,146,0.55) 0%, transparent 70%); pointer-events: none; }
+.bc-ico { width: 44px; height: 44px; border-radius: 13px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; flex-shrink: 0; }
+.bc-ico svg { width: 22px; height: 22px; }
+.bci-blue { background: rgba(100,140,255,0.15); color: #7eb0ff; }
+.bci-ora { background: rgba(255,150,60,0.15); color: #ffaa55; }
+.bci-grn { background: rgba(80,220,120,0.15); color: #60e080; }
+.bc-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,201,167,0.12); border: 1px solid rgba(0,201,167,0.28); border-radius: 100px; padding: 4px 12px; font-family: var(--fb); font-size: 11px; font-weight: 600; color: var(--teal); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 16px; }
+.bc-tag-dot { width: 6px; height: 6px; background: var(--teal); border-radius: 50%; animation: tdot 2s ease-in-out infinite; flex-shrink: 0; }
+@keyframes tdot { 0%,100% { box-shadow: 0 0 0 0 rgba(0,201,167,0.5); } 50% { box-shadow: 0 0 0 4px rgba(0,201,167,0); } }
+.bc-stat, .bc-counter { font-family: var(--fd); font-size: clamp(38px, 3.5vw, 52px); font-weight: 800; color: var(--od-1); letter-spacing: -0.04em; line-height: 1; margin-bottom: 10px; }
+.bc-counter { color: var(--teal); }
+.bc-stat-unit { font-size: .48em; font-weight: 600; letter-spacing: -0.01em; opacity: .55; vertical-align: middle; }
+.bc-head { font-family: var(--fd); font-size: 16px; font-weight: 700; color: var(--od-1); margin-bottom: 7px; letter-spacing: -0.02em; }
+.bc-body { font-family: var(--fb); font-size: 13px; color: var(--od-2); line-height: 1.6; }
+.bc-sub { font-family: var(--fb); font-size: 12px; color: var(--od-3); margin-top: 4px; }
+
+/* Modern vertical timeline */
+.how { padding: 96px 24px 104px; background: var(--s2); position: relative; overflow: hidden; }
+.how::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 1px; height: 100%; background: linear-gradient(to bottom, transparent 0%, var(--border) 12%, var(--border) 88%, transparent 100%); pointer-events: none; }
+.how-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+.how-eyebrow { font-family: var(--fb); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--teal-d); margin-bottom: 10px; }
+.how-title { font-family: var(--fd); font-size: clamp(26px, 3.2vw, 42px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.07; color: var(--ink); margin-bottom: 8px; }
+.how-sub { font-family: var(--fb); font-size: 15px; color: var(--ink-soft); margin-bottom: 64px; line-height: 1.6; }
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.tl-step { display: grid; grid-template-columns: minmax(0, 1fr) 80px minmax(0, 1fr); align-items: start; }
+#tl1 .tl-node, #tl3 .tl-node { grid-column: 2; grid-row: 1; }
+#tl1 .tl-card, #tl3 .tl-card { grid-column: 1; grid-row: 1; padding-right: 32px; }
+#tl1 .tl-spacer, #tl3 .tl-spacer { grid-column: 3; grid-row: 1; }
+#tl2 .tl-node { grid-column: 2; grid-row: 1; }
+#tl2 .tl-card { grid-column: 3; grid-row: 1; padding-left: 32px; }
+#tl2 .tl-spacer { grid-column: 1; grid-row: 1; }
+.tl-card { background: #fff; border: 1px solid var(--border); border-radius: 18px; padding: 22px 22px 24px; box-shadow: 0 2px 12px rgba(7,16,30,0.05); margin-bottom: 40px; }
+.tl-card-num { font-family: var(--fb); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal-d); margin-bottom: 10px; }
+.tl-card h3 { font-family: var(--fd); font-size: 17px; font-weight: 800; color: var(--ink); margin-bottom: 7px; letter-spacing: -0.02em; }
+.tl-card p { font-family: var(--fb); font-size: 13.5px; color: var(--ink-soft); line-height: 1.65; }
+.tl-node { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; padding-top: 20px; }
+.tl-num { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--border); background: var(--surface); font-family: var(--fd); font-size: 17px; font-weight: 800; color: var(--ink-muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .45s cubic-bezier(.22,1,.36,1); }
+.tl-step.lit .tl-num { background: linear-gradient(135deg, var(--teal-d), var(--teal)); border-color: transparent; color: var(--navy); box-shadow: 0 0 0 6px rgba(0,201,167,0.15); animation: npop .5s cubic-bezier(.22,1,.36,1) forwards; }
+.tl-line { width: 2px; flex: 1; min-height: 52px; background: var(--border); position: relative; overflow: hidden; margin: 3px 0; }
+.tl-line-fill { position: absolute; top: 0; left: 0; width: 100%; height: 0%; background: linear-gradient(to bottom, var(--teal-d), var(--teal)); transition: height .75s cubic-bezier(.22,1,.36,1); }
+.tl-step.lit .tl-line-fill { height: 100%; }
+.how-cta { text-align: center; margin-top: 12px; }
+.btn-lg { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--teal-d), var(--teal)); color: var(--navy); border: none; padding: 14px 32px; border-radius: 100px; font-family: var(--fd); font-size: 14px; font-weight: 800; cursor: pointer; text-decoration: none; letter-spacing: -0.01em; transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s, filter .25s; }
+.btn-lg:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,201,167,0.36); filter: brightness(1.05); }
+.btn-arr { width: 22px; height: 22px; background: rgba(11,29,80,0.16); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform .2s; }
+.btn-lg:hover .btn-arr { transform: translateX(3px); }
+
+/* Modern contact form */
+.contact { background: var(--surface); padding: 96px 24px 104px; border-top: 1px solid var(--border); }
+.contact-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 560px); gap: 64px; align-items: start; }
+.contact-eyebrow { font-family: var(--fb); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--teal-d); margin-bottom: 10px; }
+.contact-title { font-family: var(--fd); font-size: clamp(28px, 3vw, 42px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.07; color: var(--ink); margin-bottom: 14px; }
+.contact-sub { font-family: var(--fb); font-size: 15px; color: var(--ink-soft); line-height: 1.7; margin-bottom: 40px; }
+.contact-details { display: flex; flex-direction: column; gap: 20px; }
+.contact-detail { display: flex; align-items: flex-start; gap: 14px; }
+.cd-ico { width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0; background: var(--teal-glow); color: var(--teal-d); display: flex; align-items: center; justify-content: center; }
+.cd-ico svg { width: 18px; height: 18px; }
+.cd-label { font-family: var(--fb); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-muted); margin-bottom: 3px; }
+.cd-value { font-family: var(--fd); font-size: 15px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+.cd-sub { font-family: var(--fb); font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
+.contact-form-wrap { background: #fff; border: 1px solid var(--border); border-radius: 24px; padding: 36px 32px; box-shadow: 0 4px 24px rgba(7,16,30,0.06); }
+.contact-form { display: flex; flex-direction: column; gap: 20px; }
+.cf-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+.cf-group { display: flex; flex-direction: column; gap: 6px; }
+.cf-label { font-family: var(--fb); font-size: 13px; font-weight: 600; color: var(--ink-soft); letter-spacing: -0.01em; }
+.cf-req { color: var(--teal-d); }
+.cf-input, .cf-select, .cf-textarea { font-family: var(--fb); font-size: 14px; color: var(--ink); background: #fff; border: 1.5px solid var(--border); border-radius: 10px; padding: 11px 14px; outline: none; transition: border-color .18s, box-shadow .18s; width: 100%; min-width: 0; }
+.cf-input::placeholder, .cf-textarea::placeholder { color: var(--ink-muted); }
+.cf-input:focus, .cf-select:focus, .cf-textarea:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(0,201,167,0.12); }
+.cf-input.error, .cf-select.error, .cf-textarea.error { border-color: #e03050; box-shadow: 0 0 0 3px rgba(224,48,80,0.1); }
+.cf-err { font-family: var(--fb); font-size: 12px; color: #e03050; min-height: 16px; }
+.cf-select-wrap { position: relative; }
+.cf-select { appearance: none; -webkit-appearance: none; padding-right: 36px; cursor: pointer; }
+.cf-chevron { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); width: 16px; height: 16px; color: var(--ink-muted); pointer-events: none; }
+.cf-toggle { display: flex; gap: 8px; flex-wrap: wrap; }
+.cf-tog-btn { flex: 1; min-width: 130px; display: flex; align-items: center; gap: 8px; background: #fff; border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 14px; font-family: var(--fb); font-size: 13.5px; font-weight: 500; color: var(--ink-soft); cursor: pointer; transition: all .18s; }
+.cf-tog-btn.active { border-color: var(--teal); background: rgba(0,201,167,0.07); color: var(--ink); font-weight: 600; }
+.cf-tog-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; border: 2px solid var(--border); transition: all .18s; }
+.cf-tog-btn.active .cf-tog-dot { border-color: var(--teal); background: var(--teal); box-shadow: inset 0 0 0 2px #fff; }
+.cf-textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
+.cf-submit { display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, var(--navy), var(--navy-l)); color: #fff; border: none; padding: 14px 28px; border-radius: 12px; font-family: var(--fd); font-size: 14.5px; font-weight: 800; cursor: pointer; letter-spacing: -0.01em; transition: transform .22s cubic-bezier(.22,1,.36,1), box-shadow .22s, filter .22s; width: 100%; margin-top: 4px; }
+.cf-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(11,29,80,0.3); filter: brightness(1.1); }
+.cf-submit:active { transform: translateY(0); }
+.cf-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
+.cf-success { text-align: center; padding: 32px 16px; }
+.cf-success-ico { width: 56px; height: 56px; border-radius: 50%; background: rgba(0,201,167,0.12); color: var(--teal-d); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+.cf-success-ico svg { width: 26px; height: 26px; }
+.cf-success-title { font-family: var(--fd); font-size: 20px; font-weight: 800; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.02em; }
+.cf-success-body { font-family: var(--fb); font-size: 14px; color: var(--ink-soft); line-height: 1.6; }
+
+/* Shared Quido footer */
+.ft { display: block; background: linear-gradient(155deg,#0f1830 0%,#122447 58%,#143c7a 100%); padding: 28px clamp(16px,4vw,32px) 20px; margin: 0; border-radius: 0; overflow: hidden; position: relative; color: #fff; box-shadow: none; }
+.ft::before { content: ''; position: absolute; top: -60px; right: -40px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,.06); }
+.ft::after { content: ''; position: absolute; bottom: -70px; left: -50px; width: 180px; height: 180px; border-radius: 50%; background: rgba(52,211,153,.12); }
+.ft-inner { position: relative; width: min(100%,1040px); margin: 0 auto; }
+.ft-top { position: relative; display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,.9fr); gap: 20px; align-items: start; }
+.ft-brand { max-width: 360px; }
+.ft .brand-link { display: inline-flex; align-items: center; gap: 9px; color: #fff; text-decoration: none; background: transparent; border: 0; padding: 0; cursor: pointer; }
+.ft .brand-lockup { display: inline-flex; align-items: center; gap: 9px; }
+.ft .brand-name { font-family: var(--fd); font-size: 17px; font-weight: 800; letter-spacing: -0.03em; }
+.ft-copy { font-size: 11px; color: rgba(255,255,255,.72); line-height: 1.65; margin-top: 12px; }
+.ft-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; align-content: start; }
+.ft-links a { font-size: 11.5px; color: rgba(255,255,255,.88); text-decoration: none; padding: 4px 0; display: block; }
+.ft-links a:hover { color: #fff; }
+.fleg { position: relative; font-size: 9.8px; color: rgba(255,255,255,.68); line-height: 1.65; border-top: 1px solid rgba(255,255,255,.12); padding-top: 16px; margin-top: 18px; }
+
+@media (max-width: 1020px) { .bc-4 { grid-column: 1 / 3; } .bc-5 { grid-column: 1 / 3; } }
+@media (max-width: 840px) { .bento-grid { grid-template-columns: 1fr 1fr; } .bc-4, .bc-5 { grid-column: 1 / 3; } .contact-inner { grid-template-columns: 1fr; gap: 40px; } .contact-copy { max-width: 560px; } }
+@media (max-width: 720px) { .contact { padding: 56px 16px 64px; } .contact-form-wrap { padding: 24px 18px; } .cf-row { grid-template-columns: 1fr; } .ft-top { grid-template-columns: 1fr; gap: 24px; } .ft-links { grid-template-columns: 1fr 1fr; gap: 8px 18px; } }
+@media (max-width: 600px) { .bento { padding: 52px 16px 60px; } .bento-grid { grid-template-columns: 1fr; gap: 10px; } .bc-4, .bc-5 { grid-column: 1; } .bc-stat, .bc-counter { font-size: 42px; } .how { padding: 48px 16px 56px; } .how::before { display: none; } .tl-step { display: block !important; margin-bottom: 0 !important; padding-bottom: 0 !important; } .tl-node, #tl1 .tl-node, #tl2 .tl-node, #tl3 .tl-node, .tl-spacer { display: none !important; } .tl-card, #tl1 .tl-card, #tl2 .tl-card, #tl3 .tl-card { display: block !important; grid-column: unset !important; grid-row: unset !important; padding: 18px 18px 20px !important; margin-bottom: 0 !important; width: 100% !important; border-radius: 14px !important; } .tl-card-num { display: inline-flex !important; align-items: center !important; justify-content: center !important; width: 32px !important; height: 32px !important; border-radius: 50% !important; background: linear-gradient(135deg,var(--teal-d),var(--teal)) !important; margin-bottom: 12px !important; font-size: 0 !important; text-indent: -9999px; } .tl-card-num::before { font-family: var(--fd) !important; font-size: 14px !important; font-weight: 800 !important; color: var(--navy) !important; text-indent: 0; } #tl1 .tl-card-num::before { content: '1' !important; } #tl2 .tl-card-num::before { content: '2' !important; } #tl3 .tl-card-num::before { content: '3' !important; } .tl-step:not(:last-child)::after { content: ''; display: block; width: 2px; height: 24px; background: linear-gradient(to bottom,var(--teal-d),var(--teal)); border-radius: 2px; margin-left: 29px; } .tl-card h3 { font-size: 16px !important; } .tl-card p { font-size: 13.5px !important; } .how-title { font-size: 24px; } .how-sub { font-size: 14px; margin-bottom: 32px; } .how-cta { margin-top: 20px; } .ft { padding: 24px 16px 18px; } }
+@media (max-width: 380px) { .bento { padding: 40px 14px 48px; } .how { padding: 48px 14px 56px; } .contact { padding: 48px 14px 56px; } .ft { padding: 24px 14px 18px; } .ft-links { grid-template-columns: 1fr; } }
+
 .app-section-wrap { background: var(--s2); padding: 56px 24px 64px; }
 .app-section-inner { max-width: 1100px; margin: 0 auto; }
 
@@ -594,20 +721,6 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
     </div>
 
     <div class="hero-visual">
-      <div class="hero-chips">
-        <div class="chip">
-          <div class="chip-ico ci-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-          <div><div class="chip-label">Borrow up to</div><div class="chip-val">£10,000</div></div>
-        </div>
-        <div class="chip">
-          <div class="chip-ico ci-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div>
-          <div><div class="chip-label">Decision in</div><div class="chip-val">Same day</div></div>
-        </div>
-        <div class="chip">
-          <div class="chip-ico ci-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
-          <div><div class="chip-label">Responsible</div><div class="chip-val">Lending</div></div>
-        </div>
-      </div>
 
       <div class="qcard">
         <div class="qcard-g1"></div>
@@ -644,66 +757,75 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
   </div>
 </section>
 
-<!-- TRUST -->
-<div class="trust">
-  <div class="trust-grid">
-    <div class="tcard" style="transition-delay:0.04s">
-      <div class="tcard-ico ti-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="8.5,12 11,14.5 15.5,9.5"/></svg></div>
-      <div><h4>No hidden fees</h4><p>The rate you see is the rate you pay.</p></div>
-    </div>
-    <div class="tcard" style="transition-delay:0.12s">
-      <div class="tcard-ico ti-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="3"/><path d="M16 8V6a2 2 0 00-8 0v2"/><line x1="12" y1="14" x2="12" y2="17"/></svg></div>
-      <div><h4>Flexible repayments</h4><p>Pay on a date and term that suits you.</p></div>
-    </div>
-    <div class="tcard" style="transition-delay:0.20s">
-      <div class="tcard-ico ti-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="16.5" r="0.7" fill="currentColor"/></svg></div>
-      <div><h4>Responsible lending</h4><p>We only lend what you can afford to repay.</p></div>
+<!-- BENTO -->
+<section class="bento" aria-label="Why Quido">
+  <div class="bento-inner">
+    <div class="bento-eyebrow">Why Quido</div>
+    <div class="bento-grid">
+      <div class="bc bc-1" style="transition-delay:0.05s">
+        <div class="bc-tag"><div class="bc-tag-dot"></div>FCA Authorised</div>
+        <div class="bc-head">Regulated lending you can trust</div>
+        <div class="bc-body">Authorised by the Financial Conduct Authority. Your protection is built in, not bolted on.</div>
+      </div>
+      <div class="bc bc-2" style="transition-delay:0.12s">
+        <div class="bc-ico bci-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div>
+        <div class="bc-stat">5<span class="bc-stat-unit">min</span></div>
+        <div class="bc-head">Application time</div>
+        <div class="bc-body">Same-day decision.</div>
+      </div>
+      <div class="bc bc-3" style="transition-delay:0.19s">
+        <div class="bc-ico bci-ora"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
+        <div class="bc-stat">&pound;0</div>
+        <div class="bc-head">Hidden fees</div>
+        <div class="bc-body">What you see is what you pay.</div>
+      </div>
+      <div class="bc bc-4" style="transition-delay:0.26s">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:24px;position:relative;z-index:1">
+          <div>
+            <div class="bc-body" style="color:var(--od-3);margin-bottom:8px">Representative APR</div>
+            <div class="bc-counter" id="apr-counter">0%</div>
+            <div class="bc-sub">Fixed rate, no surprises</div>
+          </div>
+          <div>
+            <div class="bc-body" style="color:var(--od-3);margin-bottom:8px">Borrow</div>
+            <div class="bc-stat">&pound;300<span class="bc-stat-unit" style="margin:0 5px;font-size:0.35em;opacity:0.4">to</span>&pound;10k</div>
+          </div>
+        </div>
+      </div>
+      <div class="bc bc-5" style="transition-delay:0.33s">
+        <div class="bc-ico bci-grn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg></div>
+        <div class="bc-head">Soft check only</div>
+        <div class="bc-body">Check your rate with zero credit footprint. 6 to 24 month terms.</div>
+      </div>
     </div>
   </div>
-</div>
+</section>
 
 <!-- HOW IT WORKS -->
 <section class="how" id="how">
-  <div class="how-bg1"></div>
-  <div class="how-bg2"></div>
   <div class="how-inner">
-    <div class="eyebrow reveal">Simple process</div>
-    <h2 class="sec-title reveal" style="transition-delay:0.08s">From first quote<br>to funded loan</h2>
-    <p class="sec-sub reveal" style="transition-delay:0.16s">Online, start to finish. No paperwork.</p>
-    <div class="steps">
-      <div class="step reveal" id="step1" style="transition-delay:0.05s">
-        <div class="step-n">1</div>
-        <h3>Get your quote</h3>
-        <p>Set your amount and term. No credit check at this stage.</p>
+    <div class="how-eyebrow reveal">Simple process</div>
+    <h2 class="how-title reveal" style="transition-delay:0.08s">From first quote<br>to funded loan</h2>
+    <p class="how-sub reveal" style="transition-delay:0.16s">Online, start to finish. No paperwork.</p>
+    <div class="timeline">
+      <div class="tl-step" id="tl1">
+        <div class="tl-node"><div class="tl-num">1</div><div class="tl-line"><div class="tl-line-fill" id="lf1"></div></div></div>
+        <div class="tl-card reveal" style="transition-delay:0.05s"><div class="tl-card-num">Step 01</div><h3>Get your quote</h3><p>Set your amount and term. No credit check at this stage.</p></div>
+        <div class="tl-spacer"></div>
       </div>
-      <div class="conn">
-        <svg viewBox="0 0 64 14" fill="none">
-          <path class="conn-base" d="M0 7 Q16 2,32 7 Q48 12,64 7"/>
-          <path class="conn-fill" id="cf1" d="M0 7 Q16 2,32 7 Q48 12,64 7"/>
-        </svg>
+      <div class="tl-step" id="tl2">
+        <div class="tl-node"><div class="tl-num">2</div><div class="tl-line"><div class="tl-line-fill" id="lf2"></div></div></div>
+        <div class="tl-card reveal" style="transition-delay:0.18s"><div class="tl-card-num">Step 02</div><h3>Apply and get a decision</h3><p>Complete your profile and receive an instant affordability decision.</p></div>
+        <div class="tl-spacer"></div>
       </div>
-      <div class="step reveal" id="step2" style="transition-delay:0.2s">
-        <div class="step-n">2</div>
-        <h3>Apply and get a decision</h3>
-        <p>Complete your profile and receive an instant affordability decision.</p>
-      </div>
-      <div class="conn">
-        <svg viewBox="0 0 64 14" fill="none">
-          <path class="conn-base" d="M0 7 Q16 2,32 7 Q48 12,64 7"/>
-          <path class="conn-fill" id="cf2" d="M0 7 Q16 2,32 7 Q48 12,64 7"/>
-        </svg>
-      </div>
-      <div class="step reveal" id="step3" style="transition-delay:0.35s">
-        <div class="step-n">3</div>
-        <h3>Sign and receive funds</h3>
-        <p>Sign your offer online. Funds transferred the same day.</p>
+      <div class="tl-step" id="tl3">
+        <div class="tl-node"><div class="tl-num">3</div></div>
+        <div class="tl-card reveal" style="transition-delay:0.31s"><div class="tl-card-num">Step 03</div><h3>Sign and receive funds</h3><p>Sign your offer online. Funds transferred the same day.</p></div>
+        <div class="tl-spacer"></div>
       </div>
     </div>
-    <div class="how-cta reveal" style="transition-delay:0.45s">
-      <button type="button" class="btn-lg" onclick="startApplication()">
-        Start your application
-        <span class="btn-arr"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="5" x2="9" y2="5"/><polyline points="6,2 9,5 6,8"/></svg></span>
-      </button>
+    <div class="how-cta reveal" style="transition-delay:0.44s">
+      <button type="button" class="btn-lg" onclick="startApplication()">Start your application <span class="btn-arr"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="5" x2="9" y2="5"/><polyline points="6,2 9,5 6,8"/></svg></span></button>
     </div>
   </div>
 </section>
@@ -878,70 +1000,52 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
   </div>
 </div>
 
-<!-- CONTACT STRIPS -->
-<div class="contact-outer">
+<!-- CONTACT -->
+<section class="contact" id="contact">
   <div class="contact-inner">
-    <div class="contact-strips">
-      <a class="cstrip" href="/customer#faq">
-        <div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="1.5"/><path d="M7.5 7.5a2.5 2.5 0 1 1 4.25 1.77c-.82.82-1.5 1.28-1.5 2.23" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="14.25" r=".8" fill="#fff"/></svg></div>
-        <div class="cstrip-text"><strong>Frequently Asked Questions</strong><span>Find answers to common queries</span></div>
-      </a>
-      <a class="cstrip" href="tel:08001234567">
-        <div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 4a1 1 0 011-1h2.5l1.2 3.5-1.8 1.8a10 10 0 005.3 5.3l1.8-1.8L17 14v2.5a1 1 0 01-1 1C8.2 17.5 2 11.8 4 4z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="cstrip-text"><strong>Call us</strong><span>0800 123 4567 &middot; Mon-Fri 9:00-17:00</span></div>
-      </a>
-      <a class="cstrip" href="mailto:info@quido.co.uk">
-        <div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2" y="4" width="16" height="12" rx="2" stroke="#fff" stroke-width="1.5"/><path d="M2 7l8 5 8-5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="cstrip-text"><strong>Write to us</strong><span>info@quido.co.uk</span></div>
-      </a>
-      <a class="cstrip" href="mailto:complaints@quido.co.uk">
-        <div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="1.5"/><path d="M10 6v4.5M10 13.5v.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></div>
-        <div class="cstrip-text"><strong>Make a complaint</strong><span>complaints@quido.co.uk</span></div>
-      </a>
+    <div class="contact-copy reveal">
+      <div class="contact-eyebrow">Get in touch</div>
+      <h2 class="contact-title">We'd love<br>to hear from you</h2>
+      <p class="contact-sub">Whether you have a question about your loan, an application in progress, or just want to know more, our team is here.</p>
+      <div class="contact-details">
+        <div class="contact-detail">
+          <div class="cd-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 12a19.79 19.79 0 01-3.07-8.67A2 2 0 012.86 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+          <div><div class="cd-label">Phone</div><div class="cd-value">0800 123 4567</div><div class="cd-sub">Mon-Fri, 9:00-17:00</div></div>
+        </div>
+        <div class="contact-detail">
+          <div class="cd-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><div class="cd-label">Email</div><div class="cd-value">info@quido.co.uk</div><div class="cd-sub">We reply within 24 hours</div></div>
+        </div>
+      </div>
     </div>
+    <div class="contact-form-wrap reveal" style="transition-delay:0.12s">
+      <form class="contact-form" id="contact-form" novalidate>
+        <div class="cf-group"><label class="cf-label" for="cf-name">Full name <span class="cf-req">*</span></label><input class="cf-input" id="cf-name" type="text" placeholder="Sarah Mitchell" autocomplete="name" required><span class="cf-err" id="err-name"></span></div>
+        <div class="cf-group"><label class="cf-label">Are you a Quido customer? <span class="cf-req">*</span></label><div class="cf-toggle" id="cf-customer-wrap"><button type="button" class="cf-tog-btn active" data-val="yes" onclick="setCust(this)"><span class="cf-tog-dot"></span>Yes, I'm a customer</button><button type="button" class="cf-tog-btn" data-val="no" onclick="setCust(this)"><span class="cf-tog-dot"></span>No, not yet</button></div><input type="hidden" id="cf-customer" value="yes"></div>
+        <div class="cf-group"><label class="cf-label" for="cf-email">Email address <span class="cf-req">*</span></label><input class="cf-input" id="cf-email" type="email" placeholder="sarah@example.co.uk" autocomplete="email" required><span class="cf-err" id="err-email"></span></div>
+        <div class="cf-row"><div class="cf-group"><label class="cf-label" for="cf-mobile">Mobile number</label><input class="cf-input" id="cf-mobile" type="tel" placeholder="07700 900 000" autocomplete="tel"><span class="cf-err" id="err-mobile"></span></div><div class="cf-group" id="loan-id-group"><label class="cf-label" for="cf-loanid">Loan ID</label><input class="cf-input" id="cf-loanid" type="text" placeholder="e.g. QD-123456"></div></div>
+        <div class="cf-group"><label class="cf-label" for="cf-reason">Reason for contact <span class="cf-req">*</span></label><div class="cf-select-wrap"><select class="cf-select" id="cf-reason" required><option value="" disabled selected>Select a reason...</option><option value="application">Application query</option><option value="existing">Existing loan query</option><option value="payment">Payment or repayment</option><option value="complaint">Make a complaint</option><option value="technical">Technical support</option><option value="other">Other</option></select><svg class="cf-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,6 8,10 12,6"/></svg></div><span class="cf-err" id="err-reason"></span></div>
+        <div class="cf-group"><label class="cf-label" for="cf-message">Your message <span class="cf-req">*</span></label><textarea class="cf-textarea" id="cf-message" rows="4" placeholder="Tell us how we can help..." required></textarea><span class="cf-err" id="err-message"></span></div>
+        <button type="submit" class="cf-submit" id="cf-submit"><span id="cf-submit-label">Send message</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+        <div class="cf-success" id="cf-success" style="display:none"><div class="cf-success-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg></div><div class="cf-success-title">Message sent</div><div class="cf-success-body">Thanks for reaching out. We'll get back to you within 24 hours.</div></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- SHARED FOOTER -->
+<div class="ft">
+  <div class="ft-inner">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <a class="brand-link" href="/" aria-label="Go to homepage"><span class="brand-lockup"><div class="logo-box" style="width:30px;height:30px"><span class="logo-q" style="font-size:15px">Q</span></div><span class="brand-name">Quido</span></span></a>
+        <div class="ft-copy">Clear repayment journeys, flexible support, and fair treatment when life changes.</div>
+      </div>
+      <div class="ft-links"><a href="#">Loan</a><a href="#">About Us</a><a href="#">FAQs</a><a href="#">Careers</a><a href="#">Beware of Loan Sharks</a><a href="#">Terms of Use</a><a href="#contact">Contact Us</a><a href="#">Privacy Policy</a><a href="#">File a Complaint</a><a href="#">Fraud Disclaimer</a><a href="#">Insights</a><a href="#">Cookies Policy</a></div>
+    </div>
+    <div class="fleg">We are a lender and may pay commissions to credit brokers or other intermediaries. This commission does not affect the total cost of your loan.<br><br><strong>Responsible lending:</strong> Take a moment to decide if Quido is right for you. Short term loans are an expensive form of borrowing.<br><br>Quido Ltd. Authorised and regulated by the Financial Conduct Authority. Registration number 900001.</div>
   </div>
 </div>
-
-<!-- FOOTER -->
-<footer>
-  <div class="fi">
-    <div class="ft">
-      <div class="fb">
-        <a href="#" class="nav-logo fb-logo" style="color:#fff;margin-bottom:10px">
-          <div class="logo-box"><span class="logo-q">Q</span></div>
-          Quido
-        </a>
-        <p class="fb-p">Personal loans designed to be clear, fair, and fast.</p>
-      </div>
-      <div class="fc">
-        <h5>Product</h5>
-        <a href="#">Personal loans</a>
-        <a href="#">How it works</a>
-        <a href="#">Calculator</a>
-        <a href="#">FAQs</a>
-      </div>
-      <div class="fc">
-        <h5>Company</h5>
-        <a href="#">About us</a>
-        <a href="#">Responsible lending</a>
-        <a href="#">Privacy policy</a>
-        <a href="#">Terms and conditions</a>
-      </div>
-      <div class="fc">
-        <h5>Contact</h5>
-        <a href="tel:08001234567">0800 123 4567</a>
-        <a href="mailto:info@quido.co.uk">info@quido.co.uk</a>
-        <a href="#">Make a complaint</a>
-        <a href="#">Mon to Fri, 9:00 to 17:00</a>
-      </div>
-    </div>
-    <hr class="fhr">
-    <div class="fbot">
-      <span>© 2025 Quido Ltd. Authorised and regulated by the Financial Conduct Authority.</span>
-      <span>Representative 29.9% APR. Borrow £300 to £10,000.</span>
-    </div>
-  </div>
-</footer>
 
 <!-- CHAT FAB + PANEL -->
 <button class="cfab" id="cfab" aria-label="Open chat">
@@ -1041,6 +1145,14 @@ const hs=document.getElementById('how');if(hs)sio.observe(hs);
 document.getElementById('a-sl').addEventListener('input',calc);
 document.getElementById('t-sl').addEventListener('input',calc);
 calc();
+</script>
+
+<script>
+(function(){const bentoObserver=new IntersectionObserver(entries=>{entries.forEach(entry=>entry.target.classList.toggle('in',entry.isIntersecting));},{threshold:0.08,rootMargin:'0px 0px -16px 0px'});document.querySelectorAll('.bc').forEach(el=>bentoObserver.observe(el));const timelineObserver=new IntersectionObserver(entries=>{entries.forEach(entry=>{const on=entry.isIntersecting;['tl1','tl2','tl3'].forEach((id,idx)=>{const el=document.getElementById(id);if(on)setTimeout(()=>el&&el.classList.add('lit'),idx*320);else el&&el.classList.remove('lit');});});},{threshold:0.15});const how=document.getElementById('how');if(how)timelineObserver.observe(how);const aprObserver=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(!entry.isIntersecting)return;let start=0,end=29.9,dur=1400,startTime=null;function step(ts){if(!startTime)startTime=ts;const p=Math.min((ts-startTime)/dur,1);const ease=1-Math.pow(1-p,3);const el=document.getElementById('apr-counter');if(el)el.textContent=(start+(end-start)*ease).toFixed(1)+'%';if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);aprObserver.disconnect();});},{threshold:0.3});const apr=document.querySelector('.bc-4');if(apr)aprObserver.observe(apr);})();
+function setCust(btn){document.querySelectorAll('.cf-tog-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('cf-customer').value=btn.dataset.val;const group=document.getElementById('loan-id-group');if(group)group.style.display=btn.dataset.val==='yes'?'flex':'none';}
+function cfErr(id,msg){const err=document.getElementById('err-'+id);const input=document.getElementById('cf-'+id);if(err)err.textContent=msg;if(input)msg?input.classList.add('error'):input.classList.remove('error');}
+function validateContactForm(){let ok=true;const name=document.getElementById('cf-name').value.trim();if(!name){cfErr('name','Please enter your full name');ok=false}else cfErr('name','');const email=document.getElementById('cf-email').value.trim();if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){cfErr('email','Please enter a valid email address');ok=false}else cfErr('email','');const mobile=document.getElementById('cf-mobile').value.trim();if(mobile&&!/^[\d\s\+\-\(\)]{7,15}$/.test(mobile)){cfErr('mobile','Please enter a valid mobile number');ok=false}else cfErr('mobile','');const reason=document.getElementById('cf-reason').value;if(!reason){cfErr('reason','Please select a reason');ok=false}else cfErr('reason','');const message=document.getElementById('cf-message').value.trim();if(!message||message.length<10){cfErr('message','Please enter a message (at least 10 characters)');ok=false}else cfErr('message','');return ok;}
+(function(){const form=document.getElementById('contact-form');if(!form)return;const loanGroup=document.getElementById('loan-id-group');if(loanGroup)loanGroup.style.display='flex';form.addEventListener('submit',async function(e){e.preventDefault();if(!validateContactForm())return;const submit=document.getElementById('cf-submit');const label=document.getElementById('cf-submit-label');submit.disabled=true;label.textContent='Sending...';await new Promise(r=>setTimeout(r,1000));form.style.display='none';document.getElementById('cf-success').style.display='block';});})();
 </script>
 </body>
 </html>
