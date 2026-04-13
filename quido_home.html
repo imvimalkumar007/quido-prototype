@@ -416,8 +416,6 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 /* ════════════════════════════════════════
    TOPBAR
 ════════════════════════════════════════ */
-.topbar { padding: 7px 16px; text-align: center; font-size: 10.5px; line-height: 1.5; color: #92400e; background: #fffbeb; border-bottom: 1px solid #fde68a; font-family: var(--fb); }
-.topbar a { color: var(--navy-l); font-weight: 500; text-decoration: none; }
 
 /* ════════════════════════════════════════
    APP SECTION WRAPPER
@@ -662,8 +660,6 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
   </defs>
 </svg>
 
-<!-- TOPBAR -->
-<div class="topbar">Warning: Late repayments can cause serious money problems. For help, visit <a href="https://www.moneyhelper.org.uk" target="_blank" rel="noreferrer">moneyhelper.org.uk</a>. You can compare our loans at <a href="#" target="_blank" rel="noreferrer">All the Lenders</a>.</div>
 
 <!-- NAV -->
 <nav class="nav" id="main-nav">
@@ -1070,21 +1066,33 @@ const APR=0.299;
 function mo(a,n){const r=APR/12;return a*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);}
 function gbp(n,d=0){return'£'+n.toLocaleString('en-GB',{minimumFractionDigits:d,maximumFractionDigits:d});}
 function bmp(id){const e=document.getElementById(id);if(!e)return;e.classList.remove('bump');void e.offsetWidth;e.classList.add('bump');}
-function calc(){
-  const a=+document.getElementById('a-sl').value;
-  const n=+document.getElementById('t-sl').value;
-  const m=mo(a,n),t=m*n;
+function renderCalculatorQuote(q){
+  const a=Number(q&&q.amount||document.getElementById('a-sl').value||0);
+  const n=Number(q&&q.termMonths||document.getElementById('t-sl').value||0);
+  const apr=Number(q&&q.apr||APR*100);
+  const m=Number(q&&q.emi||mo(a,n));
+  const t=Number(q&&q.totalRepayable||m*n);
+  const interest=Number(q&&q.totalInterest||Math.max(0,t-a));
+  window.quidoRepresentativeApr=apr;
   document.getElementById('a-disp').textContent=gbp(a);
   document.getElementById('t-disp').textContent=n+' months';
   document.getElementById('s-borrow').textContent=gbp(a);
   document.getElementById('s-monthly').textContent=gbp(m);
   document.getElementById('s-total').textContent=gbp(t);
   document.getElementById('s-sub').textContent=n+' payments';
-  document.getElementById('disc').textContent='Representative example: '+gbp(a)+' over '+n+' months at 29.9% APR. Monthly repayment '+gbp(m,2)+'. Total repayable '+gbp(t,2)+'.';
+  document.querySelectorAll('#apr-counter').forEach(el=>{el.textContent=apr.toFixed(1)+'%';});
+  document.getElementById('disc').textContent='Representative example: '+gbp(a)+' over '+n+' months at '+apr.toFixed(1)+'% APR. Monthly repayment '+gbp(m,2)+'. Total repayable '+gbp(t,2)+'. Total interest '+gbp(interest,2)+'.';
   document.getElementById('a-fill').style.width=((a-300)/(10000-300)*100)+'%';
   document.getElementById('t-fill').style.width=((n-6)/(24-6)*100)+'%';
   ['s-borrow','s-monthly','s-total'].forEach(bmp);
 }
+function calc(){
+  const a=+document.getElementById('a-sl').value;
+  const n=+document.getElementById('t-sl').value;
+  const m=mo(a,n);
+  renderCalculatorQuote({amount:a,termMonths:n,apr:APR*100,emi:m,totalRepayable:m*n,totalInterest:(m*n)-a});
+}
+window.applyQuoteToCalculator=renderCalculatorQuote;
 
 /* ── App Funnel ── */
 (function(){
@@ -1097,7 +1105,7 @@ function calc(){
   window.goToPane=function(name){setActive(name);document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'});};
   window.startApplication=function(){var shell=document.getElementById('application-shell');shell.style.display='block';hydrateApplicationFromQuote();setActive(state.account?'application':'step1');shell.scrollIntoView({behavior:'smooth',block:'start'});};
   function hydrateApplicationFromQuote(){document.getElementById('app-amount').value=document.getElementById('a-sl').value;document.getElementById('app-term').value=document.getElementById('t-sl').value;}
-  async function runCalculator(){var P=Number(document.getElementById('a-sl').value||0),n=Number(document.getElementById('t-sl').value||0),requestId=++calcRequestId;try{var result=await postJson('/api/public/quote',{amount:P,termMonths:n});if(requestId!==calcRequestId)return;var d=result.decision||result;state.quote=d;hydrateApplicationFromQuote();}catch(err){}}
+  async function runCalculator(){var P=Number(document.getElementById('a-sl').value||0),n=Number(document.getElementById('t-sl').value||0),requestId=++calcRequestId;try{var result=await postJson('/api/public/quote',{amount:P,termMonths:n});if(requestId!==calcRequestId)return;var d=result.decision||result;state.quote=d;if(window.applyQuoteToCalculator)window.applyQuoteToCalculator(d.quote||d);hydrateApplicationFromQuote();updateApplicationSummary();}catch(err){}}
   function updateApplicationSummary(){var q=null;if(state.decision&&state.decision.quote)q=state.decision.quote;else if(state.quote&&state.quote.quote)q=state.quote.quote;else if(state.quote&&state.quote.amount)q=state.quote;var amtEl=document.getElementById('app-summary-amount'),intEl=document.getElementById('app-summary-interest'),emiEl=document.getElementById('app-summary-emi'),repayEl=document.getElementById('app-summary-repay');if(q){if(amtEl)amtEl.textContent=money(q.amount);if(intEl)intEl.textContent=money(q.totalInterest);if(emiEl)emiEl.textContent=money(q.emi)+'/mo';if(repayEl){var d=new Date();d.setMonth(d.getMonth()+1);repayEl.textContent=d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear();}}else{if(amtEl)amtEl.textContent='-';if(intEl)intEl.textContent='-';if(emiEl)emiEl.textContent='-';if(repayEl)repayEl.textContent='-';}}
   function populateFromProfile(account){if(!account)return;var personal=(account.profile&&account.profile.personal)||{};document.getElementById('sign-full-name').value=[personal.firstName,personal.lastName].filter(Boolean).join(' ');if(account.application&&account.application.quote){document.getElementById('app-amount').value=account.application.quote.amount||document.getElementById('app-amount').value;document.getElementById('app-term').value=account.application.quote.termMonths||document.getElementById('app-term').value;}updateApplicationSummary();}
   function reflectDecision(decision){if(!decision||!decision.quote)return;state.decision=decision;document.getElementById('decision-amount').textContent=money(decision.quote.amount);document.getElementById('decision-emi').textContent=money(decision.quote.emi);document.getElementById('decision-total').textContent=money(decision.quote.totalRepayable);document.getElementById('sign-amount').textContent=money(decision.quote.amount);document.getElementById('sign-term').textContent=decision.quote.termMonths+' months';document.getElementById('sign-apr').textContent=decision.quote.apr+'%';var btn=document.getElementById('decision-sign-btn');if(decision.approved){document.getElementById('decision-title').textContent='You are approved, subject to signing';document.getElementById('decision-copy').textContent='Your loan of '+money(decision.quote.amount)+' over '+decision.quote.termMonths+' months at '+decision.quote.apr+'% APR is ready. Review and sign to move forward.';btn.style.display='inline-flex';setMessage('decision-note','success','Approved at '+decision.quote.apr+'% APR. Review and sign your offer to proceed.');}else{document.getElementById('decision-title').textContent='We cannot approve this application right now';document.getElementById('decision-copy').textContent=(decision.reasons||[]).join(' ')||'This application does not meet our current lending criteria.';btn.style.display='none';setMessage('decision-note','warn',document.getElementById('decision-copy').textContent);}}
@@ -1148,7 +1156,7 @@ calc();
 </script>
 
 <script>
-(function(){const bentoObserver=new IntersectionObserver(entries=>{entries.forEach(entry=>entry.target.classList.toggle('in',entry.isIntersecting));},{threshold:0.08,rootMargin:'0px 0px -16px 0px'});document.querySelectorAll('.bc').forEach(el=>bentoObserver.observe(el));const timelineObserver=new IntersectionObserver(entries=>{entries.forEach(entry=>{const on=entry.isIntersecting;['tl1','tl2','tl3'].forEach((id,idx)=>{const el=document.getElementById(id);if(on)setTimeout(()=>el&&el.classList.add('lit'),idx*320);else el&&el.classList.remove('lit');});});},{threshold:0.15});const how=document.getElementById('how');if(how)timelineObserver.observe(how);const aprObserver=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(!entry.isIntersecting)return;let start=0,end=29.9,dur=1400,startTime=null;function step(ts){if(!startTime)startTime=ts;const p=Math.min((ts-startTime)/dur,1);const ease=1-Math.pow(1-p,3);const el=document.getElementById('apr-counter');if(el)el.textContent=(start+(end-start)*ease).toFixed(1)+'%';if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);aprObserver.disconnect();});},{threshold:0.3});const apr=document.querySelector('.bc-4');if(apr)aprObserver.observe(apr);})();
+(function(){const bentoObserver=new IntersectionObserver(entries=>{entries.forEach(entry=>entry.target.classList.toggle('in',entry.isIntersecting));},{threshold:0.08,rootMargin:'0px 0px -16px 0px'});document.querySelectorAll('.bc').forEach(el=>bentoObserver.observe(el));const timelineObserver=new IntersectionObserver(entries=>{entries.forEach(entry=>{const on=entry.isIntersecting;['tl1','tl2','tl3'].forEach((id,idx)=>{const el=document.getElementById(id);if(on)setTimeout(()=>el&&el.classList.add('lit'),idx*320);else el&&el.classList.remove('lit');});});},{threshold:0.15});const how=document.getElementById('how');if(how)timelineObserver.observe(how);const aprObserver=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(!entry.isIntersecting)return;let start=0,end=Number(window.quidoRepresentativeApr||29.9),dur=1400,startTime=null;function step(ts){if(!startTime)startTime=ts;const p=Math.min((ts-startTime)/dur,1);const ease=1-Math.pow(1-p,3);const el=document.getElementById('apr-counter');if(el)el.textContent=(start+(end-start)*ease).toFixed(1)+'%';if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);aprObserver.disconnect();});},{threshold:0.3});const apr=document.querySelector('.bc-4');if(apr)aprObserver.observe(apr);})();
 function setCust(btn){document.querySelectorAll('.cf-tog-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('cf-customer').value=btn.dataset.val;const group=document.getElementById('loan-id-group');if(group)group.style.display=btn.dataset.val==='yes'?'flex':'none';}
 function cfErr(id,msg){const err=document.getElementById('err-'+id);const input=document.getElementById('cf-'+id);if(err)err.textContent=msg;if(input)msg?input.classList.add('error'):input.classList.remove('error');}
 function validateContactForm(){let ok=true;const name=document.getElementById('cf-name').value.trim();if(!name){cfErr('name','Please enter your full name');ok=false}else cfErr('name','');const email=document.getElementById('cf-email').value.trim();if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){cfErr('email','Please enter a valid email address');ok=false}else cfErr('email','');const mobile=document.getElementById('cf-mobile').value.trim();if(mobile&&!/^[\d\s\+\-\(\)]{7,15}$/.test(mobile)){cfErr('mobile','Please enter a valid mobile number');ok=false}else cfErr('mobile','');const reason=document.getElementById('cf-reason').value;if(!reason){cfErr('reason','Please select a reason');ok=false}else cfErr('reason','');const message=document.getElementById('cf-message').value.trim();if(!message||message.length<10){cfErr('message','Please enter a message (at least 10 characters)');ok=false}else cfErr('message','');return ok;}
