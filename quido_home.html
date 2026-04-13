@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -7,272 +6,371 @@
 <title>Quido | Personal loans, done right</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --blue:#1a56db;--blue-dark:#0d3b9e;--green:#00b865;--green-dark:#007e3f;
-  --bg:#eef2fa;--surface:#fff;--border:#e2e8f5;--text:#0f1828;--muted:#64748b;--dim:#94a3b8;
-  --warn-bg:#fffbeb;--warn-border:#fde68a;--warn-text:#92400e;--ok-bg:#ecfdf5;--ok-text:#065f46;
-  --shadow:0 20px 50px rgba(15,24,40,.08);--shadow-soft:0 10px 30px rgba(26,86,219,.1);
-  --r:14px;--r-lg:20px;--r-xl:28px
+  --ink:#0f1828;--ink-s:#4b5563;
+  --teal:#00c2a2;--teal-dark:#009e84;--teal-glow:rgba(0,194,162,.22);
+  --navy:#162d55;--nm:#162d55;--nl:#1a3a6e;
+  --fd:'Sora',sans-serif;--fb:'DM Sans',sans-serif;
+  --surf:#fff;--s2:#f4f8ff;
+  --bg:#eef2fa;--bdr:#e2e8f5;
+  --muted:#64748b;--dim:#94a3b8;
+  --ok-bg:#ecfdf5;--ok-text:#065f46;
+  --warn-bg:#fffbeb;--warn-border:#fde68a;--warn-text:#92400e;
+  --r:14px;--r-lg:20px;--r-xl:28px;
+  --shadow:0 20px 50px rgba(15,24,40,.08);--shadow-soft:0 10px 30px rgba(22,45,85,.12)
 }
-html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;overflow-x:hidden}
-body::before{content:'';position:fixed;top:-180px;right:-140px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(26,86,219,.07) 0%,transparent 70%);pointer-events:none;z-index:0}
-body::after{content:'';position:fixed;bottom:-200px;left:-160px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(0,184,101,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
-.site{position:relative;z-index:1}
-a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cursor:pointer}
-.topbar{padding:7px 16px;text-align:center;font-size:10.5px;line-height:1.5;color:var(--warn-text);background:var(--warn-bg);border-bottom:1px solid var(--warn-border)}
-.topbar a{color:var(--blue);font-weight:500}
-.site{min-height:100vh;display:flex;flex-direction:column}
-/* Header */
-.header{position:sticky;top:0;z-index:20;background:rgba(238,242,250,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.header-inner{max-width:1120px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.brand-link{display:inline-flex;align-items:center;gap:10px;background:none;border:none;padding:0;cursor:pointer;text-align:left}
-.brand-lockup{display:flex;align-items:center;gap:10px}.brand-word{display:flex;flex-direction:column;gap:1px}
-.brand-mark{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:transparent;box-shadow:none;position:relative;overflow:visible;z-index:1}.brand-mark .q-tail{stroke:#ffffff}
-.brand-mark .q-ring{stroke:#ffffff}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--fb);overflow-x:hidden}
+body::before{content:'';position:fixed;top:-180px;right:-140px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,194,162,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;bottom:-200px;left:-160px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(22,45,85,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
+a{text-decoration:none;color:inherit}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
 
-.brand-mark svg{display:block;width:132%;height:132%;max-width:none;max-height:none;}
-.brand-name{font-size:20px;font-weight:800;color:var(--blue);letter-spacing:-.4px;line-height:1}
-.brand-tag{font-size:9px;font-weight:600;color:var(--muted);letter-spacing:.01em;line-height:1.3}
-.nav{display:flex;align-items:center;gap:8px}
-.nav-link{border:none;background:none;padding:9px 14px;border-radius:999px;font-size:13px;font-weight:600;color:var(--muted)}
-.nav-link:hover{color:var(--text);background:#f1f5fb}
-.nav-login{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border:none;padding:10px 20px;border-radius:999px;font-size:13px;font-weight:700;box-shadow:var(--shadow-soft)}
-/* Layout */
-.main{flex:1;max-width:1120px;margin:0 auto;padding:24px 20px 64px;width:100%}
-/* Hero */
-.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(380px,460px);gap:32px;align-items:center}
+/* ── Floating pill nav ──────────────────────────────────────────────────── */
+.nav-pill{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:50;display:flex;align-items:center;gap:10px;padding:10px 16px;background:rgba(255,255,255,.88);backdrop-filter:blur(18px);border:1px solid var(--bdr);border-radius:999px;box-shadow:0 8px 32px rgba(15,24,40,.10);width:min(680px,calc(100vw - 28px))}
+.nav-brand{display:inline-flex;align-items:center;gap:8px;background:none;border:none;padding:0;cursor:pointer}
+.brand-mark{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:transparent;overflow:visible;position:relative}
+.brand-mark svg{display:block;width:132%;height:132%;max-width:none;max-height:none}
+.brand-name{font-family:var(--fd);font-size:18px;font-weight:800;color:var(--navy);letter-spacing:-.4px;line-height:1}
+.nav-links{display:flex;align-items:center;gap:4px;margin-left:auto}
+.nav-link{border:none;background:none;padding:8px 13px;border-radius:999px;font-size:13px;font-weight:600;color:var(--muted);font-family:var(--fb)}
+.nav-link:hover{color:var(--ink);background:#f1f5fb}
+.nav-login{background:linear-gradient(135deg,var(--nm),var(--nl));color:#fff;border:none;padding:9px 18px;border-radius:999px;font-size:13px;font-weight:700;font-family:var(--fd);box-shadow:var(--shadow-soft)}
+.ham{display:none;background:none;border:none;padding:6px;flex-direction:column;gap:4px;cursor:pointer;margin-left:auto}
+.ham span{width:18px;height:2px;background:var(--ink);border-radius:2px;display:block;transition:.2s}
+@media(max-width:600px){.nav-links{display:none;position:absolute;top:calc(100% + 8px);left:0;width:100%;background:#fff;border:1px solid var(--bdr);border-radius:18px;flex-direction:column;padding:8px;box-shadow:0 8px 32px rgba(15,24,40,.12)}.nav-links.open{display:flex}.ham{display:flex}}
+
+/* ── Layout ─────────────────────────────────────────────────────────────── */
+.site{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
+.main{flex:1;max-width:1120px;margin:0 auto;padding:88px 20px 64px;width:100%}
+
+/* ── Scroll reveal ───────────────────────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .55s ease,transform .55s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* ── Hero ───────────────────────────────────────────────────────────────── */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,440px);gap:36px;align-items:center;padding:20px 0 10px}
 .hero-copy{padding:0 0 10px}
-.eyebrow{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;background:linear-gradient(135deg,#e8f0fe,#dce9fe);color:var(--blue);font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border:1px solid #bfd3f8;box-shadow:0 2px 8px rgba(26,86,219,.1)}
-.hero-copy h1{margin:0 0 28px;font-size:66px;line-height:.95;letter-spacing:-.06em;font-weight:900}.h1-primary{color:var(--blue)}
-.h1-accent{color:var(--green)}
-.hero-copy .lead{margin:0 0 24px;max-width:520px;font-size:15px;line-height:1.65;color:var(--muted)}
-.hero-points{display:grid;gap:8px;margin:0 0 28px}
-.hero-point{display:flex;align-items:flex-start;gap:9px;line-height:1.45;font-size:12px;color:#4b5563}
-.hp-icon{width:20px;height:20px;border-radius:50%;background:rgba(0,184,101,.14);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
-.hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
-.btn-hero-primary{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:16px;padding:15px 26px;font-size:15px;font-weight:800;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;box-shadow:0 8px 28px rgba(26,86,219,.26)}
-.btn-hero-secondary{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--border);border-radius:16px;padding:14px 20px;font-size:14px;font-weight:700;background:var(--surface);color:var(--text)}
-.hero-trust{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.ht-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-weight:600}
-.ht-dot{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0}
-/* Calculator card */
-.calc-card{background:linear-gradient(160deg,var(--blue) 0%,var(--blue-dark) 78%);border:1px solid rgba(13,59,158,.7);border-radius:var(--r-xl);box-shadow:0 32px 80px rgba(26,86,219,.18),0 4px 20px rgba(15,24,40,.08);overflow:hidden;position:relative}
-.calc-card::before{display:none}
+.hero-copy h1{font-family:var(--fd);font-size:62px;line-height:.96;letter-spacing:-.05em;font-weight:800;color:var(--ink);margin:0 0 20px}
+.h1-line{display:block}
+.h1-teal{position:relative;display:inline-block;color:var(--teal)}
+.h1-teal::after{content:'';position:absolute;left:0;bottom:-4px;width:100%;height:3px;background:var(--teal);border-radius:2px;opacity:.45}
+.hero-lead{font-size:15px;line-height:1.7;color:var(--muted);max-width:480px;margin:0 0 24px}
+
+/* 2×2 trust grid */
+.trust-mini{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 28px}
+.tm-item{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:14px;background:var(--surf);border:1px solid var(--bdr);font-size:12.5px;font-weight:600;color:var(--ink)}
+.tm-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0}
+
+.hero-cta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.btn-hero-primary{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:16px;padding:15px 26px;font-size:15px;font-weight:700;font-family:var(--fd);background:linear-gradient(135deg,var(--nm),var(--nl));color:#fff;box-shadow:0 8px 28px rgba(22,45,85,.22)}
+.btn-hero-secondary{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--bdr);border-radius:16px;padding:14px 20px;font-size:14px;font-weight:600;background:var(--surf);color:var(--ink)}
+
+/* ── Calculator card ────────────────────────────────────────────────────── */
+.calc-card{background:linear-gradient(160deg,var(--nm) 0%,var(--nl) 78%);border:1px solid rgba(22,45,85,.7);border-radius:var(--r-xl);box-shadow:0 32px 80px rgba(22,45,85,.18),0 4px 20px rgba(15,24,40,.08);overflow:hidden;position:relative}
 .calc-card-head{padding:22px 22px 0}
-.calc-card-head h2{margin:0 0 5px;font-size:22px;font-weight:800;letter-spacing:-.04em;color:#fff}
-.calc-card-head p{margin:0;color:rgba(255,255,255,.76);font-size:13px;line-height:1.5}
-.calc-body{padding:20px 22px 22px;display:grid;gap:18px}
+.calc-card-head h2{font-family:var(--fd);margin:0 0 5px;font-size:22px;font-weight:700;letter-spacing:-.04em;color:#fff}
+.calc-card-head p{margin:0;color:rgba(255,255,255,.72);font-size:13px;font-family:var(--fb);line-height:1.5}
+.calc-body{padding:20px 22px 22px;display:grid;gap:16px}
 .quote-top{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.metric{padding:13px 12px;border-radius:14px;background:#fff;border:1px solid rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.metric{display:flex;flex-direction:column}.metric span{display:block;font-size:9.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;min-height:26px}
-.metric strong{display:block;font-size:23px;font-weight:800;letter-spacing:-.04em;color:var(--text)}
-.metric small{display:block;margin-top:4px;font-size:10.5px;color:var(--muted);line-height:1.4}
-.slider-stack{display:grid;gap:18px}.slider-group{display:grid;gap:10px}
+.metric{padding:13px 12px;border-radius:14px;background:#fff;border:1px solid rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;flex-direction:column}
+.metric span{display:block;font-size:9.5px;font-weight:700;font-family:var(--fb);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;min-height:26px}
+.metric strong{display:block;font-size:22px;font-weight:800;font-family:var(--fd);letter-spacing:-.04em;color:var(--ink)}
+.metric small{display:block;margin-top:4px;font-size:10.5px;color:var(--muted);font-family:var(--fb);line-height:1.4}
+.slider-stack{display:grid;gap:16px}
+.slider-group{display:grid;gap:10px}
 .slider-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
-.slider-label{font-size:11px;font-weight:800;color:rgba(255,255,255,.8);text-transform:uppercase;letter-spacing:.08em}
-.slider-value{font-size:28px;font-weight:800;letter-spacing:-.05em;color:#fff}
+.slider-label{font-size:10px;font-weight:700;font-family:var(--fb);color:rgba(255,255,255,.75);text-transform:uppercase;letter-spacing:.09em}
+.slider-value{font-size:26px;font-weight:800;font-family:var(--fd);letter-spacing:-.05em;color:#fff}
 .range-wrap{display:grid;gap:8px}
-.range-input{appearance:none;width:100%;height:8px;border-radius:999px;background:linear-gradient(90deg,var(--green) 0%,var(--green) var(--fill,50%),rgba(255,255,255,.22) var(--fill,50%),rgba(255,255,255,.22) 100%);outline:none;touch-action:pan-y;cursor:pointer}
-.range-input::-webkit-slider-thumb{appearance:none;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-dark));border:3px solid #fff;box-shadow:0 4px 12px rgba(0,184,101,.28)}
-.range-input::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-dark));border:3px solid #fff;box-shadow:0 4px 12px rgba(0,184,101,.28)}
-.slider-scale{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.62)}
+/* New slider track pattern */
+.sl-t{position:relative;height:8px;border-radius:999px;background:rgba(255,255,255,.22);margin:4px 0}
+.sl-f{position:absolute;top:0;left:0;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--teal),var(--teal-dark));pointer-events:none}
+.sl-t input[type=range]{position:absolute;top:50%;left:0;width:100%;transform:translateY(-50%);appearance:none;-webkit-appearance:none;height:8px;background:transparent;outline:none;cursor:pointer;touch-action:pan-y;margin:0}
+.sl-t input[type=range]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-dark));border:3px solid #fff;box-shadow:0 4px 12px var(--teal-glow)}
+.sl-t input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-dark));border:3px solid #fff;box-shadow:0 4px 12px var(--teal-glow)}
+.slider-scale{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.58);font-family:var(--fb)}
 .calc-cta{display:grid;gap:10px;justify-items:center;text-align:center}
-.btn-calc-apply{width:min(100%,240px);border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:800;background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;box-shadow:0 8px 24px rgba(0,184,101,.28);transition:transform .15s,box-shadow .15s}
-.btn-calc-apply:hover{transform:translateY(-1px);box-shadow:0 12px 32px rgba(0,184,101,.36)}
-.calc-rep{font-size:11px;color:rgba(255,255,255,.68);text-align:center;line-height:1.55;margin:0}
-/* Trust strip */
-.trust-strip{margin-top:28px}
-.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.trust-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 16px;display:flex;align-items:flex-start;gap:13px;transition:box-shadow .18s,transform .18s,border-color .18s}
-.trust-item:hover{box-shadow:0 8px 28px rgba(26,86,219,.1);border-color:#c7d9f8;transform:translateY(-2px)}
-.trust-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ti-blue{background:#eff6ff}.ti-green{background:#f0fdf4}.ti-amber{background:#fffbeb}.ti-purple{background:#faf5ff}
-.trust-item strong{display:block;font-size:13px;font-weight:800;margin-bottom:3px;color:var(--text)}
-.trust-item span{display:block;font-size:12px;color:var(--muted);line-height:1.5}
-/* How it works */
-.section{margin-top:28px}
-.how-card{background:linear-gradient(160deg,var(--blue) 0%,var(--blue-dark) 78%);border:1px solid rgba(13,59,158,.7);border-radius:var(--r-xl);box-shadow:0 32px 80px rgba(26,86,219,.18),0 4px 20px rgba(15,24,40,.08);padding:32px}
-.how-card-head{margin-bottom:22px}
-.how-card-head h3{margin:0 0 7px;font-size:30px;font-weight:800;letter-spacing:-.04em;color:#fff}
-.how-card-head p{margin:0;color:rgba(255,255,255,.76);line-height:1.65;max-width:600px;font-size:15px}
-.how-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.how-step{padding:22px;border-radius:18px;background:#fff;border:1px solid rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(0,0,0,.06);transition:box-shadow .18s,transform .18s}
-.how-step:hover{box-shadow:0 8px 24px rgba(0,0,0,.12);transform:translateY(-2px)}
-.how-step-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;font-size:13px;font-weight:800;margin-bottom:14px}
-.how-step strong{display:block;font-size:15px;font-weight:800;margin-bottom:7px;color:var(--text)}
-.how-step span{display:block;font-size:13px;line-height:1.65;color:var(--muted)}
-.apply-cta{display:none}
-.apply-button{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:16px;padding:14px 24px;font-size:14px;font-weight:800;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;box-shadow:var(--shadow-soft)}
-.apply-note{font-size:13px;color:var(--muted)}
-/* Application shell */
-.app-shell{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow);padding:28px}
+.btn-calc-apply{width:min(100%,240px);border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:700;font-family:var(--fd);background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:#fff;box-shadow:0 8px 24px var(--teal-glow);transition:transform .15s,box-shadow .15s}
+.btn-calc-apply:hover{transform:translateY(-1px);box-shadow:0 12px 32px var(--teal-glow)}
+.calc-rep{font-size:11px;color:rgba(255,255,255,.65);font-family:var(--fb);text-align:center;line-height:1.55;margin:0}
+@keyframes bump{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.bump{animation:bump .25s ease}
+
+/* ── Bento grid ─────────────────────────────────────────────────────────── */
+.bento{margin-top:28px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.bento-cell{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r-lg);padding:18px 16px;display:flex;flex-direction:column;gap:6px;transition:box-shadow .18s,transform .18s;overflow:hidden}
+.bento-cell:hover{box-shadow:0 8px 28px rgba(22,45,85,.08);transform:translateY(-2px)}
+.bc-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-bottom:4px}
+.bc-teal{background:rgba(0,194,162,.12)}
+.bc-navy{background:rgba(22,45,85,.08)}
+.bc-amber{background:#fffbeb}
+.bc-green{background:#f0fdf4}
+.bento-cell strong{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--ink);display:block}
+.bento-cell span{font-size:12px;color:var(--muted);font-family:var(--fb);line-height:1.5;display:block}
+/* APR counter cell */
+.bc-apr .apr-num{font-family:var(--fd);font-size:32px;font-weight:800;color:var(--navy);letter-spacing:-.04em;line-height:1}
+.bc-apr .apr-label{font-size:11px;color:var(--muted);font-family:var(--fb);margin-top:2px}
+@media(max-width:900px){.bento{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.bento{grid-template-columns:1fr 1fr}}
+
+/* ── Timeline how-it-works ───────────────────────────────────────────────── */
+.how-section{margin-top:52px}
+.section-label{font-size:11px;font-weight:700;font-family:var(--fb);color:var(--teal);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px}
+.how-section h2{font-family:var(--fd);font-size:36px;font-weight:800;letter-spacing:-.04em;color:var(--ink);margin:0 0 8px}
+.how-section .how-sub{font-size:15px;color:var(--muted);font-family:var(--fb);line-height:1.65;max-width:560px;margin:0 0 40px}
+.timeline{display:grid;gap:0;position:relative;max-width:780px;margin:0 auto}
+.timeline::before{content:'';position:absolute;left:50%;transform:translateX(-50%);top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--teal),var(--navy));border-radius:2px;opacity:.25}
+.tl-item{display:grid;grid-template-columns:1fr 60px 1fr;gap:0;align-items:center;min-height:120px}
+.tl-item:nth-child(odd) .tl-card{grid-column:1;grid-row:1;margin-right:24px;justify-self:end}
+.tl-item:nth-child(odd) .tl-node{grid-column:2;grid-row:1}
+.tl-item:nth-child(odd) .tl-empty{grid-column:3;grid-row:1}
+.tl-item:nth-child(even) .tl-empty{grid-column:1;grid-row:1}
+.tl-item:nth-child(even) .tl-node{grid-column:2;grid-row:1}
+.tl-item:nth-child(even) .tl-card{grid-column:3;grid-row:1;margin-left:24px;justify-self:start}
+.tl-node{display:flex;align-items:center;justify-content:center;width:60px}
+.tl-dot{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-dark));display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:16px;font-weight:800;color:#fff;box-shadow:0 0 0 6px rgba(0,194,162,.15),0 4px 16px var(--teal-glow);transition:box-shadow .3s;flex-shrink:0}
+.tl-dot.active{box-shadow:0 0 0 10px rgba(0,194,162,.2),0 4px 20px var(--teal-glow)}
+.tl-card{background:var(--surf);border:1px solid var(--bdr);border-radius:18px;padding:22px 20px;max-width:320px;box-shadow:0 2px 12px rgba(15,24,40,.06);transition:box-shadow .2s,transform .2s}
+.tl-card:hover{box-shadow:0 8px 28px rgba(22,45,85,.10);transform:translateY(-2px)}
+.tl-card strong{font-family:var(--fd);font-size:15px;font-weight:700;color:var(--ink);display:block;margin-bottom:6px}
+.tl-card span{font-size:13px;color:var(--muted);font-family:var(--fb);line-height:1.65;display:block}
+@media(max-width:700px){
+  .timeline::before{display:none}
+  .timeline{gap:12px}
+  .tl-item{grid-template-columns:1fr;grid-template-rows:auto auto}
+  .tl-item:nth-child(odd) .tl-card,.tl-item:nth-child(even) .tl-card{grid-column:1;margin:0}
+  .tl-item .tl-node{grid-column:1;grid-row:1;justify-content:flex-start;padding-left:4px;margin-bottom:8px}
+  .tl-item .tl-empty{display:none}
+  .tl-item:nth-child(odd) .tl-card,.tl-item:nth-child(even) .tl-card{grid-row:2;justify-self:stretch;max-width:100%}
+}
+
+/* ── Application shell ───────────────────────────────────────────────────── */
+.app-section{margin-top:48px}
+.app-shell{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r-xl);box-shadow:var(--shadow);padding:28px}
 .app-head{margin-bottom:22px}
-.app-head h3{margin:0 0 6px;font-size:26px;font-weight:800;letter-spacing:-.04em}
-.app-head>p{margin:0 0 16px;color:var(--muted);line-height:1.65;font-size:14px}
-.stepper{display:flex;gap:6px;flex-wrap:wrap}
-.chip{padding:8px 14px;border-radius:999px;background:#f4f8ff;border:1px solid var(--border);font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.chip.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.app-head h3{font-family:var(--fd);margin:0 0 6px;font-size:26px;font-weight:800;letter-spacing:-.04em;color:var(--ink)}
+.app-head>p{margin:0 0 16px;color:var(--muted);line-height:1.65;font-size:14px;font-family:var(--fb)}
 .pane{display:none}.pane.active{display:block}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stack{display:grid;gap:12px}
 .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
-.summary-card{padding:14px;border-radius:16px;background:#f8fbff;border:1px solid var(--border)}
-.summary-card span{display:block;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
-.summary-card strong{display:block;font-size:22px;letter-spacing:-.05em}
-.offer-box{padding:20px;border-radius:18px;background:linear-gradient(160deg,#f7faff 0%,#eef4ff 100%);border:1px solid #d6e2fb}
-.offer-box h4{margin:0 0 7px;font-size:19px;font-weight:800}.offer-box p{margin:0;color:var(--muted);line-height:1.65;font-size:14px}
+.summary-card{padding:14px;border-radius:16px;background:var(--s2);border:1px solid var(--bdr)}
+.summary-card span{display:block;font-size:10px;font-weight:700;font-family:var(--fb);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.summary-card strong{font-family:var(--fd);display:block;font-size:22px;letter-spacing:-.05em;color:var(--ink)}
+.offer-box{padding:20px;border-radius:18px;background:linear-gradient(160deg,rgba(0,194,162,.06) 0%,rgba(22,45,85,.05) 100%);border:1px solid rgba(0,194,162,.2)}
+.offer-box h4{font-family:var(--fd);margin:0 0 7px;font-size:19px;font-weight:700;color:var(--ink)}
+.offer-box p{margin:0;color:var(--muted);font-family:var(--fb);line-height:1.65;font-size:14px}
 .field{display:grid;gap:6px}.field.full{grid-column:1/-1}
-.field label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-.field input,.field select{width:100%;max-width:100%;min-width:0;box-sizing:border-box;padding:13px 14px;min-height:50px;border:1.5px solid var(--border);border-radius:14px;background:var(--surface);outline:none}
+.field label{font-family:var(--fb);font-size:12px;font-weight:600;color:var(--ink-s);letter-spacing:.01em}
+.field input,.field select{width:100%;max-width:100%;min-width:0;box-sizing:border-box;padding:13px 14px;min-height:50px;border:1.5px solid var(--bdr);border-radius:10px;background:var(--surf);outline:none;font-family:var(--fb);font-size:14px;color:var(--ink)}
 .field input[type="date"],.field input[type="month"]{-webkit-appearance:none;appearance:none;font-size:16px;padding:13px 14px;box-sizing:border-box;display:block;width:100%}
 .field input[type="date"]::-webkit-date-and-time-value,.field input[type="month"]::-webkit-date-and-time-value{min-height:1.5em;text-align:left}
-.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,219,.08)}
-.message{padding:13px 14px;border-radius:14px;font-size:13px;line-height:1.6}.message:empty{display:none}
-.message.info{background:#eff6ff;color:#1e40af}.message.success{background:var(--ok-bg);color:var(--ok-text)}
+.field input:focus,.field select:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-glow)}
+.message{padding:13px 14px;border-radius:14px;font-size:13px;font-family:var(--fb);line-height:1.6}.message:empty{display:none}
+.message.info{background:#e8f9f6;color:#0a6b59}.message.success{background:var(--ok-bg);color:var(--ok-text)}
 .message.warn{background:var(--warn-bg);color:var(--warn-text)}.message.error{background:#fee2e2;color:#991b1b}
 .check-grid{display:grid;gap:10px}
-.check{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:14px;background:#f8fbff;border:1px solid var(--border)}
-.check input{width:18px;height:18px;min-width:18px;min-height:18px;margin:1px 0 0;flex-shrink:0}
+.check{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:14px;background:var(--s2);border:1px solid var(--bdr)}
+.check input{width:18px;height:18px;min-width:18px;min-height:18px;margin:1px 0 0;flex-shrink:0;accent-color:var(--teal)}
 .inline{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.btn{display:inline-flex;align-items:center;justify-content:center;border:none;border-radius:16px;padding:14px 24px;font-size:14px;font-weight:800;min-width:140px}
-.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;box-shadow:var(--shadow-soft)}
-.btn-secondary{background:var(--surface);color:var(--text);border:1.5px solid var(--border)}
-/* Footer */
-.ft{background:linear-gradient(155deg,#0f1830 0%,#122447 58%,#143c7a 100%);padding:28px clamp(16px,4vw,32px) 20px;margin:60px calc(50% - 50vw) 0;width:100vw;overflow:hidden;position:relative;color:#fff}
-.ft::before{content:'';position:absolute;top:-60px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.05)}
-.ft::after{content:'';position:absolute;bottom:-70px;left:-50px;width:180px;height:180px;border-radius:50%;background:rgba(52,211,153,.1)}
-.ft-inner{position:relative;width:min(100%,1040px);margin:0 auto}
-.ft-top{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:24px;align-items:start}
-.ft-brand{max-width:360px}.ft-copy{font-size:11.5px;color:rgba(255,255,255,.7);line-height:1.7;margin-top:12px}
-.ft-links{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;align-content:start}
-.ft-links a{font-size:11.5px;color:rgba(255,255,255,.82);padding:4px 0;display:block}
-.ft-links a:hover{color:#fff}
-.fleg{font-size:9.8px;color:rgba(255,255,255,.6);line-height:1.65;border-top:1px solid rgba(255,255,255,.1);padding-top:16px;margin-top:20px}
-@media (max-width:980px){
-  .hero{grid-template-columns:1fr}
-  .hero-copy h1{font-size:54px}
-  .quote-top,.summary-grid,.how-steps,.trust-grid{grid-template-columns:1fr 1fr}
-  .main{padding-top:12px}
-}
-@media (max-width:720px){
-  .header-inner,.main{padding-left:14px;padding-right:14px}
-  .hero-copy h1{font-size:42px}
-  .quote-top,.grid,.summary-grid,.how-steps,.trust-grid{grid-template-columns:1fr}
-  .calc-card,.how-card,.app-shell{border-radius:20px}
-  .hero-actions{flex-direction:column;align-items:flex-start}
-  .btn-hero-primary,.btn-hero-secondary{width:100%;justify-content:center}
-}
-@media (max-width:480px){
-  .hero-copy h1{font-size:40px;line-height:1.0;letter-spacing:-.04em}
-  .ft-top{grid-template-columns:1fr;gap:18px}
-  .ft-links{grid-template-columns:1fr 1fr}
-  .ft{margin:24px calc(50% - 50vw) 0;padding:20px clamp(12px,4vw,24px) 16px}
-}
-/* Contact strips */
-.contact-section{margin-top:32px}
-.contact-strips{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media (max-width:720px){.contact-strips{grid-template-columns:1fr}}
-.cstrip{display:flex;align-items:center;gap:14px;padding:20px 18px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:var(--r-lg);color:#fff;border:none;width:100%;text-align:left;cursor:default;box-shadow:0 6px 20px rgba(26,86,219,.2);text-decoration:none;transition:transform .18s,box-shadow .18s}
-.cstrip:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(26,86,219,.28)}
-.cstrip-icon{width:42px;height:42px;border-radius:11px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.cstrip-text strong{display:block;font-size:13.5px;font-weight:700;color:#fff}
-.cstrip-text span{display:block;font-size:12px;color:rgba(255,255,255,.75);margin-top:3px}
-/* Chat FAB + panel */
-.cfab{position:fixed;bottom:20px;right:20px;width:50px;height:50px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:50;border:none}
-.cnb{position:absolute;top:-2px;right:-2px;width:18px;height:18px;background:#ef4444;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff}
-.cpanel{position:fixed;bottom:80px;right:12px;width:320px;background:var(--surface);border-radius:var(--r-xl);box-shadow:0 12px 40px rgba(0,0,0,0.18);z-index:49;overflow:hidden;display:none;flex-direction:column;height:420px}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:none;border-radius:16px;padding:14px 24px;font-size:14px;font-weight:700;font-family:var(--fd);min-width:140px}
+.btn-primary{background:linear-gradient(135deg,var(--nm),var(--nl));color:#fff;box-shadow:var(--shadow-soft)}
+.btn-secondary{background:var(--surf);color:var(--ink);border:1.5px solid var(--bdr)}
+a.btn{text-decoration:none}
+
+/* ── Contact section ─────────────────────────────────────────────────────── */
+.contact-section{margin-top:52px}
+.contact-inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:36px;align-items:start}
+.contact-details{padding:32px 0}
+.contact-details h2{font-family:var(--fd);font-size:32px;font-weight:800;letter-spacing:-.04em;color:var(--ink);margin:0 0 10px}
+.contact-details .c-sub{font-size:15px;color:var(--muted);font-family:var(--fb);line-height:1.65;margin:0 0 28px}
+.c-info-row{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
+.c-info-icon{width:42px;height:42px;border-radius:12px;background:var(--s2);border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.c-info-text strong{display:block;font-family:var(--fd);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.c-info-text span{font-size:12.5px;color:var(--muted);font-family:var(--fb)}
+.contact-form-wrap{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r-xl);padding:32px;box-shadow:var(--shadow)}
+.cf-title{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--ink);margin:0 0 20px}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.cf-field{display:grid;gap:6px;margin-bottom:14px}
+.cf-field.cf-last{margin-bottom:0}
+.cf-field label{font-family:var(--fb);font-size:12px;font-weight:600;color:var(--ink-s)}
+.cf-field input,.cf-field select,.cf-field textarea{width:100%;padding:13px 14px;border:1.5px solid var(--bdr);border-radius:10px;background:var(--surf);outline:none;font-family:var(--fb);font-size:14px;color:var(--ink);resize:vertical}
+.cf-field input:focus,.cf-field select:focus,.cf-field textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-glow)}
+.cf-toggle{display:flex;gap:8px}
+.cf-tog-btn{flex:1;padding:11px;border:1.5px solid var(--bdr);border-radius:10px;background:var(--surf);font-size:13px;font-weight:600;font-family:var(--fb);color:var(--muted);cursor:pointer;transition:.15s}
+.cf-tog-btn.active{border-color:var(--teal);background:rgba(0,194,162,.07);color:var(--teal)}
+.btn-cf-submit{width:100%;padding:15px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--nm),var(--nl));color:#fff;font-family:var(--fd);font-size:15px;font-weight:700;margin-top:18px;transition:transform .15s,box-shadow .15s}
+.btn-cf-submit:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(22,45,85,.2)}
+.cf-success{display:none;text-align:center;padding:28px 0}
+.cf-success-icon{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-dark));display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.cf-success h3{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--ink);margin:0 0 8px}
+.cf-success p{font-size:14px;color:var(--muted);font-family:var(--fb);line-height:1.65}
+.cf-err{font-size:12px;color:#dc2626;font-family:var(--fb);margin-top:4px;display:none}
+@media(max-width:820px){.contact-inner{grid-template-columns:1fr}}
+@media(max-width:600px){.cf-row{grid-template-columns:1fr}}
+
+/* ── Footer ─────────────────────────────────────────────────────────────── */
+.ft{background:linear-gradient(155deg,#0f1830 0%,#122447 58%,#143c7a 100%);padding:48px clamp(16px,4vw,40px) 28px;margin:60px calc(50% - 50vw) 0;width:100vw;overflow:hidden;position:relative;color:#fff}
+.ft::before{content:'';position:absolute;top:-60px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.04)}
+.ft::after{content:'';position:absolute;bottom:-70px;left:-50px;width:180px;height:180px;border-radius:50%;background:rgba(0,194,162,.08)}
+.ft-inner{position:relative;width:min(100%,1080px);margin:0 auto}
+.ft-cols{display:grid;grid-template-columns:minmax(0,1.4fr) 1fr 1fr 1fr;gap:32px;margin-bottom:36px}
+.ft-brand-col .ft-logo-name{font-family:var(--fd);font-size:22px;font-weight:800;color:#fff;letter-spacing:-.4px;margin-bottom:10px}
+.ft-brand-col .ft-copy{font-size:12px;color:rgba(255,255,255,.65);font-family:var(--fb);line-height:1.7;max-width:280px}
+.ft-col-title{font-family:var(--fd);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.5);margin-bottom:14px}
+.ft-col a{display:block;font-size:12.5px;color:rgba(255,255,255,.78);font-family:var(--fb);padding:4px 0}
+.ft-col a:hover{color:#fff}
+.ft-col address{font-style:normal}
+.ft-col address span{display:block;font-size:12.5px;color:rgba(255,255,255,.78);font-family:var(--fb);padding:4px 0}
+.fleg{font-size:10px;color:rgba(255,255,255,.5);font-family:var(--fb);line-height:1.65;border-top:1px solid rgba(255,255,255,.1);padding-top:20px}
+@media(max-width:900px){.ft-cols{grid-template-columns:1fr 1fr;gap:24px}}
+@media(max-width:520px){.ft-cols{grid-template-columns:1fr;gap:20px}.ft{margin:24px calc(50% - 50vw) 0;padding:32px clamp(12px,4vw,24px) 20px}}
+
+/* ── Chat widget ─────────────────────────────────────────────────────────── */
+.cfab{position:fixed;bottom:24px;right:24px;width:54px;height:54px;background:linear-gradient(135deg,var(--nm),var(--nl));border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:50;border:none;box-shadow:0 8px 24px rgba(22,45,85,.28)}
+.cnb{position:absolute;top:-3px;right:-3px;width:19px;height:19px;background:#ef4444;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;font-family:var(--fd)}
+.cpanel{position:fixed;bottom:88px;right:16px;width:320px;background:var(--surf);border-radius:var(--r-xl);box-shadow:0 12px 40px rgba(0,0,0,.16);z-index:49;overflow:hidden;display:none;flex-direction:column;height:420px;border:1px solid var(--bdr)}
 .cpanel.open{display:flex}
-.ctop{background:linear-gradient(135deg,var(--blue),var(--blue-dark));padding:12px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0}
-.cav{width:34px;height:34px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
-.can{font-size:13px;font-weight:700;color:#fff}
-.col{font-size:10px;color:rgba(255,255,255,0.7);display:flex;align-items:center;gap:4px;margin-top:1px}
+.ctop{background:linear-gradient(135deg,var(--nm),var(--nl));padding:14px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.cav{width:34px;height:34px;background:rgba(255,255,255,.18);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:var(--fd);color:#fff;flex-shrink:0}
+.can{font-size:13px;font-weight:700;font-family:var(--fd);color:#fff}
+.col{font-size:10px;color:rgba(255,255,255,.7);font-family:var(--fb);display:flex;align-items:center;gap:4px;margin-top:1px}
 .cold{width:6px;height:6px;background:#4ade80;border-radius:50%}
-.ccl{margin-left:auto;background:rgba(255,255,255,0.15);border:none;border-radius:8px;padding:5px 8px;color:#fff;cursor:pointer;font-size:11px}
+.ccl{margin-left:auto;background:rgba(255,255,255,.15);border:none;border-radius:8px;padding:5px 8px;color:#fff;cursor:pointer;font-size:11px;font-family:var(--fb)}
 .cmsgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px;background:#f8faff}
 .cmsgs::-webkit-scrollbar{display:none}
-.msg{max-width:84%;padding:8px 11px;border-radius:11px;font-size:11.5px;line-height:1.55}
-.msg.agent{background:#fff;border:1px solid var(--border);color:var(--text);align-self:flex-start;border-bottom-left-radius:3px}
-.msg.user{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
-.mtime{font-size:9px;color:var(--dim);margin-top:2px}
+.msg{max-width:84%;padding:8px 11px;border-radius:11px;font-size:11.5px;font-family:var(--fb);line-height:1.55}
+.msg.agent{background:#fff;border:1px solid var(--bdr);color:var(--ink);align-self:flex-start;border-bottom-left-radius:3px}
+.msg.user{background:linear-gradient(135deg,var(--nm),var(--nl));color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
+.mtime{font-size:9px;color:var(--dim);margin-top:2px;font-family:var(--fb)}
 .mtime.r{text-align:right}
-.cqk{padding:7px 8px;display:flex;gap:5px;overflow-x:auto;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.cqk{padding:7px 8px;display:flex;gap:5px;overflow-x:auto;border-top:1px solid var(--bdr);background:var(--surf);flex-shrink:0}
 .cqk::-webkit-scrollbar{display:none}
-.qp{flex-shrink:0;padding:5px 9px;background:#eff6ff;border:1px solid #dbeafe;border-radius:20px;font-size:10px;color:var(--blue);font-weight:500;cursor:pointer;white-space:nowrap}
-.cir{display:flex;gap:7px;padding:8px 10px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0}
-.cinp{flex:1;padding:8px 11px;border:1.5px solid var(--border);border-radius:20px;font-size:11px;outline:none;background:var(--bg);color:var(--text)}
-.cinp:focus{border-color:var(--blue)}
-.csend{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-@media (min-width:768px){.cpanel{right:24px;width:360px}.cfab{right:24px}}
-@media (min-width:1024px){.cpanel{right:32px;bottom:88px;width:380px;height:460px}.cfab{right:32px;bottom:24px}}
+.qp{flex-shrink:0;padding:5px 9px;background:var(--s2);border:1px solid var(--bdr);border-radius:20px;font-size:10px;color:var(--navy);font-weight:600;font-family:var(--fb);cursor:pointer;white-space:nowrap}
+.cir{display:flex;gap:7px;padding:8px 10px;border-top:1px solid var(--bdr);background:var(--surf);flex-shrink:0}
+.cinp{flex:1;padding:8px 11px;border:1.5px solid var(--bdr);border-radius:20px;font-size:11px;font-family:var(--fb);outline:none;background:var(--bg);color:var(--ink)}
+.cinp:focus{border-color:var(--teal)}
+.csend{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--nm),var(--nl));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+@media(min-width:768px){.cpanel{right:24px;width:360px}.cfab{right:28px}}
+@media(min-width:1024px){.cpanel{right:32px;bottom:92px;width:380px;height:460px}.cfab{right:32px;bottom:28px}}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media(max-width:960px){
+  .hero{grid-template-columns:1fr}
+  .hero-copy h1{font-size:52px}
+  .quote-top,.summary-grid{grid-template-columns:1fr 1fr}
+  .main{padding-top:80px}
+}
+@media(max-width:720px){
+  .main{padding-left:14px;padding-right:14px}
+  .hero-copy h1{font-size:42px}
+  .quote-top,.grid,.summary-grid{grid-template-columns:1fr}
+  .calc-card,.app-shell{border-radius:20px}
+  .hero-cta{flex-direction:column;align-items:flex-start}
+  .btn-hero-primary,.btn-hero-secondary{width:100%;justify-content:center}
+}
+@media(max-width:480px){
+  .hero-copy h1{font-size:38px;line-height:1;letter-spacing:-.04em}
+  .trust-mini{grid-template-columns:1fr}
+  .ft{margin:24px calc(50% - 50vw) 0}
+}
 </style>
 </head>
 <body>
 <div class="site">
-<div class="topbar">Warning: Late repayments can cause serious money problems. For help, visit <a href="https://www.moneyhelper.org.uk" target="_blank" rel="noreferrer">moneyhelper.org.uk</a>. You can compare our loans at <a href="#" target="_blank" rel="noreferrer">All the Lenders</a>.</div>
-<header class="header">
-  <div class="header-inner">
-    <button class="brand-link" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Go to homepage">
-      <span class="brand-lockup">
-        <span class="brand-mark"><svg width="22" height="22" viewBox="0 0 200 200" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bgQ1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1E4ED8" /><stop offset="100%" style="stop-color:#0F36A9" /></linearGradient></defs><rect x="10" y="10" width="180" height="180" rx="45" fill="url(#bgQ1)" /><path d="M145 190 C 145 190, 155 145, 190 145 L 190 145 Q 190 190, 145 190 Z" fill="#3ACC90" /><g transform="translate(60, 60)"><circle cx="35" cy="35" r="28" fill="none" stroke="white" stroke-width="12" /><line x1="55" y1="55" x2="75" y2="75" stroke="white" stroke-width="12" stroke-linecap="round" /></g></svg></span>
-        <span class="brand-word"><span class="brand-name">Quido</span></span>
-      </span>
-    </button>
-    <nav class="nav">
-      <a class="nav-login" href="/customer">Log in</a>
-    </nav>
+
+<!-- FLOATING PILL NAV -->
+<nav class="nav-pill" role="navigation" aria-label="Main navigation">
+  <button class="nav-brand" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Go to homepage">
+    <span class="brand-mark"><svg width="22" height="22" viewBox="0 0 200 200" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bgQ1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#162d55"/><stop offset="100%" style="stop-color:#1a3a6e"/></linearGradient></defs><rect x="10" y="10" width="180" height="180" rx="45" fill="url(#bgQ1)"/><path d="M145 190 C 145 190, 155 145, 190 145 L 190 145 Q 190 190, 145 190 Z" fill="#00c2a2"/><g transform="translate(60,60)"><circle cx="35" cy="35" r="28" fill="none" stroke="white" stroke-width="12"/><line x1="55" y1="55" x2="75" y2="75" stroke="white" stroke-width="12" stroke-linecap="round"/></g></svg></span>
+    <span class="brand-name">Quido</span>
+  </button>
+  <div class="nav-links" id="nav-links">
+    <a class="nav-link" href="#how-it-works">How it works</a>
+    <a class="nav-link" href="#contact">Contact</a>
+    <a class="nav-login" href="/customer">Log in</a>
   </div>
-</header>
+  <button class="ham" id="ham" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
 <main class="main">
 
   <!-- HERO -->
-  <section class="hero">
+  <section class="hero reveal">
     <div class="hero-copy">
-      <h1><span class="h1-primary">Personal loans,</span><br><span class="h1-accent">done right.</span></h1>
-      <div class="hero-points">
-        <div class="hero-point">
-          <span class="hp-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#00b865" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span>Instant repayment check — no commitment, no credit footprint.</span>
-        </div>
-        <div class="hero-point">
-          <span class="hp-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#00b865" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span>Apply in minutes and get a decision the same day.</span>
-        </div>
-        <div class="hero-point">
-          <span class="hp-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 5.5 4 7.5 8 3" stroke="#00b865" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span>Funds in your account the same day you're approved.</span>
-        </div>
+      <h1>
+        <span class="h1-line">Personal loans,</span>
+        <span class="h1-line"><span class="h1-teal">done right.</span></span>
+      </h1>
+      <p class="hero-lead">Check your personalised rate in seconds with no impact on your credit score. Borrow from £300 to £10,000 over 6 to 24 months.</p>
+      <div class="trust-mini">
+        <div class="tm-item"><span class="tm-dot"></span>FCA Authorised lender</div>
+        <div class="tm-item"><span class="tm-dot"></span>No hidden fees, ever</div>
+        <div class="tm-item"><span class="tm-dot"></span>Same-day funds</div>
+        <div class="tm-item"><span class="tm-dot"></span>Soft check only</div>
       </div>
-      <div class="hero-trust">
-        <div class="ht-item"><span class="ht-dot"></span>No hidden fees</div>
-        <div class="ht-item"><span class="ht-dot"></span>Representative 29.9% APR</div>
-        <div class="ht-item"><span class="ht-dot"></span>Borrow £300 – £10,000</div>
+      <div class="hero-cta">
+        <button class="btn-hero-primary" type="button" onclick="startApplication()">Apply now <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M8 3l5 5-5 5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <a class="btn-hero-secondary" href="#how-it-works">How it works</a>
       </div>
     </div>
 
-    <aside class="calc-card">
+    <!-- CALCULATOR CARD -->
+    <aside class="calc-card" aria-label="Loan calculator">
       <div class="calc-card-head">
         <h2>Get your quote</h2>
-        <p>Adjust the sliders to see your monthly repayment update instantly.</p>
+        <p>Adjust the sliders to see your repayment instantly.</p>
       </div>
       <div class="calc-body">
         <div class="quote-top">
-          <div class="metric"><span>Borrowing</span><strong id="quote-amount">£1,500</strong><small id="quote-term">12 monthly instalments</small></div>
-          <div class="metric"><span>Monthly repayment</span><strong id="quote-emi">£0.00</strong><small id="quote-extra">Updates automatically</small></div>
-          <div class="metric"><span>Total repayable</span><strong id="quote-total">£0.00</strong><small id="quote-policy">Rep. APR 29.9%</small></div>
+          <div class="metric">
+            <span>Borrowing</span>
+            <strong id="s-b">£1,500</strong>
+            <small id="s-sub">12 monthly instalments</small>
+          </div>
+          <div class="metric">
+            <span>Monthly repayment</span>
+            <strong id="s-m">£0.00</strong>
+            <small id="s-t">Updates automatically</small>
+          </div>
+          <div class="metric">
+            <span>Total repayable</span>
+            <strong id="disc">£0.00</strong>
+            <small id="s-sub2">Rep. APR 29.9%</small>
+          </div>
         </div>
         <div class="slider-stack">
           <div class="slider-group">
-            <div class="slider-head"><span class="slider-label">Amount</span><span class="slider-value" id="amount-display">£1,500</span></div>
-            <div class="range-wrap"><input class="range-input" id="calc-amount" type="range" min="300" max="10000" step="50" value="1500"><div class="slider-scale"><span>£300</span><span>£10,000</span></div></div>
+            <div class="slider-head">
+              <span class="slider-label">Amount</span>
+              <span class="slider-value" id="a-d">£1,500</span>
+            </div>
+            <div class="range-wrap">
+              <div class="sl-t">
+                <div class="sl-f" id="a-f" style="width:12%"></div>
+                <input type="range" id="a-sl" min="300" max="10000" step="50" value="1500" aria-label="Loan amount">
+              </div>
+              <div class="slider-scale"><span>£300</span><span>£10,000</span></div>
+            </div>
           </div>
           <div class="slider-group">
-            <div class="slider-head"><span class="slider-label">Term</span><span class="slider-value" id="term-display">12 months</span></div>
-            <div class="range-wrap"><input class="range-input" id="calc-term" type="range" min="6" max="24" step="1" value="12"><div class="slider-scale"><span>6 months</span><span>24 months</span></div></div>
+            <div class="slider-head">
+              <span class="slider-label">Term</span>
+              <span class="slider-value" id="t-d">12 months</span>
+            </div>
+            <div class="range-wrap">
+              <div class="sl-t">
+                <div class="sl-f" id="t-f" style="width:33%"></div>
+                <input type="range" id="t-sl" min="6" max="24" step="1" value="12" aria-label="Loan term">
+              </div>
+              <div class="slider-scale"><span>6 months</span><span>24 months</span></div>
+            </div>
           </div>
-          
         </div>
         <div class="calc-cta">
           <button class="btn-calc-apply" type="button" onclick="startApplication()">Apply now</button>
@@ -282,79 +380,86 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
     </aside>
   </section>
 
-  <!-- TRUST STRIP -->
-  <section class="trust-strip">
-    <div class="trust-grid">
-      <div class="trust-item">
-        <div class="trust-icon ti-blue">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 2 3 5v4c0 3.5 2.5 6.5 6 7.4C12.5 15.5 15 12.5 15 9V5L9 2z" stroke="#1a56db" stroke-width="1.4" stroke-linejoin="round"/><path d="M6.5 9.5l2 2 3-3.5" stroke="#1a56db" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div><strong>FCA Authorised</strong><span>Authorised and regulated by the Financial Conduct Authority</span></div>
+  <!-- BENTO GRID -->
+  <section class="bento reveal" aria-label="Key features">
+    <div class="bento-cell">
+      <div class="bc-icon bc-navy">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 2 3 5v4c0 3.5 2.5 6.5 6 7.4C12.5 15.5 15 12.5 15 9V5L9 2z" stroke="#162d55" stroke-width="1.4" stroke-linejoin="round"/><path d="M6.5 9.5l2 2 3-3.5" stroke="#162d55" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
-      <div class="trust-item">
-        <div class="trust-icon ti-green">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="6.5" stroke="#059669" stroke-width="1.4"/><path d="M6 9l2.5 2.5L12.5 7" stroke="#059669" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div><strong>No hidden fees</strong><span>The rate you see is the rate you pay. Nothing added later.</span></div>
+      <strong>FCA Authorised</strong>
+      <span>Regulated by the Financial Conduct Authority</span>
+    </div>
+    <div class="bento-cell">
+      <div class="bc-icon bc-teal">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="6.5" stroke="#00c2a2" stroke-width="1.4"/><path d="M6 9l2.5 2.5L12.5 7" stroke="#00c2a2" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
-      <div class="trust-item">
-        <div class="trust-icon ti-amber">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="3" y="5" width="12" height="9" rx="2" stroke="#b45309" stroke-width="1.4"/><path d="M3 8h12M7 5V3.5M11 5V3.5" stroke="#b45309" stroke-width="1.4" stroke-linecap="round"/></svg>
-        </div>
-        <div><strong>Flexible repayments</strong><span>Choose your term and pay on a date that suits you</span></div>
+      <strong>Same-day funds</strong>
+      <span>Approved today, money in your account today</span>
+    </div>
+    <div class="bento-cell">
+      <div class="bc-icon bc-green">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="3" y="5" width="12" height="9" rx="2" stroke="#059669" stroke-width="1.4"/><path d="M3 8h12M7 5V3.5M11 5V3.5" stroke="#059669" stroke-width="1.4" stroke-linecap="round"/></svg>
       </div>
-      <div class="trust-item">
-        <div class="trust-icon ti-purple">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 2c0 0-6 3-6 7v2.5L9 15l6-3.5V9c0-4-6-7-6-7z" stroke="#7c3aed" stroke-width="1.3" stroke-linejoin="round"/><path d="M9 7v3.5" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round"/><circle cx="9" cy="12.5" r=".75" fill="#7c3aed"/></svg>
-        </div>
-        <div><strong>Responsible lending</strong><span>We only lend what you can comfortably afford to repay</span></div>
+      <strong>No hidden fees</strong>
+      <span>The rate you see is exactly what you pay</span>
+    </div>
+    <div class="bento-cell bc-apr">
+      <div class="apr-num" id="apr-counter" aria-live="polite">29.9%</div>
+      <div class="apr-label">Representative APR</div>
+    </div>
+    <div class="bento-cell">
+      <div class="bc-icon bc-amber">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 2c0 0-6 3-6 7v2.5L9 15l6-3.5V9c0-4-6-7-6-7z" stroke="#b45309" stroke-width="1.3" stroke-linejoin="round"/><path d="M9 7v3.5" stroke="#b45309" stroke-width="1.4" stroke-linecap="round"/><circle cx="9" cy="12.5" r=".75" fill="#b45309"/></svg>
       </div>
+      <strong>Soft check only</strong>
+      <span>No credit footprint until you fully apply</span>
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="section" id="how-it-works">
-    <div class="how-card">
-      <div class="how-card-head">
-        <h3>How it works</h3>
-        <p>From first quote to funded loan. The entire journey happens online, in one place.</p>
-      </div>
-      <div class="how-steps">
-        <div class="how-step">
-          <div class="how-step-num">1</div>
+  <!-- HOW IT WORKS – TIMELINE -->
+  <section class="how-section reveal" id="how-it-works" aria-labelledby="how-title">
+    <div class="section-label">The process</div>
+    <h2 id="how-title">How it works</h2>
+    <p class="how-sub">From first quote to funded loan. The entire journey happens online, in one place.</p>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-card">
           <strong>Get your quote</strong>
-          <span>Use the calculator to set your amount and term. See the exact monthly repayment before committing to anything. No credit check at this stage.</span>
+          <span>Use the calculator to set your amount and term. See the exact monthly repayment before committing. No credit check at this stage.</span>
         </div>
-        <div class="how-step">
-          <div class="how-step-num">2</div>
+        <div class="tl-node"><div class="tl-dot tl-dot-1">1</div></div>
+        <div class="tl-empty"></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-empty"></div>
+        <div class="tl-node"><div class="tl-dot tl-dot-2">2</div></div>
+        <div class="tl-card">
           <strong>Apply &amp; get a decision</strong>
           <span>Create your profile, complete the application, and receive an instant decision. We assess affordability to make sure the loan is right for you.</span>
         </div>
-        <div class="how-step">
-          <div class="how-step-num">3</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-card">
           <strong>Sign and receive funds</strong>
           <span>Review your offer documents, sign online, and your application moves to final approval. Once approved, funds are transferred the same day.</span>
         </div>
-      </div>
-      <div class="apply-cta">
-        <button class="apply-button" type="button" onclick="startApplication()">Apply now</button>
-        <span class="apply-note">Create your profile and continue with the application in one place.</span>
+        <div class="tl-node"><div class="tl-dot tl-dot-3">3</div></div>
+        <div class="tl-empty"></div>
       </div>
     </div>
   </section>
 
   <!-- APPLICATION SHELL -->
-  <section class="section" id="application-shell" style="display:none">
+  <section class="app-section" id="application-shell" style="display:none">
     <div class="app-shell">
       <div class="app-head">
         <h3>Apply online</h3>
         <p>Complete your application in four simple steps. Your information is held securely and used only to assess your loan.</p>
-        
       </div>
 
       <!-- STEP 1 OF 3: Account & Identity -->
       <section class="pane active" id="pane-step1">
-        <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px">Step 1 of 3 &mdash; Account &amp; Identity</div>
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;font-family:var(--fb)">Step 1 of 3 &mdash; Account &amp; Identity</div>
         <div class="offer-box" style="margin-bottom:16px"><h4>Create your Quido account</h4><p>Your account secures your application and gives you access to your Quido customer portal once approved.</p></div>
         <form id="step1-form" class="grid">
           <div class="field"><label for="pf-title">Title</label><select id="pf-title" required><option value="MR">Mr</option><option value="MRS">Mrs</option><option value="MS" selected>Ms</option><option value="MISS">Miss</option></select></div>
@@ -366,12 +471,12 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
           <div class="field"><label for="pf-password">Password</label><input id="pf-password" type="password" required minlength="8" placeholder="Min 8 characters, at least 1 digit"></div>
           <div class="field"><label for="pf-dob">Date of birth</label><input id="pf-dob" type="date" required></div>
           <div class="field full" style="margin-top:4px">
-            <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Marketing &amp; Consent</div>
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-family:var(--fb)">Marketing &amp; Consent</div>
             <div class="check-grid">
               <label class="check"><input id="pf-mkt-phone" type="checkbox"><span>I agree to be contacted by phone for marketing purposes</span></label>
               <label class="check"><input id="pf-mkt-email" type="checkbox"><span>I agree to receive marketing emails</span></label>
               <label class="check"><input id="pf-mkt-sms" type="checkbox"><span>I agree to receive marketing SMS messages</span></label>
-              <label class="check"><input id="pf-privacy" type="checkbox" required><span>I have read and accept the <a href="#" style="color:var(--blue)">Privacy Policy</a>. <strong>(Required to proceed)</strong></span></label>
+              <label class="check"><input id="pf-privacy" type="checkbox" required><span>I have read and accept the <a href="#" style="color:var(--teal)">Privacy Policy</a>. <strong>(Required to proceed)</strong></span></label>
             </div>
           </div>
           <div class="field full"><button class="btn btn-primary" type="submit">Continue to address &rarr;</button></div>
@@ -381,7 +486,7 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
 
       <!-- STEP 2 OF 3: Address -->
       <section class="pane" id="pane-step2">
-        <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px">Step 2 of 3 &mdash; Residential Address</div>
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;font-family:var(--fb)">Step 2 of 3 &mdash; Residential Address</div>
         <div class="offer-box" style="margin-bottom:16px"><h4>Your current address</h4><p>We use your address to verify your identity and process your application.</p></div>
         <form id="step2-form" class="grid">
           <div class="field"><label for="pf-home-status">Home owner status</label><select id="pf-home-status" required><option value="HOME_OWNER">Home owner</option><option value="JOINT_OWNER">Joint owner</option><option value="RENT" selected>Renting</option><option value="COUNCIL_TENANT">Council tenant</option><option value="RENT_FREE">Living rent-free</option><option value="OTHER">Other</option></select></div>
@@ -392,9 +497,8 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
           <div class="field"><label for="pf-city">City / town</label><input id="pf-city" type="text" required maxlength="100"></div>
           <div class="field"><label for="pf-county">County</label><input id="pf-county" type="text" required maxlength="100"></div>
           <div class="field"><label for="pf-postcode">Post code</label><input id="pf-postcode" type="text" required maxlength="10" placeholder="e.g. SW1A 1AA" style="text-transform:uppercase"></div>
-          <!-- Previous address (shown when time at address < 6 months) -->
           <div class="field full" id="prev-address-group" style="display:none">
-            <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Previous address</div>
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-family:var(--fb)">Previous address</div>
             <div class="grid" style="gap:10px">
               <div class="field"><label for="pf-prev-home-status">Home owner status</label><select id="pf-prev-home-status"><option value="HOME_OWNER">Home owner</option><option value="JOINT_OWNER">Joint owner</option><option value="RENT" selected>Renting</option><option value="COUNCIL_TENANT">Council tenant</option><option value="RENT_FREE">Living rent-free</option><option value="OTHER">Other</option></select></div>
               <div class="field"><label for="pf-prev-house-num">House / building number</label><input id="pf-prev-house-num" type="text" maxlength="20"></div>
@@ -412,11 +516,11 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
 
       <!-- STEP 3 OF 3: Employment & Expenses -->
       <section class="pane" id="pane-step3">
-        <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px">Step 3 of 3 &mdash; Employment &amp; Expenses</div>
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;font-family:var(--fb)">Step 3 of 3 &mdash; Employment &amp; Expenses</div>
         <form id="step3-form" class="stack">
           <div class="grid" style="align-items:start">
             <div class="stack">
-              <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:2px">Employment</div>
+              <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px;font-family:var(--fd)">Employment</div>
               <div class="field"><label for="pf-emp-status">Employment status</label><select id="pf-emp-status" required><option value="FULL_TIME" selected>Full-time employed</option><option value="PART_TIME">Part-time employed</option><option value="TEMPORARY">Temporary / contract</option><option value="SELF_EMPLOYED">Self-employed</option><option value="STUDENT">Student</option><option value="DISABILITY">Disability / incapacity</option><option value="PENSION">Retired / pension</option><option value="UNEMPLOYED">Unemployed</option></select></div>
               <div id="employer-group" class="stack" style="gap:10px">
                 <div class="field"><label for="pf-employer">Employer name</label><input id="pf-employer" type="text" maxlength="100" placeholder="Your employer's name"></div>
@@ -429,7 +533,7 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
               <div class="field"><label for="pf-when-paid">Date you get paid</label><select id="pf-when-paid" required></select></div>
             </div>
             <div class="stack">
-              <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:2px">Monthly expenses</div>
+              <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px;font-family:var(--fd)">Monthly expenses</div>
               <div class="field"><label for="pf-exp-rent">Rent / mortgage (£)</label><input id="pf-exp-rent" type="number" min="0" step="0.01" value="0" required></div>
               <div class="field"><label for="pf-exp-utilities">Utilities bills (£)</label><input id="pf-exp-utilities" type="number" min="0" step="0.01" value="0" required></div>
               <div class="field"><label for="pf-exp-council">Council tax (£)</label><input id="pf-exp-council" type="number" min="0" step="0.01" value="0" required></div>
@@ -485,7 +589,7 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
         </div>
         <form id="sign-form" class="stack">
           <div class="field"><label for="sign-full-name">Full name</label><input id="sign-full-name" type="text" required></div>
-          <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;margin-top:4px">Bank account for loan disbursement</div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;margin-top:4px;font-family:var(--fb)">Bank account for loan disbursement</div>
           <div class="grid" style="gap:10px">
             <div class="field"><label for="sign-bank-holder">Account holder name</label><input id="sign-bank-holder" type="text" placeholder="As it appears on your bank statement" required></div>
             <div class="field"><label for="sign-bank-name">Bank name</label><input id="sign-bank-name" type="text" placeholder="e.g. Barclays, HSBC" required></div>
@@ -514,73 +618,164 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
     </div>
   </section>
 
-  <!-- CONTACT STRIPS -->
-  <section class="contact-section">
-    <div class="contact-strips">
-      <a class="cstrip" href="/customer#faq">
-        <div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="1.5"/><path d="M7.5 7.5a2.5 2.5 0 1 1 4.25 1.77c-.82.82-1.5 1.28-1.5 2.23" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="14.25" r=".8" fill="#fff"/></svg></div>
-        <div class="cstrip-text"><strong>Frequently Asked Questions</strong><span>Find answers to common queries</span></div>
-      </a>
-      <a class="cstrip" href="tel:08001234567">
-        <div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 4a1 1 0 011-1h2.5l1.2 3.5-1.8 1.8a10 10 0 005.3 5.3l1.8-1.8L17 14v2.5a1 1 0 01-1 1C8.2 17.5 2 11.8 4 4z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="cstrip-text"><strong>Call us</strong><span>0800 123 4567 &middot; Mon-Fri 9:00-17:00</span></div>
-      </a>
-      <a class="cstrip" href="mailto:info@quido.co.uk">
-        <div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2" y="4" width="16" height="12" rx="2" stroke="#fff" stroke-width="1.5"/><path d="M2 7l8 5 8-5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="cstrip-text"><strong>Write to us</strong><span>info@quido.co.uk</span></div>
-      </a>
-      <a class="cstrip" href="mailto:complaints@quido.co.uk">
-        <div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="1.5"/><path d="M10 6v4.5M10 13.5v.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></div>
-        <div class="cstrip-text"><strong>Make a complaint</strong><span>complaints@quido.co.uk</span></div>
-      </a>
+  <!-- CONTACT SECTION -->
+  <section class="contact-section reveal" id="contact" aria-labelledby="contact-title">
+    <div class="contact-inner">
+      <div class="contact-details">
+        <div class="section-label">Get in touch</div>
+        <h2 id="contact-title">Contact us</h2>
+        <p class="c-sub">Have a question about your loan or application? Our team is here to help.</p>
+        <div class="c-info-row">
+          <div class="c-info-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 4a1 1 0 011-1h2l1 3-1.5 1.5a8 8 0 004 4L12 10l3 1v2a1 1 0 01-1 1C7.5 14 3 9.5 4 4z" stroke="#162d55" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="c-info-text">
+            <strong>0800 123 4567</strong>
+            <span>Mon–Fri 9:00–17:00</span>
+          </div>
+        </div>
+        <div class="c-info-row">
+          <div class="c-info-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="2" y="4" width="14" height="10" rx="2" stroke="#162d55" stroke-width="1.4"/><path d="M2 7l7 4.5 7-4.5" stroke="#162d55" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="c-info-text">
+            <strong>info@quido.co.uk</strong>
+            <span>We aim to reply within one business day</span>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form-wrap">
+        <div id="cf-form-body">
+          <p class="cf-title">Send us a message</p>
+          <div class="cf-row">
+            <div class="cf-field">
+              <label for="cf-name">Full name</label>
+              <input type="text" id="cf-name" placeholder="Jane Smith" autocomplete="name">
+              <span class="cf-err" id="cf-name-err">Please enter your name</span>
+            </div>
+            <div class="cf-field">
+              <label>Are you a customer?</label>
+              <div class="cf-toggle">
+                <button type="button" class="cf-tog-btn active" id="cf-tog-yes" onclick="setCust('yes')">Yes</button>
+                <button type="button" class="cf-tog-btn" id="cf-tog-no" onclick="setCust('no')">No</button>
+              </div>
+            </div>
+          </div>
+          <div class="cf-field">
+            <label for="cf-email">Email address</label>
+            <input type="email" id="cf-email" placeholder="jane@example.com" autocomplete="email">
+            <span class="cf-err" id="cf-email-err">Please enter a valid email</span>
+          </div>
+          <div class="cf-field">
+            <label for="cf-reason">Reason for contact</label>
+            <select id="cf-reason">
+              <option value="">Select a reason…</option>
+              <option value="application">Application query</option>
+              <option value="existing">Existing loan query</option>
+              <option value="payment">Payment or repayment</option>
+              <option value="complaint">Make a complaint</option>
+              <option value="tech">Technical support</option>
+              <option value="other">Other</option>
+            </select>
+            <span class="cf-err" id="cf-reason-err">Please select a reason</span>
+          </div>
+          <div class="cf-field cf-last">
+            <label for="cf-msg">Message</label>
+            <textarea id="cf-msg" rows="4" placeholder="Tell us how we can help…"></textarea>
+            <span class="cf-err" id="cf-msg-err">Please enter a message</span>
+          </div>
+          <button type="button" class="btn-cf-submit" id="cf-submit-btn" onclick="submitContactForm()">Send message</button>
+        </div>
+        <div class="cf-success" id="cf-success">
+          <div class="cf-success-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M7 14l5 5 9-10" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Message sent!</h3>
+          <p>Thanks for getting in touch. We'll get back to you within one business day.</p>
+        </div>
+      </div>
     </div>
   </section>
+
 </main>
 
 <!-- CHAT FAB + PANEL -->
-<button class="cfab" id="cfab" aria-label="Open chat">
-  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M3 4a1 1 0 011-1h14a1 1 0 011 1v10a1 1 0 01-1 1H12.5l-4 3.5V15H4a1 1 0 01-1-1V4z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7.5" cy="9.5" r="1" fill="#fff"/><circle cx="11" cy="9.5" r="1" fill="#fff"/><circle cx="14.5" cy="9.5" r="1" fill="#fff"/></svg><div class="cnb" id="cnb">1</div>
+<button class="cfab" id="cfab" aria-label="Open support chat">
+  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M3 4a1 1 0 011-1h14a1 1 0 011 1v10a1 1 0 01-1 1H12.5l-4 3.5V15H4a1 1 0 01-1-1V4z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7.5" cy="9.5" r="1" fill="#fff"/><circle cx="11" cy="9.5" r="1" fill="#fff"/><circle cx="14.5" cy="9.5" r="1" fill="#fff"/></svg>
+  <div class="cnb" id="cnb">1</div>
 </button>
-<div class="cpanel" id="cpanel">
-  <div class="ctop"><div class="cav">Q</div><div><div class="can">Quido Support</div><div class="col"><div class="cold"></div>Online &lt;1 min</div></div><button class="ccl" id="cclose">X</button></div>
-  <div class="cmsgs" id="cmsgs"><div><div class="msg agent">Hi there. You're through to Quido Support. How can we help today?</div><div class="mtime">9:41 AM</div></div></div>
+<div class="cpanel" id="cpanel" role="dialog" aria-label="Quido Support Chat">
+  <div class="ctop">
+    <div class="cav">Q</div>
+    <div><div class="can">Quido Support</div><div class="col"><div class="cold"></div>Online &lt;1 min</div></div>
+    <button class="ccl" id="cclose" aria-label="Close chat">&#10005;</button>
+  </div>
+  <div class="cmsgs" id="cmsgs">
+    <div><div class="msg agent">Hi there. You're through to Quido Support. How can we help today?</div><div class="mtime">9:41 AM</div></div>
+  </div>
   <div class="cqk">
     <div class="qp" data-msg="What is my outstanding balance?">Outstanding balance</div>
     <div class="qp" data-msg="When is my next payment due?">Next payment</div>
     <div class="qp" data-msg="I am struggling to make a payment">Need more time</div>
     <div class="qp" data-msg="Can I repay early?">Early repayment</div>
   </div>
-  <div class="cir"><input class="cinp" id="cinp" type="text" placeholder="Type a message…"><button class="csend" id="csend" aria-label="Send"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M12.5 7L1.5 2l2 5-2 5 11-5z" fill="#fff"/></svg></button></div>
+  <div class="cir">
+    <input class="cinp" id="cinp" type="text" placeholder="Type a message…" aria-label="Chat message">
+    <button class="csend" id="csend" aria-label="Send message"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M12.5 7L1.5 2l2 5-2 5 11-5z" fill="#fff"/></svg></button>
+  </div>
 </div>
+
 <!-- FOOTER -->
-<div class="ft">
+<footer class="ft" role="contentinfo">
   <div class="ft-inner">
-    <div class="ft-top">
-      <div class="ft-brand">
-        <button class="brand-link" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Go to homepage">
-          <span class="brand-lockup">
-            <span class="brand-mark"><svg width="22" height="22" viewBox="0 0 200 200" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bgQ2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1E4ED8" /><stop offset="100%" style="stop-color:#0F36A9" /></linearGradient></defs><rect x="10" y="10" width="180" height="180" rx="45" fill="url(#bgQ2)" /><path d="M145 190 C 145 190, 155 145, 190 145 L 190 145 Q 190 190, 145 190 Z" fill="#3ACC90" /><g transform="translate(60, 60)"><circle cx="35" cy="35" r="28" fill="none" stroke="white" stroke-width="12" /><line x1="55" y1="55" x2="75" y2="75" stroke="white" stroke-width="12" stroke-linecap="round" /></g></svg></span>
-            <span class="brand-word"><span class="brand-name" style="color:#fff">Quido</span></span>
-          </span>
-        </button>
-        <div class="ft-copy">Personal loans, done right.</div>
+    <div class="ft-cols">
+      <div class="ft-brand-col">
+        <div class="ft-logo-name">Quido</div>
+        <p class="ft-copy">Personal loans, done right. Fast, fair, and fully FCA-authorised. Borrow from £300 to £10,000.</p>
       </div>
-      <div class="ft-links">
-        <a href="#">Loan</a><a href="#">About Us</a><a href="#">FAQs</a><a href="#">Careers</a>
-        <a href="#">Beware of Loan Sharks</a><a href="#">Terms of Use</a><a href="#">Contact Us</a><a href="#">Privacy Policy</a>
-        <a href="#">File a Complaint</a><a href="#">Fraud Disclaimer</a><a href="#">Insights</a><a href="#">Cookies Policy</a>
+      <div class="ft-col">
+        <div class="ft-col-title">Product</div>
+        <a href="#">Personal Loan</a>
+        <a href="#">Loan Calculator</a>
+        <a href="#">How It Works</a>
+        <a href="#">FAQs</a>
+      </div>
+      <div class="ft-col">
+        <div class="ft-col-title">Company</div>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Insights</a>
+        <a href="#">Beware of Loan Sharks</a>
+      </div>
+      <div class="ft-col">
+        <div class="ft-col-title">Contact</div>
+        <address>
+          <span>0800 123 4567</span>
+          <span>info@quido.co.uk</span>
+          <span>complaints@quido.co.uk</span>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+          <a href="#">Cookies Policy</a>
+        </address>
       </div>
     </div>
     <div class="fleg">We are a lender and may pay commissions to credit brokers or other intermediaries. This commission does not affect the total cost of your loan.<br><br><strong>Responsible lending:</strong> Take a moment to decide if Quido is right for you. Short term loans are an expensive form of borrowing.<br><br>Quido Ltd. Authorised and regulated by the Financial Conduct Authority. Registration number 900001.</div>
   </div>
-</div>
+</footer>
 
 <script>
 (function(){
+  'use strict';
   var state = { quote:null, account:null, resolved:null, decision:null, draft:{} };
   var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  /* ── Helpers ─────────────────────────────────────────────────────────── */
+  function gbp(n, d){ return '£'+Number(n||0).toLocaleString('en-GB',{minimumFractionDigits:d||0,maximumFractionDigits:d||0}); }
   function money(v){ return new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(Number(v||0)); }
   function setMessage(id,kind,text){ var el=document.getElementById(id); if(!el)return; el.className='message'+(kind?' '+kind:''); el.textContent=text; }
+  function bmp(id){ var el=document.getElementById(id); if(!el)return; el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
+
+  /* ── Pane navigation ─────────────────────────────────────────────────── */
   function setActive(name){
     ['step1','step2','step3','application','decision','sign','card'].forEach(function(key){
       var pane=document.getElementById('pane-'+key);
@@ -595,17 +790,136 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
     setActive(state.account?'application':'step1');
     shell.scrollIntoView({behavior:'smooth',block:'start'});
   };
-  function patchRangeFill(el){ var min=Number(el.min||0),max=Number(el.max||100),val=Number(el.value||0),pct=((val-min)/(max-min))*100,p=pct.toFixed(2)+'%'; requestAnimationFrame(function(){ el.style.setProperty('--fill',p); el.style.background='linear-gradient(90deg,#00b865 0%,#00b865 '+p+',rgba(255,255,255,.22) '+p+',rgba(255,255,255,.22) 100%)'; }); }
-  var calcRequestId=0;
-  function patchQuote(decision){ if(!decision||!decision.quote)return; state.quote=decision; var repApr=((decision.policy||{}).repAPR!=null?(decision.policy||{}).repAPR:(decision.policy||{}).apr); document.getElementById('quote-amount').textContent=money(decision.quote.amount); document.getElementById('quote-term').textContent=decision.quote.termMonths+' monthly instalments'; document.getElementById('quote-emi').textContent=money(decision.quote.emi); document.getElementById('quote-total').textContent=money(decision.quote.totalRepayable); document.getElementById('quote-policy').textContent='Rep. APR '+Number(repApr||0).toFixed(1)+'%'; document.getElementById('quote-extra').textContent='Updates automatically'; document.getElementById('amount-display').textContent=money(decision.quote.amount); document.getElementById('term-display').textContent=decision.quote.termMonths+' months'; }
-  async function runCalculator(){ var P=Number(document.getElementById('calc-amount').value||0),n=Number(document.getElementById('calc-term').value||0),requestId=++calcRequestId; document.getElementById('quote-extra').textContent='Updating quote...'; try{ var result=await postJson('/api/public/quote',{amount:P,termMonths:n}); if(requestId!==calcRequestId)return; patchQuote(result.decision||result); hydrateApplicationFromQuote(); }catch(err){ if(requestId!==calcRequestId)return; document.getElementById('quote-extra').textContent='We could not update the quote right now.'; } }
-  function hydrateApplicationFromQuote(){ document.getElementById('app-amount').value=document.getElementById('calc-amount').value; document.getElementById('app-term').value=document.getElementById('calc-term').value; }
-  function updateApplicationSummary(){ var q=null; if(state.decision&&state.decision.quote)q=state.decision.quote; else if(state.quote&&state.quote.quote)q=state.quote.quote; else if(state.quote&&state.quote.amount)q=state.quote; var amtEl=document.getElementById('app-summary-amount'),intEl=document.getElementById('app-summary-interest'),emiEl=document.getElementById('app-summary-emi'),repayEl=document.getElementById('app-summary-repay'); if(q){ if(amtEl)amtEl.textContent=money(q.amount); if(intEl)intEl.textContent=money(q.totalInterest); if(emiEl)emiEl.textContent=money(q.emi)+'/mo'; if(repayEl){var d=new Date();d.setMonth(d.getMonth()+1);repayEl.textContent=d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear();} }else{ if(amtEl)amtEl.textContent='-'; if(intEl)intEl.textContent='-'; if(emiEl)emiEl.textContent='-'; if(repayEl)repayEl.textContent='-'; } }
-  function populateFromProfile(account){ if(!account)return; var personal=(account.profile&&account.profile.personal)||{}; document.getElementById('sign-full-name').value=[personal.firstName,personal.lastName].filter(Boolean).join(' '); if(account.application&&account.application.quote){ document.getElementById('app-amount').value=account.application.quote.amount||document.getElementById('app-amount').value; document.getElementById('app-term').value=account.application.quote.termMonths||document.getElementById('app-term').value; } updateApplicationSummary(); }
-  function reflectDecision(decision){ if(!decision||!decision.quote)return; state.decision=decision; document.getElementById('decision-amount').textContent=money(decision.quote.amount); document.getElementById('decision-emi').textContent=money(decision.quote.emi); document.getElementById('decision-total').textContent=money(decision.quote.totalRepayable); document.getElementById('sign-amount').textContent=money(decision.quote.amount); document.getElementById('sign-term').textContent=decision.quote.termMonths+' months'; document.getElementById('sign-apr').textContent=decision.quote.apr+'%'; var btn=document.getElementById('decision-sign-btn'); if(decision.approved){ document.getElementById('decision-title').textContent='You are approved, subject to signing'; document.getElementById('decision-copy').textContent='Your loan of '+money(decision.quote.amount)+' over '+decision.quote.termMonths+' months at '+decision.quote.apr+'% APR is ready. Review and sign to move forward.'; btn.style.display='inline-flex'; setMessage('decision-note','success','Approved at '+decision.quote.apr+'% APR. Review and sign your offer to proceed.'); }else{ document.getElementById('decision-title').textContent='We cannot approve this application right now'; document.getElementById('decision-copy').textContent=(decision.reasons||[]).join(' ')||'This application does not meet our current lending criteria.'; btn.style.display='none'; setMessage('decision-note','warn',document.getElementById('decision-copy').textContent); } }
-  async function postJson(url,payload){ var res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload||{})}); var data=await res.json().catch(function(){return{};}); if(!res.ok)throw new Error(data.error||'Request failed.'); return data; }
 
-  // ── whenGetPaid reactive options ──────────────────────────────────────────
+  /* ── Range slider fill ───────────────────────────────────────────────── */
+  function patchRangeFill(el){
+    var min=Number(el.min||0),max=Number(el.max||100),val=Number(el.value||0);
+    var pct=((val-min)/(max-min))*100;
+    var fillEl = el.previousElementSibling;
+    if(fillEl && fillEl.classList.contains('sl-f')){
+      fillEl.style.width = pct.toFixed(2)+'%';
+    }
+  }
+
+  /* ── Local calculator (instant) ──────────────────────────────────────── */
+  function calcLocal(){
+    var P=Number(document.getElementById('a-sl').value||0);
+    var n=Number(document.getElementById('t-sl').value||0);
+    if(!P||!n)return;
+    var r=0.299/12;
+    var pwr=Math.pow(1+r,n);
+    var emi=P*r*pwr/(pwr-1);
+    var total=emi*n;
+    document.getElementById('s-b').textContent=gbp(P);
+    bmp('s-b');
+    document.getElementById('s-sub').textContent=n+' monthly instalments';
+    document.getElementById('s-m').textContent=gbp(emi,2);
+    bmp('s-m');
+    document.getElementById('disc').textContent=gbp(total,2);
+    bmp('disc');
+    document.getElementById('a-d').textContent=gbp(P);
+    document.getElementById('t-d').textContent=n+' months';
+  }
+
+  /* ── API calculator (debounced) ─────────────────────────────────────── */
+  var calcRequestId=0;
+  var calcDebounceTimer=null;
+  function patchQuote(decision){
+    if(!decision||!decision.quote)return;
+    state.quote=decision;
+    var repApr=((decision.policy||{}).repAPR!=null?(decision.policy||{}).repAPR:(decision.policy||{}).apr);
+    document.getElementById('s-b').textContent=money(decision.quote.amount);
+    document.getElementById('s-sub').textContent=decision.quote.termMonths+' monthly instalments';
+    document.getElementById('s-m').textContent=money(decision.quote.emi);
+    document.getElementById('disc').textContent=money(decision.quote.totalRepayable);
+    document.getElementById('s-t').textContent='Updates automatically';
+    document.getElementById('a-d').textContent=money(decision.quote.amount);
+    document.getElementById('t-d').textContent=decision.quote.termMonths+' months';
+    if(document.getElementById('s-sub2')) document.getElementById('s-sub2').textContent='Rep. APR '+Number(repApr||0).toFixed(1)+'%';
+  }
+  async function runCalculator(){
+    var P=Number(document.getElementById('a-sl').value||0);
+    var n=Number(document.getElementById('t-sl').value||0);
+    var requestId=++calcRequestId;
+    document.getElementById('s-t').textContent='Updating quote...';
+    try{
+      var result=await postJson('/api/public/quote',{amount:P,termMonths:n});
+      if(requestId!==calcRequestId)return;
+      patchQuote(result.decision||result);
+      hydrateApplicationFromQuote();
+    }catch(err){
+      if(requestId!==calcRequestId)return;
+      document.getElementById('s-t').textContent='Could not update right now.';
+    }
+  }
+  function runCalculatorDebounced(){
+    clearTimeout(calcDebounceTimer);
+    calcDebounceTimer=setTimeout(runCalculator,480);
+  }
+  function hydrateApplicationFromQuote(){
+    document.getElementById('app-amount').value=document.getElementById('a-sl').value;
+    document.getElementById('app-term').value=document.getElementById('t-sl').value;
+  }
+
+  /* ── Application summary helpers ─────────────────────────────────────── */
+  function updateApplicationSummary(){
+    var q=null;
+    if(state.decision&&state.decision.quote)q=state.decision.quote;
+    else if(state.quote&&state.quote.quote)q=state.quote.quote;
+    else if(state.quote&&state.quote.amount)q=state.quote;
+    var amtEl=document.getElementById('app-summary-amount'),intEl=document.getElementById('app-summary-interest'),emiEl=document.getElementById('app-summary-emi'),repayEl=document.getElementById('app-summary-repay');
+    if(q){
+      if(amtEl)amtEl.textContent=money(q.amount);
+      if(intEl)intEl.textContent=money(q.totalInterest);
+      if(emiEl)emiEl.textContent=money(q.emi)+'/mo';
+      if(repayEl){var d=new Date();d.setMonth(d.getMonth()+1);repayEl.textContent=d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear();}
+    }else{
+      if(amtEl)amtEl.textContent='-';
+      if(intEl)intEl.textContent='-';
+      if(emiEl)emiEl.textContent='-';
+      if(repayEl)repayEl.textContent='-';
+    }
+  }
+  function populateFromProfile(account){
+    if(!account)return;
+    var personal=(account.profile&&account.profile.personal)||{};
+    document.getElementById('sign-full-name').value=[personal.firstName,personal.lastName].filter(Boolean).join(' ');
+    if(account.application&&account.application.quote){
+      document.getElementById('app-amount').value=account.application.quote.amount||document.getElementById('app-amount').value;
+      document.getElementById('app-term').value=account.application.quote.termMonths||document.getElementById('app-term').value;
+    }
+    updateApplicationSummary();
+  }
+  function reflectDecision(decision){
+    if(!decision||!decision.quote)return;
+    state.decision=decision;
+    document.getElementById('decision-amount').textContent=money(decision.quote.amount);
+    document.getElementById('decision-emi').textContent=money(decision.quote.emi);
+    document.getElementById('decision-total').textContent=money(decision.quote.totalRepayable);
+    document.getElementById('sign-amount').textContent=money(decision.quote.amount);
+    document.getElementById('sign-term').textContent=decision.quote.termMonths+' months';
+    document.getElementById('sign-apr').textContent=decision.quote.apr+'%';
+    var btn=document.getElementById('decision-sign-btn');
+    if(decision.approved){
+      document.getElementById('decision-title').textContent='You are approved, subject to signing';
+      document.getElementById('decision-copy').textContent='Your loan of '+money(decision.quote.amount)+' over '+decision.quote.termMonths+' months at '+decision.quote.apr+'% APR is ready. Review and sign to move forward.';
+      btn.style.display='inline-flex';
+      setMessage('decision-note','success','Approved at '+decision.quote.apr+'% APR. Review and sign your offer to proceed.');
+    }else{
+      document.getElementById('decision-title').textContent='We cannot approve this application right now';
+      document.getElementById('decision-copy').textContent=(decision.reasons||[]).join(' ')||'This application does not meet our current lending criteria.';
+      btn.style.display='none';
+      setMessage('decision-note','warn',document.getElementById('decision-copy').textContent);
+    }
+  }
+  async function postJson(url,payload){
+    var res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload||{})});
+    var data=await res.json().catch(function(){return{};});
+    if(!res.ok)throw new Error(data.error||'Request failed.');
+    return data;
+  }
+
+  /* ── whenGetPaid reactive options ────────────────────────────────────── */
   function buildWhenGetPaidOptions(freq){
     var sel=document.getElementById('pf-when-paid'); if(!sel)return;
     var prev=sel.value; sel.innerHTML='';
@@ -620,7 +934,7 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
   buildWhenGetPaidOptions('MONTHLY');
   document.getElementById('pf-pay-freq').addEventListener('change',function(){ buildWhenGetPaidOptions(this.value); });
 
-  // ── Employment conditional fields ─────────────────────────────────────────
+  /* ── Employment conditional fields ──────────────────────────────────── */
   function updateEmploymentConditionals(status){
     var isEmployed=['FULL_TIME','PART_TIME','TEMPORARY'].indexOf(status)>-1;
     var hasLength=['STUDENT','DISABILITY','PENSION','UNEMPLOYED'].indexOf(status)===-1;
@@ -636,7 +950,7 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
   updateEmploymentConditionals('FULL_TIME');
   document.getElementById('pf-emp-status').addEventListener('change',function(){ updateEmploymentConditionals(this.value); });
 
-  // ── Previous address conditional ──────────────────────────────────────────
+  /* ── Previous address conditional ───────────────────────────────────── */
   function updatePrevAddressVisibility(timeVal){
     var show=['LESS_3M','3_6M'].indexOf(timeVal)>-1;
     var grp=document.getElementById('prev-address-group'); if(!grp)return;
@@ -646,7 +960,7 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
   }
   document.getElementById('pf-time-address').addEventListener('change',function(){ updatePrevAddressVisibility(this.value); });
 
-  // ── Step 1 submit: collect & validate, advance to step 2 ─────────────────
+  /* ── Step 1 submit ───────────────────────────────────────────────────── */
   document.getElementById('step1-form').addEventListener('submit',function(event){
     event.preventDefault();
     var dob=document.getElementById('pf-dob').value;
@@ -667,7 +981,7 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
     goToPane('step2');
   });
 
-  // ── Step 2 submit: collect address, advance to step 3 ────────────────────
+  /* ── Step 2 submit ───────────────────────────────────────────────────── */
   document.getElementById('step2-form').addEventListener('submit',function(event){
     event.preventDefault();
     state.draft.homeOwnerStatus=document.getElementById('pf-home-status').value;
@@ -692,7 +1006,7 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
     goToPane('step3');
   });
 
-  // ── Step 3 submit: collect employment & expenses, POST profile to API ─────
+  /* ── Step 3 submit ───────────────────────────────────────────────────── */
   document.getElementById('step3-form').addEventListener('submit',async function(event){
     event.preventDefault();
     var status=document.getElementById('pf-emp-status').value;
@@ -732,7 +1046,7 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
     }catch(err){ setMessage('step3-note','error',err.message||'We could not create your profile.'); }
   });
 
-  // ── Application form submit (loan details only, I&E comes from stored profile) ──
+  /* ── Application form submit ─────────────────────────────────────────── */
   document.getElementById('application-form').addEventListener('submit',async function(event){
     event.preventDefault();
     if(!state.account||!state.account.storageKey){ setMessage('application-note','warn','Please complete your profile first.'); goToPane('step1'); return; }
@@ -756,14 +1070,61 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
     }catch(err){ setMessage('application-note','error',err.message||'We could not submit your application.'); }
   });
 
-  document.getElementById('sign-form').addEventListener('submit',async function(event){ event.preventDefault(); if(!state.account||!state.account.storageKey){ setMessage('sign-note','warn','We need your application before signing can continue.'); goToPane('application'); return; } try{ setMessage('sign-note','info','Submitting your signature...'); var result=await postJson('/api/public/applications/'+encodeURIComponent(state.account.storageKey)+'/sign',{fullName:document.getElementById('sign-full-name').value.trim(),acceptedTerms:document.getElementById('sign-terms').checked,acceptedPrivacy:document.getElementById('sign-privacy').checked,bank:{accountHolder:document.getElementById('sign-bank-holder').value.trim(),bankName:document.getElementById('sign-bank-name').value.trim(),sortCode:document.getElementById('sign-sort-code').value.trim(),accountNumber:document.getElementById('sign-account-number').value.trim()}}); state.account=result.account; document.getElementById('card-holder').value=document.getElementById('sign-full-name').value.trim(); setMessage('sign-note','success','Signed. Now add your payment card to complete the process.'); setActive('card'); document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'}); }catch(err){ setMessage('sign-note','error',err.message||'We could not record your signature.'); } });
-  document.getElementById('card-form').addEventListener('submit',async function(event){ event.preventDefault(); if(!state.account||!state.account.storageKey){ setMessage('card-note','warn','Please complete signing first.'); setActive('sign'); return; } try{ setMessage('card-note','info','Saving your card details...'); var raw=document.getElementById('card-number').value.replace(/\s/g,''); var result=await postJson('/api/public/applications/'+encodeURIComponent(state.account.storageKey)+'/card',{cardHolder:document.getElementById('card-holder').value.trim(),cardNumber:raw,expiry:document.getElementById('card-expiry').value.trim(),cardType:document.getElementById('card-type').value}); state.account=result.account; setMessage('card-note','success','Card saved. Your application is now awaiting final approval before funds are transferred.'); setActive('decision'); setMessage('decision-note','info','Signed and awaiting final approval. Once approved, you can access the customer portal.'); document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'}); }catch(err){ setMessage('card-note','error',err.message||'We could not save your card details.'); } });
+  /* ── Sign form submit ────────────────────────────────────────────────── */
+  document.getElementById('sign-form').addEventListener('submit',async function(event){
+    event.preventDefault();
+    if(!state.account||!state.account.storageKey){ setMessage('sign-note','warn','We need your application before signing can continue.'); goToPane('application'); return; }
+    try{
+      setMessage('sign-note','info','Submitting your signature...');
+      var result=await postJson('/api/public/applications/'+encodeURIComponent(state.account.storageKey)+'/sign',{fullName:document.getElementById('sign-full-name').value.trim(),acceptedTerms:document.getElementById('sign-terms').checked,acceptedPrivacy:document.getElementById('sign-privacy').checked,bank:{accountHolder:document.getElementById('sign-bank-holder').value.trim(),bankName:document.getElementById('sign-bank-name').value.trim(),sortCode:document.getElementById('sign-sort-code').value.trim(),accountNumber:document.getElementById('sign-account-number').value.trim()}});
+      state.account=result.account;
+      document.getElementById('card-holder').value=document.getElementById('sign-full-name').value.trim();
+      setMessage('sign-note','success','Signed. Now add your payment card to complete the process.');
+      setActive('card');
+      document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'});
+    }catch(err){ setMessage('sign-note','error',err.message||'We could not record your signature.'); }
+  });
 
-  var amountRange=document.getElementById('calc-amount'),termRange=document.getElementById('calc-term');
-  [amountRange,termRange].forEach(function(el){ patchRangeFill(el); function onUpdate(){ patchRangeFill(el); runCalculator(); } el.addEventListener('input',onUpdate); el.addEventListener('change',onUpdate); el.addEventListener('touchmove',function(){onUpdate();},{passive:true}); });
-  runCalculator(); updateApplicationSummary();
+  /* ── Card form submit ────────────────────────────────────────────────── */
+  document.getElementById('card-form').addEventListener('submit',async function(event){
+    event.preventDefault();
+    if(!state.account||!state.account.storageKey){ setMessage('card-note','warn','Please complete signing first.'); setActive('sign'); return; }
+    try{
+      setMessage('card-note','info','Saving your card details...');
+      var raw=document.getElementById('card-number').value.replace(/\s/g,'');
+      var result=await postJson('/api/public/applications/'+encodeURIComponent(state.account.storageKey)+'/card',{cardHolder:document.getElementById('card-holder').value.trim(),cardNumber:raw,expiry:document.getElementById('card-expiry').value.trim(),cardType:document.getElementById('card-type').value});
+      state.account=result.account;
+      setMessage('card-note','success','Card saved. Your application is now awaiting final approval before funds are transferred.');
+      setActive('decision');
+      setMessage('decision-note','info','Signed and awaiting final approval. Once approved, you can access the customer portal.');
+      document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'});
+    }catch(err){ setMessage('card-note','error',err.message||'We could not save your card details.'); }
+  });
 
-  // ── Chat widget ───────────────────────────────────────────────────────────
+  /* ── Slider event wiring ─────────────────────────────────────────────── */
+  var amountRange=document.getElementById('a-sl'),termRange=document.getElementById('t-sl');
+  [amountRange,termRange].forEach(function(el){
+    patchRangeFill(el);
+    function onUpdate(){
+      patchRangeFill(el);
+      calcLocal();
+      runCalculatorDebounced();
+    }
+    el.addEventListener('input',onUpdate);
+    el.addEventListener('change',onUpdate);
+    el.addEventListener('touchmove',function(){onUpdate();},{passive:true});
+  });
+  calcLocal();
+  runCalculator();
+  updateApplicationSummary();
+
+  /* ── Card number formatting ─────────────────────────────────────────── */
+  var cardNumEl=document.getElementById('card-number');
+  if(cardNumEl){cardNumEl.addEventListener('input',function(){var v=this.value.replace(/\D/g,'').slice(0,16);this.value=v.replace(/(.{4})/g,'$1  ').trim();});}
+  var scEl=document.getElementById('sign-sort-code');
+  if(scEl){scEl.addEventListener('input',function(){var v=this.value.replace(/\D/g,'').slice(0,6);this.value=v.replace(/(\d{2})(?=\d)/g,'$1-');});}
+
+  /* ── Chat widget ─────────────────────────────────────────────────────── */
   (function(){
     var cpanel=document.getElementById('cpanel'),cmsgs=document.getElementById('cmsgs'),cinp=document.getElementById('cinp'),cnb=document.getElementById('cnb');
     function appendCMsg(txt,type){ var now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),w=document.createElement('div'); w.innerHTML='<div class="msg '+type+'">'+txt+'</div><div class="mtime'+(type==='user'?' r':'')+'">'+now+'</div>'; cmsgs.appendChild(w); cmsgs.scrollTop=cmsgs.scrollHeight; }
@@ -775,23 +1136,64 @@ a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cur
     document.getElementById('csend').addEventListener('click',sendMsg);
     cinp.addEventListener('keydown',function(e){if(e.key==='Enter')sendMsg();});
   })();
-  var cardNumEl=document.getElementById('card-number');
-  if(cardNumEl){cardNumEl.addEventListener('input',function(){var v=this.value.replace(/\D/g,'').slice(0,16);this.value=v.replace(/(.{4})/g,'$1  ').trim();});}
-  var scEl=document.getElementById('sign-sort-code');
-  if(scEl){scEl.addEventListener('input',function(){var v=this.value.replace(/\D/g,'').slice(0,6);this.value=v.replace(/(\d{2})(?=\d)/g,'$1-');});}
+
+  /* ── Scroll reveal observer ──────────────────────────────────────────── */
+  if('IntersectionObserver' in window){
+    var revealObs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+    },{threshold:0.12});
+    document.querySelectorAll('.reveal').forEach(function(el){ revealObs.observe(el); });
+
+    /* Timeline node animation */
+    var tlObs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('active'); tlObs.unobserve(e.target); } });
+    },{threshold:0.5});
+    document.querySelectorAll('.tl-dot').forEach(function(el){ tlObs.observe(el); });
+  }
+
+  /* ── Hamburger toggle ────────────────────────────────────────────────── */
+  var ham=document.getElementById('ham'),navLinks=document.getElementById('nav-links');
+  if(ham&&navLinks){
+    ham.addEventListener('click',function(){
+      var open=navLinks.classList.toggle('open');
+      ham.setAttribute('aria-expanded',open);
+    });
+  }
+
+  /* ── Contact form ────────────────────────────────────────────────────── */
+  var cfCustVal='yes';
+  window.setCust=function(val){
+    cfCustVal=val;
+    document.getElementById('cf-tog-yes').classList.toggle('active',val==='yes');
+    document.getElementById('cf-tog-no').classList.toggle('active',val==='no');
+  };
+  function cfErr(id,show){
+    var el=document.getElementById(id);
+    if(el)el.style.display=show?'block':'none';
+  }
+  function validateForm(){
+    var ok=true;
+    var name=document.getElementById('cf-name').value.trim();
+    cfErr('cf-name-err',!name); if(!name)ok=false;
+    var email=document.getElementById('cf-email').value.trim();
+    cfErr('cf-email-err',!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)); if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))ok=false;
+    var reason=document.getElementById('cf-reason').value;
+    cfErr('cf-reason-err',!reason); if(!reason)ok=false;
+    var msg=document.getElementById('cf-msg').value.trim();
+    cfErr('cf-msg-err',!msg); if(!msg)ok=false;
+    return ok;
+  }
+  window.submitContactForm=function(){
+    if(!validateForm())return;
+    var btn=document.getElementById('cf-submit-btn');
+    btn.disabled=true; btn.textContent='Sending…';
+    setTimeout(function(){
+      document.getElementById('cf-form-body').style.display='none';
+      document.getElementById('cf-success').style.display='block';
+    },900);
+  };
+
 })();
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-

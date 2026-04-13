@@ -391,6 +391,33 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
   .ft-top{grid-template-columns:1fr;gap:18px}
   .ft-links{grid-template-columns:1fr 1fr;gap:6px 16px}
 }
+/* ── Inline contact form (replaces contact-strips) ──────────────────── */
+.portal-contact{margin:0 16px 16px}
+.pct-heading{font-size:15px;font-weight:700;color:var(--text);margin-bottom:3px}
+.pct-sub{font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5}
+.pct-info{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.pct-info-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:0 1px 4px rgba(15,24,40,.04)}
+.pct-info-icon{width:32px;height:32px;border-radius:9px;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pct-info-text strong{display:block;font-size:12.5px;font-weight:700;color:var(--text)}
+.pct-info-text span{display:block;font-size:11px;color:var(--muted)}
+.pct-form{background:var(--surface);border-radius:var(--r-lg);overflow:hidden;box-shadow:0 1px 4px rgba(15,24,40,.06),0 4px 16px rgba(15,24,40,.04)}
+.pct-form-inner{padding:16px}
+.pct-field{display:grid;gap:5px;margin-bottom:12px}
+.pct-field:last-of-type{margin-bottom:0}
+.pct-field label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.pct-field input,.pct-field select,.pct-field textarea{width:100%;padding:11px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:13px;color:var(--text);outline:none;background:var(--surface);font-family:inherit;resize:vertical}
+.pct-field input:focus,.pct-field select:focus,.pct-field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,219,.08)}
+.pct-toggle{display:flex;gap:6px}
+.pct-tog-btn{flex:1;padding:10px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--surface);font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:.15s;font-family:inherit}
+.pct-tog-btn.active{border-color:var(--blue);background:#eff6ff;color:var(--blue)}
+.pct-err{font-size:11px;color:var(--err);display:none;margin-top:3px}
+.pct-submit{width:100%;padding:13px;border:none;border-radius:var(--r-lg);background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;font-size:14px;font-weight:700;margin-top:14px;cursor:pointer;font-family:inherit;transition:transform .15s,box-shadow .15s}
+.pct-submit:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(26,86,219,.2)}
+.pct-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.pct-success{display:none;padding:24px 16px;text-align:center}
+.pct-success-icon{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-dark));display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.pct-success h4{font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px}
+.pct-success p{font-size:12px;color:var(--muted);line-height:1.6}
 </style>
 </head>
 <body>
@@ -534,12 +561,65 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
           </div>
         </div>
         <div class="card"><div class="ch"><span class="ct">Loan Summary</span><span class="cb" id="emi-badge">- instalments</span></div><div id="emi-list"></div></div>
-        <div class="contact-section loan-contact-wrap"><div class="contact-strips">
-        <a class="cstrip" href="/customer#faq"><div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="1.5"/><path d="M7.5 7.5a2.5 2.5 0 1 1 4.25 1.77c-.82.82-1.5 1.28-1.5 2.23" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="14.25" r=".8" fill="#fff"/></svg></div><div class="cstrip-text"><strong>Frequently Asked Questions</strong><span>Find answers to common queries</span></div></a>
-        <a class="cstrip" href="tel:08001234567"><div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4a1 1 0 011-1h2.5l1.2 3.5-1.8 1.8a10 10 0 005.3 5.3l1.8-1.8L17 14v2.5a1 1 0 01-1 1C8.2 17.5 2 11.8 4 4z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="cstrip-text"><strong>Call us</strong><span>0800 123 4567 &middot; Mon-Fri 9:00-17:00</span></div></a>
-        <a class="cstrip" href="mailto:info@quido.co.uk"><div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="#fff" stroke-width="1.5"/><path d="M2 7l8 5 8-5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="cstrip-text"><strong>Write to us</strong><span>info@quido.co.uk</span></div></a>
-        <a class="cstrip" href="mailto:complaints@quido.co.uk"><div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="1.5"/><path d="M10 6v4.5M10 13.5v.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></div><div class="cstrip-text"><strong>Make a complaint</strong><span>complaints@quido.co.uk</span></div></a>
-        </div></div>
+        <div class="portal-contact">
+          <p class="pct-heading">Contact us</p>
+          <p class="pct-sub">Our team is here to help Mon&ndash;Fri 9:00&ndash;17:00</p>
+          <div class="pct-info">
+            <div class="pct-info-row">
+              <div class="pct-info-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3a1 1 0 011-1h2L7 5l-1.5 1.5a7 7 0 003 3L10 8l3 1v2a1 1 0 01-1 1C5 12 2.5 8 3 3z" stroke="var(--blue)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div class="pct-info-text"><strong>0800 123 4567</strong><span>Mon&ndash;Fri 9:00&ndash;17:00</span></div>
+            </div>
+            <div class="pct-info-row">
+              <div class="pct-info-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="2" stroke="var(--blue)" stroke-width="1.3"/><path d="M2 6l6 4 6-4" stroke="var(--blue)" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+              <div class="pct-info-text"><strong>info@quido.co.uk</strong><span>We reply within one business day</span></div>
+            </div>
+          </div>
+          <div class="pct-form">
+            <div id="home-cf-form-body" class="pct-form-inner">
+              <div class="pct-field">
+                <label for="home-cf-name">Full name</label>
+                <input type="text" id="home-cf-name" placeholder="Jane Smith" autocomplete="name">
+                <span class="pct-err" id="home-cf-name-err">Please enter your name</span>
+              </div>
+              <div class="pct-field">
+                <label>Are you a customer?</label>
+                <div class="pct-toggle">
+                  <button type="button" class="pct-tog-btn active" id="home-cf-tog-yes" onclick="pctSetCust('home-cf','yes')">Yes</button>
+                  <button type="button" class="pct-tog-btn" id="home-cf-tog-no" onclick="pctSetCust('home-cf','no')">No</button>
+                </div>
+              </div>
+              <div class="pct-field">
+                <label for="home-cf-email">Email address</label>
+                <input type="email" id="home-cf-email" placeholder="jane@example.com" autocomplete="email">
+                <span class="pct-err" id="home-cf-email-err">Please enter a valid email</span>
+              </div>
+              <div class="pct-field">
+                <label for="home-cf-reason">Reason for contact</label>
+                <select id="home-cf-reason">
+                  <option value="">Select a reason&hellip;</option>
+                  <option value="application">Application query</option>
+                  <option value="existing">Existing loan query</option>
+                  <option value="payment">Payment or repayment</option>
+                  <option value="complaint">Make a complaint</option>
+                  <option value="tech">Technical support</option>
+                  <option value="other">Other</option>
+                </select>
+                <span class="pct-err" id="home-cf-reason-err">Please select a reason</span>
+              </div>
+              <div class="pct-field">
+                <label for="home-cf-msg">Message</label>
+                <textarea id="home-cf-msg" rows="3" placeholder="Tell us how we can help&hellip;"></textarea>
+                <span class="pct-err" id="home-cf-msg-err">Please enter a message</span>
+              </div>
+              <button type="button" class="pct-submit" id="home-cf-submit" onclick="pctSubmit('home-cf')">Send message</button>
+            </div>
+            <div class="pct-success" id="home-cf-success">
+              <div class="pct-success-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5 9-9" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <h4>Message sent!</h4>
+              <p>Thanks for getting in touch. We&rsquo;ll get back to you within one business day.</p>
+            </div>
+          </div>
+        </div>
         </div>
         <div class="ft">
           <div class="ft-inner">
@@ -2736,31 +2816,47 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
   }
 
   // ═══════════════════════════════════════════════
-  // SHARED CONTACT BLOCK - injected into sub-screens
+  // SHARED CONTACT BLOCK - injected into sub-screens (inline form version)
   // ═══════════════════════════════════════════════
   (function() {
-    var faqBtn  = '<a class="cstrip" href="/customer#faq"><div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="1.5"/><path d="M7.5 7.5a2.5 2.5 0 1 1 4.25 1.77c-.82.82-1.5 1.28-1.5 2.23" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="14.25" r=".8" fill="#fff"/></svg></div><div class="cstrip-text"><strong>Frequently Asked Questions</strong><span>Find answers to common queries</span></div></a>';
-    var callBtn = '<a class="cstrip" href="tel:08001234567"><div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 4a1 1 0 011-1h2.5l1.2 3.5-1.8 1.8a10 10 0 005.3 5.3l1.8-1.8L17 14v2.5a1 1 0 01-1 1C8.2 17.5 2 11.8 4 4z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="cstrip-text"><strong>Call us</strong><span>0800 123 4567 &middot; Mon-Fri 9:00-17:00</span></div></a>';
-    var writeBtn= '<a class="cstrip" href="mailto:info@quido.co.uk"><div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="#fff" stroke-width="1.5"/><path d="M2 7l8 5 8-5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="cstrip-text"><strong>Write to us</strong><span>info@quido.co.uk</span></div></a>';
-    var cmpBtn  = '<a class="cstrip" href="mailto:complaints@quido.co.uk"><div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="1.5"/><path d="M10 6v4.5M10 13.5v.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></div><div class="cstrip-text"><strong>Make a complaint</strong><span>complaints@quido.co.uk</span></div></a>';
-    var wrapO   = '<div class="contact-section loan-contact-wrap"><div class="contact-strips">';
-    var wrapC   = '</div></div>';
+    var _cfIdx = 0;
+    function makeContactForm(prefix) {
+      return '<div class="portal-contact">'
+        + '<p class="pct-heading">Contact us</p>'
+        + '<p class="pct-sub">Our team is here to help Mon&ndash;Fri 9:00&ndash;17:00</p>'
+        + '<div class="pct-info">'
+        +   '<div class="pct-info-row"><div class="pct-info-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3a1 1 0 011-1h2L7 5l-1.5 1.5a7 7 0 003 3L10 8l3 1v2a1 1 0 01-1 1C5 12 2.5 8 3 3z" stroke="var(--blue)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="pct-info-text"><strong>0800 123 4567</strong><span>Mon&ndash;Fri 9:00&ndash;17:00</span></div></div>'
+        +   '<div class="pct-info-row"><div class="pct-info-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="2" stroke="var(--blue)" stroke-width="1.3"/><path d="M2 6l6 4 6-4" stroke="var(--blue)" stroke-width="1.3" stroke-linecap="round"/></svg></div><div class="pct-info-text"><strong>info@quido.co.uk</strong><span>Reply within one business day</span></div></div>'
+        + '</div>'
+        + '<div class="pct-form">'
+        +   '<div id="'+prefix+'-form-body" class="pct-form-inner">'
+        +     '<div class="pct-field"><label>Full name</label><input type="text" id="'+prefix+'-name" placeholder="Jane Smith"><span class="pct-err" id="'+prefix+'-name-err">Please enter your name</span></div>'
+        +     '<div class="pct-field"><label>Are you a customer?</label><div class="pct-toggle"><button type="button" class="pct-tog-btn active" id="'+prefix+'-tog-yes" onclick="pctSetCust(\''+prefix+'\',\'yes\')">Yes</button><button type="button" class="pct-tog-btn" id="'+prefix+'-tog-no" onclick="pctSetCust(\''+prefix+'\',\'no\')">No</button></div></div>'
+        +     '<div class="pct-field"><label>Email address</label><input type="email" id="'+prefix+'-email" placeholder="jane@example.com"><span class="pct-err" id="'+prefix+'-email-err">Please enter a valid email</span></div>'
+        +     '<div class="pct-field"><label>Reason for contact</label><select id="'+prefix+'-reason"><option value="">Select a reason\u2026</option><option value="application">Application query</option><option value="existing">Existing loan query</option><option value="payment">Payment or repayment</option><option value="complaint">Make a complaint</option><option value="tech">Technical support</option><option value="other">Other</option></select><span class="pct-err" id="'+prefix+'-reason-err">Please select a reason</span></div>'
+        +     '<div class="pct-field"><label>Message</label><textarea id="'+prefix+'-msg" rows="3" placeholder="Tell us how we can help\u2026"></textarea><span class="pct-err" id="'+prefix+'-msg-err">Please enter a message</span></div>'
+        +     '<button type="button" class="pct-submit" id="'+prefix+'-submit" onclick="pctSubmit(\''+prefix+'\')">Send message</button>'
+        +   '</div>'
+        +   '<div class="pct-success" id="'+prefix+'-success"><div class="pct-success-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5 9-9" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h4>Message sent!</h4><p>Thanks for getting in touch. We\'ll get back to you within one business day.</p></div>'
+        + '</div>'
+        + '</div>';
+    }
     var footer  = '<div class="ft"><div class="ft-inner"><div class="ft-top"><div class="ft-brand"><button class="brand-link" type="button" data-goto="s-home" aria-label="Go to homepage"><span class="brand-lockup"><span class="brand-mark"><svg width="22" height="22" viewBox="0 0 200 200" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bgQ6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1E4ED8" /><stop offset="100%" style="stop-color:#0F36A9" /></linearGradient></defs><rect x="10" y="10" width="180" height="180" rx="45" fill="url(#bgQ6)" /><path d="M145 190 C 145 190, 155 145, 190 145 L 190 145 Q 190 190, 145 190 Z" fill="#3ACC90" /><g transform="translate(60, 60)"><circle cx="35" cy="35" r="28" fill="none" stroke="white" stroke-width="12" /><line x1="55" y1="55" x2="75" y2="75" stroke="white" stroke-width="12" stroke-linecap="round" /></g></svg></span><span class="brand-word"><span class="brand-name" style="color:#fff">Quido</span></span></span></button><div class="ft-copy">Personal loans, done right.</div></div><div class="ft-links"><a href="#">Loan</a><a href="#">About Us</a><a href="#">FAQs</a><a href="#">Careers</a><a href="#">Beware of Loan Sharks</a><a href="#">Terms of Use</a><a href="#">Contact Us</a><a href="#">Privacy Policy</a><a href="#">File a Complaint</a><a href="#">Fraud Disclaimer</a><a href="#">Insights</a><a href="#">Cookies Policy</a></div></div><div class="fleg">We are a lender and may pay commissions to credit brokers or other intermediaries. This commission does not affect the total cost of your loan.<br><br><strong>Responsible lending:</strong> Take a moment to decide if Quido is right for you. Short term loans are an expensive form of borrowing.<br><br>Quido Ltd. Authorised and regulated by the Financial Conduct Authority. Registration number 900001.</div></div></div>';
-    var full  = wrapO + faqBtn + callBtn + writeBtn + cmpBtn + wrapC + footer;
-    var noFaq = wrapO + callBtn + writeBtn + cmpBtn + wrapC + footer;
     var screens = [
-      { id: 's-options', html: full },
-      { id: 's-faq',     html: noFaq },
-      { id: 's-profile', html: full },
-      { id: 's-payment-details', html: full },
-      { id: 's-statement',       html: full },
-      { id: 's-documents',       html: full }
+      { id: 's-options' },
+      { id: 's-faq' },
+      { id: 's-profile' },
+      { id: 's-payment-details' },
+      { id: 's-statement' },
+      { id: 's-documents' }
     ];
     screens.forEach(function(s) {
       var sc = document.querySelector('#' + s.id + ' .scroll');
       if (!sc) return;
+      var prefix = s.id.replace(/[^a-z0-9]/g, '-') + '-cf-' + (++_cfIdx);
+      var html = makeContactForm(prefix) + footer;
       sc.classList.add('fullbleed-scroll');
-      sc.insertAdjacentHTML('beforeend', s.html);
+      sc.insertAdjacentHTML('beforeend', html);
       var footer = null;
       for (var i = sc.children.length - 1; i >= 0; i--) {
         if (sc.children[i].classList && sc.children[i].classList.contains('ft')) {
@@ -3539,6 +3635,62 @@ body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'Inter','
   })();
   // All loan/account initialisation happens inside initCustomerSession() after login
 
+})();
+
+// ── Portal contact form logic ─────────────────────────────────────────────
+(function() {
+  'use strict';
+
+  function pctSetCust(id, val) {
+    var yes = document.getElementById(id + '-tog-yes');
+    var no  = document.getElementById(id + '-tog-no');
+    if (yes) yes.classList.toggle('active', val === 'yes');
+    if (no)  no.classList.toggle('active',  val === 'no');
+    var wrap = yes ? yes.closest('.pct-form-inner') : null;
+    if (wrap) wrap.setAttribute('data-cust', val);
+  }
+
+  function pctShowErr(id, show) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = show ? 'block' : 'none';
+  }
+
+  function pctValidate(prefix) {
+    var ok = true;
+    var nameEl   = document.getElementById(prefix + '-name');
+    var emailEl  = document.getElementById(prefix + '-email');
+    var reasonEl = document.getElementById(prefix + '-reason');
+    var msgEl    = document.getElementById(prefix + '-msg');
+
+    var name = nameEl ? nameEl.value.trim() : '';
+    pctShowErr(prefix + '-name-err', !name); if (!name) ok = false;
+
+    var email = emailEl ? emailEl.value.trim() : '';
+    var emailOk = email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    pctShowErr(prefix + '-email-err', !emailOk); if (!emailOk) ok = false;
+
+    var reason = reasonEl ? reasonEl.value : '';
+    pctShowErr(prefix + '-reason-err', !reason); if (!reason) ok = false;
+
+    var msg = msgEl ? msgEl.value.trim() : '';
+    pctShowErr(prefix + '-msg-err', !msg); if (!msg) ok = false;
+
+    return ok;
+  }
+
+  // Expose globally so onclick handlers in injected HTML work
+  window.pctSetCust = pctSetCust;
+  window.pctSubmit  = function(prefix) {
+    if (!pctValidate(prefix)) return;
+    var btn = document.getElementById(prefix + '-submit');
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending\u2026'; }
+    setTimeout(function() {
+      var formBody = document.getElementById(prefix + '-form-body');
+      var success  = document.getElementById(prefix + '-success');
+      if (formBody) formBody.style.display = 'none';
+      if (success)  success.style.display = 'block';
+    }, 900);
+  };
 })();
 </script>
 </body>
