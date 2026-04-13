@@ -1,8 +1,8 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quido | Personal loans, done right</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,10 +41,6 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
 }
-
-a { text-decoration: none; color: inherit; }
-button, input, select, textarea { font: inherit; }
-button { cursor: pointer; }
 
 /* ════════════════════════════════════════
    NAV
@@ -147,7 +143,9 @@ button { cursor: pointer; }
   color: var(--ink); margin-bottom: 16px;
   opacity: 0; animation: riseIn 0.65s cubic-bezier(0.22,1,0.36,1) 0.05s forwards;
 }
-.hero-h1 em { font-style: normal; color: var(--teal-d); position: relative; }
+.hero-h1 em {
+  font-style: normal; color: var(--teal-d); position: relative;
+}
 .hero-h1 em::after {
   content: '';
   position: absolute; left: 0; bottom: 2px;
@@ -165,12 +163,17 @@ button { cursor: pointer; }
   opacity: 0; animation: riseIn 0.65s cubic-bezier(0.22,1,0.36,1) 0.18s forwards;
 }
 .hero-trust {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
   opacity: 0; animation: riseIn 0.65s cubic-bezier(0.22,1,0.36,1) 0.28s forwards;
 }
 .ht-card {
-  background: #fff; border: 1px solid var(--border); border-radius: 14px;
-  padding: 14px; display: flex; align-items: center; gap: 12px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 14px;
+  display: flex; align-items: center; gap: 12px;
   box-shadow: 0 2px 10px rgba(7,16,30,0.05);
   transition: box-shadow 0.2s, transform 0.2s;
 }
@@ -211,12 +214,13 @@ button { cursor: pointer; }
   background: var(--navy); border-radius: 24px; padding: 28px 24px;
   position: relative; overflow: hidden;
   box-shadow: 0 24px 64px rgba(7,16,30,0.22), 0 0 0 1px rgba(255,255,255,0.05) inset;
+  width: 100%;
 }
 .qcard-g1 { position: absolute; top: -80px; right: -80px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(0,201,167,0.22) 0%, transparent 65%); pointer-events: none; }
 .qcard-g2 { position: absolute; bottom: -50px; left: -40px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(28,56,146,0.5) 0%, transparent 65%); pointer-events: none; }
 .qcard-head { margin-bottom: 18px; position: relative; z-index: 1; }
 .qcard-head h2 { font-family: var(--fd); font-size: 19px; font-weight: 800; color: var(--od-1); letter-spacing: -0.02em; margin-bottom: 3px; }
-.qcard-head p  { font-family: var(--fb); font-size: 12px; color: var(--od-3); }
+.qcard-head p { font-family: var(--fb); font-size: 12px; color: var(--od-3); }
 .qstats { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; margin-bottom: 18px; position: relative; z-index: 1; }
 .qs { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.09); border-radius: 12px; padding: 10px 7px; text-align: center; }
 .qs-lbl { font-family: var(--fb); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.09em; font-weight: 600; color: var(--od-3); margin-bottom: 4px; }
@@ -229,18 +233,28 @@ button { cursor: pointer; }
 .sl-lbl { font-family: var(--fb); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.09em; font-weight: 600; color: var(--od-3); }
 .sl-val { font-family: var(--fd); font-size: 21px; font-weight: 700; color: var(--od-1); letter-spacing: -0.03em; }
 .sl-track { position: relative; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-bottom: 5px; }
-.sl-fill  { position: absolute; left: 0; top: 0; height: 100%; background: linear-gradient(90deg, var(--teal-d), var(--teal)); border-radius: 3px; pointer-events: none; }
-input[type="range"] { -webkit-appearance: none; appearance: none; position: absolute; top: 50%; left: 0; width: 100%; height: 22px; transform: translateY(-50%); background: transparent; cursor: pointer; outline: none; }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 2.5px solid var(--teal); box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: transform 0.15s, box-shadow 0.15s; }
+.sl-fill { position: absolute; left: 0; top: 0; height: 100%; background: linear-gradient(90deg, var(--teal-d), var(--teal)); border-radius: 3px; pointer-events: none; }
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  position: absolute; top: 50%; left: 0;
+  width: 100%; height: 22px; transform: translateY(-50%);
+  background: transparent; cursor: pointer; outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #fff; border: 2.5px solid var(--teal);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
 input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); box-shadow: 0 0 0 6px rgba(0,201,167,0.18), 0 2px 6px rgba(0,0,0,0.2); }
 input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #fff; border: 2.5px solid var(--teal); cursor: pointer; }
 .sl-range { display: flex; justify-content: space-between; font-family: var(--fb); font-size: 9.5px; color: var(--od-4); }
 .btn-apply {
   width: 100%; background: linear-gradient(135deg, var(--teal-d), var(--teal));
   color: var(--navy); border: none; padding: 13px 20px; border-radius: 12px;
-  font-family: var(--fd); font-size: 14px; font-weight: 800;
-  cursor: pointer; letter-spacing: -0.01em;
-  margin-bottom: 12px; position: relative; z-index: 1;
+  font-family: var(--fd); font-size: 14px; font-weight: 800; cursor: pointer;
+  letter-spacing: -0.01em; margin-bottom: 12px; position: relative; z-index: 1;
   transition: transform 0.22s cubic-bezier(0.22,1,0.36,1), box-shadow 0.22s, filter 0.22s;
 }
 .btn-apply:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,201,167,0.38); filter: brightness(1.06); }
@@ -255,8 +269,7 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
 .tcard {
   background: #ffffff; border: 1px solid var(--border); border-radius: 18px; padding: 20px 18px;
   display: flex; align-items: flex-start; gap: 12px;
-  transform: translateY(20px);
-  transition: transform 0.65s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s;
+  transform: translateY(20px); transition: transform 0.65s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s;
 }
 .tcard.in { transform: translateY(0); }
 .tcard:hover { transform: translateY(-4px) !important; box-shadow: 0 12px 32px rgba(7,16,30,0.09); }
@@ -271,11 +284,7 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
 /* ════════════════════════════════════════
    HOW IT WORKS
 ════════════════════════════════════════ */
-.how {
-  padding: 88px 24px 96px;
-  background: var(--ink);
-  position: relative; overflow: hidden;
-}
+.how { padding: 88px 24px 96px; background: var(--ink); position: relative; overflow: hidden; }
 .how-bg1 { position: absolute; top: -120px; right: -80px; width: 480px; height: 480px; background: radial-gradient(circle, rgba(0,201,167,0.1) 0%, transparent 62%); pointer-events: none; }
 .how-bg2 { position: absolute; bottom: -80px; left: -60px; width: 360px; height: 360px; background: radial-gradient(circle, rgba(28,56,146,0.28) 0%, transparent 62%); pointer-events: none; }
 .how-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
@@ -303,10 +312,9 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
 .btn-lg {
   display: inline-flex; align-items: center; gap: 8px;
   background: linear-gradient(135deg, var(--teal-d), var(--teal));
-  color: var(--navy); border: none;
-  padding: 14px 32px; border-radius: 100px;
-  font-family: var(--fd); font-size: 14px; font-weight: 800;
-  cursor: pointer; text-decoration: none; letter-spacing: -0.01em;
+  color: var(--navy); border: none; padding: 14px 32px; border-radius: 100px;
+  font-family: var(--fd); font-size: 14px; font-weight: 800; cursor: pointer;
+  text-decoration: none; letter-spacing: -0.01em;
   transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s, filter 0.25s;
 }
 .btn-lg:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,201,167,0.36); filter: brightness(1.05); }
@@ -334,105 +342,6 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .reveal.in { opacity: 1; transform: translateY(0); }
 
 /* ════════════════════════════════════════
-   APPLICATION SHELL
-════════════════════════════════════════ */
-.app-section { padding: 64px 24px; background: var(--s2); }
-.app-wrap    { max-width: 1100px; margin: 0 auto; }
-.app-shell   { background: var(--surface); border: 1px solid var(--border); border-radius: 28px; box-shadow: 0 20px 50px rgba(7,16,30,0.08); padding: 28px; }
-.app-head    { margin-bottom: 22px; }
-.app-head h3 { font-family: var(--fd); margin: 0 0 6px; font-size: 26px; font-weight: 800; letter-spacing: -0.04em; color: var(--ink); }
-.app-head > p{ margin: 0 0 16px; color: var(--ink-muted); line-height: 1.65; font-size: 14px; font-family: var(--fb); }
-.pane { display: none; } .pane.active { display: block; }
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.stack{ display: grid; gap: 12px; }
-.summary-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 16px; }
-.summary-card { padding: 14px; border-radius: 16px; background: var(--s2); border: 1px solid var(--border); }
-.summary-card span   { display: block; font-size: 10px; font-weight: 700; font-family: var(--fb); color: var(--ink-muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 5px; }
-.summary-card strong { font-family: var(--fd); display: block; font-size: 22px; letter-spacing: -.05em; color: var(--ink); }
-.offer-box   { padding: 20px; border-radius: 18px; background: linear-gradient(160deg,rgba(0,201,167,.06) 0%,rgba(11,29,80,.05) 100%); border: 1px solid rgba(0,201,167,.2); }
-.offer-box h4{ font-family: var(--fd); margin: 0 0 7px; font-size: 19px; font-weight: 700; color: var(--ink); }
-.offer-box p { margin: 0; color: var(--ink-muted); font-family: var(--fb); line-height: 1.65; font-size: 14px; }
-.field       { display: grid; gap: 6px; } .field.full { grid-column: 1/-1; }
-.field label { font-family: var(--fb); font-size: 12px; font-weight: 600; color: var(--ink-soft); letter-spacing: .01em; }
-.field input, .field select { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; padding: 13px 14px; min-height: 50px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--surface); outline: none; font-family: var(--fb); font-size: 14px; color: var(--ink); }
-.field input[type="date"], .field input[type="month"] { -webkit-appearance: none; appearance: none; font-size: 16px; padding: 13px 14px; display: block; width: 100%; }
-.field input:focus, .field select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-glow); }
-.message { padding: 13px 14px; border-radius: 14px; font-size: 13px; font-family: var(--fb); line-height: 1.6; } .message:empty { display: none; }
-.message.info    { background: #e8f9f6; color: #0a6b59; }
-.message.success { background: #ecfdf5; color: #065f46; }
-.message.warn    { background: #fffbeb; color: #92400e; }
-.message.error   { background: #fee2e2; color: #991b1b; }
-.check-grid { display: grid; gap: 10px; }
-.check { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 14px; background: var(--s2); border: 1px solid var(--border); }
-.check input { width: 18px; height: 18px; min-width: 18px; min-height: 18px; margin: 1px 0 0; flex-shrink: 0; accent-color: var(--teal); }
-.inline { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-.btn { display: inline-flex; align-items: center; justify-content: center; border: none; border-radius: 16px; padding: 14px 24px; font-size: 14px; font-weight: 700; font-family: var(--fd); min-width: 140px; }
-.btn-primary   { background: linear-gradient(135deg, var(--navy), var(--navy-l)); color: #fff; box-shadow: 0 10px 30px rgba(11,29,80,0.12); }
-.btn-secondary { background: var(--surface); color: var(--ink); border: 1.5px solid var(--border); }
-a.btn { text-decoration: none; }
-
-/* ════════════════════════════════════════
-   CONTACT SECTION
-════════════════════════════════════════ */
-.contact-section { padding: 72px 24px; background: var(--surface); }
-.contact-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.6fr); gap: 36px; align-items: start; }
-.contact-details { padding: 32px 0; }
-.contact-details h2 { font-family: var(--fd); font-size: 32px; font-weight: 800; letter-spacing: -.04em; color: var(--ink); margin: 0 0 10px; }
-.contact-details .c-sub { font-size: 15px; color: var(--ink-muted); font-family: var(--fb); line-height: 1.65; margin: 0 0 28px; }
-.c-info-row  { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
-.c-info-icon { width: 42px; height: 42px; border-radius: 12px; background: var(--s2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.c-info-text strong { display: block; font-family: var(--fd); font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
-.c-info-text span   { font-size: 12.5px; color: var(--ink-muted); font-family: var(--fb); }
-.contact-form-wrap  { background: var(--surface); border: 1px solid var(--border); border-radius: 28px; padding: 32px; box-shadow: 0 20px 50px rgba(7,16,30,0.08); }
-.cf-title  { font-family: var(--fd); font-size: 20px; font-weight: 700; color: var(--ink); margin: 0 0 20px; }
-.cf-row    { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
-.cf-field  { display: grid; gap: 6px; margin-bottom: 14px; }
-.cf-field.cf-last { margin-bottom: 0; }
-.cf-field label   { font-family: var(--fb); font-size: 12px; font-weight: 600; color: var(--ink-soft); }
-.cf-field input, .cf-field select, .cf-field textarea { width: 100%; padding: 13px 14px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--surface); outline: none; font-family: var(--fb); font-size: 14px; color: var(--ink); resize: vertical; }
-.cf-field input:focus, .cf-field select:focus, .cf-field textarea:focus { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-glow); }
-.cf-toggle   { display: flex; gap: 8px; }
-.cf-tog-btn  { flex: 1; padding: 11px; border: 1.5px solid var(--border); border-radius: 10px; background: var(--surface); font-size: 13px; font-weight: 600; font-family: var(--fb); color: var(--ink-muted); cursor: pointer; transition: .15s; }
-.cf-tog-btn.active { border-color: var(--teal); background: rgba(0,201,167,.07); color: var(--teal); }
-.btn-cf-submit { width: 100%; padding: 15px; border: none; border-radius: 12px; background: linear-gradient(135deg, var(--navy), var(--navy-l)); color: #fff; font-family: var(--fd); font-size: 15px; font-weight: 700; margin-top: 18px; transition: transform .15s, box-shadow .15s; }
-.btn-cf-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(11,29,80,0.2); }
-.cf-success { display: none; text-align: center; padding: 28px 0; }
-.cf-success-icon { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--teal-d), var(--teal)); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
-.cf-success h3 { font-family: var(--fd); font-size: 20px; font-weight: 700; color: var(--ink); margin: 0 0 8px; }
-.cf-success p  { font-size: 14px; color: var(--ink-muted); font-family: var(--fb); line-height: 1.65; }
-.cf-err { font-size: 12px; color: #dc2626; font-family: var(--fb); margin-top: 4px; display: none; }
-
-/* ════════════════════════════════════════
-   CHAT WIDGET
-════════════════════════════════════════ */
-.cfab { position: fixed; bottom: 24px; right: 24px; width: 54px; height: 54px; background: linear-gradient(135deg, var(--navy), var(--navy-l)); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 50; border: none; box-shadow: 0 8px 24px rgba(11,29,80,.28); }
-.cnb  { position: absolute; top: -3px; right: -3px; width: 19px; height: 19px; background: #ef4444; border-radius: 50%; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #fff; font-family: var(--fd); }
-.cpanel { position: fixed; bottom: 88px; right: 16px; width: 320px; background: var(--surface); border-radius: 28px; box-shadow: 0 12px 40px rgba(0,0,0,.16); z-index: 49; overflow: hidden; display: none; flex-direction: column; height: 420px; border: 1px solid var(--border); }
-.cpanel.open { display: flex; }
-.ctop { background: linear-gradient(135deg, var(--navy), var(--navy-l)); padding: 14px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-.cav  { width: 34px; height: 34px; background: rgba(255,255,255,.18); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; font-family: var(--fd); color: #fff; flex-shrink: 0; }
-.can  { font-size: 13px; font-weight: 700; font-family: var(--fd); color: #fff; }
-.col  { font-size: 10px; color: rgba(255,255,255,.7); font-family: var(--fb); display: flex; align-items: center; gap: 4px; margin-top: 1px; }
-.cold { width: 6px; height: 6px; background: #4ade80; border-radius: 50%; }
-.ccl  { margin-left: auto; background: rgba(255,255,255,.15); border: none; border-radius: 8px; padding: 5px 8px; color: #fff; cursor: pointer; font-size: 11px; font-family: var(--fb); }
-.cmsgs{ flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 7px; background: #f8faff; }
-.cmsgs::-webkit-scrollbar { display: none; }
-.msg  { max-width: 84%; padding: 8px 11px; border-radius: 11px; font-size: 11.5px; font-family: var(--fb); line-height: 1.55; }
-.msg.agent { background: #fff; border: 1px solid var(--border); color: var(--ink); align-self: flex-start; border-bottom-left-radius: 3px; }
-.msg.user  { background: linear-gradient(135deg, var(--navy), var(--navy-l)); color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; }
-.mtime { font-size: 9px; color: #94a3b8; margin-top: 2px; font-family: var(--fb); }
-.mtime.r { text-align: right; }
-.cqk  { padding: 7px 8px; display: flex; gap: 5px; overflow-x: auto; border-top: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
-.cqk::-webkit-scrollbar { display: none; }
-.qp   { flex-shrink: 0; padding: 5px 9px; background: var(--s2); border: 1px solid var(--border); border-radius: 20px; font-size: 10px; color: var(--navy); font-weight: 600; font-family: var(--fb); cursor: pointer; white-space: nowrap; }
-.cir  { display: flex; gap: 7px; padding: 8px 10px; border-top: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
-.cinp { flex: 1; padding: 8px 11px; border: 1.5px solid var(--border); border-radius: 20px; font-size: 11px; font-family: var(--fb); outline: none; background: var(--s2); color: var(--ink); }
-.cinp:focus { border-color: var(--teal); }
-.csend{ width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--navy), var(--navy-l)); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-@media(min-width:768px)  { .cpanel { right: 24px; width: 360px; } .cfab { right: 28px; } }
-@media(min-width:1024px) { .cpanel { right: 32px; bottom: 92px; width: 380px; height: 460px; } .cfab { right: 32px; bottom: 28px; } }
-
-/* ════════════════════════════════════════
    RESPONSIVE
 ════════════════════════════════════════ */
 @media (max-width: 1020px) {
@@ -441,18 +350,22 @@ a.btn { text-decoration: none; }
   .ft .fb { grid-column: 1/-1; }
   .steps { grid-template-columns: 1fr; gap: 32px; }
   .conn { display: none; }
-  .contact-inner { grid-template-columns: 1fr; }
 }
 @media (max-width: 840px) {
   .hero-inner { grid-template-columns: 1fr; gap: 28px; padding: 0 20px; }
   .hero-h1 { font-size: clamp(32px, 6vw, 48px); }
   .trust-grid { grid-template-columns: 1fr 1fr; }
   .hero-chips { display: none; }
-  .grid, .summary-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
   .nav { width: calc(100% - 24px); top: 10px; padding: 0 14px; border-radius: 14px; height: 50px; }
-  .nav-links { display: none; flex-direction: column; gap: 2px; position: absolute; top: 56px; left: 0; right: 0; background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 8px; z-index: 400; box-shadow: 0 8px 28px rgba(7,16,30,0.1); }
+  .nav-links {
+    display: none; flex-direction: column; gap: 2px;
+    position: absolute; top: 56px; left: 0; right: 0;
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 14px; padding: 8px; z-index: 400;
+    box-shadow: 0 8px 28px rgba(7,16,30,0.1);
+  }
   .nav-links.open { display: flex; }
   .nav-links li a { display: block; padding: 10px 12px; border-radius: 10px; font-size: 15px; color: var(--ink); font-weight: 500; }
   .nav-links li a:hover { background: var(--s2); }
@@ -461,8 +374,8 @@ a.btn { text-decoration: none; }
   .hero { padding: 72px 0 40px; }
   .hero-inner { padding: 0 16px; gap: 22px; }
   .hero-h1 { font-size: 28px; letter-spacing: -0.03em; line-height: 1.06; }
-  .hero-p  { font-size: 14.5px; margin-bottom: 18px; }
-  .hero-chips { display: none; }
+  .hero-p { font-size: 14.5px; margin-bottom: 18px; }
+  .hero-trust { gap: 9px; }
   .qcard { padding: 20px 16px; border-radius: 20px; }
   .qcard-head h2 { font-size: 17px; }
   .qstats { gap: 6px; margin-bottom: 14px; }
@@ -470,7 +383,6 @@ a.btn { text-decoration: none; }
   .qs-val { font-size: 14px; }
   .qs-lbl { font-size: 8px; }
   .sl-val { font-size: 19px; }
-  .sl { margin-bottom: 14px; }
   .trust { padding: 36px 16px 52px; }
   .trust-grid { grid-template-columns: 1fr; gap: 10px; }
   .how { padding: 56px 16px 64px; }
@@ -480,21 +392,18 @@ a.btn { text-decoration: none; }
   footer { padding: 44px 16px 28px; }
   .ft { grid-template-columns: 1fr 1fr; gap: 24px; }
   .ft .fb { grid-column: 1/-1; }
-  .app-section { padding: 40px 16px; }
-  .app-shell { padding: 20px 16px; border-radius: 20px; }
-  .contact-section { padding: 48px 16px; }
-  .contact-form-wrap { padding: 20px 16px; border-radius: 20px; }
-  .cf-row { grid-template-columns: 1fr; }
 }
 @media (max-width: 380px) {
   .nav { width: calc(100% - 16px); padding: 0 12px; }
   .hero { padding: 68px 0 32px; }
   .hero-inner { padding: 0 14px; }
   .hero-h1 { font-size: 24px; }
+  .hero-p { font-size: 14px; }
   .hero-trust { grid-template-columns: 1fr 1fr; gap: 8px; }
   .ht-card { padding: 11px 10px; gap: 9px; }
   .ht-ico { width: 34px; height: 34px; border-radius: 9px; }
   .ht-val { font-size: 12.5px; }
+  .ht-lbl { font-size: 10px; }
   .qcard { padding: 16px 13px; }
   .qs-val { font-size: 13px; }
   .trust { padding: 28px 14px 44px; }
@@ -503,255 +412,119 @@ a.btn { text-decoration: none; }
   .ft { grid-template-columns: 1fr; gap: 20px; }
   .fbot { flex-direction: column; }
 }
-.nav-brand{display:inline-flex;align-items:center;gap:8px;background:none;border:none;padding:0;cursor:pointer}
-.brand-mark{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:transparent;overflow:visible;position:relative}
-.brand-mark svg{display:block;width:132%;height:132%;max-width:none;max-height:none}
-.brand-name{font-family:var(--fd);font-size:18px;font-weight:800;color:var(--navy);letter-spacing:-.4px;line-height:1}
-.nav-links{display:flex;align-items:center;gap:4px;margin-left:auto}
-.nav-link{border:none;background:none;padding:8px 13px;border-radius:999px;font-size:13px;font-weight:600;color:var(--muted);font-family:var(--fb)}
-.nav-link:hover{color:var(--ink);background:#f1f5fb}
-.nav-login{background:linear-gradient(135deg,var(--nm),var(--nl));color:#fff;border:none;padding:9px 18px;border-radius:999px;font-size:13px;font-weight:700;font-family:var(--fd);box-shadow:var(--shadow-soft)}
-.ham{display:none;background:none;border:none;padding:6px;flex-direction:column;gap:4px;cursor:pointer;margin-left:auto}
-.ham span{width:18px;height:2px;background:var(--ink);border-radius:2px;display:block;transition:.2s}
-@media(max-width:600px){.nav-links{display:none;position:absolute;top:calc(100% + 8px);left:0;width:100%;background:#fff;border:1px solid var(--bdr);border-radius:18px;flex-direction:column;padding:8px;box-shadow:0 8px 32px rgba(15,24,40,.12)}.nav-links.open{display:flex}.ham{display:flex}}
 
-/* ── Layout ─────────────────────────────────────────────────────────────── */
-.site{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
-.main{flex:1;max-width:1120px;margin:0 auto;padding:88px 20px 64px;width:100%}
+/* ════════════════════════════════════════
+   TOPBAR
+════════════════════════════════════════ */
+.topbar { padding: 7px 16px; text-align: center; font-size: 10.5px; line-height: 1.5; color: #92400e; background: #fffbeb; border-bottom: 1px solid #fde68a; font-family: var(--fb); }
+.topbar a { color: var(--navy-l); font-weight: 500; text-decoration: none; }
 
-/* ── Scroll reveal ───────────────────────────────────────────────────────── */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .55s ease,transform .55s ease}
-.reveal.visible{opacity:1;transform:none}
+/* ════════════════════════════════════════
+   APP SECTION WRAPPER
+════════════════════════════════════════ */
+.app-section-wrap { background: var(--s2); padding: 56px 24px 64px; }
+.app-section-inner { max-width: 1100px; margin: 0 auto; }
 
-/* ── Hero ───────────────────────────────────────────────────────────────── */
-.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,440px);gap:36px;align-items:center;padding:20px 0 10px}
-.hero-copy{padding:0 0 10px}
-.hero-copy h1{font-family:var(--fd);font-size:62px;line-height:.96;letter-spacing:-.05em;font-weight:800;color:var(--ink);margin:0 0 20px}
-.h1-line{display:block}
-.h1-teal{position:relative;display:inline-block;color:var(--teal)}
-.h1-teal::after{content:'';position:absolute;left:0;bottom:-4px;width:100%;height:3px;background:var(--teal);border-radius:2px;opacity:.45}
-.hero-lead{font-size:15px;line-height:1.7;color:var(--muted);max-width:480px;margin:0 0 24px}
+/* ════════════════════════════════════════
+   APP SHELL + FORMS
+════════════════════════════════════════ */
+.app-shell { background: var(--surface); border: 1px solid var(--border); border-radius: 28px; box-shadow: 0 20px 50px rgba(7,16,30,.08); padding: 28px; }
+.app-head { margin-bottom: 22px; }
+.app-head h3 { margin: 0 0 6px; font-size: 26px; font-weight: 800; letter-spacing: -.04em; font-family: var(--fd); color: var(--ink); }
+.app-head > p { margin: 0 0 16px; color: var(--ink-muted); line-height: 1.65; font-size: 14px; }
+.pane { display: none; }
+.pane.active { display: block; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stack { display: grid; gap: 12px; }
+.summary-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 16px; }
+.summary-card { padding: 14px; border-radius: 16px; background: #f8fbff; border: 1px solid var(--border); }
+.summary-card span { display: block; font-size: 10px; font-weight: 800; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 5px; }
+.summary-card strong { display: block; font-size: 22px; letter-spacing: -.05em; color: var(--ink); font-family: var(--fd); }
+.offer-box { padding: 20px; border-radius: 18px; background: linear-gradient(160deg,#f7faff 0%,#eef4ff 100%); border: 1px solid #d6e2fb; }
+.offer-box h4 { margin: 0 0 7px; font-size: 19px; font-weight: 800; font-family: var(--fd); color: var(--ink); }
+.offer-box p { margin: 0; color: var(--ink-muted); line-height: 1.65; font-size: 14px; }
+.field { display: grid; gap: 6px; }
+.field.full { grid-column: 1/-1; }
+.field label { font-size: 11px; font-weight: 800; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .08em; font-family: var(--fb); }
+.field input,.field select { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; padding: 13px 14px; min-height: 50px; border: 1.5px solid var(--border); border-radius: 14px; background: var(--surface); outline: none; font-family: var(--fb); color: var(--ink); font-size: 14px; }
+.field input[type="date"],.field input[type="month"] { -webkit-appearance: none; appearance: none; font-size: 16px; padding: 13px 14px; }
+.field input:focus,.field select:focus { border-color: var(--navy-l); box-shadow: 0 0 0 3px rgba(28,56,146,.08); }
+.message { padding: 13px 14px; border-radius: 14px; font-size: 13px; line-height: 1.6; font-family: var(--fb); }
+.message:empty { display: none; }
+.message.info { background: #eff6ff; color: #1e40af; }
+.message.success { background: #ecfdf5; color: #065f46; }
+.message.warn { background: #fffbeb; color: #92400e; }
+.message.error { background: #fee2e2; color: #991b1b; }
+.check-grid { display: grid; gap: 10px; }
+.check { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 14px; background: #f8fbff; border: 1px solid var(--border); font-family: var(--fb); font-size: 13px; color: var(--ink); }
+.check input { width: 18px; height: 18px; min-width: 18px; min-height: 18px; margin: 1px 0 0; flex-shrink: 0; }
+.inline { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.btn { display: inline-flex; align-items: center; justify-content: center; border: none; border-radius: 16px; padding: 14px 24px; font-size: 14px; font-weight: 800; min-width: 140px; font-family: var(--fd); cursor: pointer; }
+.btn-primary { background: linear-gradient(135deg, var(--navy-l), var(--navy)); color: #fff; box-shadow: 0 10px 30px rgba(28,56,146,.1); }
+.btn-primary:hover { background: linear-gradient(135deg, var(--navy-m), var(--navy)); }
+.btn-secondary { background: var(--surface); color: var(--ink); border: 1.5px solid var(--border); }
+.btn-secondary:hover { background: var(--s2); }
 
-/* 2×2 trust grid */
-.trust-mini{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 28px}
-.tm-item{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:14px;background:var(--surf);border:1px solid var(--bdr);font-size:12.5px;font-weight:600;color:var(--ink)}
-.tm-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0}
+/* ════════════════════════════════════════
+   CONTACT STRIPS
+════════════════════════════════════════ */
+.contact-outer { background: var(--surface); padding: 0 24px 64px; }
+.contact-inner { max-width: 1100px; margin: 0 auto; }
+.contact-strips { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.cstrip { display: flex; align-items: center; gap: 14px; padding: 20px 18px; background: linear-gradient(135deg,var(--navy-l),var(--navy)); border-radius: 20px; color: #fff; border: none; width: 100%; text-align: left; cursor: default; box-shadow: 0 6px 20px rgba(28,56,146,.2); text-decoration: none; transition: transform .18s, box-shadow .18s; }
+.cstrip:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(28,56,146,.28); }
+.cstrip-icon { width: 42px; height: 42px; border-radius: 11px; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.cstrip-text strong { display: block; font-size: 13.5px; font-weight: 700; color: #fff; font-family: var(--fd); }
+.cstrip-text span { display: block; font-size: 12px; color: rgba(255,255,255,.75); margin-top: 3px; font-family: var(--fb); }
 
-.hero-cta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.btn-hero-primary{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:16px;padding:15px 26px;font-size:15px;font-weight:700;font-family:var(--fd);background:linear-gradient(135deg,var(--nm),var(--nl));color:#fff;box-shadow:0 8px 28px rgba(22,45,85,.22)}
-.btn-hero-secondary{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--bdr);border-radius:16px;padding:14px 20px;font-size:14px;font-weight:600;background:var(--surf);color:var(--ink)}
+/* ════════════════════════════════════════
+   CHAT FAB + PANEL
+════════════════════════════════════════ */
+.cfab { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: linear-gradient(135deg,var(--navy-l),var(--navy)); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 50; border: none; }
+.cnb { position: absolute; top: -2px; right: -2px; width: 18px; height: 18px; background: #ef4444; border-radius: 50%; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #fff; }
+.cpanel { position: fixed; bottom: 80px; right: 12px; width: 320px; background: var(--surface); border-radius: 28px; box-shadow: 0 12px 40px rgba(0,0,0,.18); z-index: 49; overflow: hidden; display: none; flex-direction: column; height: 420px; }
+.cpanel.open { display: flex; }
+.ctop { background: linear-gradient(135deg,var(--navy-l),var(--navy)); padding: 12px 14px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.cav { width: 34px; height: 34px; background: rgba(255,255,255,.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: var(--fd); }
+.can { font-size: 13px; font-weight: 700; color: #fff; font-family: var(--fd); }
+.col { font-size: 10px; color: rgba(255,255,255,.7); display: flex; align-items: center; gap: 4px; margin-top: 1px; }
+.cold { width: 6px; height: 6px; background: #4ade80; border-radius: 50%; }
+.ccl { margin-left: auto; background: rgba(255,255,255,.15); border: none; border-radius: 8px; padding: 5px 8px; color: #fff; cursor: pointer; font-size: 11px; }
+.cmsgs { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 7px; background: var(--s2); }
+.cmsgs::-webkit-scrollbar { display: none; }
+.msg { max-width: 84%; padding: 8px 11px; border-radius: 11px; font-size: 11.5px; line-height: 1.55; font-family: var(--fb); }
+.msg.agent { background: #fff; border: 1px solid var(--border); color: var(--ink); align-self: flex-start; border-bottom-left-radius: 3px; }
+.msg.user { background: linear-gradient(135deg,var(--navy-l),var(--navy)); color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; }
+.mtime { font-size: 9px; color: var(--ink-muted); margin-top: 2px; }
+.mtime.r { text-align: right; }
+.cqk { padding: 7px 8px; display: flex; gap: 5px; overflow-x: auto; border-top: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+.cqk::-webkit-scrollbar { display: none; }
+.qp { flex-shrink: 0; padding: 5px 9px; background: #eff6ff; border: 1px solid #dbeafe; border-radius: 20px; font-size: 10px; color: var(--navy-l); font-weight: 500; cursor: pointer; white-space: nowrap; }
+.cir { display: flex; gap: 7px; padding: 8px 10px; border-top: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+.cinp { flex: 1; padding: 8px 11px; border: 1.5px solid var(--border); border-radius: 20px; font-size: 11px; outline: none; background: var(--s2); color: var(--ink); font-family: var(--fb); }
+.cinp:focus { border-color: var(--navy-l); }
+.csend { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg,var(--navy-l),var(--navy)); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
-/* ── Calculator card ────────────────────────────────────────────────────── */
-.calc-card{background:linear-gradient(160deg,var(--nm) 0%,var(--nl) 78%);border:1px solid rgba(22,45,85,.7);border-radius:var(--r-xl);box-shadow:0 32px 80px rgba(22,45,85,.18),0 4px 20px rgba(15,24,40,.08);overflow:hidden;position:relative}
-.calc-card-head{padding:22px 22px 0}
-.calc-card-head h2{font-family:var(--fd);margin:0 0 5px;font-size:22px;font-weight:700;letter-spacing:-.04em;color:#fff}
-.calc-card-head p{margin:0;color:rgba(255,255,255,.72);font-size:13px;font-family:var(--fb);line-height:1.5}
-.calc-body{padding:20px 22px 22px;display:grid;gap:16px}
-.quote-top{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.metric{padding:13px 12px;border-radius:14px;background:#fff;border:1px solid rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;flex-direction:column}
-.metric span{display:block;font-size:9.5px;font-weight:700;font-family:var(--fb);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;min-height:26px}
-.metric strong{display:block;font-size:22px;font-weight:800;font-family:var(--fd);letter-spacing:-.04em;color:var(--ink)}
-.metric small{display:block;margin-top:4px;font-size:10.5px;color:var(--muted);font-family:var(--fb);line-height:1.4}
-.slider-stack{display:grid;gap:16px}
-.slider-group{display:grid;gap:10px}
-.slider-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
-.slider-label{font-size:10px;font-weight:700;font-family:var(--fb);color:rgba(255,255,255,.75);text-transform:uppercase;letter-spacing:.09em}
-.slider-value{font-size:26px;font-weight:800;font-family:var(--fd);letter-spacing:-.05em;color:#fff}
-.range-wrap{display:grid;gap:8px}
-/* New slider track pattern */
-.sl-t{position:relative;height:8px;border-radius:999px;background:rgba(255,255,255,.22);margin:4px 0}
-.sl-f{position:absolute;top:0;left:0;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--teal),var(--teal-dark));pointer-events:none}
-.sl-t input[type=range]{position:absolute;top:50%;left:0;width:100%;transform:translateY(-50%);appearance:none;-webkit-appearance:none;height:8px;background:transparent;outline:none;cursor:pointer;touch-action:pan-y;margin:0}
-.sl-t input[type=range]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-dark));border:3px solid #fff;box-shadow:0 4px 12px var(--teal-glow)}
-.sl-t input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-dark));border:3px solid #fff;box-shadow:0 4px 12px var(--teal-glow)}
-.slider-scale{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.58);font-family:var(--fb)}
-.calc-cta{display:grid;gap:10px;justify-items:center;text-align:center}
-.btn-calc-apply{width:min(100%,240px);border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:700;font-family:var(--fd);background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:#fff;box-shadow:0 8px 24px var(--teal-glow);transition:transform .15s,box-shadow .15s}
-.btn-calc-apply:hover{transform:translateY(-1px);box-shadow:0 12px 32px var(--teal-glow)}
-.calc-rep{font-size:11px;color:rgba(255,255,255,.65);font-family:var(--fb);text-align:center;line-height:1.55;margin:0}
-@keyframes bump{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-.bump{animation:bump .25s ease}
-
-/* ── Bento grid ─────────────────────────────────────────────────────────── */
-.bento{margin-top:28px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
-.bento-cell{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r-lg);padding:18px 16px;display:flex;flex-direction:column;gap:6px;transition:box-shadow .18s,transform .18s;overflow:hidden}
-.bento-cell:hover{box-shadow:0 8px 28px rgba(22,45,85,.08);transform:translateY(-2px)}
-.bc-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-bottom:4px}
-.bc-teal{background:rgba(0,194,162,.12)}
-.bc-navy{background:rgba(22,45,85,.08)}
-.bc-amber{background:#fffbeb}
-.bc-green{background:#f0fdf4}
-.bento-cell strong{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--ink);display:block}
-.bento-cell span{font-size:12px;color:var(--muted);font-family:var(--fb);line-height:1.5;display:block}
-/* APR counter cell */
-.bc-apr .apr-num{font-family:var(--fd);font-size:32px;font-weight:800;color:var(--navy);letter-spacing:-.04em;line-height:1}
-.bc-apr .apr-label{font-size:11px;color:var(--muted);font-family:var(--fb);margin-top:2px}
-@media(max-width:900px){.bento{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:600px){.bento{grid-template-columns:1fr 1fr}}
-
-/* ── Timeline how-it-works ───────────────────────────────────────────────── */
-.how-section{margin-top:52px}
-.section-label{font-size:11px;font-weight:700;font-family:var(--fb);color:var(--teal);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px}
-.how-section h2{font-family:var(--fd);font-size:36px;font-weight:800;letter-spacing:-.04em;color:var(--ink);margin:0 0 8px}
-.how-section .how-sub{font-size:15px;color:var(--muted);font-family:var(--fb);line-height:1.65;max-width:560px;margin:0 0 40px}
-.timeline{display:grid;gap:0;position:relative;max-width:780px;margin:0 auto}
-.timeline::before{content:'';position:absolute;left:50%;transform:translateX(-50%);top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--teal),var(--navy));border-radius:2px;opacity:.25}
-.tl-item{display:grid;grid-template-columns:1fr 60px 1fr;gap:0;align-items:center;min-height:120px}
-.tl-item:nth-child(odd) .tl-card{grid-column:1;grid-row:1;margin-right:24px;justify-self:end}
-.tl-item:nth-child(odd) .tl-node{grid-column:2;grid-row:1}
-.tl-item:nth-child(odd) .tl-empty{grid-column:3;grid-row:1}
-.tl-item:nth-child(even) .tl-empty{grid-column:1;grid-row:1}
-.tl-item:nth-child(even) .tl-node{grid-column:2;grid-row:1}
-.tl-item:nth-child(even) .tl-card{grid-column:3;grid-row:1;margin-left:24px;justify-self:start}
-.tl-node{display:flex;align-items:center;justify-content:center;width:60px}
-.tl-dot{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-dark));display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:16px;font-weight:800;color:#fff;box-shadow:0 0 0 6px rgba(0,194,162,.15),0 4px 16px var(--teal-glow);transition:box-shadow .3s;flex-shrink:0}
-.tl-dot.active{box-shadow:0 0 0 10px rgba(0,194,162,.2),0 4px 20px var(--teal-glow)}
-.tl-card{background:var(--surf);border:1px solid var(--bdr);border-radius:18px;padding:22px 20px;max-width:320px;box-shadow:0 2px 12px rgba(15,24,40,.06);transition:box-shadow .2s,transform .2s}
-.tl-card:hover{box-shadow:0 8px 28px rgba(22,45,85,.10);transform:translateY(-2px)}
-.tl-card strong{font-family:var(--fd);font-size:15px;font-weight:700;color:var(--ink);display:block;margin-bottom:6px}
-.tl-card span{font-size:13px;color:var(--muted);font-family:var(--fb);line-height:1.65;display:block}
-@media(max-width:700px){
-  .timeline::before{display:none}
-  .timeline{gap:12px}
-  .tl-item{grid-template-columns:1fr;grid-template-rows:auto auto}
-  .tl-item:nth-child(odd) .tl-card,.tl-item:nth-child(even) .tl-card{grid-column:1;margin:0}
-  .tl-item .tl-node{grid-column:1;grid-row:1;justify-content:flex-start;padding-left:4px;margin-bottom:8px}
-  .tl-item .tl-empty{display:none}
-  .tl-item:nth-child(odd) .tl-card,.tl-item:nth-child(even) .tl-card{grid-row:2;justify-self:stretch;max-width:100%}
+/* Additional responsive for app/contact */
+@media (max-width: 720px) {
+  .contact-strips { grid-template-columns: 1fr; }
+  .grid { grid-template-columns: 1fr; }
+  .summary-grid { grid-template-columns: 1fr 1fr; }
+  .app-shell { border-radius: 20px; }
+  .app-section-wrap { padding: 40px 16px 48px; }
+  .contact-outer { padding: 0 16px 48px; }
 }
-
-/* ── Application shell ───────────────────────────────────────────────────── */
-.app-section{margin-top:48px}
-.app-shell{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r-xl);box-shadow:var(--shadow);padding:28px}
-.app-head{margin-bottom:22px}
-.app-head h3{font-family:var(--fd);margin:0 0 6px;font-size:26px;font-weight:800;letter-spacing:-.04em;color:var(--ink)}
-.app-head>p{margin:0 0 16px;color:var(--muted);line-height:1.65;font-size:14px;font-family:var(--fb)}
-.pane{display:none}.pane.active{display:block}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stack{display:grid;gap:12px}
-.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
-.summary-card{padding:14px;border-radius:16px;background:var(--s2);border:1px solid var(--bdr)}
-.summary-card span{display:block;font-size:10px;font-weight:700;font-family:var(--fb);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
-.summary-card strong{font-family:var(--fd);display:block;font-size:22px;letter-spacing:-.05em;color:var(--ink)}
-.offer-box{padding:20px;border-radius:18px;background:linear-gradient(160deg,rgba(0,194,162,.06) 0%,rgba(22,45,85,.05) 100%);border:1px solid rgba(0,194,162,.2)}
-.offer-box h4{font-family:var(--fd);margin:0 0 7px;font-size:19px;font-weight:700;color:var(--ink)}
-.offer-box p{margin:0;color:var(--muted);font-family:var(--fb);line-height:1.65;font-size:14px}
-.field{display:grid;gap:6px}.field.full{grid-column:1/-1}
-.field label{font-family:var(--fb);font-size:12px;font-weight:600;color:var(--ink-s);letter-spacing:.01em}
-.field input,.field select{width:100%;max-width:100%;min-width:0;box-sizing:border-box;padding:13px 14px;min-height:50px;border:1.5px solid var(--bdr);border-radius:10px;background:var(--surf);outline:none;font-family:var(--fb);font-size:14px;color:var(--ink)}
-.field input[type="date"],.field input[type="month"]{-webkit-appearance:none;appearance:none;font-size:16px;padding:13px 14px;box-sizing:border-box;display:block;width:100%}
-.field input[type="date"]::-webkit-date-and-time-value,.field input[type="month"]::-webkit-date-and-time-value{min-height:1.5em;text-align:left}
-.field input:focus,.field select:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-glow)}
-.message{padding:13px 14px;border-radius:14px;font-size:13px;font-family:var(--fb);line-height:1.6}.message:empty{display:none}
-.message.info{background:#e8f9f6;color:#0a6b59}.message.success{background:var(--ok-bg);color:var(--ok-text)}
-.message.warn{background:var(--warn-bg);color:var(--warn-text)}.message.error{background:#fee2e2;color:#991b1b}
-.check-grid{display:grid;gap:10px}
-.check{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:14px;background:var(--s2);border:1px solid var(--bdr)}
-.check input{width:18px;height:18px;min-width:18px;min-height:18px;margin:1px 0 0;flex-shrink:0;accent-color:var(--teal)}
-.inline{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.btn{display:inline-flex;align-items:center;justify-content:center;border:none;border-radius:16px;padding:14px 24px;font-size:14px;font-weight:700;font-family:var(--fd);min-width:140px}
-.btn-primary{background:linear-gradient(135deg,var(--nm),var(--nl));color:#fff;box-shadow:var(--shadow-soft)}
-.btn-secondary{background:var(--surf);color:var(--ink);border:1.5px solid var(--bdr)}
-a.btn{text-decoration:none}
-
-/* ── Contact section ─────────────────────────────────────────────────────── */
-.contact-section{margin-top:52px}
-.contact-inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:36px;align-items:start}
-.contact-details{padding:32px 0}
-.contact-details h2{font-family:var(--fd);font-size:32px;font-weight:800;letter-spacing:-.04em;color:var(--ink);margin:0 0 10px}
-.contact-details .c-sub{font-size:15px;color:var(--muted);font-family:var(--fb);line-height:1.65;margin:0 0 28px}
-.c-info-row{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
-.c-info-icon{width:42px;height:42px;border-radius:12px;background:var(--s2);border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.c-info-text strong{display:block;font-family:var(--fd);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px}
-.c-info-text span{font-size:12.5px;color:var(--muted);font-family:var(--fb)}
-.contact-form-wrap{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r-xl);padding:32px;box-shadow:var(--shadow)}
-.cf-title{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--ink);margin:0 0 20px}
-.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-.cf-field{display:grid;gap:6px;margin-bottom:14px}
-.cf-field.cf-last{margin-bottom:0}
-.cf-field label{font-family:var(--fb);font-size:12px;font-weight:600;color:var(--ink-s)}
-.cf-field input,.cf-field select,.cf-field textarea{width:100%;padding:13px 14px;border:1.5px solid var(--bdr);border-radius:10px;background:var(--surf);outline:none;font-family:var(--fb);font-size:14px;color:var(--ink);resize:vertical}
-.cf-field input:focus,.cf-field select:focus,.cf-field textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-glow)}
-.cf-toggle{display:flex;gap:8px}
-.cf-tog-btn{flex:1;padding:11px;border:1.5px solid var(--bdr);border-radius:10px;background:var(--surf);font-size:13px;font-weight:600;font-family:var(--fb);color:var(--muted);cursor:pointer;transition:.15s}
-.cf-tog-btn.active{border-color:var(--teal);background:rgba(0,194,162,.07);color:var(--teal)}
-.btn-cf-submit{width:100%;padding:15px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--nm),var(--nl));color:#fff;font-family:var(--fd);font-size:15px;font-weight:700;margin-top:18px;transition:transform .15s,box-shadow .15s}
-.btn-cf-submit:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(22,45,85,.2)}
-.cf-success{display:none;text-align:center;padding:28px 0}
-.cf-success-icon{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-dark));display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
-.cf-success h3{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--ink);margin:0 0 8px}
-.cf-success p{font-size:14px;color:var(--muted);font-family:var(--fb);line-height:1.65}
-.cf-err{font-size:12px;color:#dc2626;font-family:var(--fb);margin-top:4px;display:none}
-@media(max-width:820px){.contact-inner{grid-template-columns:1fr}}
-@media(max-width:600px){.cf-row{grid-template-columns:1fr}}
-
-/* ── Footer ─────────────────────────────────────────────────────────────── */
-.ft{background:linear-gradient(155deg,#0f1830 0%,#122447 58%,#143c7a 100%);padding:48px clamp(16px,4vw,40px) 28px;margin:60px calc(50% - 50vw) 0;width:100vw;overflow:hidden;position:relative;color:#fff}
-.ft::before{content:'';position:absolute;top:-60px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.04)}
-.ft::after{content:'';position:absolute;bottom:-70px;left:-50px;width:180px;height:180px;border-radius:50%;background:rgba(0,194,162,.08)}
-.ft-inner{position:relative;width:min(100%,1080px);margin:0 auto}
-.ft-cols{display:grid;grid-template-columns:minmax(0,1.4fr) 1fr 1fr 1fr;gap:32px;margin-bottom:36px}
-.ft-brand-col .ft-logo-name{font-family:var(--fd);font-size:22px;font-weight:800;color:#fff;letter-spacing:-.4px;margin-bottom:10px}
-.ft-brand-col .ft-copy{font-size:12px;color:rgba(255,255,255,.65);font-family:var(--fb);line-height:1.7;max-width:280px}
-.ft-col-title{font-family:var(--fd);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.5);margin-bottom:14px}
-.ft-col a{display:block;font-size:12.5px;color:rgba(255,255,255,.78);font-family:var(--fb);padding:4px 0}
-.ft-col a:hover{color:#fff}
-.ft-col address{font-style:normal}
-.ft-col address span{display:block;font-size:12.5px;color:rgba(255,255,255,.78);font-family:var(--fb);padding:4px 0}
-.fleg{font-size:10px;color:rgba(255,255,255,.5);font-family:var(--fb);line-height:1.65;border-top:1px solid rgba(255,255,255,.1);padding-top:20px}
-@media(max-width:900px){.ft-cols{grid-template-columns:1fr 1fr;gap:24px}}
-@media(max-width:520px){.ft-cols{grid-template-columns:1fr;gap:20px}.ft{margin:24px calc(50% - 50vw) 0;padding:32px clamp(12px,4vw,24px) 20px}}
-
-/* ── Chat widget ─────────────────────────────────────────────────────────── */
-.cfab{position:fixed;bottom:24px;right:24px;width:54px;height:54px;background:linear-gradient(135deg,var(--nm),var(--nl));border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:50;border:none;box-shadow:0 8px 24px rgba(22,45,85,.28)}
-.cnb{position:absolute;top:-3px;right:-3px;width:19px;height:19px;background:#ef4444;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;font-family:var(--fd)}
-.cpanel{position:fixed;bottom:88px;right:16px;width:320px;background:var(--surf);border-radius:var(--r-xl);box-shadow:0 12px 40px rgba(0,0,0,.16);z-index:49;overflow:hidden;display:none;flex-direction:column;height:420px;border:1px solid var(--bdr)}
-.cpanel.open{display:flex}
-.ctop{background:linear-gradient(135deg,var(--nm),var(--nl));padding:14px;display:flex;align-items:center;gap:10px;flex-shrink:0}
-.cav{width:34px;height:34px;background:rgba(255,255,255,.18);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:var(--fd);color:#fff;flex-shrink:0}
-.can{font-size:13px;font-weight:700;font-family:var(--fd);color:#fff}
-.col{font-size:10px;color:rgba(255,255,255,.7);font-family:var(--fb);display:flex;align-items:center;gap:4px;margin-top:1px}
-.cold{width:6px;height:6px;background:#4ade80;border-radius:50%}
-.ccl{margin-left:auto;background:rgba(255,255,255,.15);border:none;border-radius:8px;padding:5px 8px;color:#fff;cursor:pointer;font-size:11px;font-family:var(--fb)}
-.cmsgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px;background:#f8faff}
-.cmsgs::-webkit-scrollbar{display:none}
-.msg{max-width:84%;padding:8px 11px;border-radius:11px;font-size:11.5px;font-family:var(--fb);line-height:1.55}
-.msg.agent{background:#fff;border:1px solid var(--bdr);color:var(--ink);align-self:flex-start;border-bottom-left-radius:3px}
-.msg.user{background:linear-gradient(135deg,var(--nm),var(--nl));color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
-.mtime{font-size:9px;color:var(--dim);margin-top:2px;font-family:var(--fb)}
-.mtime.r{text-align:right}
-.cqk{padding:7px 8px;display:flex;gap:5px;overflow-x:auto;border-top:1px solid var(--bdr);background:var(--surf);flex-shrink:0}
-.cqk::-webkit-scrollbar{display:none}
-.qp{flex-shrink:0;padding:5px 9px;background:var(--s2);border:1px solid var(--bdr);border-radius:20px;font-size:10px;color:var(--navy);font-weight:600;font-family:var(--fb);cursor:pointer;white-space:nowrap}
-.cir{display:flex;gap:7px;padding:8px 10px;border-top:1px solid var(--bdr);background:var(--surf);flex-shrink:0}
-.cinp{flex:1;padding:8px 11px;border:1.5px solid var(--bdr);border-radius:20px;font-size:11px;font-family:var(--fb);outline:none;background:var(--bg);color:var(--ink)}
-.cinp:focus{border-color:var(--teal)}
-.csend{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--nm),var(--nl));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-@media(min-width:768px){.cpanel{right:24px;width:360px}.cfab{right:28px}}
-@media(min-width:1024px){.cpanel{right:32px;bottom:92px;width:380px;height:460px}.cfab{right:32px;bottom:28px}}
-
-/* ── Responsive ──────────────────────────────────────────────────────────── */
-@media(max-width:960px){
-  .hero{grid-template-columns:1fr}
-  .hero-copy h1{font-size:52px}
-  .quote-top,.summary-grid{grid-template-columns:1fr 1fr}
-  .main{padding-top:80px}
+@media (max-width: 480px) {
+  .summary-grid { grid-template-columns: 1fr; }
+  .inline { flex-direction: column; align-items: stretch; }
+  .btn { width: 100%; }
 }
-@media(max-width:720px){
-  .main{padding-left:14px;padding-right:14px}
-  .hero-copy h1{font-size:42px}
-  .quote-top,.grid,.summary-grid{grid-template-columns:1fr}
-  .calc-card,.app-shell{border-radius:20px}
-  .hero-cta{flex-direction:column;align-items:flex-start}
-  .btn-hero-primary,.btn-hero-secondary{width:100%;justify-content:center}
-}
-@media(max-width:480px){
-  .hero-copy h1{font-size:38px;line-height:1;letter-spacing:-.04em}
-  .trust-mini{grid-template-columns:1fr}
-  .ft{margin:24px calc(50% - 50vw) 0}
-}
+@media (min-width: 768px) { .cpanel { right: 24px; width: 360px; } .cfab { right: 24px; } }
+@media (min-width: 1024px) { .cpanel { right: 32px; bottom: 88px; width: 380px; height: 460px; } .cfab { right: 32px; bottom: 24px; } }
 </style>
 </head>
 <body>
+
 <!-- SVG gradient for connectors -->
 <svg width="0" height="0" style="position:absolute;pointer-events:none">
   <defs>
@@ -762,7 +535,10 @@ a.btn{text-decoration:none}
   </defs>
 </svg>
 
-<!-- ══════════ NAV ══════════ -->
+<!-- TOPBAR -->
+<div class="topbar">Warning: Late repayments can cause serious money problems. For help, visit <a href="https://www.moneyhelper.org.uk" target="_blank" rel="noreferrer">moneyhelper.org.uk</a>. You can compare our loans at <a href="#" target="_blank" rel="noreferrer">All the Lenders</a>.</div>
+
+<!-- NAV -->
 <nav class="nav" id="main-nav">
   <a href="#" class="nav-logo">
     <div class="logo-box"><span class="logo-q">Q</span></div>
@@ -770,7 +546,7 @@ a.btn{text-decoration:none}
   </a>
   <ul class="nav-links" id="nav-links">
     <li><a href="#how">How it works</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="#">FAQs</a></li>
     <li><a href="#">About</a></li>
   </ul>
   <div class="nav-right">
@@ -781,83 +557,58 @@ a.btn{text-decoration:none}
   </div>
 </nav>
 
-<!-- ══════════ HERO ══════════ -->
+<!-- HERO -->
 <section class="hero">
   <div class="orb orb-a"></div>
   <div class="orb orb-b"></div>
-
   <div class="hero-inner">
-    <!-- Copy -->
     <div class="hero-copy">
       <h1 class="hero-h1">Personal loans,<br><em>done right.</em></h1>
       <p class="hero-p">Transparent lending from £300 to £10,000.<br>Same-day decisions. No credit footprint.</p>
-
-      <!-- Icon trust grid -->
       <div class="hero-trust">
         <div class="ht-card">
           <div class="ht-ico ht-teal">
-            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M14 3L5 7v7c0 5.5 3.9 10.7 9 12 5.1-1.3 9-6.5 9-12V7L14 3z"/>
-              <polyline points="10,14 13,17 18,11"/>
-            </svg>
+            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3L5 7v7c0 5.5 3.9 10.7 9 12 5.1-1.3 9-6.5 9-12V7L14 3z"/><polyline points="10,14 13,17 18,11"/></svg>
           </div>
           <div class="ht-text"><span class="ht-val">FCA</span><span class="ht-lbl">Authorised</span></div>
         </div>
         <div class="ht-card">
           <div class="ht-ico ht-blue">
-            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="15,3 6,16 13,16 13,25 22,12 15,12 15,3"/>
-            </svg>
+            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="15,3 6,16 13,16 13,25 22,12 15,12 15,3"/></svg>
           </div>
           <div class="ht-text"><span class="ht-val">Same day</span><span class="ht-lbl">Decision</span></div>
         </div>
         <div class="ht-card">
           <div class="ht-ico ht-orange">
-            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="14" cy="14" r="10"/><line x1="7" y1="7" x2="21" y2="21"/>
-            </svg>
+            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="14" r="10"/><line x1="7" y1="7" x2="21" y2="21"/></svg>
           </div>
           <div class="ht-text"><span class="ht-val">Zero</span><span class="ht-lbl">Hidden fees</span></div>
         </div>
         <div class="ht-card">
           <div class="ht-ico ht-purple">
-            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="4" y="6" width="20" height="18" rx="3"/>
-              <line x1="4" y1="11" x2="24" y2="11"/>
-              <line x1="9" y1="3" x2="9" y2="9"/>
-              <line x1="19" y1="3" x2="19" y2="9"/>
-              <polyline points="9,17 12,20 19,15"/>
-            </svg>
+            <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="20" height="18" rx="3"/><line x1="4" y1="11" x2="24" y2="11"/><line x1="9" y1="3" x2="9" y2="9"/><line x1="19" y1="3" x2="19" y2="9"/><polyline points="9,17 12,20 19,15"/></svg>
           </div>
           <div class="ht-text"><span class="ht-val">6–24 mo</span><span class="ht-lbl">Flexible term</span></div>
         </div>
       </div>
     </div>
 
-    <!-- Right: chips + quote card -->
     <div class="hero-visual">
       <div class="hero-chips">
         <div class="chip">
-          <div class="chip-ico ci-green">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-          </div>
+          <div class="chip-ico ci-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
           <div><div class="chip-label">Borrow up to</div><div class="chip-val">£10,000</div></div>
         </div>
         <div class="chip">
-          <div class="chip-ico ci-blue">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
-          </div>
+          <div class="chip-ico ci-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div>
           <div><div class="chip-label">Decision in</div><div class="chip-val">Same day</div></div>
         </div>
         <div class="chip">
-          <div class="chip-ico ci-orange">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-          </div>
+          <div class="chip-ico ci-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
           <div><div class="chip-label">Responsible</div><div class="chip-val">Lending</div></div>
         </div>
       </div>
 
-      <!-- Quote calculator card -->
       <div class="qcard">
         <div class="qcard-g1"></div>
         <div class="qcard-g2"></div>
@@ -866,27 +617,12 @@ a.btn{text-decoration:none}
           <p>Adjust the sliders and your repayment updates instantly</p>
         </div>
         <div class="qstats">
-          <div class="qs">
-            <div class="qs-lbl">Borrowing</div>
-            <div class="qs-val" id="s-borrow">£1,500</div>
-            <div class="qs-sub" id="s-sub">12 payments</div>
-          </div>
-          <div class="qs">
-            <div class="qs-lbl">Monthly</div>
-            <div class="qs-val" id="s-monthly">£146</div>
-            <div class="qs-sub">per month</div>
-          </div>
-          <div class="qs">
-            <div class="qs-lbl">Total</div>
-            <div class="qs-val" id="s-total">£1,754</div>
-            <div class="qs-sub">29.9% APR</div>
-          </div>
+          <div class="qs"><div class="qs-lbl">Borrowing</div><div class="qs-val" id="s-borrow">£1,500</div><div class="qs-sub" id="s-sub">12 payments</div></div>
+          <div class="qs"><div class="qs-lbl">Monthly</div><div class="qs-val" id="s-monthly">£146</div><div class="qs-sub">per month</div></div>
+          <div class="qs"><div class="qs-lbl">Total</div><div class="qs-val" id="s-total">£1,754</div><div class="qs-sub">29.9% APR</div></div>
         </div>
         <div class="sl">
-          <div class="sl-head">
-            <span class="sl-lbl">Amount</span>
-            <span class="sl-val" id="a-disp">£1,500</span>
-          </div>
+          <div class="sl-head"><span class="sl-lbl">Amount</span><span class="sl-val" id="a-disp">£1,500</span></div>
           <div class="sl-track">
             <div class="sl-fill" id="a-fill" style="width:12.4%"></div>
             <input type="range" id="a-sl" min="300" max="10000" step="50" value="1500">
@@ -894,48 +630,39 @@ a.btn{text-decoration:none}
           <div class="sl-range"><span>£300</span><span>£10,000</span></div>
         </div>
         <div class="sl">
-          <div class="sl-head">
-            <span class="sl-lbl">Term</span>
-            <span class="sl-val" id="t-disp">12 months</span>
-          </div>
+          <div class="sl-head"><span class="sl-lbl">Term</span><span class="sl-val" id="t-disp">12 months</span></div>
           <div class="sl-track">
             <div class="sl-fill" id="t-fill" style="width:33.3%"></div>
             <input type="range" id="t-sl" min="6" max="24" step="1" value="12">
           </div>
           <div class="sl-range"><span>6 months</span><span>24 months</span></div>
         </div>
-        <button class="btn-apply" onclick="startApplication()">Apply now, no credit check</button>
+        <button class="btn-apply" type="button" onclick="startApplication()">Apply now, no credit check</button>
         <p class="qcard-disc" id="disc">Representative example: £1,500 over 12 months at 29.9% APR. Monthly repayment £147.85. Total repayable £1,774.20.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════ TRUST ══════════ -->
+<!-- TRUST -->
 <div class="trust">
   <div class="trust-grid">
     <div class="tcard" style="transition-delay:0.04s">
-      <div class="tcard-ico ti-teal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="8.5,12 11,14.5 15.5,9.5"/></svg>
-      </div>
+      <div class="tcard-ico ti-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="8.5,12 11,14.5 15.5,9.5"/></svg></div>
       <div><h4>No hidden fees</h4><p>The rate you see is the rate you pay.</p></div>
     </div>
     <div class="tcard" style="transition-delay:0.12s">
-      <div class="tcard-ico ti-orange">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="3"/><path d="M16 8V6a2 2 0 00-8 0v2"/><line x1="12" y1="14" x2="12" y2="17"/></svg>
-      </div>
+      <div class="tcard-ico ti-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="3"/><path d="M16 8V6a2 2 0 00-8 0v2"/><line x1="12" y1="14" x2="12" y2="17"/></svg></div>
       <div><h4>Flexible repayments</h4><p>Pay on a date and term that suits you.</p></div>
     </div>
     <div class="tcard" style="transition-delay:0.20s">
-      <div class="tcard-ico ti-purple">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="16.5" r="0.7" fill="currentColor"/></svg>
-      </div>
+      <div class="tcard-ico ti-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="16.5" r="0.7" fill="currentColor"/></svg></div>
       <div><h4>Responsible lending</h4><p>We only lend what you can afford to repay.</p></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════ HOW IT WORKS ══════════ -->
+<!-- HOW IT WORKS -->
 <section class="how" id="how">
   <div class="how-bg1"></div>
   <div class="how-bg2"></div>
@@ -973,7 +700,7 @@ a.btn{text-decoration:none}
       </div>
     </div>
     <div class="how-cta reveal" style="transition-delay:0.45s">
-      <button class="btn-lg" onclick="startApplication()">
+      <button type="button" class="btn-lg" onclick="startApplication()">
         Start your application
         <span class="btn-arr"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="5" x2="9" y2="5"/><polyline points="6,2 9,5 6,8"/></svg></span>
       </button>
@@ -981,286 +708,206 @@ a.btn{text-decoration:none}
   </div>
 </section>
 
-<!-- ══════════ APPLICATION SHELL ══════════ -->
-  <section class="app-section" id="application-shell" style="display:none">
-    <div class="app-shell">
-      <div class="app-head">
-        <h3>Apply online</h3>
-        <p>Complete your application in four simple steps. Your information is held securely and used only to assess your loan.</p>
-      </div>
+<!-- APPLICATION SHELL -->
+<div id="application-shell" style="display:none">
+  <div class="app-section-wrap">
+    <div class="app-section-inner">
+      <div class="app-shell">
+        <div class="app-head">
+          <h3>Apply online</h3>
+          <p>Complete your application in four simple steps. Your information is held securely and used only to assess your loan.</p>
+        </div>
 
-      <!-- STEP 1 OF 3: Account & Identity -->
-      <section class="pane active" id="pane-step1">
-        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;font-family:var(--fb)">Step 1 of 3 &mdash; Account &amp; Identity</div>
-        <div class="offer-box" style="margin-bottom:16px"><h4>Create your Quido account</h4><p>Your account secures your application and gives you access to your Quido customer portal once approved.</p></div>
-        <form id="step1-form" class="grid">
-          <div class="field"><label for="pf-title">Title</label><select id="pf-title" required><option value="MR">Mr</option><option value="MRS">Mrs</option><option value="MS" selected>Ms</option><option value="MISS">Miss</option></select></div>
-          <div class="field"><label for="pf-marital">Marital status</label><select id="pf-marital" required><option value="SINGLE" selected>Single</option><option value="MARRIED">Married</option><option value="PARTNER">Partner</option><option value="COHABITING">Cohabiting</option><option value="SEPARATED">Separated</option><option value="DIVORCED">Divorced</option><option value="CIVIL_UNION">Civil union</option><option value="WIDOWED">Widowed</option></select></div>
-          <div class="field"><label for="pf-first">First name</label><input id="pf-first" type="text" required minlength="2" maxlength="50"></div>
-          <div class="field"><label for="pf-last">Last name</label><input id="pf-last" type="text" required minlength="2" maxlength="50"></div>
-          <div class="field"><label for="pf-email">Email address</label><input id="pf-email" type="email" required maxlength="254"></div>
-          <div class="field"><label for="pf-mobile">Mobile number</label><input id="pf-mobile" type="tel" required placeholder="07xxx xxxxxx"></div>
-          <div class="field"><label for="pf-password">Password</label><input id="pf-password" type="password" required minlength="8" placeholder="Min 8 characters, at least 1 digit"></div>
-          <div class="field"><label for="pf-dob">Date of birth</label><input id="pf-dob" type="date" required></div>
-          <div class="field full" style="margin-top:4px">
-            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-family:var(--fb)">Marketing &amp; Consent</div>
+        <section class="pane active" id="pane-step1">
+          <div style="font-size:11px;font-weight:800;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;font-family:var(--fb)">Step 1 of 3 &mdash; Account &amp; Identity</div>
+          <div class="offer-box" style="margin-bottom:16px"><h4>Create your Quido account</h4><p>Your account secures your application and gives you access to your Quido customer portal once approved.</p></div>
+          <form id="step1-form" class="grid">
+            <div class="field"><label for="pf-title">Title</label><select id="pf-title" required><option value="MR">Mr</option><option value="MRS">Mrs</option><option value="MS" selected>Ms</option><option value="MISS">Miss</option></select></div>
+            <div class="field"><label for="pf-marital">Marital status</label><select id="pf-marital" required><option value="SINGLE" selected>Single</option><option value="MARRIED">Married</option><option value="PARTNER">Partner</option><option value="COHABITING">Cohabiting</option><option value="SEPARATED">Separated</option><option value="DIVORCED">Divorced</option><option value="CIVIL_UNION">Civil union</option><option value="WIDOWED">Widowed</option></select></div>
+            <div class="field"><label for="pf-first">First name</label><input id="pf-first" type="text" required minlength="2" maxlength="50"></div>
+            <div class="field"><label for="pf-last">Last name</label><input id="pf-last" type="text" required minlength="2" maxlength="50"></div>
+            <div class="field"><label for="pf-email">Email address</label><input id="pf-email" type="email" required maxlength="254"></div>
+            <div class="field"><label for="pf-mobile">Mobile number</label><input id="pf-mobile" type="tel" required placeholder="07xxx xxxxxx"></div>
+            <div class="field"><label for="pf-password">Password</label><input id="pf-password" type="password" required minlength="8" placeholder="Min 8 characters, at least 1 digit"></div>
+            <div class="field"><label for="pf-dob">Date of birth</label><input id="pf-dob" type="date" required></div>
+            <div class="field full" style="margin-top:4px">
+              <div style="font-size:11px;font-weight:800;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-family:var(--fb)">Marketing &amp; Consent</div>
+              <div class="check-grid">
+                <label class="check"><input id="pf-mkt-phone" type="checkbox"><span>I agree to be contacted by phone for marketing purposes</span></label>
+                <label class="check"><input id="pf-mkt-email" type="checkbox"><span>I agree to receive marketing emails</span></label>
+                <label class="check"><input id="pf-mkt-sms" type="checkbox"><span>I agree to receive marketing SMS messages</span></label>
+                <label class="check"><input id="pf-privacy" type="checkbox" required><span>I have read and accept the <a href="#" style="color:var(--navy-l)">Privacy Policy</a>. <strong>(Required to proceed)</strong></span></label>
+              </div>
+            </div>
+            <div class="field full"><button class="btn btn-primary" type="submit">Continue to address &rarr;</button></div>
+          </form>
+          <div class="message" id="step1-note" style="margin-top:14px"></div>
+        </section>
+
+        <section class="pane" id="pane-step2">
+          <div style="font-size:11px;font-weight:800;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;font-family:var(--fb)">Step 2 of 3 &mdash; Residential Address</div>
+          <div class="offer-box" style="margin-bottom:16px"><h4>Your current address</h4><p>We use your address to verify your identity and process your application.</p></div>
+          <form id="step2-form" class="grid">
+            <div class="field"><label for="pf-home-status">Home owner status</label><select id="pf-home-status" required><option value="HOME_OWNER">Home owner</option><option value="JOINT_OWNER">Joint owner</option><option value="RENT" selected>Renting</option><option value="COUNCIL_TENANT">Council tenant</option><option value="RENT_FREE">Living rent-free</option><option value="OTHER">Other</option></select></div>
+            <div class="field"><label for="pf-time-address">Time at this address</label><select id="pf-time-address" required><option value="LESS_3M">Less than 3 months</option><option value="3_6M">3 &ndash; 6 months</option><option value="6_12M">6 &ndash; 12 months</option><option value="1_3Y" selected>1 &ndash; 3 years</option><option value="3_5Y">3 &ndash; 5 years</option><option value="OVER_5Y">Over 5 years</option></select></div>
+            <div class="field"><label for="pf-house-num">House / building number</label><input id="pf-house-num" type="text" required maxlength="20" placeholder="e.g. 12A"></div>
+            <div class="field"><label for="pf-flat-num">Flat number <span style="font-weight:400;text-transform:none">(optional)</span></label><input id="pf-flat-num" type="text" maxlength="20"></div>
+            <div class="field full"><label for="pf-street">Street</label><input id="pf-street" type="text" required maxlength="100"></div>
+            <div class="field"><label for="pf-city">City / town</label><input id="pf-city" type="text" required maxlength="100"></div>
+            <div class="field"><label for="pf-county">County</label><input id="pf-county" type="text" required maxlength="100"></div>
+            <div class="field"><label for="pf-postcode">Post code</label><input id="pf-postcode" type="text" required maxlength="10" placeholder="e.g. SW1A 1AA" style="text-transform:uppercase"></div>
+            <div class="field full" id="prev-address-group" style="display:none">
+              <div style="font-size:11px;font-weight:800;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-family:var(--fb)">Previous address</div>
+              <div class="grid" style="gap:10px">
+                <div class="field"><label for="pf-prev-home-status">Home owner status</label><select id="pf-prev-home-status"><option value="HOME_OWNER">Home owner</option><option value="JOINT_OWNER">Joint owner</option><option value="RENT" selected>Renting</option><option value="COUNCIL_TENANT">Council tenant</option><option value="RENT_FREE">Living rent-free</option><option value="OTHER">Other</option></select></div>
+                <div class="field"><label for="pf-prev-house-num">House / building number</label><input id="pf-prev-house-num" type="text" maxlength="20"></div>
+                <div class="field"><label for="pf-prev-flat-num">Flat number <span style="font-weight:400;text-transform:none">(optional)</span></label><input id="pf-prev-flat-num" type="text" maxlength="20"></div>
+                <div class="field full"><label for="pf-prev-street">Street</label><input id="pf-prev-street" type="text" maxlength="100"></div>
+                <div class="field"><label for="pf-prev-city">City / town</label><input id="pf-prev-city" type="text" maxlength="100"></div>
+                <div class="field"><label for="pf-prev-county">County</label><input id="pf-prev-county" type="text" maxlength="100"></div>
+                <div class="field"><label for="pf-prev-postcode">Post code</label><input id="pf-prev-postcode" type="text" maxlength="10" placeholder="e.g. SW1A 1AA" style="text-transform:uppercase"></div>
+              </div>
+            </div>
+            <div class="field full"><div class="inline"><button class="btn btn-primary" type="submit">Continue to employment &rarr;</button><button class="btn btn-secondary" type="button" onclick="goToPane('step1')">Back</button></div></div>
+          </form>
+          <div class="message" id="step2-note" style="margin-top:14px"></div>
+        </section>
+
+        <section class="pane" id="pane-step3">
+          <div style="font-size:11px;font-weight:800;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;font-family:var(--fb)">Step 3 of 3 &mdash; Employment &amp; Expenses</div>
+          <form id="step3-form" class="stack">
+            <div class="grid" style="align-items:start">
+              <div class="stack">
+                <div style="font-size:13px;font-weight:800;color:var(--ink);margin-bottom:2px;font-family:var(--fd)">Employment</div>
+                <div class="field"><label for="pf-emp-status">Employment status</label><select id="pf-emp-status" required><option value="FULL_TIME" selected>Full-time employed</option><option value="PART_TIME">Part-time employed</option><option value="TEMPORARY">Temporary / contract</option><option value="SELF_EMPLOYED">Self-employed</option><option value="STUDENT">Student</option><option value="DISABILITY">Disability / incapacity</option><option value="PENSION">Retired / pension</option><option value="UNEMPLOYED">Unemployed</option></select></div>
+                <div id="employer-group" class="stack" style="gap:10px">
+                  <div class="field"><label for="pf-employer">Employer name</label><input id="pf-employer" type="text" maxlength="100" placeholder="Your employer's name"></div>
+                  <div class="field"><label for="pf-employer-phone">Employer phone</label><input id="pf-employer-phone" type="tel" maxlength="20" placeholder="Employer contact number"></div>
+                </div>
+                <div class="field" id="length-service-group"><label for="pf-length-service">Length of service</label><select id="pf-length-service"><option value="1_3M">1 &ndash; 3 months</option><option value="4_6M">4 &ndash; 6 months</option><option value="7_12M">7 &ndash; 12 months</option><option value="1_2Y" selected>1 &ndash; 2 years</option><option value="2_4Y">2 &ndash; 4 years</option><option value="OVER_4Y">Over 4 years</option></select></div>
+                <div class="field"><label for="pf-net-income">Net monthly income (£)</label><input id="pf-net-income" type="number" min="1" step="0.01" required placeholder="Take-home pay after tax"></div>
+                <div class="field"><label for="pf-total-income">Total net monthly income (£)</label><input id="pf-total-income" type="number" min="1" step="0.01" required placeholder="All income sources combined"></div>
+                <div class="field"><label for="pf-pay-freq">How often are you paid?</label><select id="pf-pay-freq" required><option value="MONTHLY" selected>Monthly</option><option value="BI_WEEKLY">Bi-weekly (every 2 weeks)</option><option value="WEEKLY">Weekly</option></select></div>
+                <div class="field"><label for="pf-when-paid">Date you get paid</label><select id="pf-when-paid" required></select></div>
+              </div>
+              <div class="stack">
+                <div style="font-size:13px;font-weight:800;color:var(--ink);margin-bottom:2px;font-family:var(--fd)">Monthly expenses</div>
+                <div class="field"><label for="pf-exp-rent">Rent / mortgage (£)</label><input id="pf-exp-rent" type="number" min="0" step="0.01" value="0" required></div>
+                <div class="field"><label for="pf-exp-utilities">Utilities bills (£)</label><input id="pf-exp-utilities" type="number" min="0" step="0.01" value="0" required></div>
+                <div class="field"><label for="pf-exp-council">Council tax (£)</label><input id="pf-exp-council" type="number" min="0" step="0.01" value="0" required></div>
+                <div class="field"><label for="pf-exp-credit">Credit commitments (£)</label><input id="pf-exp-credit" type="number" min="0" step="0.01" value="0" required></div>
+                <div class="field"><label for="pf-exp-travel">Travel &amp; transport (£)</label><input id="pf-exp-travel" type="number" min="0" step="0.01" value="0" required></div>
+                <div class="field"><label for="pf-exp-subs">Subscriptions (£)</label><input id="pf-exp-subs" type="number" min="0" step="0.01" value="0" required></div>
+                <div class="field"><label for="pf-exp-household">Household expenses (£)</label><input id="pf-exp-household" type="number" min="0" step="0.01" value="0" required></div>
+                <div class="field"><label for="pf-exp-other">Other expenses (£)</label><input id="pf-exp-other" type="number" min="0" step="0.01" value="0" required></div>
+                <div class="field"><label for="pf-dependents">Number of dependants</label><input id="pf-dependents" type="number" min="0" max="20" value="0" required></div>
+              </div>
+            </div>
             <div class="check-grid">
-              <label class="check"><input id="pf-mkt-phone" type="checkbox"><span>I agree to be contacted by phone for marketing purposes</span></label>
-              <label class="check"><input id="pf-mkt-email" type="checkbox"><span>I agree to receive marketing emails</span></label>
-              <label class="check"><input id="pf-mkt-sms" type="checkbox"><span>I agree to receive marketing SMS messages</span></label>
-              <label class="check"><input id="pf-privacy" type="checkbox" required><span>I have read and accept the <a href="#" style="color:var(--teal)">Privacy Policy</a>. <strong>(Required to proceed)</strong></span></label>
+              <label class="check"><input id="pf-ie-confirmed" type="checkbox" required><span>I confirm the income and expense figures I have provided are accurate and complete. <strong>(Required)</strong></span></label>
             </div>
-          </div>
-          <div class="field full"><button class="btn btn-primary" type="submit">Continue to address &rarr;</button></div>
-        </form>
-        <div class="message" id="step1-note" style="margin-top:14px"></div>
-      </section>
+            <div class="inline"><button class="btn btn-primary" type="submit">Create profile and continue</button><button class="btn btn-secondary" type="button" onclick="goToPane('step2')">Back</button></div>
+          </form>
+          <div class="message" id="step3-note" style="margin-top:14px"></div>
+        </section>
 
-      <!-- STEP 2 OF 3: Address -->
-      <section class="pane" id="pane-step2">
-        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;font-family:var(--fb)">Step 2 of 3 &mdash; Residential Address</div>
-        <div class="offer-box" style="margin-bottom:16px"><h4>Your current address</h4><p>We use your address to verify your identity and process your application.</p></div>
-        <form id="step2-form" class="grid">
-          <div class="field"><label for="pf-home-status">Home owner status</label><select id="pf-home-status" required><option value="HOME_OWNER">Home owner</option><option value="JOINT_OWNER">Joint owner</option><option value="RENT" selected>Renting</option><option value="COUNCIL_TENANT">Council tenant</option><option value="RENT_FREE">Living rent-free</option><option value="OTHER">Other</option></select></div>
-          <div class="field"><label for="pf-time-address">Time at this address</label><select id="pf-time-address" required><option value="LESS_3M">Less than 3 months</option><option value="3_6M">3 &ndash; 6 months</option><option value="6_12M">6 &ndash; 12 months</option><option value="1_3Y" selected>1 &ndash; 3 years</option><option value="3_5Y">3 &ndash; 5 years</option><option value="OVER_5Y">Over 5 years</option></select></div>
-          <div class="field"><label for="pf-house-num">House / building number</label><input id="pf-house-num" type="text" required maxlength="20" placeholder="e.g. 12A"></div>
-          <div class="field"><label for="pf-flat-num">Flat number <span style="font-weight:400;text-transform:none">(optional)</span></label><input id="pf-flat-num" type="text" maxlength="20"></div>
-          <div class="field full"><label for="pf-street">Street</label><input id="pf-street" type="text" required maxlength="100"></div>
-          <div class="field"><label for="pf-city">City / town</label><input id="pf-city" type="text" required maxlength="100"></div>
-          <div class="field"><label for="pf-county">County</label><input id="pf-county" type="text" required maxlength="100"></div>
-          <div class="field"><label for="pf-postcode">Post code</label><input id="pf-postcode" type="text" required maxlength="10" placeholder="e.g. SW1A 1AA" style="text-transform:uppercase"></div>
-          <div class="field full" id="prev-address-group" style="display:none">
-            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-family:var(--fb)">Previous address</div>
+        <section class="pane" id="pane-application">
+          <div class="summary-grid">
+            <div class="summary-card"><span>Loan amount</span><strong id="app-summary-amount">-</strong></div>
+            <div class="summary-card"><span>Total interest</span><strong id="app-summary-interest">-</strong></div>
+            <div class="summary-card"><span>Monthly instalment</span><strong id="app-summary-emi">-</strong></div>
+            <div class="summary-card"><span>First repayment</span><strong id="app-summary-repay">-</strong></div>
+          </div>
+          <form id="application-form" class="grid">
+            <div class="field"><label for="app-amount">Amount requested (£)</label><input id="app-amount" type="number" min="300" max="10000" step="50" required></div>
+            <div class="field"><label for="app-term">Term</label><select id="app-term" required><option value="6">6 months</option><option value="7">7 months</option><option value="8">8 months</option><option value="9">9 months</option><option value="10">10 months</option><option value="11">11 months</option><option value="12" selected>12 months</option><option value="13">13 months</option><option value="14">14 months</option><option value="15">15 months</option><option value="16">16 months</option><option value="17">17 months</option><option value="18">18 months</option><option value="19">19 months</option><option value="20">20 months</option><option value="21">21 months</option><option value="22">22 months</option><option value="23">23 months</option><option value="24">24 months</option></select></div>
+            <div class="field full"><label for="app-purpose">What is the loan for?</label><input id="app-purpose" type="text" placeholder="e.g. Home repairs, travel, car costs" required></div>
+            <div class="field full"><div class="inline"><button class="btn btn-primary" type="submit">Submit application</button><button class="btn btn-secondary" type="button" onclick="goToPane('step3')">Back</button></div></div>
+          </form>
+          <div class="message info" id="application-note" style="margin-top:14px">We'll assess your affordability and eligibility based on the details you provided.</div>
+        </section>
+
+        <section class="pane" id="pane-decision">
+          <div class="summary-grid">
+            <div class="summary-card"><span>Amount</span><strong id="decision-amount">£0.00</strong></div>
+            <div class="summary-card"><span>Monthly repayment</span><strong id="decision-emi">£0.00</strong></div>
+            <div class="summary-card"><span>Total repayable</span><strong id="decision-total">£0.00</strong></div>
+          </div>
+          <div class="offer-box" style="margin-bottom:16px"><h4 id="decision-title">Decision ready</h4><p id="decision-copy">Your application outcome will appear here.</p></div>
+          <div class="message info" id="decision-note">If approved, the next step is reviewing and signing your documents.</div>
+          <div class="inline" style="margin-top:16px"><button class="btn btn-primary" type="button" id="decision-sign-btn" style="display:none" onclick="goToPane('sign')">Review and sign</button><button class="btn btn-secondary" type="button" onclick="goToPane('application')">Edit application</button><a class="btn btn-secondary" href="/customer">Log in</a></div>
+        </section>
+
+        <section class="pane" id="pane-sign">
+          <div class="offer-box" style="margin-bottom:16px"><h4>Review and sign your offer</h4><p>Read through the terms carefully. By signing, you confirm that you understand and accept the loan agreement.</p></div>
+          <div class="summary-grid">
+            <div class="summary-card"><span>Loan amount</span><strong id="sign-amount">£0.00</strong></div>
+            <div class="summary-card"><span>Term</span><strong id="sign-term">0 months</strong></div>
+            <div class="summary-card"><span>APR</span><strong id="sign-apr">29.9%</strong></div>
+          </div>
+          <form id="sign-form" class="stack">
+            <div class="field"><label for="sign-full-name">Full name</label><input id="sign-full-name" type="text" required></div>
+            <div style="font-size:11px;font-weight:800;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;margin-top:4px;font-family:var(--fb)">Bank account for loan disbursement</div>
             <div class="grid" style="gap:10px">
-              <div class="field"><label for="pf-prev-home-status">Home owner status</label><select id="pf-prev-home-status"><option value="HOME_OWNER">Home owner</option><option value="JOINT_OWNER">Joint owner</option><option value="RENT" selected>Renting</option><option value="COUNCIL_TENANT">Council tenant</option><option value="RENT_FREE">Living rent-free</option><option value="OTHER">Other</option></select></div>
-              <div class="field"><label for="pf-prev-house-num">House / building number</label><input id="pf-prev-house-num" type="text" maxlength="20"></div>
-              <div class="field"><label for="pf-prev-flat-num">Flat number <span style="font-weight:400;text-transform:none">(optional)</span></label><input id="pf-prev-flat-num" type="text" maxlength="20"></div>
-              <div class="field full"><label for="pf-prev-street">Street</label><input id="pf-prev-street" type="text" maxlength="100"></div>
-              <div class="field"><label for="pf-prev-city">City / town</label><input id="pf-prev-city" type="text" maxlength="100"></div>
-              <div class="field"><label for="pf-prev-county">County</label><input id="pf-prev-county" type="text" maxlength="100"></div>
-              <div class="field"><label for="pf-prev-postcode">Post code</label><input id="pf-prev-postcode" type="text" maxlength="10" placeholder="e.g. SW1A 1AA" style="text-transform:uppercase"></div>
+              <div class="field"><label for="sign-bank-holder">Account holder name</label><input id="sign-bank-holder" type="text" placeholder="As it appears on your bank statement" required></div>
+              <div class="field"><label for="sign-bank-name">Bank name</label><input id="sign-bank-name" type="text" placeholder="e.g. Barclays, HSBC" required></div>
+              <div class="field"><label for="sign-sort-code">Sort code</label><input id="sign-sort-code" type="text" placeholder="00-00-00" maxlength="8" required></div>
+              <div class="field"><label for="sign-account-number">Account number</label><input id="sign-account-number" type="text" placeholder="8 digits" maxlength="8" inputmode="numeric" required></div>
             </div>
-          </div>
-          <div class="field full"><div class="inline"><button class="btn btn-primary" type="submit">Continue to employment &rarr;</button><button class="btn btn-secondary" type="button" onclick="goToPane('step1')">Back</button></div></div>
-        </form>
-        <div class="message" id="step2-note" style="margin-top:14px"></div>
-      </section>
+            <div class="check-grid" style="margin-top:6px"><label class="check"><input id="sign-terms" type="checkbox" required><span>I have reviewed the agreement and accept the terms.</span></label><label class="check"><input id="sign-privacy" type="checkbox" required><span>I have reviewed the privacy notice.</span></label></div>
+            <div class="inline"><button class="btn btn-primary" type="submit">Sign and continue</button><button class="btn btn-secondary" type="button" onclick="goToPane('decision')">Back</button></div>
+          </form>
+          <div class="message info" id="sign-note" style="margin-top:14px">Once signed, you'll add your payment card before your application moves to final approval.</div>
+        </section>
 
-      <!-- STEP 3 OF 3: Employment & Expenses -->
-      <section class="pane" id="pane-step3">
-        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;font-family:var(--fb)">Step 3 of 3 &mdash; Employment &amp; Expenses</div>
-        <form id="step3-form" class="stack">
-          <div class="grid" style="align-items:start">
-            <div class="stack">
-              <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px;font-family:var(--fd)">Employment</div>
-              <div class="field"><label for="pf-emp-status">Employment status</label><select id="pf-emp-status" required><option value="FULL_TIME" selected>Full-time employed</option><option value="PART_TIME">Part-time employed</option><option value="TEMPORARY">Temporary / contract</option><option value="SELF_EMPLOYED">Self-employed</option><option value="STUDENT">Student</option><option value="DISABILITY">Disability / incapacity</option><option value="PENSION">Retired / pension</option><option value="UNEMPLOYED">Unemployed</option></select></div>
-              <div id="employer-group" class="stack" style="gap:10px">
-                <div class="field"><label for="pf-employer">Employer name</label><input id="pf-employer" type="text" maxlength="100" placeholder="Your employer's name"></div>
-                <div class="field"><label for="pf-employer-phone">Employer phone</label><input id="pf-employer-phone" type="tel" maxlength="20" placeholder="Employer contact number"></div>
-              </div>
-              <div class="field" id="length-service-group"><label for="pf-length-service">Length of service</label><select id="pf-length-service"><option value="1_3M">1 &ndash; 3 months</option><option value="4_6M">4 &ndash; 6 months</option><option value="7_12M">7 &ndash; 12 months</option><option value="1_2Y" selected>1 &ndash; 2 years</option><option value="2_4Y">2 &ndash; 4 years</option><option value="OVER_4Y">Over 4 years</option></select></div>
-              <div class="field"><label for="pf-net-income">Net monthly income (£)</label><input id="pf-net-income" type="number" min="1" step="0.01" required placeholder="Take-home pay after tax"></div>
-              <div class="field"><label for="pf-total-income">Total net monthly income (£)</label><input id="pf-total-income" type="number" min="1" step="0.01" required placeholder="All income sources combined"></div>
-              <div class="field"><label for="pf-pay-freq">How often are you paid?</label><select id="pf-pay-freq" required><option value="MONTHLY" selected>Monthly</option><option value="BI_WEEKLY">Bi-weekly (every 2 weeks)</option><option value="WEEKLY">Weekly</option></select></div>
-              <div class="field"><label for="pf-when-paid">Date you get paid</label><select id="pf-when-paid" required></select></div>
+        <section class="pane" id="pane-card">
+          <div class="offer-box" style="margin-bottom:16px"><h4>Add your payment card</h4><p>We'll use this card to collect your monthly instalments. You can update it at any time in the customer portal.</p></div>
+          <form id="card-form" class="stack">
+            <div class="field"><label for="card-holder">Cardholder name</label><input id="card-holder" type="text" placeholder="As it appears on the card" required></div>
+            <div class="field"><label for="card-number">Card number</label><input id="card-number" type="text" placeholder="1234  5678  9012  3456" maxlength="19" inputmode="numeric" required></div>
+            <div class="grid" style="gap:10px">
+              <div class="field"><label for="card-expiry">Expiry date</label><input id="card-expiry" type="text" placeholder="MM/YY" maxlength="5" required></div>
+              <div class="field"><label for="card-type">Card type</label><select id="card-type" required><option value="Visa Debit" selected>Visa Debit</option><option value="Mastercard Debit">Mastercard Debit</option><option value="Visa Credit">Visa Credit</option><option value="Mastercard Credit">Mastercard Credit</option></select></div>
             </div>
-            <div class="stack">
-              <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px;font-family:var(--fd)">Monthly expenses</div>
-              <div class="field"><label for="pf-exp-rent">Rent / mortgage (£)</label><input id="pf-exp-rent" type="number" min="0" step="0.01" value="0" required></div>
-              <div class="field"><label for="pf-exp-utilities">Utilities bills (£)</label><input id="pf-exp-utilities" type="number" min="0" step="0.01" value="0" required></div>
-              <div class="field"><label for="pf-exp-council">Council tax (£)</label><input id="pf-exp-council" type="number" min="0" step="0.01" value="0" required></div>
-              <div class="field"><label for="pf-exp-credit">Credit commitments (£)</label><input id="pf-exp-credit" type="number" min="0" step="0.01" value="0" required></div>
-              <div class="field"><label for="pf-exp-travel">Travel &amp; transport (£)</label><input id="pf-exp-travel" type="number" min="0" step="0.01" value="0" required></div>
-              <div class="field"><label for="pf-exp-subs">Subscriptions (£)</label><input id="pf-exp-subs" type="number" min="0" step="0.01" value="0" required></div>
-              <div class="field"><label for="pf-exp-household">Household expenses (£)</label><input id="pf-exp-household" type="number" min="0" step="0.01" value="0" required></div>
-              <div class="field"><label for="pf-exp-other">Other expenses (£)</label><input id="pf-exp-other" type="number" min="0" step="0.01" value="0" required></div>
-              <div class="field"><label for="pf-dependents">Number of dependants</label><input id="pf-dependents" type="number" min="0" max="20" value="0" required></div>
-            </div>
-          </div>
-          <div class="check-grid">
-            <label class="check"><input id="pf-ie-confirmed" type="checkbox" required><span>I confirm the income and expense figures I have provided are accurate and complete. <strong>(Required)</strong></span></label>
-          </div>
-          <div class="inline"><button class="btn btn-primary" type="submit">Create profile and continue</button><button class="btn btn-secondary" type="button" onclick="goToPane('step2')">Back</button></div>
-        </form>
-        <div class="message" id="step3-note" style="margin-top:14px"></div>
-      </section>
-
-      <section class="pane" id="pane-application">
-        <div class="summary-grid">
-          <div class="summary-card"><span>Loan amount</span><strong id="app-summary-amount">-</strong></div>
-          <div class="summary-card"><span>Total interest</span><strong id="app-summary-interest">-</strong></div>
-          <div class="summary-card"><span>Monthly instalment</span><strong id="app-summary-emi">-</strong></div>
-          <div class="summary-card"><span>First repayment</span><strong id="app-summary-repay">-</strong></div>
-        </div>
-        <form id="application-form" class="grid">
-          <div class="field"><label for="app-amount">Amount requested (£)</label><input id="app-amount" type="number" min="300" max="10000" step="50" required></div>
-          <div class="field"><label for="app-term">Term</label><select id="app-term" required><option value="6">6 months</option><option value="7">7 months</option><option value="8">8 months</option><option value="9">9 months</option><option value="10">10 months</option><option value="11">11 months</option><option value="12" selected>12 months</option><option value="13">13 months</option><option value="14">14 months</option><option value="15">15 months</option><option value="16">16 months</option><option value="17">17 months</option><option value="18">18 months</option><option value="19">19 months</option><option value="20">20 months</option><option value="21">21 months</option><option value="22">22 months</option><option value="23">23 months</option><option value="24">24 months</option></select></div>
-          <div class="field full"><label for="app-purpose">What is the loan for?</label><input id="app-purpose" type="text" placeholder="e.g. Home repairs, travel, car costs" required></div>
-          <div class="field full"><div class="inline"><button class="btn btn-primary" type="submit">Submit application</button><button class="btn btn-secondary" type="button" onclick="goToPane('step3')">Back</button></div></div>
-        </form>
-        <div class="message info" id="application-note" style="margin-top:14px">We'll assess your affordability and eligibility based on the details you provided.</div>
-      </section>
-
-      <section class="pane" id="pane-decision">
-        <div class="summary-grid">
-          <div class="summary-card"><span>Amount</span><strong id="decision-amount">£0.00</strong></div>
-          <div class="summary-card"><span>Monthly repayment</span><strong id="decision-emi">£0.00</strong></div>
-          <div class="summary-card"><span>Total repayable</span><strong id="decision-total">£0.00</strong></div>
-        </div>
-        <div class="offer-box" style="margin-bottom:16px"><h4 id="decision-title">Decision ready</h4><p id="decision-copy">Your application outcome will appear here.</p></div>
-        <div class="message info" id="decision-note">If approved, the next step is reviewing and signing your documents.</div>
-        <div class="inline" style="margin-top:16px"><button class="btn btn-primary" type="button" id="decision-sign-btn" style="display:none" onclick="goToPane('sign')">Review and sign</button><button class="btn btn-secondary" type="button" onclick="goToPane('application')">Edit application</button><a class="btn btn-secondary" href="/customer">Log in</a></div>
-      </section>
-
-      <section class="pane" id="pane-sign">
-        <div class="offer-box" style="margin-bottom:16px"><h4>Review and sign your offer</h4><p>Read through the terms carefully. By signing, you confirm that you understand and accept the loan agreement.</p></div>
-        <div class="summary-grid">
-          <div class="summary-card"><span>Loan amount</span><strong id="sign-amount">£0.00</strong></div>
-          <div class="summary-card"><span>Term</span><strong id="sign-term">0 months</strong></div>
-          <div class="summary-card"><span>APR</span><strong id="sign-apr">29.9%</strong></div>
-        </div>
-        <form id="sign-form" class="stack">
-          <div class="field"><label for="sign-full-name">Full name</label><input id="sign-full-name" type="text" required></div>
-          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;margin-top:4px;font-family:var(--fb)">Bank account for loan disbursement</div>
-          <div class="grid" style="gap:10px">
-            <div class="field"><label for="sign-bank-holder">Account holder name</label><input id="sign-bank-holder" type="text" placeholder="As it appears on your bank statement" required></div>
-            <div class="field"><label for="sign-bank-name">Bank name</label><input id="sign-bank-name" type="text" placeholder="e.g. Barclays, HSBC" required></div>
-            <div class="field"><label for="sign-sort-code">Sort code</label><input id="sign-sort-code" type="text" placeholder="00-00-00" maxlength="8" required></div>
-            <div class="field"><label for="sign-account-number">Account number</label><input id="sign-account-number" type="text" placeholder="8 digits" maxlength="8" inputmode="numeric" required></div>
-          </div>
-          <div class="check-grid" style="margin-top:6px"><label class="check"><input id="sign-terms" type="checkbox" required><span>I have reviewed the agreement and accept the terms.</span></label><label class="check"><input id="sign-privacy" type="checkbox" required><span>I have reviewed the privacy notice.</span></label></div>
-          <div class="inline"><button class="btn btn-primary" type="submit">Sign and continue</button><button class="btn btn-secondary" type="button" onclick="goToPane('decision')">Back</button></div>
-        </form>
-        <div class="message info" id="sign-note" style="margin-top:14px">Once signed, you'll add your payment card before your application moves to final approval.</div>
-      </section>
-
-      <section class="pane" id="pane-card">
-        <div class="offer-box" style="margin-bottom:16px"><h4>Add your payment card</h4><p>We'll use this card to collect your monthly instalments. You can update it at any time in the customer portal.</p></div>
-        <form id="card-form" class="stack">
-          <div class="field"><label for="card-holder">Cardholder name</label><input id="card-holder" type="text" placeholder="As it appears on the card" required></div>
-          <div class="field"><label for="card-number">Card number</label><input id="card-number" type="text" placeholder="1234  5678  9012  3456" maxlength="19" inputmode="numeric" required></div>
-          <div class="grid" style="gap:10px">
-            <div class="field"><label for="card-expiry">Expiry date</label><input id="card-expiry" type="text" placeholder="MM/YY" maxlength="5" required></div>
-            <div class="field"><label for="card-type">Card type</label><select id="card-type" required><option value="Visa Debit" selected>Visa Debit</option><option value="Mastercard Debit">Mastercard Debit</option><option value="Visa Credit">Visa Credit</option><option value="Mastercard Credit">Mastercard Credit</option></select></div>
-          </div>
-          <div class="inline"><button class="btn btn-primary" type="submit">Save card and submit</button><button class="btn btn-secondary" type="button" onclick="goToPane('sign')">Back</button></div>
-        </form>
-        <div class="message info" id="card-note" style="margin-top:14px">Your card details are stored securely. The first payment will be collected one month after your loan is disbursed.</div>
-      </section>
-    </div>
-  </section>
-
-  <!-- CONTACT SECTION -->
-  <section class="contact-section reveal" id="contact" aria-labelledby="contact-title">
-    <div class="contact-inner">
-      <div class="contact-details">
-        <div class="section-label">Get in touch</div>
-        <h2 id="contact-title">Contact us</h2>
-        <p class="c-sub">Have a question about your loan or application? Our team is here to help.</p>
-        <div class="c-info-row">
-          <div class="c-info-icon">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4 4a1 1 0 011-1h2l1 3-1.5 1.5a8 8 0 004 4L12 10l3 1v2a1 1 0 01-1 1C7.5 14 3 9.5 4 4z" stroke="#162d55" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <div class="c-info-text">
-            <strong>0800 123 4567</strong>
-            <span>Mon–Fri 9:00–17:00</span>
-          </div>
-        </div>
-        <div class="c-info-row">
-          <div class="c-info-icon">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="2" y="4" width="14" height="10" rx="2" stroke="#162d55" stroke-width="1.4"/><path d="M2 7l7 4.5 7-4.5" stroke="#162d55" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <div class="c-info-text">
-            <strong>info@quido.co.uk</strong>
-            <span>We aim to reply within one business day</span>
-          </div>
-        </div>
-      </div>
-      <div class="contact-form-wrap">
-        <div id="cf-form-body">
-          <p class="cf-title">Send us a message</p>
-          <div class="cf-row">
-            <div class="cf-field">
-              <label for="cf-name">Full name</label>
-              <input type="text" id="cf-name" placeholder="Jane Smith" autocomplete="name">
-              <span class="cf-err" id="cf-name-err">Please enter your name</span>
-            </div>
-            <div class="cf-field">
-              <label>Are you a customer?</label>
-              <div class="cf-toggle">
-                <button type="button" class="cf-tog-btn active" id="cf-tog-yes" onclick="setCust('yes')">Yes</button>
-                <button type="button" class="cf-tog-btn" id="cf-tog-no" onclick="setCust('no')">No</button>
-              </div>
-            </div>
-          </div>
-          <div class="cf-field">
-            <label for="cf-email">Email address</label>
-            <input type="email" id="cf-email" placeholder="jane@example.com" autocomplete="email">
-            <span class="cf-err" id="cf-email-err">Please enter a valid email</span>
-          </div>
-          <div class="cf-field">
-            <label for="cf-reason">Reason for contact</label>
-            <select id="cf-reason">
-              <option value="">Select a reason…</option>
-              <option value="application">Application query</option>
-              <option value="existing">Existing loan query</option>
-              <option value="payment">Payment or repayment</option>
-              <option value="complaint">Make a complaint</option>
-              <option value="tech">Technical support</option>
-              <option value="other">Other</option>
-            </select>
-            <span class="cf-err" id="cf-reason-err">Please select a reason</span>
-          </div>
-          <div class="cf-field cf-last">
-            <label for="cf-msg">Message</label>
-            <textarea id="cf-msg" rows="4" placeholder="Tell us how we can help…"></textarea>
-            <span class="cf-err" id="cf-msg-err">Please enter a message</span>
-          </div>
-          <button type="button" class="btn-cf-submit" id="cf-submit-btn" onclick="submitContactForm()">Send message</button>
-        </div>
-        <div class="cf-success" id="cf-success">
-          <div class="cf-success-icon">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M7 14l5 5 9-10" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <h3>Message sent!</h3>
-          <p>Thanks for getting in touch. We'll get back to you within one business day.</p>
-        </div>
+            <div class="inline"><button class="btn btn-primary" type="submit">Save card and submit</button><button class="btn btn-secondary" type="button" onclick="goToPane('sign')">Back</button></div>
+          </form>
+          <div class="message info" id="card-note" style="margin-top:14px">Your card details are stored securely. The first payment will be collected one month after your loan is disbursed.</div>
+        </section>
       </div>
     </div>
-  </section>
-
-<!-- CHAT FAB + PANEL -->
-<button class="cfab" id="cfab" aria-label="Open support chat">
-  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M3 4a1 1 0 011-1h14a1 1 0 011 1v10a1 1 0 01-1 1H12.5l-4 3.5V15H4a1 1 0 01-1-1V4z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7.5" cy="9.5" r="1" fill="#fff"/><circle cx="11" cy="9.5" r="1" fill="#fff"/><circle cx="14.5" cy="9.5" r="1" fill="#fff"/></svg>
-  <div class="cnb" id="cnb">1</div>
-</button>
-<div class="cpanel" id="cpanel" role="dialog" aria-label="Quido Support Chat">
-  <div class="ctop">
-    <div class="cav">Q</div>
-    <div><div class="can">Quido Support</div><div class="col"><div class="cold"></div>Online &lt;1 min</div></div>
-    <button class="ccl" id="cclose" aria-label="Close chat">&#10005;</button>
-  </div>
-  <div class="cmsgs" id="cmsgs">
-    <div><div class="msg agent">Hi there. You're through to Quido Support. How can we help today?</div><div class="mtime">9:41 AM</div></div>
-  </div>
-  <div class="cqk">
-    <div class="qp" data-msg="What is my outstanding balance?">Outstanding balance</div>
-    <div class="qp" data-msg="When is my next payment due?">Next payment</div>
-    <div class="qp" data-msg="I am struggling to make a payment">Need more time</div>
-    <div class="qp" data-msg="Can I repay early?">Early repayment</div>
-  </div>
-  <div class="cir">
-    <input class="cinp" id="cinp" type="text" placeholder="Type a message…" aria-label="Chat message">
-    <button class="csend" id="csend" aria-label="Send message"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M12.5 7L1.5 2l2 5-2 5 11-5z" fill="#fff"/></svg></button>
   </div>
 </div>
 
-<!-- ══════════ FOOTER ══════════ -->
+<!-- CONTACT STRIPS -->
+<div class="contact-outer">
+  <div class="contact-inner">
+    <div class="contact-strips">
+      <a class="cstrip" href="/customer#faq">
+        <div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="1.5"/><path d="M7.5 7.5a2.5 2.5 0 1 1 4.25 1.77c-.82.82-1.5 1.28-1.5 2.23" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="14.25" r=".8" fill="#fff"/></svg></div>
+        <div class="cstrip-text"><strong>Frequently Asked Questions</strong><span>Find answers to common queries</span></div>
+      </a>
+      <a class="cstrip" href="tel:08001234567">
+        <div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 4a1 1 0 011-1h2.5l1.2 3.5-1.8 1.8a10 10 0 005.3 5.3l1.8-1.8L17 14v2.5a1 1 0 01-1 1C8.2 17.5 2 11.8 4 4z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="cstrip-text"><strong>Call us</strong><span>0800 123 4567 &middot; Mon-Fri 9:00-17:00</span></div>
+      </a>
+      <a class="cstrip" href="mailto:info@quido.co.uk">
+        <div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2" y="4" width="16" height="12" rx="2" stroke="#fff" stroke-width="1.5"/><path d="M2 7l8 5 8-5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="cstrip-text"><strong>Write to us</strong><span>info@quido.co.uk</span></div>
+      </a>
+      <a class="cstrip" href="mailto:complaints@quido.co.uk">
+        <div class="cstrip-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="1.5"/><path d="M10 6v4.5M10 13.5v.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        <div class="cstrip-text"><strong>Make a complaint</strong><span>complaints@quido.co.uk</span></div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
 <footer>
   <div class="fi">
     <div class="ft">
       <div class="fb">
-        <a href="#" class="nav-logo fb-logo" style="color:#fff;margin-bottom:10px;text-decoration:none;display:inline-flex;align-items:center;gap:9px;font-family:var(--fd);font-weight:800;font-size:18px;">
+        <a href="#" class="nav-logo fb-logo" style="color:#fff;margin-bottom:10px">
           <div class="logo-box"><span class="logo-q">Q</span></div>
           Quido
         </a>
@@ -1296,430 +943,104 @@ a.btn{text-decoration:none}
   </div>
 </footer>
 
+<!-- CHAT FAB + PANEL -->
+<button class="cfab" id="cfab" aria-label="Open chat">
+  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M3 4a1 1 0 011-1h14a1 1 0 011 1v10a1 1 0 01-1 1H12.5l-4 3.5V15H4a1 1 0 01-1-1V4z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7.5" cy="9.5" r="1" fill="#fff"/><circle cx="11" cy="9.5" r="1" fill="#fff"/><circle cx="14.5" cy="9.5" r="1" fill="#fff"/></svg>
+  <div class="cnb" id="cnb">1</div>
+</button>
+<div class="cpanel" id="cpanel">
+  <div class="ctop"><div class="cav">Q</div><div><div class="can">Quido Support</div><div class="col"><div class="cold"></div>Online &lt;1 min</div></div><button class="ccl" id="cclose">&#x2715;</button></div>
+  <div class="cmsgs" id="cmsgs"><div><div class="msg agent">Hi there. You're through to Quido Support. How can we help today?</div><div class="mtime">9:41 AM</div></div></div>
+  <div class="cqk">
+    <div class="qp" data-msg="What is my outstanding balance?">Outstanding balance</div>
+    <div class="qp" data-msg="When is my next payment due?">Next payment</div>
+    <div class="qp" data-msg="I am struggling to make a payment">Need more time</div>
+    <div class="qp" data-msg="Can I repay early?">Early repayment</div>
+  </div>
+  <div class="cir"><input class="cinp" id="cinp" type="text" placeholder="Type a message…"><button class="csend" id="csend" aria-label="Send"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M12.5 7L1.5 2l2 5-2 5 11-5z" fill="#fff"/></svg></button></div>
+</div>
+
 <script>
+/* ── Calculator (reference) ── */
+const APR=0.299;
+function mo(a,n){const r=APR/12;return a*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);}
+function gbp(n,d=0){return'£'+n.toLocaleString('en-GB',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function bmp(id){const e=document.getElementById(id);if(!e)return;e.classList.remove('bump');void e.offsetWidth;e.classList.add('bump');}
+function calc(){
+  const a=+document.getElementById('a-sl').value;
+  const n=+document.getElementById('t-sl').value;
+  const m=mo(a,n),t=m*n;
+  document.getElementById('a-disp').textContent=gbp(a);
+  document.getElementById('t-disp').textContent=n+' months';
+  document.getElementById('s-borrow').textContent=gbp(a);
+  document.getElementById('s-monthly').textContent=gbp(m);
+  document.getElementById('s-total').textContent=gbp(t);
+  document.getElementById('s-sub').textContent=n+' payments';
+  document.getElementById('disc').textContent='Representative example: '+gbp(a)+' over '+n+' months at 29.9% APR. Monthly repayment '+gbp(m,2)+'. Total repayable '+gbp(t,2)+'.';
+  document.getElementById('a-fill').style.width=((a-300)/(10000-300)*100)+'%';
+  document.getElementById('t-fill').style.width=((n-6)/(24-6)*100)+'%';
+  ['s-borrow','s-monthly','s-total'].forEach(bmp);
+}
+
+/* ── App Funnel ── */
 (function(){
-  'use strict';
-  var state = { quote:null, account:null, resolved:null, decision:null, draft:{} };
-  var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
-  /* ── Helpers ─────────────────────────────────────────────────────────── */
-  function gbp(n, d){ return '£'+Number(n||0).toLocaleString('en-GB',{minimumFractionDigits:d||0,maximumFractionDigits:d||0}); }
-  function money(v){ return new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(Number(v||0)); }
-  function setMessage(id,kind,text){ var el=document.getElementById(id); if(!el)return; el.className='message'+(kind?' '+kind:''); el.textContent=text; }
-  function bmp(id){ var el=document.getElementById(id); if(!el)return; el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
-
-  /* ── Pane navigation ─────────────────────────────────────────────────── */
-  function setActive(name){
-    ['step1','step2','step3','application','decision','sign','card'].forEach(function(key){
-      var pane=document.getElementById('pane-'+key);
-      if(pane) pane.classList.toggle('active',key===name);
-    });
-  }
-  window.goToPane = function(name){ setActive(name); document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'}); };
-  window.startApplication = function(){
-    var shell=document.getElementById('application-shell');
-    shell.style.display='block';
-    hydrateApplicationFromQuote();
-    setActive(state.account?'application':'step1');
-    shell.scrollIntoView({behavior:'smooth',block:'start'});
-  };
-
-  /* ── Calculator (reference design) ──────────────────────────────────── */
-  var APR=0.299;
-  function mo(a,n){var r=APR/12;return a*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);}
-  function calc(){
-    var a=+document.getElementById('a-sl').value;
-    var n=+document.getElementById('t-sl').value;
-    var m=mo(a,n),t=m*n;
-    document.getElementById('a-disp').textContent=gbp(a);
-    document.getElementById('t-disp').textContent=n+' months';
-    document.getElementById('s-borrow').textContent=gbp(a);
-    document.getElementById('s-monthly').textContent=gbp(m);
-    document.getElementById('s-total').textContent=gbp(t);
-    document.getElementById('s-sub').textContent=n+' payments';
-    document.getElementById('disc').textContent='Representative example: '+gbp(a)+' over '+n+' months at 29.9% APR. Monthly repayment '+gbp(m,2)+'. Total repayable '+gbp(t,2)+'.';
-    document.getElementById('a-fill').style.width=((a-300)/(10000-300)*100)+'%';
-    document.getElementById('t-fill').style.width=((n-6)/(24-6)*100)+'%';
-    ['s-borrow','s-monthly','s-total'].forEach(bmp);
-    runCalculatorDebounced();
-  }
-
-  /* ── API calculator (debounced) ─────────────────────────────────────── */
+  var state={quote:null,account:null,resolved:null,decision:null,draft:{}};
+  var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var calcRequestId=0;
-  var calcDebounceTimer=null;
-  function patchQuote(decision){
-    if(!decision||!decision.quote)return;
-    state.quote=decision;
-    var repApr=((decision.policy||{}).repAPR!=null?(decision.policy||{}).repAPR:(decision.policy||{}).apr)||29.9;
-    var q=decision.quote;
-    document.getElementById('s-borrow').textContent=money(q.amount);
-    document.getElementById('s-sub').textContent=q.termMonths+' payments';
-    document.getElementById('s-monthly').textContent=money(q.emi);
-    document.getElementById('s-total').textContent=money(q.totalRepayable);
-    document.getElementById('a-disp').textContent=money(q.amount);
-    document.getElementById('t-disp').textContent=q.termMonths+' months';
-    document.getElementById('disc').textContent='Representative example: '+money(q.amount)+' over '+q.termMonths+' months at '+Number(repApr).toFixed(1)+'% APR. Monthly repayment '+money(q.emi)+'. Total repayable '+money(q.totalRepayable)+'.';
-  }
-  async function runCalculator(){
-    var P=Number(document.getElementById('a-sl').value||0);
-    var n=Number(document.getElementById('t-sl').value||0);
-    var requestId=++calcRequestId;
-    document.getElementById('s-t').textContent='Updating quote...';
-    try{
-      var result=await postJson('/api/public/quote',{amount:P,termMonths:n});
-      if(requestId!==calcRequestId)return;
-      patchQuote(result.decision||result);
-      hydrateApplicationFromQuote();
-    }catch(err){
-      if(requestId!==calcRequestId)return;
-      document.getElementById('s-t').textContent='Could not update right now.';
-    }
-  }
-  function runCalculatorDebounced(){
-    clearTimeout(calcDebounceTimer);
-    calcDebounceTimer=setTimeout(runCalculator,480);
-  }
-  function hydrateApplicationFromQuote(){
-    document.getElementById('app-amount').value=document.getElementById('a-sl').value;
-    document.getElementById('app-term').value=document.getElementById('t-sl').value;
-  }
-
-  /* ── Application summary helpers ─────────────────────────────────────── */
-  function updateApplicationSummary(){
-    var q=null;
-    if(state.decision&&state.decision.quote)q=state.decision.quote;
-    else if(state.quote&&state.quote.quote)q=state.quote.quote;
-    else if(state.quote&&state.quote.amount)q=state.quote;
-    var amtEl=document.getElementById('app-summary-amount'),intEl=document.getElementById('app-summary-interest'),emiEl=document.getElementById('app-summary-emi'),repayEl=document.getElementById('app-summary-repay');
-    if(q){
-      if(amtEl)amtEl.textContent=money(q.amount);
-      if(intEl)intEl.textContent=money(q.totalInterest);
-      if(emiEl)emiEl.textContent=money(q.emi)+'/mo';
-      if(repayEl){var d=new Date();d.setMonth(d.getMonth()+1);repayEl.textContent=d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear();}
-    }else{
-      if(amtEl)amtEl.textContent='-';
-      if(intEl)intEl.textContent='-';
-      if(emiEl)emiEl.textContent='-';
-      if(repayEl)repayEl.textContent='-';
-    }
-  }
-  function populateFromProfile(account){
-    if(!account)return;
-    var personal=(account.profile&&account.profile.personal)||{};
-    document.getElementById('sign-full-name').value=[personal.firstName,personal.lastName].filter(Boolean).join(' ');
-    if(account.application&&account.application.quote){
-      document.getElementById('app-amount').value=account.application.quote.amount||document.getElementById('app-amount').value;
-      document.getElementById('app-term').value=account.application.quote.termMonths||document.getElementById('app-term').value;
-    }
-    updateApplicationSummary();
-  }
-  function reflectDecision(decision){
-    if(!decision||!decision.quote)return;
-    state.decision=decision;
-    document.getElementById('decision-amount').textContent=money(decision.quote.amount);
-    document.getElementById('decision-emi').textContent=money(decision.quote.emi);
-    document.getElementById('decision-total').textContent=money(decision.quote.totalRepayable);
-    document.getElementById('sign-amount').textContent=money(decision.quote.amount);
-    document.getElementById('sign-term').textContent=decision.quote.termMonths+' months';
-    document.getElementById('sign-apr').textContent=decision.quote.apr+'%';
-    var btn=document.getElementById('decision-sign-btn');
-    if(decision.approved){
-      document.getElementById('decision-title').textContent='You are approved, subject to signing';
-      document.getElementById('decision-copy').textContent='Your loan of '+money(decision.quote.amount)+' over '+decision.quote.termMonths+' months at '+decision.quote.apr+'% APR is ready. Review and sign to move forward.';
-      btn.style.display='inline-flex';
-      setMessage('decision-note','success','Approved at '+decision.quote.apr+'% APR. Review and sign your offer to proceed.');
-    }else{
-      document.getElementById('decision-title').textContent='We cannot approve this application right now';
-      document.getElementById('decision-copy').textContent=(decision.reasons||[]).join(' ')||'This application does not meet our current lending criteria.';
-      btn.style.display='none';
-      setMessage('decision-note','warn',document.getElementById('decision-copy').textContent);
-    }
-  }
-  async function postJson(url,payload){
-    var res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload||{})});
-    var data=await res.json().catch(function(){return{};});
-    if(!res.ok)throw new Error(data.error||'Request failed.');
-    return data;
-  }
-
-  /* ── whenGetPaid reactive options ────────────────────────────────────── */
-  function buildWhenGetPaidOptions(freq){
-    var sel=document.getElementById('pf-when-paid'); if(!sel)return;
-    var prev=sel.value; sel.innerHTML='';
-    if(freq==='MONTHLY'){
-      for(var d=1;d<=28;d++){ var o=document.createElement('option'); o.value=String(d).padStart(2,'0'); o.textContent=d+(d===1?'st':d===2?'nd':d===3?'rd':'th')+' of month'; sel.appendChild(o); }
-      var last=document.createElement('option'); last.value='LAST'; last.textContent='Last day of month'; sel.appendChild(last);
-    }else{
-      ['MON','TUE','WED','THU','FRI','SAT','SUN'].forEach(function(v,i){ var o=document.createElement('option'); o.value=v; o.textContent=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'][i]; sel.appendChild(o); });
-    }
-    sel.value=prev; if(!sel.value&&sel.options.length)sel.value=sel.options[0].value;
-  }
+  function money(v){return new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(Number(v||0));}
+  function setMessage(id,kind,text){var el=document.getElementById(id);if(!el)return;el.className='message'+(kind?' '+kind:'');el.textContent=text;}
+  function setActive(name){['step1','step2','step3','application','decision','sign','card'].forEach(function(key){var pane=document.getElementById('pane-'+key);if(pane)pane.classList.toggle('active',key===name);});}
+  window.goToPane=function(name){setActive(name);document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'});};
+  window.startApplication=function(){var shell=document.getElementById('application-shell');shell.style.display='block';hydrateApplicationFromQuote();setActive(state.account?'application':'step1');shell.scrollIntoView({behavior:'smooth',block:'start'});};
+  function hydrateApplicationFromQuote(){document.getElementById('app-amount').value=document.getElementById('a-sl').value;document.getElementById('app-term').value=document.getElementById('t-sl').value;}
+  async function runCalculator(){var P=Number(document.getElementById('a-sl').value||0),n=Number(document.getElementById('t-sl').value||0),requestId=++calcRequestId;try{var result=await postJson('/api/public/quote',{amount:P,termMonths:n});if(requestId!==calcRequestId)return;var d=result.decision||result;state.quote=d;hydrateApplicationFromQuote();}catch(err){}}
+  function updateApplicationSummary(){var q=null;if(state.decision&&state.decision.quote)q=state.decision.quote;else if(state.quote&&state.quote.quote)q=state.quote.quote;else if(state.quote&&state.quote.amount)q=state.quote;var amtEl=document.getElementById('app-summary-amount'),intEl=document.getElementById('app-summary-interest'),emiEl=document.getElementById('app-summary-emi'),repayEl=document.getElementById('app-summary-repay');if(q){if(amtEl)amtEl.textContent=money(q.amount);if(intEl)intEl.textContent=money(q.totalInterest);if(emiEl)emiEl.textContent=money(q.emi)+'/mo';if(repayEl){var d=new Date();d.setMonth(d.getMonth()+1);repayEl.textContent=d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear();}}else{if(amtEl)amtEl.textContent='-';if(intEl)intEl.textContent='-';if(emiEl)emiEl.textContent='-';if(repayEl)repayEl.textContent='-';}}
+  function populateFromProfile(account){if(!account)return;var personal=(account.profile&&account.profile.personal)||{};document.getElementById('sign-full-name').value=[personal.firstName,personal.lastName].filter(Boolean).join(' ');if(account.application&&account.application.quote){document.getElementById('app-amount').value=account.application.quote.amount||document.getElementById('app-amount').value;document.getElementById('app-term').value=account.application.quote.termMonths||document.getElementById('app-term').value;}updateApplicationSummary();}
+  function reflectDecision(decision){if(!decision||!decision.quote)return;state.decision=decision;document.getElementById('decision-amount').textContent=money(decision.quote.amount);document.getElementById('decision-emi').textContent=money(decision.quote.emi);document.getElementById('decision-total').textContent=money(decision.quote.totalRepayable);document.getElementById('sign-amount').textContent=money(decision.quote.amount);document.getElementById('sign-term').textContent=decision.quote.termMonths+' months';document.getElementById('sign-apr').textContent=decision.quote.apr+'%';var btn=document.getElementById('decision-sign-btn');if(decision.approved){document.getElementById('decision-title').textContent='You are approved, subject to signing';document.getElementById('decision-copy').textContent='Your loan of '+money(decision.quote.amount)+' over '+decision.quote.termMonths+' months at '+decision.quote.apr+'% APR is ready. Review and sign to move forward.';btn.style.display='inline-flex';setMessage('decision-note','success','Approved at '+decision.quote.apr+'% APR. Review and sign your offer to proceed.');}else{document.getElementById('decision-title').textContent='We cannot approve this application right now';document.getElementById('decision-copy').textContent=(decision.reasons||[]).join(' ')||'This application does not meet our current lending criteria.';btn.style.display='none';setMessage('decision-note','warn',document.getElementById('decision-copy').textContent);}}
+  async function postJson(url,payload){var res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload||{})});var data=await res.json().catch(function(){return{};});if(!res.ok)throw new Error(data.error||'Request failed.');return data;}
+  function buildWhenGetPaidOptions(freq){var sel=document.getElementById('pf-when-paid');if(!sel)return;var prev=sel.value;sel.innerHTML='';if(freq==='MONTHLY'){for(var d=1;d<=28;d++){var o=document.createElement('option');o.value=String(d).padStart(2,'0');o.textContent=d+(d===1?'st':d===2?'nd':d===3?'rd':'th')+' of month';sel.appendChild(o);}var last=document.createElement('option');last.value='LAST';last.textContent='Last day of month';sel.appendChild(last);}else{['MON','TUE','WED','THU','FRI','SAT','SUN'].forEach(function(v,i){var o=document.createElement('option');o.value=v;o.textContent=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'][i];sel.appendChild(o);});}sel.value=prev;if(!sel.value&&sel.options.length)sel.value=sel.options[0].value;}
   buildWhenGetPaidOptions('MONTHLY');
-  document.getElementById('pf-pay-freq').addEventListener('change',function(){ buildWhenGetPaidOptions(this.value); });
-
-  /* ── Employment conditional fields ──────────────────────────────────── */
-  function updateEmploymentConditionals(status){
-    var isEmployed=['FULL_TIME','PART_TIME','TEMPORARY'].indexOf(status)>-1;
-    var hasLength=['STUDENT','DISABILITY','PENSION','UNEMPLOYED'].indexOf(status)===-1;
-    var eg=document.getElementById('employer-group'),ls=document.getElementById('length-service-group');
-    if(eg)eg.style.display=isEmployed?'':'none';
-    var empEl=document.getElementById('pf-employer'),empPhEl=document.getElementById('pf-employer-phone');
-    if(empEl)empEl.required=isEmployed;
-    if(empPhEl)empPhEl.required=isEmployed;
-    if(ls)ls.style.display=hasLength?'':'none';
-    var lsEl=document.getElementById('pf-length-service');
-    if(lsEl)lsEl.required=hasLength;
-  }
+  document.getElementById('pf-pay-freq').addEventListener('change',function(){buildWhenGetPaidOptions(this.value);});
+  function updateEmploymentConditionals(status){var isEmployed=['FULL_TIME','PART_TIME','TEMPORARY'].indexOf(status)>-1;var hasLength=['STUDENT','DISABILITY','PENSION','UNEMPLOYED'].indexOf(status)===-1;var eg=document.getElementById('employer-group'),ls=document.getElementById('length-service-group');if(eg)eg.style.display=isEmployed?'':'none';var empEl=document.getElementById('pf-employer'),empPhEl=document.getElementById('pf-employer-phone');if(empEl)empEl.required=isEmployed;if(empPhEl)empPhEl.required=isEmployed;if(ls)ls.style.display=hasLength?'':'none';var lsEl=document.getElementById('pf-length-service');if(lsEl)lsEl.required=hasLength;}
   updateEmploymentConditionals('FULL_TIME');
-  document.getElementById('pf-emp-status').addEventListener('change',function(){ updateEmploymentConditionals(this.value); });
-
-  /* ── Previous address conditional ───────────────────────────────────── */
-  function updatePrevAddressVisibility(timeVal){
-    var show=['LESS_3M','3_6M'].indexOf(timeVal)>-1;
-    var grp=document.getElementById('prev-address-group'); if(!grp)return;
-    grp.style.display=show?'':'none';
-    var prevFields=['pf-prev-house-num','pf-prev-street','pf-prev-city','pf-prev-county','pf-prev-postcode'];
-    prevFields.forEach(function(id){ var el=document.getElementById(id); if(el)el.required=show; });
-  }
-  document.getElementById('pf-time-address').addEventListener('change',function(){ updatePrevAddressVisibility(this.value); });
-
-  /* ── Step 1 submit ───────────────────────────────────────────────────── */
-  document.getElementById('step1-form').addEventListener('submit',function(event){
-    event.preventDefault();
-    var dob=document.getElementById('pf-dob').value;
-    if(dob){ var age=(new Date()-new Date(dob))/(1000*60*60*24*365.25); if(age<18){ setMessage('step1-note','error','You must be at least 18 years old to apply.'); return; } }
-    var pwd=document.getElementById('pf-password').value;
-    if(pwd.length<8||!/\d/.test(pwd)){ setMessage('step1-note','error','Password must be at least 8 characters and contain at least one digit.'); return; }
-    state.draft.title=document.getElementById('pf-title').value;
-    state.draft.maritalStatus=document.getElementById('pf-marital').value;
-    state.draft.firstName=document.getElementById('pf-first').value.trim();
-    state.draft.lastName=document.getElementById('pf-last').value.trim();
-    state.draft.email=document.getElementById('pf-email').value.trim();
-    state.draft.mobileNumber=document.getElementById('pf-mobile').value.trim();
-    state.draft.password=pwd;
-    state.draft.dateOfBirth=dob;
-    state.draft.marketingConsents={ phone:document.getElementById('pf-mkt-phone').checked, email:document.getElementById('pf-mkt-email').checked, sms:document.getElementById('pf-mkt-sms').checked };
-    state.draft.privacyConsent=document.getElementById('pf-privacy').checked;
-    setMessage('step1-note','','');
-    goToPane('step2');
-  });
-
-  /* ── Step 2 submit ───────────────────────────────────────────────────── */
-  document.getElementById('step2-form').addEventListener('submit',function(event){
-    event.preventDefault();
-    state.draft.homeOwnerStatus=document.getElementById('pf-home-status').value;
-    state.draft.timeAtAddress=document.getElementById('pf-time-address').value;
-    state.draft.houseNumber=document.getElementById('pf-house-num').value.trim();
-    state.draft.flatNumber=document.getElementById('pf-flat-num').value.trim()||null;
-    state.draft.street=document.getElementById('pf-street').value.trim();
-    state.draft.city=document.getElementById('pf-city').value.trim();
-    state.draft.county=document.getElementById('pf-county').value.trim();
-    state.draft.postCode=document.getElementById('pf-postcode').value.trim().toUpperCase();
-    var needsPrev=['LESS_3M','3_6M'].indexOf(state.draft.timeAtAddress)>-1;
-    state.draft.previousAddress=needsPrev?{
-      homeOwnerStatus:document.getElementById('pf-prev-home-status').value,
-      houseNumber:document.getElementById('pf-prev-house-num').value.trim(),
-      flatNumber:document.getElementById('pf-prev-flat-num').value.trim()||null,
-      street:document.getElementById('pf-prev-street').value.trim(),
-      city:document.getElementById('pf-prev-city').value.trim(),
-      county:document.getElementById('pf-prev-county').value.trim(),
-      postCode:document.getElementById('pf-prev-postcode').value.trim().toUpperCase()
-    }:null;
-    setMessage('step2-note','','');
-    goToPane('step3');
-  });
-
-  /* ── Step 3 submit ───────────────────────────────────────────────────── */
-  document.getElementById('step3-form').addEventListener('submit',async function(event){
-    event.preventDefault();
-    var status=document.getElementById('pf-emp-status').value;
-    var isEmployed=['FULL_TIME','PART_TIME','TEMPORARY'].indexOf(status)>-1;
-    var hasLength=['STUDENT','DISABILITY','PENSION','UNEMPLOYED'].indexOf(status)===-1;
-    var net=Number(document.getElementById('pf-net-income').value||0);
-    var total=Number(document.getElementById('pf-total-income').value||0);
-    if(total<net){ setMessage('step3-note','error','Total net monthly income must be equal to or greater than net monthly income.'); return; }
-    state.draft.employmentStatus=status;
-    state.draft.employer=isEmployed?document.getElementById('pf-employer').value.trim():null;
-    state.draft.employerPhone=isEmployed?document.getElementById('pf-employer-phone').value.trim():null;
-    state.draft.lengthOfService=hasLength?document.getElementById('pf-length-service').value:null;
-    state.draft.netMonthlyIncome=net;
-    state.draft.totalNetMonthlyIncome=total;
-    state.draft.howOftenGetPaid=document.getElementById('pf-pay-freq').value;
-    state.draft.whenGetPaid=document.getElementById('pf-when-paid').value;
-    state.draft.expenses={
-      rentMortgage:Number(document.getElementById('pf-exp-rent').value||0),
-      utilitiesBills:Number(document.getElementById('pf-exp-utilities').value||0),
-      councilTax:Number(document.getElementById('pf-exp-council').value||0),
-      creditCommitments:Number(document.getElementById('pf-exp-credit').value||0),
-      travelTransport:Number(document.getElementById('pf-exp-travel').value||0),
-      subscriptions:Number(document.getElementById('pf-exp-subs').value||0),
-      householdExpenses:Number(document.getElementById('pf-exp-household').value||0),
-      otherExpenses:Number(document.getElementById('pf-exp-other').value||0)
-    };
-    state.draft.numberOfDependents=Number(document.getElementById('pf-dependents').value||0);
-    state.draft.incomeExpensesConfirmed=document.getElementById('pf-ie-confirmed').checked;
-    try{
-      setMessage('step3-note','info','Creating your profile...');
-      var result=await postJson('/api/public/profiles',state.draft);
-      state.account=result.account;
-      populateFromProfile(result.account);
-      hydrateApplicationFromQuote();
-      setMessage('step3-note','success',result.created?'Profile created. Continue with your loan details below.':'Welcome back. Continue with your loan details below.');
-      goToPane('application');
-    }catch(err){ setMessage('step3-note','error',err.message||'We could not create your profile.'); }
-  });
-
-  /* ── Application form submit ─────────────────────────────────────────── */
-  document.getElementById('application-form').addEventListener('submit',async function(event){
-    event.preventDefault();
-    if(!state.account||!state.account.storageKey){ setMessage('application-note','warn','Please complete your profile first.'); goToPane('step1'); return; }
-    var payload={
-      storageKey:state.account.storageKey,
-      amount:Number(document.getElementById('app-amount').value||0),
-      termMonths:Number(document.getElementById('app-term').value||0),
-      purpose:document.getElementById('app-purpose').value.trim()||'Personal loan',
-      ukResident:true,
-      gainfullyEmployed:true,
-      proxyData:{ recentDefaults:false, ccjCount:0, missedPaymentsLast6m:0, onElectoralRoll:true, monthsAtAddress:12 }
-    };
-    setMessage('application-note','info','Submitting your application...');
-    try{
-      var result=await postJson('/api/public/applications',payload);
-      state.account=result.account;
-      reflectDecision(result.decision);
-      updateApplicationSummary();
-      setMessage('application-note','success','Application submitted. Your decision is ready below.');
-      goToPane('decision');
-    }catch(err){ setMessage('application-note','error',err.message||'We could not submit your application.'); }
-  });
-
-  /* ── Sign form submit ────────────────────────────────────────────────── */
-  document.getElementById('sign-form').addEventListener('submit',async function(event){
-    event.preventDefault();
-    if(!state.account||!state.account.storageKey){ setMessage('sign-note','warn','We need your application before signing can continue.'); goToPane('application'); return; }
-    try{
-      setMessage('sign-note','info','Submitting your signature...');
-      var result=await postJson('/api/public/applications/'+encodeURIComponent(state.account.storageKey)+'/sign',{fullName:document.getElementById('sign-full-name').value.trim(),acceptedTerms:document.getElementById('sign-terms').checked,acceptedPrivacy:document.getElementById('sign-privacy').checked,bank:{accountHolder:document.getElementById('sign-bank-holder').value.trim(),bankName:document.getElementById('sign-bank-name').value.trim(),sortCode:document.getElementById('sign-sort-code').value.trim(),accountNumber:document.getElementById('sign-account-number').value.trim()}});
-      state.account=result.account;
-      document.getElementById('card-holder').value=document.getElementById('sign-full-name').value.trim();
-      setMessage('sign-note','success','Signed. Now add your payment card to complete the process.');
-      setActive('card');
-      document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'});
-    }catch(err){ setMessage('sign-note','error',err.message||'We could not record your signature.'); }
-  });
-
-  /* ── Card form submit ────────────────────────────────────────────────── */
-  document.getElementById('card-form').addEventListener('submit',async function(event){
-    event.preventDefault();
-    if(!state.account||!state.account.storageKey){ setMessage('card-note','warn','Please complete signing first.'); setActive('sign'); return; }
-    try{
-      setMessage('card-note','info','Saving your card details...');
-      var raw=document.getElementById('card-number').value.replace(/\s/g,'');
-      var result=await postJson('/api/public/applications/'+encodeURIComponent(state.account.storageKey)+'/card',{cardHolder:document.getElementById('card-holder').value.trim(),cardNumber:raw,expiry:document.getElementById('card-expiry').value.trim(),cardType:document.getElementById('card-type').value});
-      state.account=result.account;
-      setMessage('card-note','success','Card saved. Your application is now awaiting final approval before funds are transferred.');
-      setActive('decision');
-      setMessage('decision-note','info','Signed and awaiting final approval. Once approved, you can access the customer portal.');
-      document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'});
-    }catch(err){ setMessage('card-note','error',err.message||'We could not save your card details.'); }
-  });
-
-  /* ── Slider event wiring ─────────────────────────────────────────────── */
-  document.getElementById('a-sl').addEventListener('input',calc);
-  document.getElementById('t-sl').addEventListener('input',calc);
-  calc();
+  document.getElementById('pf-emp-status').addEventListener('change',function(){updateEmploymentConditionals(this.value);});
+  function updatePrevAddressVisibility(timeVal){var show=['LESS_3M','3_6M'].indexOf(timeVal)>-1;var grp=document.getElementById('prev-address-group');if(!grp)return;grp.style.display=show?'':'none';['pf-prev-house-num','pf-prev-street','pf-prev-city','pf-prev-county','pf-prev-postcode'].forEach(function(id){var el=document.getElementById(id);if(el)el.required=show;});}
+  document.getElementById('pf-time-address').addEventListener('change',function(){updatePrevAddressVisibility(this.value);});
+  document.getElementById('step1-form').addEventListener('submit',function(event){event.preventDefault();var dob=document.getElementById('pf-dob').value;if(dob){var age=(new Date()-new Date(dob))/(1000*60*60*24*365.25);if(age<18){setMessage('step1-note','error','You must be at least 18 years old to apply.');return;}}var pwd=document.getElementById('pf-password').value;if(pwd.length<8||!/\d/.test(pwd)){setMessage('step1-note','error','Password must be at least 8 characters and contain at least one digit.');return;}state.draft.title=document.getElementById('pf-title').value;state.draft.maritalStatus=document.getElementById('pf-marital').value;state.draft.firstName=document.getElementById('pf-first').value.trim();state.draft.lastName=document.getElementById('pf-last').value.trim();state.draft.email=document.getElementById('pf-email').value.trim();state.draft.mobileNumber=document.getElementById('pf-mobile').value.trim();state.draft.password=pwd;state.draft.dateOfBirth=dob;state.draft.marketingConsents={phone:document.getElementById('pf-mkt-phone').checked,email:document.getElementById('pf-mkt-email').checked,sms:document.getElementById('pf-mkt-sms').checked};state.draft.privacyConsent=document.getElementById('pf-privacy').checked;setMessage('step1-note','','');goToPane('step2');});
+  document.getElementById('step2-form').addEventListener('submit',function(event){event.preventDefault();state.draft.homeOwnerStatus=document.getElementById('pf-home-status').value;state.draft.timeAtAddress=document.getElementById('pf-time-address').value;state.draft.houseNumber=document.getElementById('pf-house-num').value.trim();state.draft.flatNumber=document.getElementById('pf-flat-num').value.trim()||null;state.draft.street=document.getElementById('pf-street').value.trim();state.draft.city=document.getElementById('pf-city').value.trim();state.draft.county=document.getElementById('pf-county').value.trim();state.draft.postCode=document.getElementById('pf-postcode').value.trim().toUpperCase();var needsPrev=['LESS_3M','3_6M'].indexOf(state.draft.timeAtAddress)>-1;state.draft.previousAddress=needsPrev?{homeOwnerStatus:document.getElementById('pf-prev-home-status').value,houseNumber:document.getElementById('pf-prev-house-num').value.trim(),flatNumber:document.getElementById('pf-prev-flat-num').value.trim()||null,street:document.getElementById('pf-prev-street').value.trim(),city:document.getElementById('pf-prev-city').value.trim(),county:document.getElementById('pf-prev-county').value.trim(),postCode:document.getElementById('pf-prev-postcode').value.trim().toUpperCase()}:null;setMessage('step2-note','','');goToPane('step3');});
+  document.getElementById('step3-form').addEventListener('submit',async function(event){event.preventDefault();var status=document.getElementById('pf-emp-status').value;var isEmployed=['FULL_TIME','PART_TIME','TEMPORARY'].indexOf(status)>-1;var hasLength=['STUDENT','DISABILITY','PENSION','UNEMPLOYED'].indexOf(status)===-1;var net=Number(document.getElementById('pf-net-income').value||0);var total=Number(document.getElementById('pf-total-income').value||0);if(total<net){setMessage('step3-note','error','Total net monthly income must be equal to or greater than net monthly income.');return;}state.draft.employmentStatus=status;state.draft.employer=isEmployed?document.getElementById('pf-employer').value.trim():null;state.draft.employerPhone=isEmployed?document.getElementById('pf-employer-phone').value.trim():null;state.draft.lengthOfService=hasLength?document.getElementById('pf-length-service').value:null;state.draft.netMonthlyIncome=net;state.draft.totalNetMonthlyIncome=total;state.draft.howOftenGetPaid=document.getElementById('pf-pay-freq').value;state.draft.whenGetPaid=document.getElementById('pf-when-paid').value;state.draft.expenses={rentMortgage:Number(document.getElementById('pf-exp-rent').value||0),utilitiesBills:Number(document.getElementById('pf-exp-utilities').value||0),councilTax:Number(document.getElementById('pf-exp-council').value||0),creditCommitments:Number(document.getElementById('pf-exp-credit').value||0),travelTransport:Number(document.getElementById('pf-exp-travel').value||0),subscriptions:Number(document.getElementById('pf-exp-subs').value||0),householdExpenses:Number(document.getElementById('pf-exp-household').value||0),otherExpenses:Number(document.getElementById('pf-exp-other').value||0)};state.draft.numberOfDependents=Number(document.getElementById('pf-dependents').value||0);state.draft.incomeExpensesConfirmed=document.getElementById('pf-ie-confirmed').checked;try{setMessage('step3-note','info','Creating your profile...');var result=await postJson('/api/public/profiles',state.draft);state.account=result.account;populateFromProfile(result.account);hydrateApplicationFromQuote();setMessage('step3-note','success',result.created?'Profile created. Continue with your loan details below.':'Welcome back. Continue with your loan details below.');goToPane('application');}catch(err){setMessage('step3-note','error',err.message||'We could not create your profile.');}});
+  document.getElementById('application-form').addEventListener('submit',async function(event){event.preventDefault();if(!state.account||!state.account.storageKey){setMessage('application-note','warn','Please complete your profile first.');goToPane('step1');return;}var payload={storageKey:state.account.storageKey,amount:Number(document.getElementById('app-amount').value||0),termMonths:Number(document.getElementById('app-term').value||0),purpose:document.getElementById('app-purpose').value.trim()||'Personal loan',ukResident:true,gainfullyEmployed:true,proxyData:{recentDefaults:false,ccjCount:0,missedPaymentsLast6m:0,onElectoralRoll:true,monthsAtAddress:12}};setMessage('application-note','info','Submitting your application...');try{var result=await postJson('/api/public/applications',payload);state.account=result.account;reflectDecision(result.decision);updateApplicationSummary();setMessage('application-note','success','Application submitted. Your decision is ready below.');goToPane('decision');}catch(err){setMessage('application-note','error',err.message||'We could not submit your application.');}});
+  document.getElementById('sign-form').addEventListener('submit',async function(event){event.preventDefault();if(!state.account||!state.account.storageKey){setMessage('sign-note','warn','We need your application before signing can continue.');goToPane('application');return;}try{setMessage('sign-note','info','Submitting your signature...');var result=await postJson('/api/public/applications/'+encodeURIComponent(state.account.storageKey)+'/sign',{fullName:document.getElementById('sign-full-name').value.trim(),acceptedTerms:document.getElementById('sign-terms').checked,acceptedPrivacy:document.getElementById('sign-privacy').checked,bank:{accountHolder:document.getElementById('sign-bank-holder').value.trim(),bankName:document.getElementById('sign-bank-name').value.trim(),sortCode:document.getElementById('sign-sort-code').value.trim(),accountNumber:document.getElementById('sign-account-number').value.trim()}});state.account=result.account;document.getElementById('card-holder').value=document.getElementById('sign-full-name').value.trim();setMessage('sign-note','success','Signed. Now add your payment card to complete the process.');setActive('card');document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'});}catch(err){setMessage('sign-note','error',err.message||'We could not record your signature.');}});
+  document.getElementById('card-form').addEventListener('submit',async function(event){event.preventDefault();if(!state.account||!state.account.storageKey){setMessage('card-note','warn','Please complete signing first.');setActive('sign');return;}try{setMessage('card-note','info','Saving your card details...');var raw=document.getElementById('card-number').value.replace(/\s/g,'');var result=await postJson('/api/public/applications/'+encodeURIComponent(state.account.storageKey)+'/card',{cardHolder:document.getElementById('card-holder').value.trim(),cardNumber:raw,expiry:document.getElementById('card-expiry').value.trim(),cardType:document.getElementById('card-type').value});state.account=result.account;setMessage('card-note','success','Card saved. Your application is now awaiting final approval before funds are transferred.');setActive('decision');setMessage('decision-note','info','Signed and awaiting final approval. Once approved, you can access the customer portal.');document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'});}catch(err){setMessage('card-note','error',err.message||'We could not save your card details.');}});
+  /* Chat widget */
+  (function(){var cpanel=document.getElementById('cpanel'),cmsgs=document.getElementById('cmsgs'),cinp=document.getElementById('cinp'),cnb=document.getElementById('cnb');function appendCMsg(txt,type){var now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),w=document.createElement('div');w.innerHTML='<div class="msg '+type+'">'+txt+'</div><div class="mtime'+(type==='user'?' r':'')+'">'+now+'</div>';cmsgs.appendChild(w);cmsgs.scrollTop=cmsgs.scrollHeight;}function chatReply(msg){var m=msg.toLowerCase();if(m.indexOf('rate')>-1||m.indexOf('apr')>-1)return'Our representative APR is 29.9%. Your actual rate may vary based on your circumstances.';if(m.indexOf('amount')>-1||m.indexOf('borrow')>-1)return'You can borrow between £300 and £10,000 over 6 to 24 months. Use the calculator on the page to see your monthly repayment.';if(m.indexOf('apply')>-1||m.indexOf('application')>-1)return'You can apply online in minutes. Click Apply now and we will guide you through each step.';if(m.indexOf('credit')>-1||m.indexOf('check')>-1)return'Checking your quote does not affect your credit score. A full credit check is only performed when you submit a full application.';if(m.indexOf('decision')>-1||m.indexOf('long')>-1)return'Most decisions are made the same day. Once approved, funds are transferred to your account on the same day.';if(m.indexOf('complaint')>-1)return'We are sorry to hear that. Please email complaints@quido.co.uk and we will respond within 5 business days.';var replies=['Happy to help. Could you tell me a bit more?','Thanks for reaching out. You can also call us on 0800 123 4567.','Good question. Is there anything specific about the loan you would like to know?'];return replies[Math.floor(Math.random()*replies.length)];}function sendMsg(){var txt=cinp.value.replace(/^\s+|\s+$/g,'');if(!txt)return;appendCMsg(txt,'user');cinp.value='';setTimeout(function(){appendCMsg(chatReply(txt),'agent');},800);}document.getElementById('cfab').addEventListener('click',function(){var open=cpanel.classList.toggle('open');if(cnb)cnb.style.display=open?'none':'flex';});document.getElementById('cclose').addEventListener('click',function(){cpanel.classList.remove('open');if(cnb)cnb.style.display='flex';});Array.prototype.forEach.call(document.querySelectorAll('.qp'),function(btn){btn.addEventListener('click',function(){cinp.value=btn.getAttribute('data-msg')||btn.textContent;sendMsg();});});document.getElementById('csend').addEventListener('click',sendMsg);cinp.addEventListener('keydown',function(e){if(e.key==='Enter')sendMsg();});})();
+  /* Card formatters */
+  var cardNumEl=document.getElementById('card-number');if(cardNumEl){cardNumEl.addEventListener('input',function(){var v=this.value.replace(/\D/g,'').slice(0,16);this.value=v.replace(/(.{4})/g,'$1  ').trim();});}
+  var scEl=document.getElementById('sign-sort-code');if(scEl){scEl.addEventListener('input',function(){var v=this.value.replace(/\D/g,'').slice(0,6);this.value=v.replace(/(\d{2})(?=\d)/g,'$1-');});}
+  /* Hook sliders for API state */
+  document.getElementById('a-sl').addEventListener('input',runCalculator);
+  document.getElementById('t-sl').addEventListener('input',runCalculator);
   runCalculator();
   updateApplicationSummary();
-
-  /* ── Card number formatting ─────────────────────────────────────────── */
-  var cardNumEl=document.getElementById('card-number');
-  if(cardNumEl){cardNumEl.addEventListener('input',function(){var v=this.value.replace(/\D/g,'').slice(0,16);this.value=v.replace(/(.{4})/g,'$1  ').trim();});}
-  var scEl=document.getElementById('sign-sort-code');
-  if(scEl){scEl.addEventListener('input',function(){var v=this.value.replace(/\D/g,'').slice(0,6);this.value=v.replace(/(\d{2})(?=\d)/g,'$1-');});}
-
-  /* ── Chat widget ─────────────────────────────────────────────────────── */
-  (function(){
-    var cpanel=document.getElementById('cpanel'),cmsgs=document.getElementById('cmsgs'),cinp=document.getElementById('cinp'),cnb=document.getElementById('cnb');
-    function appendCMsg(txt,type){ var now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),w=document.createElement('div'); w.innerHTML='<div class="msg '+type+'">'+txt+'</div><div class="mtime'+(type==='user'?' r':'')+'">'+now+'</div>'; cmsgs.appendChild(w); cmsgs.scrollTop=cmsgs.scrollHeight; }
-    function chatReply(msg){ var m=msg.toLowerCase(); if(m.indexOf('rate')>-1||m.indexOf('apr')>-1)return'Our representative APR is 29.9%. Your actual rate may vary based on your circumstances.'; if(m.indexOf('amount')>-1||m.indexOf('borrow')>-1)return'You can borrow between £300 and £10,000 over 6 to 24 months. Use the calculator on the page to see your monthly repayment.'; if(m.indexOf('apply')>-1||m.indexOf('application')>-1)return'You can apply online in minutes. Click Apply now and we will guide you through each step.'; if(m.indexOf('credit')>-1||m.indexOf('check')>-1)return'Checking your quote does not affect your credit score. A full credit check is only performed when you submit a full application.'; if(m.indexOf('decision')>-1||m.indexOf('long')>-1)return'Most decisions are made the same day. Once approved, funds are transferred to your account on the same day.'; if(m.indexOf('complaint')>-1)return'We are sorry to hear that. Please email complaints@quido.co.uk and we will respond within 5 business days.'; var replies=['Happy to help. Could you tell me a bit more?','Thanks for reaching out. You can also call us on 0800 123 4567.','Good question. Is there anything specific about the loan you would like to know?']; return replies[Math.floor(Math.random()*replies.length)]; }
-    function sendMsg(){ var txt=cinp.value.replace(/^\s+|\s+$/g,''); if(!txt)return; appendCMsg(txt,'user'); cinp.value=''; setTimeout(function(){appendCMsg(chatReply(txt),'agent');},800); }
-    document.getElementById('cfab').addEventListener('click',function(){ var open=cpanel.classList.toggle('open'); if(cnb)cnb.style.display=open?'none':'flex'; });
-    document.getElementById('cclose').addEventListener('click',function(){ cpanel.classList.remove('open'); if(cnb)cnb.style.display='flex'; });
-    Array.prototype.forEach.call(document.querySelectorAll('.qp'),function(btn){ btn.addEventListener('click',function(){ cinp.value=btn.getAttribute('data-msg')||btn.textContent; sendMsg(); }); });
-    document.getElementById('csend').addEventListener('click',sendMsg);
-    cinp.addEventListener('keydown',function(e){if(e.key==='Enter')sendMsg();});
-  })();
-
-  /* ── Mobile nav (reference) ──────────────────────────────────────────── */
-  var hb=document.getElementById('hamburger'),nl=document.getElementById('nav-links');
-  if(hb&&nl){
-    hb.addEventListener('click',function(){hb.classList.toggle('open');nl.classList.toggle('open');});
-    document.addEventListener('click',function(e){if(!document.getElementById('main-nav').contains(e.target)){hb.classList.remove('open');nl.classList.remove('open');}});
-  }
-
-  /* ── Scroll reveal (reference) ───────────────────────────────────────── */
-  var io=new IntersectionObserver(function(entries){
-    entries.forEach(function(e){e.target.classList.toggle('in',e.isIntersecting);});
-  },{threshold:0.08,rootMargin:'0px 0px -16px 0px'});
-  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
-
-  /* Trust cards */
-  var tio=new IntersectionObserver(function(entries){
-    entries.forEach(function(e){e.target.classList.toggle('in',e.isIntersecting);});
-  },{threshold:0.05});
-  document.querySelectorAll('.tcard').forEach(function(el){tio.observe(el);});
-
-  /* Steps + connectors (reference) */
-  var sio=new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      var on=entry.isIntersecting;
-      [1,2,3].forEach(function(n,i){
-        var el=document.getElementById('step'+n);
-        if(on)setTimeout(function(){el&&el.classList.add('lit');},i*260);
-        else el&&el.classList.remove('lit');
-      });
-      var c1=document.getElementById('cf1'),c2=document.getElementById('cf2');
-      if(on){setTimeout(function(){c1&&c1.classList.add('drawn');},260);setTimeout(function(){c2&&c2.classList.add('drawn');},520);}
-      else{c1&&c1.classList.remove('drawn');c2&&c2.classList.remove('drawn');}
-    });
-  },{threshold:0.2});
-  var hs=document.getElementById('how');
-  if(hs)sio.observe(hs);
-
-  /* ── Contact form ────────────────────────────────────────────────────── */
-  var cfCustVal='yes';
-  window.setCust=function(val){
-    cfCustVal=val;
-    document.getElementById('cf-tog-yes').classList.toggle('active',val==='yes');
-    document.getElementById('cf-tog-no').classList.toggle('active',val==='no');
-  };
-  function cfErr(id,show){
-    var el=document.getElementById(id);
-    if(el)el.style.display=show?'block':'none';
-  }
-  function validateForm(){
-    var ok=true;
-    var name=document.getElementById('cf-name').value.trim();
-    cfErr('cf-name-err',!name); if(!name)ok=false;
-    var email=document.getElementById('cf-email').value.trim();
-    cfErr('cf-email-err',!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)); if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))ok=false;
-    var reason=document.getElementById('cf-reason').value;
-    cfErr('cf-reason-err',!reason); if(!reason)ok=false;
-    var msg=document.getElementById('cf-msg').value.trim();
-    cfErr('cf-msg-err',!msg); if(!msg)ok=false;
-    return ok;
-  }
-  window.submitContactForm=function(){
-    if(!validateForm())return;
-    var btn=document.getElementById('cf-submit-btn');
-    btn.disabled=true; btn.textContent='Sending…';
-    setTimeout(function(){
-      document.getElementById('cf-form-body').style.display='none';
-      document.getElementById('cf-success').style.display='block';
-    },900);
-  };
-
 })();
+
+/* ── Reference: Mobile nav ── */
+const hb=document.getElementById('hamburger'),nl=document.getElementById('nav-links');
+hb.addEventListener('click',()=>{hb.classList.toggle('open');nl.classList.toggle('open');});
+document.addEventListener('click',e=>{if(!document.getElementById('main-nav').contains(e.target)){hb.classList.remove('open');nl.classList.remove('open');}});
+
+/* ── Reference: Scroll reveal ── */
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>e.target.classList.toggle('in',e.isIntersecting));},{threshold:0.08,rootMargin:'0px 0px -16px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+const tio=new IntersectionObserver(entries=>{entries.forEach(e=>e.target.classList.toggle('in',e.isIntersecting));},{threshold:0.05});
+document.querySelectorAll('.tcard').forEach(el=>tio.observe(el));
+const sio=new IntersectionObserver(entries=>{entries.forEach(entry=>{const on=entry.isIntersecting;[1,2,3].forEach((n,i)=>{const el=document.getElementById('step'+n);if(on)setTimeout(()=>el&&el.classList.add('lit'),i*260);else el&&el.classList.remove('lit');});const c1=document.getElementById('cf1'),c2=document.getElementById('cf2');if(on){setTimeout(()=>c1&&c1.classList.add('drawn'),260);setTimeout(()=>c2&&c2.classList.add('drawn'),520);}else{c1&&c1.classList.remove('drawn');c2&&c2.classList.remove('drawn');}});},{threshold:0.2});
+const hs=document.getElementById('how');if(hs)sio.observe(hs);
+
+/* ── Calc visual init ── */
+document.getElementById('a-sl').addEventListener('input',calc);
+document.getElementById('t-sl').addEventListener('input',calc);
+calc();
 </script>
 </body>
 </html>
