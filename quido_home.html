@@ -216,8 +216,6 @@ body {
   box-shadow: 0 24px 64px rgba(7,16,30,0.22), 0 0 0 1px rgba(255,255,255,0.05) inset;
   width: 100%;
 }
-.qcard-g1 { position: absolute; top: -80px; right: -80px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(0,201,167,0.22) 0%, transparent 65%); pointer-events: none; }
-.qcard-g2 { position: absolute; bottom: -50px; left: -40px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(28,56,146,0.5) 0%, transparent 65%); pointer-events: none; }
 .qcard-head { margin-bottom: 18px; position: relative; z-index: 1; }
 .qcard-head h2 { font-family: var(--fd); font-size: 19px; font-weight: 800; color: var(--od-1); letter-spacing: -0.02em; margin-bottom: 3px; }
 .qcard-head p { font-family: var(--fb); font-size: 12px; color: var(--od-3); }
@@ -247,7 +245,7 @@ input[type="range"]::-webkit-slider-thumb {
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   transition: transform 0.15s, box-shadow 0.15s;
 }
-input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); box-shadow: 0 0 0 6px rgba(0,201,167,0.18), 0 2px 6px rgba(0,0,0,0.2); }
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.12); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
 input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #fff; border: 2.5px solid var(--teal); cursor: pointer; }
 .sl-range { display: flex; justify-content: space-between; font-family: var(--fb); font-size: 9.5px; color: var(--od-4); }
 .btn-apply {
@@ -257,7 +255,7 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
   letter-spacing: -0.01em; margin-bottom: 12px; position: relative; z-index: 1;
   transition: transform 0.22s cubic-bezier(0.22,1,0.36,1), box-shadow 0.22s, filter 0.22s;
 }
-.btn-apply:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,201,167,0.38); filter: brightness(1.06); }
+.btn-apply:hover { transform: translateY(-2px); filter: brightness(1.04); }
 .btn-apply:active { transform: translateY(0); }
 .qcard-disc { font-family: var(--fb); font-size: 10px; color: var(--od-4); text-align: center; line-height: 1.55; position: relative; z-index: 1; }
 
@@ -424,7 +422,6 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 
 /* Modern bento trust mosaic */
 .bento { background: var(--navy); padding: 72px 24px 80px; position: relative; overflow: hidden; }
-.bento::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 55% 55% at 85% 5%, rgba(0,201,167,0.12) 0%, transparent 60%), radial-gradient(ellipse 45% 55% at 5% 95%, rgba(28,56,146,0.35) 0%, transparent 60%); pointer-events: none; }
 .bento-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
 .bento-eyebrow { font-family: var(--fb); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em; color: var(--teal); margin-bottom: 28px; }
 .bento-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
@@ -433,17 +430,14 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .bc-4, .bc-5 { margin-top: 8px; }
 .bc { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 28px 26px; position: relative; overflow: hidden; transform: translateY(24px); opacity: 0; transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1), box-shadow .3s, background .2s; }
 .bc.in { opacity: 1; transform: translateY(0); }
-.bc:hover { box-shadow: 0 0 0 1px rgba(0,201,167,0.3); background: rgba(255,255,255,0.08); }
-.bc-1::after { content: ''; position: absolute; top: -40px; right: -40px; width: 130px; height: 130px; background: radial-gradient(circle, rgba(0,201,167,0.18) 0%, transparent 70%); pointer-events: none; }
-.bc-4::after { content: ''; position: absolute; bottom: -40px; left: -40px; width: 160px; height: 160px; background: radial-gradient(circle, rgba(28,56,146,0.55) 0%, transparent 70%); pointer-events: none; }
+.bc:hover { background: rgba(255,255,255,0.08); }
 .bc-ico { width: 44px; height: 44px; border-radius: 13px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; flex-shrink: 0; }
 .bc-ico svg { width: 22px; height: 22px; }
 .bci-blue { background: rgba(100,140,255,0.15); color: #7eb0ff; }
 .bci-ora { background: rgba(255,150,60,0.15); color: #ffaa55; }
 .bci-grn { background: rgba(80,220,120,0.15); color: #60e080; }
 .bc-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,201,167,0.12); border: 1px solid rgba(0,201,167,0.28); border-radius: 100px; padding: 4px 12px; font-family: var(--fb); font-size: 11px; font-weight: 600; color: var(--teal); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 16px; }
-.bc-tag-dot { width: 6px; height: 6px; background: var(--teal); border-radius: 50%; animation: tdot 2s ease-in-out infinite; flex-shrink: 0; }
-@keyframes tdot { 0%,100% { box-shadow: 0 0 0 0 rgba(0,201,167,0.5); } 50% { box-shadow: 0 0 0 4px rgba(0,201,167,0); } }
+.bc-tag-dot { width: 6px; height: 6px; background: var(--teal); border-radius: 50%; flex-shrink: 0; }
 .bc-stat, .bc-counter { font-family: var(--fd); font-size: clamp(38px, 3.5vw, 52px); font-weight: 800; color: var(--od-1); letter-spacing: -0.04em; line-height: 1; margin-bottom: 10px; }
 .bc-counter { color: var(--teal); }
 .bc-stat-unit { font-size: .48em; font-weight: 600; letter-spacing: -0.01em; opacity: .55; vertical-align: middle; }
@@ -719,8 +713,6 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
     <div class="hero-visual">
 
       <div class="qcard">
-        <div class="qcard-g1"></div>
-        <div class="qcard-g2"></div>
         <div class="qcard-head">
           <h2>Get your quote</h2>
           <p>Adjust the sliders and your repayment updates instantly</p>
