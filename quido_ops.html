@@ -401,10 +401,10 @@ a{text-decoration:none;color:inherit;cursor:pointer}
       <!-- ══ PENDING APPLICATIONS ══ -->
       <section id="sec-pending" class="section">
         <div class="sec-hdr">
-          <div class="sec-hdr-left"><h2>Pending Applications</h2><p>Signed applications awaiting disbursal approval</p></div>
+          <div class="sec-hdr-left"><h2>Pending Applications</h2><p>Submitted applications awaiting customer signature or disbursal approval</p></div>
         </div>
         <div class="card">
-          <div class="card-hdr"><span class="card-title">Disbursal Queue</span><span id="pending-sec-count" style="font-size:11px;color:var(--muted)">Loading…</span></div>
+          <div class="card-hdr"><span class="card-title">Application Queue</span><span id="pending-sec-count" style="font-size:11px;color:var(--muted)">Loading…</span></div>
           <div class="card-body-tight" id="pending-sec-queue" style="padding:0 18px 12px"></div>
         </div>
       </section>
@@ -1881,14 +1881,16 @@ function gotoSec(id) {
 
 function fetchPendingApplications() {
   if (!USE_API || !window.fetch) return Promise.resolve([]);
-  return window.fetch(API_BASE.replace(/\/$/, '') + '/public/applications?stage=signed_pending_disbursal', {
+  return window.fetch(API_BASE.replace(/\/$/, '') + '/public/applications', {
     method: 'GET',
     headers: { 'Accept': 'application/json' }
   }).then(function(res) {
     if (!res.ok) throw new Error('Pending applications request failed: ' + res.status);
     return res.json();
   }).then(function(data) {
-    OPS.pendingApplications = (data && data.applications) || [];
+    OPS.pendingApplications = ((data && data.applications) || []).filter(function(app) {
+      return ['approved_pending_signature','signed_pending_disbursal'].indexOf(app.stage) > -1;
+    });
     renderPendingApplications();
     return OPS.pendingApplications;
   }).catch(function() {
@@ -1902,23 +1904,33 @@ function _buildPendingAppHtml(app) {
   var submitted = app.submittedAt ? fmtTs(app.submittedAt) : 'Not submitted';
   var signed = app.signedAt ? fmtTs(app.signedAt) : 'Awaiting signature';
   var quote = app.quote || {};
+  var stage = app.stage || '';
+  var isSigned = stage === 'signed_pending_disbursal';
+  var statusLabel = isSigned ? 'Ready for Ops approval' : 'Awaiting customer signature';
+  var statusBg = isSigned ? 'rgba(16,185,129,.12)' : 'rgba(245,158,11,.12)';
+  var statusColor = isSigned ? '#047857' : '#92400e';
+  var actionHtml = isSigned
+    ? '<button class="btn btn-primary btn-xs" onclick="approvePublicDisbursal(\'' + app.storageKey + '\')">Approve disbursal</button>'
+    : '<span style="font-size:11px;color:var(--muted);font-weight:700;white-space:nowrap">Customer to sign</span>';
   return '<div style="padding:14px 0;border-bottom:1px solid #eef2f7">'
     + '<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">'
     + '<div>'
     + '<div style="font-size:13px;font-weight:700;color:var(--text)">' + escHtml(app.name || app.email || app.storageKey) + '</div>'
-    + '<div style="font-size:11px;color:var(--muted);margin-top:3px">' + escHtml(app.email || '') + ' · Submitted: ' + submitted + '</div>'
+    + '<div style="display:inline-flex;margin-top:6px;padding:3px 8px;border-radius:999px;background:' + statusBg + ';color:' + statusColor + ';font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em">' + statusLabel + '</div>'
+    + '<div style="font-size:11px;color:var(--muted);margin-top:3px">' + escHtml(app.email || '') + ' - Submitted: ' + submitted + '</div>'
     + '<div style="font-size:11px;color:var(--muted);margin-top:2px">Signed: ' + signed + '</div>'
-    + '<div style="font-size:11.5px;color:var(--text);margin-top:6px;font-weight:600">' + fmt(quote.amount || 0) + ' over ' + (quote.termMonths || '-') + ' months · ' + fmt(quote.emi || 0) + '/month</div>'
+    + '<div style="font-size:11.5px;color:var(--text);margin-top:6px;font-weight:600">' + fmt(quote.amount || 0) + ' over ' + (quote.termMonths || '-') + ' months - ' + fmt(quote.emi || 0) + '/month</div>'
     + '</div>'
-    + '<button class="btn btn-primary btn-xs" onclick="approvePublicDisbursal(\'' + app.storageKey + '\')">Approve</button>'
+    + actionHtml
     + '</div>'
     + '</div>';
 }
 function renderPendingApplications() {
   var n = OPS.pendingApplications.length;
-  var emptyHtml = '<div style="padding:10px 0;color:var(--muted);font-size:12px">No signed applications are waiting for disbursal approval right now.</div>';
+  var emptyHtml = '<div style="padding:10px 0;color:var(--muted);font-size:12px">No submitted applications are waiting right now.</div>';
   var listHtml = n ? OPS.pendingApplications.map(_buildPendingAppHtml).join('') : emptyHtml;
-  var countText = n ? (n + ' waiting') : 'None waiting';
+  var ready = OPS.pendingApplications.filter(function(app) { return app.stage === 'signed_pending_disbursal'; }).length;
+  var countText = n ? (n + ' pending' + (ready ? ' - ' + ready + ' ready' : '')) : 'None waiting';
   // Overview card
   var box = document.getElementById('ov-app-queue');
   var count = document.getElementById('ov-app-count');
