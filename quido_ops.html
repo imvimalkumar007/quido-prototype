@@ -41,6 +41,8 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 .brand-mark .q-ring{stroke:#ffffff}
 
 .brand-mark svg{display:block;width:132%;height:132%;max-width:none;max-height:none;}
+.logo-box{background:linear-gradient(140deg,var(--blue),var(--blue-dark));border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(11,29,80,0.3);flex-shrink:0}
+.logo-q{font-family:var(--fd);font-weight:800;color:#fff;line-height:1}
 .brand-copy{display:flex;flex-direction:column;gap:1px}
 .sb-name{font-family:var(--fd);font-size:13px;font-weight:800;color:#f8fafc;letter-spacing:-.02em}
 .sb-sub{font-size:10px;color:var(--sb-text);text-transform:uppercase;letter-spacing:.06em}
@@ -206,8 +208,8 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 <div id="ops-login-overlay" style="position:fixed;inset:0;background:#0f172a;z-index:9900;display:flex;align-items:center;justify-content:center">
   <div style="width:420px;background:#fff;border-radius:16px;padding:40px;box-shadow:0 24px 80px rgba(0,0,0,.55)">
     <div style="text-align:center;margin-bottom:28px">
-      <div class="brand-mark" style="width:52px;height:52px;border-radius:16px;margin:0 auto 14px">
-        <svg width="30" height="30" viewBox="0 0 200 200" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bgQ1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1c3892" /><stop offset="100%" style="stop-color:#0b1d50" /></linearGradient></defs><rect x="10" y="10" width="180" height="180" rx="45" fill="url(#bgQ1)" /><path d="M145 190 C 145 190, 155 145, 190 145 L 190 145 Q 190 190, 145 190 Z" fill="#00c9a7" /><g transform="translate(60, 60)"><circle cx="35" cy="35" r="28" fill="none" stroke="white" stroke-width="12" /><line x1="55" y1="55" x2="75" y2="75" stroke="white" stroke-width="12" stroke-linecap="round" /></g></svg>
+      <div class="logo-box" style="width:52px;height:52px;border-radius:16px;margin:0 auto 14px">
+        <span class="logo-q" style="font-size:26px">Q</span>
       </div>
       <div style="font-size:20px;font-weight:800;color:#0f172a">Quido Operations</div>
       <div style="font-size:12px;color:#7880a0;margin-top:3px">Agent sign-in</div>
@@ -253,7 +255,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 <div id="ops-cust-selector" style="position:fixed;inset:0;background:var(--bg);z-index:9800;display:none;flex-direction:column;overflow:hidden">
   <div style="background:var(--sb);padding:16px 24px;display:flex;align-items:center;gap:14px;flex-shrink:0;border-bottom:1px solid var(--sb-border)">
     <button class="brand-shell" type="button" onclick="if (typeof showCustomerSelector==='function') showCustomerSelector()">
-      <span class="brand-mark"><svg width="22" height="22" viewBox="0 0 200 200" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bgQ2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1c3892" /><stop offset="100%" style="stop-color:#0b1d50" /></linearGradient></defs><rect x="10" y="10" width="180" height="180" rx="45" fill="url(#bgQ2)" /><path d="M145 190 C 145 190, 155 145, 190 145 L 190 145 Q 190 190, 145 190 Z" fill="#00c9a7" /><g transform="translate(60, 60)"><circle cx="35" cy="35" r="28" fill="none" stroke="white" stroke-width="12" /><line x1="55" y1="55" x2="75" y2="75" stroke="white" stroke-width="12" stroke-linecap="round" /></g></svg></span>
+      <span class="logo-box" style="width:30px;height:30px"><span class="logo-q" style="font-size:15px">Q</span></span>
       <span class="brand-copy">
         <span style="font-size:13px;font-weight:700;color:#f8fafc">Quido</span>
         <span style="font-size:10px;color:var(--sb-text);text-transform:uppercase;letter-spacing:.06em">Operations Centre</span>
@@ -294,7 +296,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
   <aside class="sidebar">
     <div class="sb-logo">
       <button class="brand-shell" type="button" onclick="gotoSec('sec-overview')">
-        <span class="brand-mark"><svg width="22" height="22" viewBox="0 0 200 200" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bgQ3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1c3892" /><stop offset="100%" style="stop-color:#0b1d50" /></linearGradient></defs><rect x="10" y="10" width="180" height="180" rx="45" fill="url(#bgQ3)" /><path d="M145 190 C 145 190, 155 145, 190 145 L 190 145 Q 190 190, 145 190 Z" fill="#00c9a7" /><g transform="translate(60, 60)"><circle cx="35" cy="35" r="28" fill="none" stroke="white" stroke-width="12" /><line x1="55" y1="55" x2="75" y2="75" stroke="white" stroke-width="12" stroke-linecap="round" /></g></svg></span>
+        <span class="logo-box" style="width:30px;height:30px"><span class="logo-q" style="font-size:15px">Q</span></span>
         <span class="brand-copy"><span class="sb-name">Quido</span><span class="sb-sub">Operations Centre</span></span>
       </button>
     </div>
