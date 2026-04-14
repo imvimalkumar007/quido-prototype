@@ -4,16 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quido | Personal loans, done right</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230e5cf2'/%3E%3Ccircle cx='31' cy='29' r='15' fill='none' stroke='white' stroke-width='8'/%3E%3Cpath d='M41 41l9 9' stroke='%2330ca90' stroke-width='8' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
-/* â”€â”€ Reset â”€â”€ */
+/* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
-/* â”€â”€ Tokens â”€â”€ */
+/* ── Tokens ── */
 :root {
   --ink:       #07101e;
   --ink-soft:  #3a4362;
@@ -21,12 +20,12 @@ html { scroll-behavior: smooth; }
   --surface:   #ffffff;
   --s2:        #f3f6fb;
   --border:    #dde2ef;
-  --teal:      #30ca90;
-  --teal-d:    #0b8f67;
-  --teal-glow: rgba(48,202,144,0.14);
+  --teal:      #00c9a7;
+  --teal-d:    #00a888;
+  --teal-glow: rgba(0,201,167,0.13);
   --navy:      #0b1d50;
-  --navy-m:    #174edc;
-  --navy-l:    #0e5cf2;
+  --navy-m:    #162c78;
+  --navy-l:    #1c3892;
   --od-1: rgba(255,255,255,0.96);
   --od-2: rgba(255,255,255,0.70);
   --od-3: rgba(255,255,255,0.45);
@@ -43,9 +42,9 @@ body {
   overflow-x: clip;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════
    NAV
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════════════════════════ */
 .nav {
   position: fixed;
   top: 14px; left: 50%;
@@ -110,9 +109,9 @@ body {
 .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════
    HERO
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════════════════════════ */
 .hero {
   padding: 100px 0 64px;
   position: relative;
@@ -120,7 +119,7 @@ body {
   overflow: hidden;
 }
 .orb { position: absolute; border-radius: 50%; pointer-events: none; will-change: transform; }
-.orb-a { width: 480px; height: 480px; top: -80px; right: -80px; background: radial-gradient(circle, rgba(48,202,144,0.16) 0%, transparent 70%); animation: floatA 12s ease-in-out infinite; }
+.orb-a { width: 480px; height: 480px; top: -80px; right: -80px; background: radial-gradient(circle, rgba(0,201,167,0.15) 0%, transparent 70%); animation: floatA 12s ease-in-out infinite; }
 .orb-b { width: 320px; height: 320px; bottom: -60px; left: -60px; background: radial-gradient(circle, rgba(11,29,80,0.09) 0%, transparent 70%); animation: floatB 15s ease-in-out infinite; }
 @keyframes floatA { 0%,100%{transform:translate(0,0)} 50%{transform:translate(16px,-24px)} }
 @keyframes floatB { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-12px,18px)} }
@@ -141,7 +140,7 @@ body {
   font-size: clamp(36px, 4.2vw, 62px);
   font-weight: 800; line-height: 1.04;
   letter-spacing: -0.035em;
-  color: var(--navy-l); margin-bottom: 16px;
+  color: var(--ink); margin-bottom: 16px;
   opacity: 0; animation: riseIn 0.65s cubic-bezier(0.22,1,0.36,1) 0.05s forwards;
 }
 .hero-h1 em {
@@ -180,8 +179,8 @@ body {
 }
 .ht-card:hover { box-shadow: 0 6px 20px rgba(7,16,30,0.09); transform: translateY(-2px); }
 .ht-ico { width: 40px; height: 40px; flex-shrink: 0; border-radius: 11px; display: flex; align-items: center; justify-content: center; }
-.ht-teal   { background: rgba(48,202,144,0.14);  color: var(--teal-d); }
-.ht-blue   { background: rgba(14,92,242,0.10);   color: var(--navy-l); }
+.ht-teal   { background: rgba(0,201,167,0.12);  color: var(--teal-d); }
+.ht-blue   { background: rgba(28,56,146,0.1);   color: var(--navy-l); }
 .ht-orange { background: rgba(235,100,40,0.1);  color: #c04010; }
 .ht-purple { background: rgba(100,60,240,0.1);  color: #5020c0; }
 .ht-ico svg { width: 18px; height: 18px; }
@@ -203,22 +202,22 @@ body {
   box-shadow: 0 4px 16px rgba(7,16,30,0.07); flex: 1; min-width: 0;
 }
 .chip-ico { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.ci-green  { background: rgba(48,202,144,0.14); color: var(--teal-d); }
-.ci-blue   { background: rgba(14,92,242,0.10);  color: var(--navy-l); }
+.ci-green  { background: rgba(0,201,167,0.12); color: var(--teal-d); }
+.ci-blue   { background: rgba(28,56,146,0.1);  color: var(--navy-l); }
 .ci-orange { background: rgba(240,100,40,0.1); color: #c04010; }
 .chip-ico svg { width: 17px; height: 17px; }
 .chip-label { font-family: var(--fb); font-size: 10px; font-weight: 600; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
 .chip-val   { font-family: var(--fd); font-size: 15px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
 
-/* â”€â”€ Quote Card â”€â”€ */
+/* ── Quote Card ── */
 .qcard {
   background: var(--navy); border-radius: 24px; padding: 28px 24px;
   position: relative; overflow: hidden;
   box-shadow: 0 24px 64px rgba(7,16,30,0.22), 0 0 0 1px rgba(255,255,255,0.05) inset;
   width: 100%;
 }
-.qcard-g1 { position: absolute; top: -80px; right: -80px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(48,202,144,0.22) 0%, transparent 65%); pointer-events: none; }
-.qcard-g2 { position: absolute; bottom: -50px; left: -40px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(14,92,242,0.5) 0%, transparent 65%); pointer-events: none; }
+.qcard-g1 { position: absolute; top: -80px; right: -80px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(0,201,167,0.22) 0%, transparent 65%); pointer-events: none; }
+.qcard-g2 { position: absolute; bottom: -50px; left: -40px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(28,56,146,0.5) 0%, transparent 65%); pointer-events: none; }
 .qcard-head { margin-bottom: 18px; position: relative; z-index: 1; }
 .qcard-head h2 { font-family: var(--fd); font-size: 19px; font-weight: 800; color: var(--od-1); letter-spacing: -0.02em; margin-bottom: 3px; }
 .qcard-head p { font-family: var(--fb); font-size: 12px; color: var(--od-3); }
@@ -248,7 +247,7 @@ input[type="range"]::-webkit-slider-thumb {
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   transition: transform 0.15s, box-shadow 0.15s;
 }
-input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); box-shadow: 0 0 0 6px rgba(48,202,144,0.18), 0 2px 6px rgba(0,0,0,0.2); }
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); box-shadow: 0 0 0 6px rgba(0,201,167,0.18), 0 2px 6px rgba(0,0,0,0.2); }
 input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #fff; border: 2.5px solid var(--teal); cursor: pointer; }
 .sl-range { display: flex; justify-content: space-between; font-family: var(--fb); font-size: 9.5px; color: var(--od-4); }
 .btn-apply {
@@ -258,13 +257,13 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
   letter-spacing: -0.01em; margin-bottom: 12px; position: relative; z-index: 1;
   transition: transform 0.22s cubic-bezier(0.22,1,0.36,1), box-shadow 0.22s, filter 0.22s;
 }
-.btn-apply:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(48,202,144,0.38); filter: brightness(1.06); }
+.btn-apply:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,201,167,0.38); filter: brightness(1.06); }
 .btn-apply:active { transform: translateY(0); }
 .qcard-disc { font-family: var(--fb); font-size: 10px; color: var(--od-4); text-align: center; line-height: 1.55; position: relative; z-index: 1; }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════
    TRUST
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════════════════════════ */
 .trust { background: #ffffff; padding: 56px 24px 72px; }
 .trust-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
 .tcard {
@@ -275,19 +274,19 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
 .tcard.in { transform: translateY(0); }
 .tcard:hover { transform: translateY(-4px) !important; box-shadow: 0 12px 32px rgba(7,16,30,0.09); }
 .tcard-ico { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.ti-teal   { background: rgba(48,202,144,0.12);  color: var(--teal-d); }
+.ti-teal   { background: rgba(0,201,167,0.1);  color: var(--teal-d); }
 .ti-orange { background: rgba(235,100,40,0.1); color: #c0480a; }
 .ti-purple { background: rgba(100,60,240,0.1); color: #5428d4; }
 .tcard-ico svg { width: 20px; height: 20px; }
 .tcard h4 { font-family: var(--fd); font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.015em; }
 .tcard p  { font-family: var(--fb); font-size: 12.5px; color: var(--ink-muted); line-height: 1.55; }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════
    HOW IT WORKS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════════════════════════ */
 .how { padding: 88px 24px 96px; background: var(--ink); position: relative; overflow: hidden; }
-.how-bg1 { position: absolute; top: -120px; right: -80px; width: 480px; height: 480px; background: radial-gradient(circle, rgba(48,202,144,0.12) 0%, transparent 62%); pointer-events: none; }
-.how-bg2 { position: absolute; bottom: -80px; left: -60px; width: 360px; height: 360px; background: radial-gradient(circle, rgba(14,92,242,0.28) 0%, transparent 62%); pointer-events: none; }
+.how-bg1 { position: absolute; top: -120px; right: -80px; width: 480px; height: 480px; background: radial-gradient(circle, rgba(0,201,167,0.1) 0%, transparent 62%); pointer-events: none; }
+.how-bg2 { position: absolute; bottom: -80px; left: -60px; width: 360px; height: 360px; background: radial-gradient(circle, rgba(28,56,146,0.28) 0%, transparent 62%); pointer-events: none; }
 .how-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
 .eyebrow { font-family: var(--fb); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--teal); margin-bottom: 10px; }
 .sec-title { font-family: var(--fd); font-size: clamp(26px,3.6vw,44px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.07; color: var(--od-1); margin-bottom: 12px; }
@@ -301,7 +300,7 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
   transition: background 0.45s cubic-bezier(0.22,1,0.36,1), border-color 0.45s, color 0.45s;
 }
 .step.lit .step-n { background: linear-gradient(135deg, var(--teal-d), var(--teal)); border-color: transparent; color: var(--navy); animation: npop 0.5s cubic-bezier(0.22,1,0.36,1) forwards; }
-@keyframes npop { 0%{transform:scale(0.82);box-shadow:0 0 0 0 rgba(48,202,144,0.45)} 60%{transform:scale(1.1);box-shadow:0 0 0 10px rgba(48,202,144,0)} 100%{transform:scale(1);box-shadow:none} }
+@keyframes npop { 0%{transform:scale(0.82);box-shadow:0 0 0 0 rgba(0,201,167,0.45)} 60%{transform:scale(1.1);box-shadow:0 0 0 10px rgba(0,201,167,0)} 100%{transform:scale(1);box-shadow:none} }
 .step h3 { font-family: var(--fd); font-size: 16px; font-weight: 700; color: var(--od-1); margin-bottom: 8px; letter-spacing: -0.02em; }
 .step p  { font-family: var(--fb); font-size: 13px; color: var(--od-2); line-height: 1.65; }
 .conn { display: flex; align-items: flex-start; padding-top: 20px; justify-content: center; }
@@ -318,13 +317,13 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
   text-decoration: none; letter-spacing: -0.01em;
   transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s, filter 0.25s;
 }
-.btn-lg:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(48,202,144,0.36); filter: brightness(1.05); }
+.btn-lg:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,201,167,0.36); filter: brightness(1.05); }
 .btn-arr { width: 22px; height: 22px; background: rgba(11,29,80,0.16); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
 .btn-lg:hover .btn-arr { transform: translateX(3px); }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════
    FOOTER
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════════════════════════ */
 footer { background: #050c1a; padding: 56px 24px 32px; }
 .fi { max-width: 1100px; margin: 0 auto; }
 .ft { display: grid; grid-template-columns: 240px 1fr 1fr 1fr; gap: 44px; margin-bottom: 40px; }
@@ -336,15 +335,15 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .fhr { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin-bottom: 20px; }
 .fbot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; font-family: var(--fb); font-size: 11.5px; color: rgba(255,255,255,0.2); }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════
    SCROLL REVEAL
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════════════════════════ */
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.6s cubic-bezier(0.22,1,0.36,1); }
 .reveal.in { opacity: 1; transform: translateY(0); }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════
    RESPONSIVE
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════════════════════════ */
 @media (max-width: 1020px) {
   .hero-inner { grid-template-columns: 1fr 360px; gap: 36px; }
   .ft { grid-template-columns: 1fr 1fr; gap: 28px; }
@@ -374,7 +373,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
   .btn-login { padding: 7px 13px; font-size: 12px; }
   .hero { padding: 72px 0 40px; }
   .hero-inner { padding: 0 16px; gap: 22px; }
-  .hero-h1 { font-size: 32px; letter-spacing: -0.03em; line-height: 1.06; }
+  .hero-h1 { font-size: 28px; letter-spacing: -0.03em; line-height: 1.06; }
   .hero-p { font-size: 14.5px; margin-bottom: 18px; }
   .hero-trust { gap: 9px; }
   .qcard { padding: 20px 16px; border-radius: 20px; }
@@ -398,7 +397,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
   .nav { width: calc(100% - 16px); padding: 0 12px; }
   .hero { padding: 68px 0 32px; }
   .hero-inner { padding: 0 14px; }
-  .hero-h1 { font-size: 29px; }
+  .hero-h1 { font-size: 24px; }
   .hero-p { font-size: 14px; }
   .hero-trust { grid-template-columns: 1fr 1fr; gap: 8px; }
   .ht-card { padding: 11px 10px; gap: 9px; }
@@ -414,18 +413,18 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
   .fbot { flex-direction: column; }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════
    TOPBAR
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════════════════════════ */
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════
    APP SECTION WRAPPER
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════════════════════════ */
 
 
 /* Modern bento trust mosaic */
 .bento { background: var(--navy); padding: 72px 24px 80px; position: relative; overflow: hidden; }
-.bento::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 55% 55% at 85% 5%, rgba(48,202,144,0.14) 0%, transparent 60%), radial-gradient(ellipse 45% 55% at 5% 95%, rgba(14,92,242,0.35) 0%, transparent 60%); pointer-events: none; }
+.bento::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 55% 55% at 85% 5%, rgba(0,201,167,0.12) 0%, transparent 60%), radial-gradient(ellipse 45% 55% at 5% 95%, rgba(28,56,146,0.35) 0%, transparent 60%); pointer-events: none; }
 .bento-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
 .bento-eyebrow { font-family: var(--fb); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em; color: var(--teal); margin-bottom: 28px; }
 .bento-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
@@ -434,17 +433,17 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .bc-4, .bc-5 { margin-top: 8px; }
 .bc { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 28px 26px; position: relative; overflow: hidden; transform: translateY(24px); opacity: 0; transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1), box-shadow .3s, background .2s; }
 .bc.in { opacity: 1; transform: translateY(0); }
-.bc:hover { box-shadow: 0 0 0 1px rgba(48,202,144,0.3); background: rgba(255,255,255,0.08); }
-.bc-1::after { content: ''; position: absolute; top: -40px; right: -40px; width: 130px; height: 130px; background: radial-gradient(circle, rgba(48,202,144,0.18) 0%, transparent 70%); pointer-events: none; }
-.bc-4::after { content: ''; position: absolute; bottom: -40px; left: -40px; width: 160px; height: 160px; background: radial-gradient(circle, rgba(14,92,242,0.55) 0%, transparent 70%); pointer-events: none; }
+.bc:hover { box-shadow: 0 0 0 1px rgba(0,201,167,0.3); background: rgba(255,255,255,0.08); }
+.bc-1::after { content: ''; position: absolute; top: -40px; right: -40px; width: 130px; height: 130px; background: radial-gradient(circle, rgba(0,201,167,0.18) 0%, transparent 70%); pointer-events: none; }
+.bc-4::after { content: ''; position: absolute; bottom: -40px; left: -40px; width: 160px; height: 160px; background: radial-gradient(circle, rgba(28,56,146,0.55) 0%, transparent 70%); pointer-events: none; }
 .bc-ico { width: 44px; height: 44px; border-radius: 13px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; flex-shrink: 0; }
 .bc-ico svg { width: 22px; height: 22px; }
 .bci-blue { background: rgba(100,140,255,0.15); color: #7eb0ff; }
 .bci-ora { background: rgba(255,150,60,0.15); color: #ffaa55; }
-.bci-grn { background: rgba(80,220,120,0.15); color: var(--teal); }
-.bc-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(48,202,144,0.14); border: 1px solid rgba(48,202,144,0.30); border-radius: 100px; padding: 4px 12px; font-family: var(--fb); font-size: 11px; font-weight: 600; color: var(--teal); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 16px; }
+.bci-grn { background: rgba(80,220,120,0.15); color: #60e080; }
+.bc-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,201,167,0.12); border: 1px solid rgba(0,201,167,0.28); border-radius: 100px; padding: 4px 12px; font-family: var(--fb); font-size: 11px; font-weight: 600; color: var(--teal); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 16px; }
 .bc-tag-dot { width: 6px; height: 6px; background: var(--teal); border-radius: 50%; animation: tdot 2s ease-in-out infinite; flex-shrink: 0; }
-@keyframes tdot { 0%,100% { box-shadow: 0 0 0 0 rgba(48,202,144,0.5); } 50% { box-shadow: 0 0 0 4px rgba(48,202,144,0); } }
+@keyframes tdot { 0%,100% { box-shadow: 0 0 0 0 rgba(0,201,167,0.5); } 50% { box-shadow: 0 0 0 4px rgba(0,201,167,0); } }
 .bc-stat, .bc-counter { font-family: var(--fd); font-size: clamp(38px, 3.5vw, 52px); font-weight: 800; color: var(--od-1); letter-spacing: -0.04em; line-height: 1; margin-bottom: 10px; }
 .bc-counter { color: var(--teal); }
 .bc-stat-unit { font-size: .48em; font-weight: 600; letter-spacing: -0.01em; opacity: .55; vertical-align: middle; }
@@ -473,13 +472,13 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .tl-card p { font-family: var(--fb); font-size: 13.5px; color: var(--ink-soft); line-height: 1.65; }
 .tl-node { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; padding-top: 20px; }
 .tl-num { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--border); background: var(--surface); font-family: var(--fd); font-size: 17px; font-weight: 800; color: var(--ink-muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .45s cubic-bezier(.22,1,.36,1); }
-.tl-step.lit .tl-num { background: linear-gradient(135deg, var(--teal-d), var(--teal)); border-color: transparent; color: var(--navy); box-shadow: 0 0 0 6px rgba(48,202,144,0.16); animation: npop .5s cubic-bezier(.22,1,.36,1) forwards; }
+.tl-step.lit .tl-num { background: linear-gradient(135deg, var(--teal-d), var(--teal)); border-color: transparent; color: var(--navy); box-shadow: 0 0 0 6px rgba(0,201,167,0.15); animation: npop .5s cubic-bezier(.22,1,.36,1) forwards; }
 .tl-line { width: 2px; flex: 1; min-height: 52px; background: var(--border); position: relative; overflow: hidden; margin: 3px 0; }
 .tl-line-fill { position: absolute; top: 0; left: 0; width: 100%; height: 0%; background: linear-gradient(to bottom, var(--teal-d), var(--teal)); transition: height .75s cubic-bezier(.22,1,.36,1); }
 .tl-step.lit .tl-line-fill { height: 100%; }
 .how-cta { text-align: center; margin-top: 12px; }
 .btn-lg { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--teal-d), var(--teal)); color: var(--navy); border: none; padding: 14px 32px; border-radius: 100px; font-family: var(--fd); font-size: 14px; font-weight: 800; cursor: pointer; text-decoration: none; letter-spacing: -0.01em; transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s, filter .25s; }
-.btn-lg:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(48,202,144,0.36); filter: brightness(1.05); }
+.btn-lg:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,201,167,0.36); filter: brightness(1.05); }
 .btn-arr { width: 22px; height: 22px; background: rgba(11,29,80,0.16); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform .2s; }
 .btn-lg:hover .btn-arr { transform: translateX(3px); }
 
@@ -504,7 +503,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .cf-req { color: var(--teal-d); }
 .cf-input, .cf-select, .cf-textarea { font-family: var(--fb); font-size: 14px; color: var(--ink); background: #fff; border: 1.5px solid var(--border); border-radius: 10px; padding: 11px 14px; outline: none; transition: border-color .18s, box-shadow .18s; width: 100%; min-width: 0; }
 .cf-input::placeholder, .cf-textarea::placeholder { color: var(--ink-muted); }
-.cf-input:focus, .cf-select:focus, .cf-textarea:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(48,202,144,0.14); }
+.cf-input:focus, .cf-select:focus, .cf-textarea:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(0,201,167,0.12); }
 .cf-input.error, .cf-select.error, .cf-textarea.error { border-color: #e03050; box-shadow: 0 0 0 3px rgba(224,48,80,0.1); }
 .cf-err { font-family: var(--fb); font-size: 12px; color: #e03050; min-height: 16px; }
 .cf-select-wrap { position: relative; }
@@ -512,7 +511,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .cf-chevron { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); width: 16px; height: 16px; color: var(--ink-muted); pointer-events: none; }
 .cf-toggle { display: flex; gap: 8px; flex-wrap: wrap; }
 .cf-tog-btn { flex: 1; min-width: 130px; display: flex; align-items: center; gap: 8px; background: #fff; border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 14px; font-family: var(--fb); font-size: 13.5px; font-weight: 500; color: var(--ink-soft); cursor: pointer; transition: all .18s; }
-.cf-tog-btn.active { border-color: var(--teal); background: rgba(48,202,144,0.09); color: var(--ink); font-weight: 600; }
+.cf-tog-btn.active { border-color: var(--teal); background: rgba(0,201,167,0.07); color: var(--ink); font-weight: 600; }
 .cf-tog-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; border: 2px solid var(--border); transition: all .18s; }
 .cf-tog-btn.active .cf-tog-dot { border-color: var(--teal); background: var(--teal); box-shadow: inset 0 0 0 2px #fff; }
 .cf-textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
@@ -521,7 +520,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .cf-submit:active { transform: translateY(0); }
 .cf-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
 .cf-success { text-align: center; padding: 32px 16px; }
-.cf-success-ico { width: 56px; height: 56px; border-radius: 50%; background: rgba(48,202,144,0.14); color: var(--teal-d); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+.cf-success-ico { width: 56px; height: 56px; border-radius: 50%; background: rgba(0,201,167,0.12); color: var(--teal-d); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
 .cf-success-ico svg { width: 26px; height: 26px; }
 .cf-success-title { font-family: var(--fd); font-size: 20px; font-weight: 800; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.02em; }
 .cf-success-body { font-family: var(--fb); font-size: 14px; color: var(--ink-soft); line-height: 1.6; }
@@ -551,9 +550,9 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .app-section-wrap { background: var(--s2); padding: 56px 24px 64px; }
 .app-section-inner { max-width: 1100px; margin: 0 auto; }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════
    APP SHELL + FORMS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════════════════════════ */
 .app-shell { background: var(--surface); border: 1px solid var(--border); border-radius: 28px; box-shadow: 0 20px 50px rgba(7,16,30,.08); padding: 28px; }
 .app-head { margin-bottom: 22px; }
 .app-head h3 { margin: 0 0 6px; font-size: 26px; font-weight: 800; letter-spacing: -.04em; font-family: var(--fd); color: var(--ink); }
@@ -574,7 +573,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .field label { font-size: 11px; font-weight: 800; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .08em; font-family: var(--fb); }
 .field input,.field select { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; padding: 13px 14px; min-height: 50px; border: 1.5px solid var(--border); border-radius: 14px; background: var(--surface); outline: none; font-family: var(--fb); color: var(--ink); font-size: 14px; }
 .field input[type="date"],.field input[type="month"] { -webkit-appearance: none; appearance: none; font-size: 16px; padding: 13px 14px; }
-.field input:focus,.field select:focus { border-color: var(--navy-l); box-shadow: 0 0 0 3px rgba(14,92,242,.08); }
+.field input:focus,.field select:focus { border-color: var(--navy-l); box-shadow: 0 0 0 3px rgba(28,56,146,.08); }
 .message { padding: 13px 14px; border-radius: 14px; font-size: 13px; line-height: 1.6; font-family: var(--fb); }
 .message:empty { display: none; }
 .message.info { background: #eff6ff; color: #1e40af; }
@@ -586,26 +585,26 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .check input { width: 18px; height: 18px; min-width: 18px; min-height: 18px; margin: 1px 0 0; flex-shrink: 0; }
 .inline { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 .btn { display: inline-flex; align-items: center; justify-content: center; border: none; border-radius: 16px; padding: 14px 24px; font-size: 14px; font-weight: 800; min-width: 140px; font-family: var(--fd); cursor: pointer; }
-.btn-primary { background: linear-gradient(135deg, var(--navy-l), var(--navy)); color: #fff; box-shadow: 0 10px 30px rgba(14,92,242,.10); }
+.btn-primary { background: linear-gradient(135deg, var(--navy-l), var(--navy)); color: #fff; box-shadow: 0 10px 30px rgba(28,56,146,.1); }
 .btn-primary:hover { background: linear-gradient(135deg, var(--navy-m), var(--navy)); }
 .btn-secondary { background: var(--surface); color: var(--ink); border: 1.5px solid var(--border); }
 .btn-secondary:hover { background: var(--s2); }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════
    CONTACT STRIPS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════════════════════════ */
 .contact-outer { background: var(--surface); padding: 0 24px 64px; }
 .contact-inner { max-width: 1100px; margin: 0 auto; }
 .contact-strips { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.cstrip { display: flex; align-items: center; gap: 14px; padding: 20px 18px; background: linear-gradient(135deg,var(--navy-l),var(--navy)); border-radius: 20px; color: #fff; border: none; width: 100%; text-align: left; cursor: default; box-shadow: 0 6px 20px rgba(14,92,242,.20); text-decoration: none; transition: transform .18s, box-shadow .18s; }
-.cstrip:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(14,92,242,.28); }
+.cstrip { display: flex; align-items: center; gap: 14px; padding: 20px 18px; background: linear-gradient(135deg,var(--navy-l),var(--navy)); border-radius: 20px; color: #fff; border: none; width: 100%; text-align: left; cursor: default; box-shadow: 0 6px 20px rgba(28,56,146,.2); text-decoration: none; transition: transform .18s, box-shadow .18s; }
+.cstrip:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(28,56,146,.28); }
 .cstrip-icon { width: 42px; height: 42px; border-radius: 11px; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .cstrip-text strong { display: block; font-size: 13.5px; font-weight: 700; color: #fff; font-family: var(--fd); }
 .cstrip-text span { display: block; font-size: 12px; color: rgba(255,255,255,.75); margin-top: 3px; font-family: var(--fb); }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════
    CHAT FAB + PANEL
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+════════════════════════════════════════ */
 .cfab { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: linear-gradient(135deg,var(--navy-l),var(--navy)); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 50; border: none; }
 .cnb { position: absolute; top: -2px; right: -2px; width: 18px; height: 18px; background: #ef4444; border-radius: 50%; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #fff; }
 .cpanel { position: fixed; bottom: 80px; right: 12px; width: 320px; background: var(--surface); border-radius: 28px; box-shadow: 0 12px 40px rgba(0,0,0,.18); z-index: 49; overflow: hidden; display: none; flex-direction: column; height: 420px; }
@@ -614,7 +613,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .cav { width: 34px; height: 34px; background: rgba(255,255,255,.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; font-family: var(--fd); }
 .can { font-size: 13px; font-weight: 700; color: #fff; font-family: var(--fd); }
 .col { font-size: 10px; color: rgba(255,255,255,.7); display: flex; align-items: center; gap: 4px; margin-top: 1px; }
-.cold { width: 6px; height: 6px; background: var(--teal); border-radius: 50%; }
+.cold { width: 6px; height: 6px; background: #4ade80; border-radius: 50%; }
 .ccl { margin-left: auto; background: rgba(255,255,255,.15); border: none; border-radius: 8px; padding: 5px 8px; color: #fff; cursor: pointer; font-size: 11px; }
 .cmsgs { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 7px; background: var(--s2); }
 .cmsgs::-webkit-scrollbar { display: none; }
@@ -655,8 +654,8 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 <svg width="0" height="0" style="position:absolute;pointer-events:none">
   <defs>
     <linearGradient id="tg" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#0b8f67"/>
-      <stop offset="100%" stop-color="#30ca90"/>
+      <stop offset="0%" stop-color="#00a888"/>
+      <stop offset="100%" stop-color="#00c9a7"/>
     </linearGradient>
   </defs>
 </svg>
@@ -688,7 +687,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
   <div class="hero-inner">
     <div class="hero-copy">
       <h1 class="hero-h1">Personal loans,<br><em>done right.</em></h1>
-      <p class="hero-p">Transparent lending from Â£300 to Â£10,000.<br>Same-day decisions. No credit footprint.</p>
+      <p class="hero-p">Transparent lending from £300 to £10,000.<br>Same-day decisions. No credit footprint.</p>
       <div class="hero-trust">
         <div class="ht-card">
           <div class="ht-ico ht-teal">
@@ -712,7 +711,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
           <div class="ht-ico ht-purple">
             <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="20" height="18" rx="3"/><line x1="4" y1="11" x2="24" y2="11"/><line x1="9" y1="3" x2="9" y2="9"/><line x1="19" y1="3" x2="19" y2="9"/><polyline points="9,17 12,20 19,15"/></svg>
           </div>
-          <div class="ht-text"><span class="ht-val">6â€“24 mo</span><span class="ht-lbl">Flexible term</span></div>
+          <div class="ht-text"><span class="ht-val">6–24 mo</span><span class="ht-lbl">Flexible term</span></div>
         </div>
       </div>
     </div>
@@ -727,17 +726,17 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
           <p>Adjust the sliders and your repayment updates instantly</p>
         </div>
         <div class="qstats">
-          <div class="qs"><div class="qs-lbl">Borrowing</div><div class="qs-val" id="s-borrow">Â£1,500</div><div class="qs-sub" id="s-sub">12 payments</div></div>
-          <div class="qs"><div class="qs-lbl">Monthly</div><div class="qs-val" id="s-monthly">Â£146</div><div class="qs-sub">per month</div></div>
-          <div class="qs"><div class="qs-lbl">Total</div><div class="qs-val" id="s-total">Â£1,754</div><div class="qs-sub">29.9% APR</div></div>
+          <div class="qs"><div class="qs-lbl">Borrowing</div><div class="qs-val" id="s-borrow">£1,500</div><div class="qs-sub" id="s-sub">12 payments</div></div>
+          <div class="qs"><div class="qs-lbl">Monthly</div><div class="qs-val" id="s-monthly">£146</div><div class="qs-sub">per month</div></div>
+          <div class="qs"><div class="qs-lbl">Total</div><div class="qs-val" id="s-total">£1,754</div><div class="qs-sub">29.9% APR</div></div>
         </div>
         <div class="sl">
-          <div class="sl-head"><span class="sl-lbl">Amount</span><span class="sl-val" id="a-disp">Â£1,500</span></div>
+          <div class="sl-head"><span class="sl-lbl">Amount</span><span class="sl-val" id="a-disp">£1,500</span></div>
           <div class="sl-track">
             <div class="sl-fill" id="a-fill" style="width:12.4%"></div>
             <input type="range" id="a-sl" min="300" max="10000" step="50" value="1500">
           </div>
-          <div class="sl-range"><span>Â£300</span><span>Â£10,000</span></div>
+          <div class="sl-range"><span>£300</span><span>£10,000</span></div>
         </div>
         <div class="sl">
           <div class="sl-head"><span class="sl-lbl">Term</span><span class="sl-val" id="t-disp">12 months</span></div>
@@ -748,7 +747,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
           <div class="sl-range"><span>6 months</span><span>24 months</span></div>
         </div>
         <button class="btn-apply" type="button" onclick="startApplication()">Apply now, no credit check</button>
-        <p class="qcard-disc" id="disc">Representative example: Â£1,500 over 12 months at 29.9% APR. Monthly repayment Â£147.85. Total repayable Â£1,774.20.</p>
+        <p class="qcard-disc" id="disc">Representative example: £1,500 over 12 months at 29.9% APR. Monthly repayment £147.85. Total repayable £1,774.20.</p>
       </div>
     </div>
   </div>
@@ -904,21 +903,21 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
                   <div class="field"><label for="pf-employer-phone">Employer phone</label><input id="pf-employer-phone" type="tel" maxlength="20" placeholder="Employer contact number"></div>
                 </div>
                 <div class="field" id="length-service-group"><label for="pf-length-service">Length of service</label><select id="pf-length-service"><option value="1_3M">1 &ndash; 3 months</option><option value="4_6M">4 &ndash; 6 months</option><option value="7_12M">7 &ndash; 12 months</option><option value="1_2Y" selected>1 &ndash; 2 years</option><option value="2_4Y">2 &ndash; 4 years</option><option value="OVER_4Y">Over 4 years</option></select></div>
-                <div class="field"><label for="pf-net-income">Net monthly income (Â£)</label><input id="pf-net-income" type="number" min="1" step="0.01" required placeholder="Take-home pay after tax"></div>
-                <div class="field"><label for="pf-total-income">Total net monthly income (Â£)</label><input id="pf-total-income" type="number" min="1" step="0.01" required placeholder="All income sources combined"></div>
+                <div class="field"><label for="pf-net-income">Net monthly income (£)</label><input id="pf-net-income" type="number" min="1" step="0.01" required placeholder="Take-home pay after tax"></div>
+                <div class="field"><label for="pf-total-income">Total net monthly income (£)</label><input id="pf-total-income" type="number" min="1" step="0.01" required placeholder="All income sources combined"></div>
                 <div class="field"><label for="pf-pay-freq">How often are you paid?</label><select id="pf-pay-freq" required><option value="MONTHLY" selected>Monthly</option><option value="BI_WEEKLY">Bi-weekly (every 2 weeks)</option><option value="WEEKLY">Weekly</option></select></div>
                 <div class="field"><label for="pf-when-paid">Date you get paid</label><select id="pf-when-paid" required></select></div>
               </div>
               <div class="stack">
                 <div style="font-size:13px;font-weight:800;color:var(--ink);margin-bottom:2px;font-family:var(--fd)">Monthly expenses</div>
-                <div class="field"><label for="pf-exp-rent">Rent / mortgage (Â£)</label><input id="pf-exp-rent" type="number" min="0" step="0.01" value="0" required></div>
-                <div class="field"><label for="pf-exp-utilities">Utilities bills (Â£)</label><input id="pf-exp-utilities" type="number" min="0" step="0.01" value="0" required></div>
-                <div class="field"><label for="pf-exp-council">Council tax (Â£)</label><input id="pf-exp-council" type="number" min="0" step="0.01" value="0" required></div>
-                <div class="field"><label for="pf-exp-credit">Credit commitments (Â£)</label><input id="pf-exp-credit" type="number" min="0" step="0.01" value="0" required></div>
-                <div class="field"><label for="pf-exp-travel">Travel &amp; transport (Â£)</label><input id="pf-exp-travel" type="number" min="0" step="0.01" value="0" required></div>
-                <div class="field"><label for="pf-exp-subs">Subscriptions (Â£)</label><input id="pf-exp-subs" type="number" min="0" step="0.01" value="0" required></div>
-                <div class="field"><label for="pf-exp-household">Household expenses (Â£)</label><input id="pf-exp-household" type="number" min="0" step="0.01" value="0" required></div>
-                <div class="field"><label for="pf-exp-other">Other expenses (Â£)</label><input id="pf-exp-other" type="number" min="0" step="0.01" value="0" required></div>
+                <div class="field"><label for="pf-exp-rent">Rent / mortgage (£)</label><input id="pf-exp-rent" type="number" min="0" step="0.01" value="0" required></div>
+                <div class="field"><label for="pf-exp-utilities">Utilities bills (£)</label><input id="pf-exp-utilities" type="number" min="0" step="0.01" value="0" required></div>
+                <div class="field"><label for="pf-exp-council">Council tax (£)</label><input id="pf-exp-council" type="number" min="0" step="0.01" value="0" required></div>
+                <div class="field"><label for="pf-exp-credit">Credit commitments (£)</label><input id="pf-exp-credit" type="number" min="0" step="0.01" value="0" required></div>
+                <div class="field"><label for="pf-exp-travel">Travel &amp; transport (£)</label><input id="pf-exp-travel" type="number" min="0" step="0.01" value="0" required></div>
+                <div class="field"><label for="pf-exp-subs">Subscriptions (£)</label><input id="pf-exp-subs" type="number" min="0" step="0.01" value="0" required></div>
+                <div class="field"><label for="pf-exp-household">Household expenses (£)</label><input id="pf-exp-household" type="number" min="0" step="0.01" value="0" required></div>
+                <div class="field"><label for="pf-exp-other">Other expenses (£)</label><input id="pf-exp-other" type="number" min="0" step="0.01" value="0" required></div>
                 <div class="field"><label for="pf-dependents">Number of dependants</label><input id="pf-dependents" type="number" min="0" max="20" value="0" required></div>
               </div>
             </div>
@@ -938,7 +937,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
             <div class="summary-card"><span>First repayment</span><strong id="app-summary-repay">-</strong></div>
           </div>
           <form id="application-form" class="grid">
-            <div class="field"><label for="app-amount">Amount requested (Â£)</label><input id="app-amount" type="number" min="300" max="10000" step="50" required></div>
+            <div class="field"><label for="app-amount">Amount requested (£)</label><input id="app-amount" type="number" min="300" max="10000" step="50" required></div>
             <div class="field"><label for="app-term">Term</label><select id="app-term" required><option value="6">6 months</option><option value="7">7 months</option><option value="8">8 months</option><option value="9">9 months</option><option value="10">10 months</option><option value="11">11 months</option><option value="12" selected>12 months</option><option value="13">13 months</option><option value="14">14 months</option><option value="15">15 months</option><option value="16">16 months</option><option value="17">17 months</option><option value="18">18 months</option><option value="19">19 months</option><option value="20">20 months</option><option value="21">21 months</option><option value="22">22 months</option><option value="23">23 months</option><option value="24">24 months</option></select></div>
             <div class="field full"><label for="app-purpose">What is the loan for?</label><input id="app-purpose" type="text" placeholder="e.g. Home repairs, travel, car costs" required></div>
             <div class="field full"><div class="inline"><button class="btn btn-primary" type="submit">Submit application</button><button class="btn btn-secondary" type="button" onclick="goToPane('step3')">Back</button></div></div>
@@ -948,9 +947,9 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 
         <section class="pane" id="pane-decision">
           <div class="summary-grid">
-            <div class="summary-card"><span>Amount</span><strong id="decision-amount">Â£0.00</strong></div>
-            <div class="summary-card"><span>Monthly repayment</span><strong id="decision-emi">Â£0.00</strong></div>
-            <div class="summary-card"><span>Total repayable</span><strong id="decision-total">Â£0.00</strong></div>
+            <div class="summary-card"><span>Amount</span><strong id="decision-amount">£0.00</strong></div>
+            <div class="summary-card"><span>Monthly repayment</span><strong id="decision-emi">£0.00</strong></div>
+            <div class="summary-card"><span>Total repayable</span><strong id="decision-total">£0.00</strong></div>
           </div>
           <div class="offer-box" style="margin-bottom:16px"><h4 id="decision-title">Decision ready</h4><p id="decision-copy">Your application outcome will appear here.</p></div>
           <div class="message info" id="decision-note">If approved, the next step is reviewing and signing your documents.</div>
@@ -960,7 +959,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
         <section class="pane" id="pane-sign">
           <div class="offer-box" style="margin-bottom:16px"><h4>Review and sign your offer</h4><p>Read through the terms carefully. By signing, you confirm that you understand and accept the loan agreement.</p></div>
           <div class="summary-grid">
-            <div class="summary-card"><span>Loan amount</span><strong id="sign-amount">Â£0.00</strong></div>
+            <div class="summary-card"><span>Loan amount</span><strong id="sign-amount">£0.00</strong></div>
             <div class="summary-card"><span>Term</span><strong id="sign-term">0 months</strong></div>
             <div class="summary-card"><span>APR</span><strong id="sign-apr">29.9%</strong></div>
           </div>
@@ -1058,14 +1057,14 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
     <div class="qp" data-msg="I am struggling to make a payment">Need more time</div>
     <div class="qp" data-msg="Can I repay early?">Early repayment</div>
   </div>
-  <div class="cir"><input class="cinp" id="cinp" type="text" placeholder="Type a messageâ€¦"><button class="csend" id="csend" aria-label="Send"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M12.5 7L1.5 2l2 5-2 5 11-5z" fill="#fff"/></svg></button></div>
+  <div class="cir"><input class="cinp" id="cinp" type="text" placeholder="Type a message…"><button class="csend" id="csend" aria-label="Send"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M12.5 7L1.5 2l2 5-2 5 11-5z" fill="#fff"/></svg></button></div>
 </div>
 
 <script>
-/* â”€â”€ Calculator (reference) â”€â”€ */
+/* ── Calculator (reference) ── */
 const APR=0.299;
 function mo(a,n){const r=APR/12;return a*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);}
-function gbp(n,d=0){return'Â£'+n.toLocaleString('en-GB',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function gbp(n,d=0){return'£'+n.toLocaleString('en-GB',{minimumFractionDigits:d,maximumFractionDigits:d});}
 function bmp(id){const e=document.getElementById(id);if(!e)return;e.classList.remove('bump');void e.offsetWidth;e.classList.add('bump');}
 function renderCalculatorQuote(q){
   const a=Number(q&&q.amount||document.getElementById('a-sl').value||0);
@@ -1095,7 +1094,7 @@ function calc(){
 }
 window.applyQuoteToCalculator=renderCalculatorQuote;
 
-/* â”€â”€ App Funnel â”€â”€ */
+/* ── App Funnel ── */
 (function(){
   var state={quote:null,account:null,resolved:null,decision:null,draft:{}};
   var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -1126,7 +1125,7 @@ window.applyQuoteToCalculator=renderCalculatorQuote;
   document.getElementById('sign-form').addEventListener('submit',async function(event){event.preventDefault();if(!state.account||!state.account.storageKey){setMessage('sign-note','warn','We need your application before signing can continue.');goToPane('application');return;}try{setMessage('sign-note','info','Submitting your signature...');var result=await postJson('/api/public/applications/'+encodeURIComponent(state.account.storageKey)+'/sign',{fullName:document.getElementById('sign-full-name').value.trim(),acceptedTerms:document.getElementById('sign-terms').checked,acceptedPrivacy:document.getElementById('sign-privacy').checked,bank:{accountHolder:document.getElementById('sign-bank-holder').value.trim(),bankName:document.getElementById('sign-bank-name').value.trim(),sortCode:document.getElementById('sign-sort-code').value.trim(),accountNumber:document.getElementById('sign-account-number').value.trim()}});state.account=result.account;document.getElementById('card-holder').value=document.getElementById('sign-full-name').value.trim();setMessage('sign-note','success','Signed. Now add your payment card to complete the process.');setActive('card');document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'});}catch(err){setMessage('sign-note','error',err.message||'We could not record your signature.');}});
   document.getElementById('card-form').addEventListener('submit',async function(event){event.preventDefault();if(!state.account||!state.account.storageKey){setMessage('card-note','warn','Please complete signing first.');setActive('sign');return;}try{setMessage('card-note','info','Saving your card details...');var raw=document.getElementById('card-number').value.replace(/\s/g,'');var result=await postJson('/api/public/applications/'+encodeURIComponent(state.account.storageKey)+'/card',{cardHolder:document.getElementById('card-holder').value.trim(),cardNumber:raw,expiry:document.getElementById('card-expiry').value.trim(),cardType:document.getElementById('card-type').value});state.account=result.account;setMessage('card-note','success','Card saved. Your application is now awaiting final approval before funds are transferred.');setActive('decision');setMessage('decision-note','info','Signed and awaiting final approval. Once approved, you can access the customer portal.');document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'});}catch(err){setMessage('card-note','error',err.message||'We could not save your card details.');}});
   /* Chat widget */
-  (function(){var cpanel=document.getElementById('cpanel'),cmsgs=document.getElementById('cmsgs'),cinp=document.getElementById('cinp'),cnb=document.getElementById('cnb');function appendCMsg(txt,type){var now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),w=document.createElement('div');w.innerHTML='<div class="msg '+type+'">'+txt+'</div><div class="mtime'+(type==='user'?' r':'')+'">'+now+'</div>';cmsgs.appendChild(w);cmsgs.scrollTop=cmsgs.scrollHeight;}function chatReply(msg){var m=msg.toLowerCase();if(m.indexOf('rate')>-1||m.indexOf('apr')>-1)return'Our representative APR is 29.9%. Your actual rate may vary based on your circumstances.';if(m.indexOf('amount')>-1||m.indexOf('borrow')>-1)return'You can borrow between Â£300 and Â£10,000 over 6 to 24 months. Use the calculator on the page to see your monthly repayment.';if(m.indexOf('apply')>-1||m.indexOf('application')>-1)return'You can apply online in minutes. Click Apply now and we will guide you through each step.';if(m.indexOf('credit')>-1||m.indexOf('check')>-1)return'Checking your quote does not affect your credit score. A full credit check is only performed when you submit a full application.';if(m.indexOf('decision')>-1||m.indexOf('long')>-1)return'Most decisions are made the same day. Once approved, funds are transferred to your account on the same day.';if(m.indexOf('complaint')>-1)return'We are sorry to hear that. Please email complaints@quido.co.uk and we will respond within 5 business days.';var replies=['Happy to help. Could you tell me a bit more?','Thanks for reaching out. You can also call us on 0800 123 4567.','Good question. Is there anything specific about the loan you would like to know?'];return replies[Math.floor(Math.random()*replies.length)];}function sendMsg(){var txt=cinp.value.replace(/^\s+|\s+$/g,'');if(!txt)return;appendCMsg(txt,'user');cinp.value='';setTimeout(function(){appendCMsg(chatReply(txt),'agent');},800);}document.getElementById('cfab').addEventListener('click',function(){var open=cpanel.classList.toggle('open');if(cnb)cnb.style.display=open?'none':'flex';});document.getElementById('cclose').addEventListener('click',function(){cpanel.classList.remove('open');if(cnb)cnb.style.display='flex';});Array.prototype.forEach.call(document.querySelectorAll('.qp'),function(btn){btn.addEventListener('click',function(){cinp.value=btn.getAttribute('data-msg')||btn.textContent;sendMsg();});});document.getElementById('csend').addEventListener('click',sendMsg);cinp.addEventListener('keydown',function(e){if(e.key==='Enter')sendMsg();});})();
+  (function(){var cpanel=document.getElementById('cpanel'),cmsgs=document.getElementById('cmsgs'),cinp=document.getElementById('cinp'),cnb=document.getElementById('cnb');function appendCMsg(txt,type){var now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),w=document.createElement('div');w.innerHTML='<div class="msg '+type+'">'+txt+'</div><div class="mtime'+(type==='user'?' r':'')+'">'+now+'</div>';cmsgs.appendChild(w);cmsgs.scrollTop=cmsgs.scrollHeight;}function chatReply(msg){var m=msg.toLowerCase();if(m.indexOf('rate')>-1||m.indexOf('apr')>-1)return'Our representative APR is 29.9%. Your actual rate may vary based on your circumstances.';if(m.indexOf('amount')>-1||m.indexOf('borrow')>-1)return'You can borrow between £300 and £10,000 over 6 to 24 months. Use the calculator on the page to see your monthly repayment.';if(m.indexOf('apply')>-1||m.indexOf('application')>-1)return'You can apply online in minutes. Click Apply now and we will guide you through each step.';if(m.indexOf('credit')>-1||m.indexOf('check')>-1)return'Checking your quote does not affect your credit score. A full credit check is only performed when you submit a full application.';if(m.indexOf('decision')>-1||m.indexOf('long')>-1)return'Most decisions are made the same day. Once approved, funds are transferred to your account on the same day.';if(m.indexOf('complaint')>-1)return'We are sorry to hear that. Please email complaints@quido.co.uk and we will respond within 5 business days.';var replies=['Happy to help. Could you tell me a bit more?','Thanks for reaching out. You can also call us on 0800 123 4567.','Good question. Is there anything specific about the loan you would like to know?'];return replies[Math.floor(Math.random()*replies.length)];}function sendMsg(){var txt=cinp.value.replace(/^\s+|\s+$/g,'');if(!txt)return;appendCMsg(txt,'user');cinp.value='';setTimeout(function(){appendCMsg(chatReply(txt),'agent');},800);}document.getElementById('cfab').addEventListener('click',function(){var open=cpanel.classList.toggle('open');if(cnb)cnb.style.display=open?'none':'flex';});document.getElementById('cclose').addEventListener('click',function(){cpanel.classList.remove('open');if(cnb)cnb.style.display='flex';});Array.prototype.forEach.call(document.querySelectorAll('.qp'),function(btn){btn.addEventListener('click',function(){cinp.value=btn.getAttribute('data-msg')||btn.textContent;sendMsg();});});document.getElementById('csend').addEventListener('click',sendMsg);cinp.addEventListener('keydown',function(e){if(e.key==='Enter')sendMsg();});})();
   /* Card formatters */
   var cardNumEl=document.getElementById('card-number');if(cardNumEl){cardNumEl.addEventListener('input',function(){var v=this.value.replace(/\D/g,'').slice(0,16);this.value=v.replace(/(.{4})/g,'$1  ').trim();});}
   var scEl=document.getElementById('sign-sort-code');if(scEl){scEl.addEventListener('input',function(){var v=this.value.replace(/\D/g,'').slice(0,6);this.value=v.replace(/(\d{2})(?=\d)/g,'$1-');});}
@@ -1137,12 +1136,12 @@ window.applyQuoteToCalculator=renderCalculatorQuote;
   updateApplicationSummary();
 })();
 
-/* â”€â”€ Reference: Mobile nav â”€â”€ */
+/* ── Reference: Mobile nav ── */
 const hb=document.getElementById('hamburger'),nl=document.getElementById('nav-links');
 hb.addEventListener('click',()=>{hb.classList.toggle('open');nl.classList.toggle('open');});
 document.addEventListener('click',e=>{if(!document.getElementById('main-nav').contains(e.target)){hb.classList.remove('open');nl.classList.remove('open');}});
 
-/* â”€â”€ Reference: Scroll reveal â”€â”€ */
+/* ── Reference: Scroll reveal ── */
 const io=new IntersectionObserver(entries=>{entries.forEach(e=>e.target.classList.toggle('in',e.isIntersecting));},{threshold:0.08,rootMargin:'0px 0px -16px 0px'});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 const tio=new IntersectionObserver(entries=>{entries.forEach(e=>e.target.classList.toggle('in',e.isIntersecting));},{threshold:0.05});
@@ -1150,7 +1149,7 @@ document.querySelectorAll('.tcard').forEach(el=>tio.observe(el));
 const sio=new IntersectionObserver(entries=>{entries.forEach(entry=>{const on=entry.isIntersecting;[1,2,3].forEach((n,i)=>{const el=document.getElementById('step'+n);if(on)setTimeout(()=>el&&el.classList.add('lit'),i*260);else el&&el.classList.remove('lit');});const c1=document.getElementById('cf1'),c2=document.getElementById('cf2');if(on){setTimeout(()=>c1&&c1.classList.add('drawn'),260);setTimeout(()=>c2&&c2.classList.add('drawn'),520);}else{c1&&c1.classList.remove('drawn');c2&&c2.classList.remove('drawn');}});},{threshold:0.2});
 const hs=document.getElementById('how');if(hs)sio.observe(hs);
 
-/* â”€â”€ Calc visual init â”€â”€ */
+/* ── Calc visual init ── */
 document.getElementById('a-sl').addEventListener('input',calc);
 document.getElementById('t-sl').addEventListener('input',calc);
 calc();
