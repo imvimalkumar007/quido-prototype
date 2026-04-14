@@ -1,6 +1,8 @@
 'use strict';
 
 const express = require('express');
+const { lookupPostcode } = require('../../services/postcode-service');
+const { getDisbursalCalendar } = require('../../services/bank-holiday-service');
 
 const router = express.Router();
 
@@ -19,6 +21,26 @@ router.post('/profiles', function (req, res, next) {
 router.post('/quote', function (req, res, next) {
   try {
     res.json({ decision: svc(req).calculatePublicQuote(req.body || {}) });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/postcodes/:postcode', async function (req, res, next) {
+  try {
+    res.json(await lookupPostcode(req.params.postcode));
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/disbursal-calendar', async function (req, res, next) {
+  try {
+    res.json(await getDisbursalCalendar({
+      date: req.query.date || '',
+      division: req.query.division || 'england-and-wales',
+      allowSameDay: req.query.sameDay !== 'false'
+    }));
   } catch (err) {
     next(err);
   }

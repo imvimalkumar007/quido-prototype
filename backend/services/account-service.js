@@ -594,6 +594,7 @@ AccountService.prototype.createPublicProfile = function (payload) {
     city:            payload.city             || '',
     county:          payload.county           || '',
     postCode:        payload.postCode         || '',
+    postcodeValidation: payload.postcodeValidation || null,
     timeAtAddress:   payload.timeAtAddress    || '',
     previousAddress: payload.previousAddress  || null,
     // Legacy single-line fallback for existing code that reads contact.address
