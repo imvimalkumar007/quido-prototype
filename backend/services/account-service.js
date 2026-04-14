@@ -871,10 +871,10 @@ AccountService.prototype.signApplication = function (storageKey, payload) {
       fundedToDate:        null
     });
   }
-  account.application.stage = 'signed_pending_disbursal';
-  account.application.disbursal.status = 'pending_ops_approval';
+  account.application.stage = 'signed_awaiting_payment_details';
+  account.application.disbursal.status = 'awaiting_payment_details';
   account.application.statusHistory = account.application.statusHistory || [];
-  account.application.statusHistory.push({ stage: 'signed_pending_disbursal', at: nowIso(), by: 'customer' });
+  account.application.statusHistory.push({ stage: 'signed_awaiting_payment_details', at: nowIso(), by: 'customer' });
   this.store.save(account);
   return { account: account };
 };
@@ -894,6 +894,14 @@ AccountService.prototype.saveCardDetails = function (storageKey, card) {
     collectionDayOfMonth: 1,
     active:              true
   };
+  if (account.application && account.application.signedAt && account.paymentDetails.bank && account.paymentDetails.bank.accountNumber) {
+    account.application.stage = 'signed_pending_disbursal';
+    account.application.disbursal = account.application.disbursal || {};
+    account.application.disbursal.status = 'pending_ops_approval';
+    account.application.paymentDetailsCompletedAt = nowIso();
+    account.application.statusHistory = account.application.statusHistory || [];
+    account.application.statusHistory.push({ stage: 'signed_pending_disbursal', at: nowIso(), by: 'customer' });
+  }
   this.store.save(account);
   return { account: account };
 };
