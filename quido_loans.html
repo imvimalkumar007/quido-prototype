@@ -151,19 +151,19 @@ input,select,textarea,button{font-family:var(--fb)}
 .abt .tot td{font-size:13px;font-weight:700;color:var(--text)}
 .stab{background:var(--surface);border:none;width:100%;padding:20px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;border-radius:var(--r-lg);margin:0 0 10px;box-shadow:0 1px 4px rgba(15,24,40,0.06),0 4px 16px rgba(15,24,40,0.04)}
 .contact-section{margin:0 16px 16px}.contact-strips{display:grid;grid-template-columns:1fr;gap:12px}.cstrip{display:flex;align-items:center;gap:14px;padding:20px 18px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:var(--r-lg);color:#fff;border:none;width:100%;text-align:left;cursor:pointer;box-shadow:0 6px 20px rgba(28,56,146,.2);text-decoration:none;transition:transform .18s,box-shadow .18s}.cstrip:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(28,56,146,.28)}.cstrip-icon{width:42px;height:42px;border-radius:11px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0}.cstrip-text{display:flex;flex-direction:column;justify-content:center;flex:1;min-width:0;text-align:left}.cstrip-text strong{display:block;font-size:13.5px;font-weight:700;color:#fff}.cstrip-text span{display:block;font-size:12px;color:rgba(255,255,255,.75);margin-top:3px}.loan-contact-wrap{margin-bottom:14px}
-.portal-contact{margin:0 16px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:0 1px 4px rgba(15,24,40,.06),0 4px 16px rgba(15,24,40,.04);overflow:hidden}
-.portal-contact-copy{padding:22px 18px 0}
+.portal-contact{width:min(calc(100% - 32px),760px);margin:0 auto 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:0 1px 4px rgba(15,24,40,.06),0 4px 16px rgba(15,24,40,.04);overflow:hidden}
+.portal-contact-copy{padding:28px 24px 8px;text-align:center}
 .portal-contact-eyebrow{font-family:var(--fb);font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--green-dark);margin-bottom:8px}
-.portal-contact-title{font-family:var(--fd);font-size:24px;font-weight:800;letter-spacing:-.04em;line-height:1.12;color:var(--text);margin-bottom:8px}
-.portal-contact-sub{font-size:13px;line-height:1.65;color:var(--muted);max-width:520px}
-.portal-contact-details{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 18px 0}
+.portal-contact-title{font-family:var(--fd);font-size:26px;font-weight:800;letter-spacing:-.04em;line-height:1.12;color:var(--text);margin-bottom:10px}
+.portal-contact-sub{font-size:13px;line-height:1.65;color:var(--muted);max-width:520px;margin:0 auto}
+.portal-contact-details{display:none}
 .portal-contact-detail{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--border);border-radius:14px;background:#f8faff}
 .pcd-ico{width:34px;height:34px;border-radius:10px;background:rgba(0,201,167,.12);color:var(--green-dark);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .pcd-ico svg{width:16px;height:16px}
 .pcd-label{font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
 .pcd-value{font-family:var(--fd);font-size:12.5px;font-weight:800;color:var(--text);letter-spacing:-.02em}
 .pcd-sub{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.35}
-.portal-contact-form{display:flex;flex-direction:column;gap:14px;padding:18px}
+.portal-contact-form{display:flex;flex-direction:column;gap:14px;padding:18px 24px 24px}
 .pcf-group{display:flex;flex-direction:column;gap:6px}
 .pcf-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 .pcf-req{color:var(--green-dark)}
@@ -183,7 +183,7 @@ input,select,textarea,button{font-family:var(--fb)}
 .pcf-success-ico svg{width:25px;height:25px}
 .pcf-success-title{font-family:var(--fd);font-size:19px;font-weight:800;color:var(--text);letter-spacing:-.03em;margin-bottom:7px}
 .pcf-success-body{font-size:13px;color:var(--muted);line-height:1.6}
-@media(max-width:520px){.portal-contact-details{grid-template-columns:1fr}.portal-contact-title{font-size:22px}}
+@media(max-width:520px){.portal-contact{width:calc(100% - 24px);border-radius:22px}.portal-contact-copy{padding:24px 18px 6px}.portal-contact-form{padding:16px 18px 20px}.portal-contact-title{font-size:22px}}
 .stab.bl{background:linear-gradient(135deg,var(--blue),var(--blue-dark));box-shadow:0 6px 20px rgba(28,56,146,0.25)}
 .si-ic{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#eff6ff}
 .bl .si-ic{background:rgba(255,255,255,0.18)}
@@ -580,17 +580,7 @@ input,select,textarea,button{font-family:var(--fb)}
           <div class="portal-contact-copy">
             <div class="portal-contact-eyebrow">Contact us</div>
             <h2 class="portal-contact-title" id="portal-contact-title">We'd love to hear from you</h2>
-            <p class="portal-contact-sub">Use this form for written communication with Quido. It keeps your message secure, trackable, and linked to your loan account.</p>
-          </div>
-          <div class="portal-contact-details">
-            <div class="portal-contact-detail">
-              <div class="pcd-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 12a19.79 19.79 0 01-3.07-8.67A2 2 0 012.86 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
-              <div><div class="pcd-label">Phone</div><div class="pcd-value">0800 123 4567</div><div class="pcd-sub">Mon-Fri, 9:00-17:00</div></div>
-            </div>
-            <div class="portal-contact-detail">
-              <div class="pcd-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H8l-5 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
-              <div><div class="pcd-label">Written contact</div><div class="pcd-value">Contact Us form</div><div class="pcd-sub">Secure replies within 24 hours</div></div>
-            </div>
+            <p class="portal-contact-sub">Send us a secure message from your account. If you would rather speak to us, call 0800 123 4567, Mon-Fri 9:00-17:00.</p>
           </div>
           <form class="portal-contact-form" id="portal-contact-form" novalidate>
             <div class="pcf-group"><label class="pcf-label" for="pcf-name">Full name <span class="pcf-req">*</span></label><input class="pcf-input" id="pcf-name" type="text" autocomplete="name" required><span class="pcf-err" id="pcf-err-name"></span></div>
