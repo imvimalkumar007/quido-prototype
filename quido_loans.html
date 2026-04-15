@@ -38,8 +38,8 @@ input,select,textarea,button{font-family:var(--fb)}
 .screen:not(#s-login)>.si>.scroll:not(.fullbleed-scroll){width:min(calc(100% - var(--portal-gutter)),var(--portal-shell));max-width:var(--portal-shell);margin-left:auto;margin-right:auto;align-self:center}
 .content-stack{width:min(calc(100% - var(--portal-gutter)),var(--portal-shell));max-width:var(--portal-shell);margin:0 auto}
 .hdr + .scroll,.ihdr + .scroll{padding-top:var(--portal-nav-offset)!important}
-#s-home .scroll.fullbleed-scroll{padding-top:0!important}
-#s-home .content-stack>.hero:first-child{margin-top:0;padding-top:calc(var(--portal-nav-offset) + 14px)}
+#s-home .scroll.fullbleed-scroll{padding-top:var(--portal-nav-offset)!important}
+#s-home .content-stack>.hero:first-child{margin-top:0;padding-top:20px}
 .wb{background:var(--warn-bg);border-bottom:1px solid var(--warn-border);padding:7px 16px;font-size:10.5px;color:var(--warn-text);line-height:1.5;flex-shrink:0;text-align:center}
 .wb a{color:var(--blue);font-weight:500}
 .hdr{width:min(calc(100% - var(--portal-gutter)),var(--portal-shell));height:var(--portal-nav-height);margin:0 auto;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:0 18px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(226,232,245,.88);border-radius:16px;box-shadow:0 4px 24px rgba(7,16,30,.08);flex-shrink:0;position:fixed;top:var(--portal-nav-top);left:50%;transform:translateX(-50%);z-index:280}
@@ -178,16 +178,16 @@ input,select,textarea,button{font-family:var(--fb)}
 .portal-contact-title{font-family:var(--fd);font-size:26px;font-weight:800;letter-spacing:-.04em;line-height:1.12;color:var(--text);margin-bottom:10px}
 .portal-contact-sub{font-size:13px;line-height:1.65;color:var(--muted);max-width:560px;margin:0}
 .portal-contact-details{display:block;padding:0 24px 24px}
-.contact-call-ribbon{position:relative;width:100%;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px;padding:22px;border:1px solid rgba(226,232,245,.95);border-radius:24px;background:linear-gradient(135deg,#fff 0%,#f8fbff 58%,rgba(0,201,167,.08) 100%);box-shadow:0 4px 24px rgba(7,16,30,.06);overflow:hidden}
-.contact-call-ribbon::before{content:'';position:absolute;inset:0 auto 0 0;width:5px;background:linear-gradient(180deg,var(--green-dark),var(--blue))}
-.contact-call-ribbon::after{content:'';position:absolute;right:-44px;top:-54px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(0,201,167,.18),transparent 68%);pointer-events:none}
+.contact-call-ribbon{position:relative;width:100%;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px;padding:22px;border:1px solid rgba(226,232,245,.95);border-radius:24px;background:linear-gradient(135deg,#fff 0%,#f8fbff 58%,rgba(0,201,167,.08) 100%);box-shadow:0 4px 24px rgba(7,16,30,.06)}
+.contact-call-ribbon::before{content:none}
+.contact-call-ribbon::after{content:none}
 .contact-call-icon{position:relative;z-index:1;width:48px;height:48px;border-radius:16px;flex-shrink:0;background:linear-gradient(140deg,var(--blue),var(--blue-dark));color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(11,29,80,.18)}
 .contact-call-icon svg{width:20px;height:20px}
 .contact-call-body{position:relative;z-index:1;min-width:0}
 .contact-call-eyebrow{font-family:var(--fb);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--green-dark);margin-bottom:6px}
 .contact-call-title{font-family:var(--fd);font-size:18px;font-weight:800;letter-spacing:-.03em;color:var(--text);margin-bottom:5px}
 .contact-call-copy{font-family:var(--fb);font-size:13.5px;color:var(--muted);line-height:1.55;max-width:560px}
-.contact-call-action{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:2px;min-width:176px;padding:13px 16px;border-radius:16px;background:var(--blue-dark);color:#fff;text-decoration:none;box-shadow:0 10px 24px rgba(11,29,80,.18);transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s,background .22s}
+.contact-call-action{position:relative;z-index:1;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:176px;padding:13px 16px;border-radius:16px;background:var(--blue-dark);color:#fff;text-decoration:none;box-shadow:0 10px 24px rgba(11,29,80,.18);transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s,background .22s}
 .contact-call-action:hover{transform:translateY(-2px);background:var(--blue);box-shadow:0 14px 30px rgba(11,29,80,.24)}
 .contact-call-number{font-family:var(--fd);font-size:15px;font-weight:800;letter-spacing:-.01em;line-height:1.1}
 .contact-call-hours{font-family:var(--fb);font-size:11.5px;font-weight:600;color:rgba(255,255,255,.72);line-height:1.2}
