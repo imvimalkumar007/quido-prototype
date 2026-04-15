@@ -197,7 +197,7 @@ input,select,textarea,button{font-family:var(--fb)}
 .pcf-group{display:flex;flex-direction:column;gap:6px}
 .pcf-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 .pcf-req{color:var(--green-dark)}
-.pcf-input,.pcf-select,.pcf-textarea{width:100%;min-width:0;border:1.5px solid var(--border);border-radius:14px;background:var(--surface);color:var(--text);font-size:14px;outline:none;padding:13px 14px}
+.pcf-input,.pcf-select,.pcf-textarea{width:100%;min-width:0;border:1.5px solid var(--border);border-radius:14px;background:var(--surface);color:var(--text);font-size:16px;outline:none;padding:13px 14px}
 .pcf-input:focus,.pcf-select:focus,.pcf-textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,201,167,.12)}
 .pcf-input[readonly]{background:#f8faff;color:var(--muted)}
 .pcf-textarea{resize:vertical;min-height:110px;line-height:1.6}
@@ -334,9 +334,15 @@ input,select,textarea,button{font-family:var(--fb)}
 .em.open{display:flex}
 .emb{background:var(--surface);border-radius:var(--r-xl) var(--r-xl) 0 0;padding:20px;width:100%;max-width:600px;margin:0 auto;max-height:80%;overflow-y:auto}
 .emt{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px}
-.emi{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;color:var(--text);outline:none;background:var(--bg);margin-bottom:0}
+.emi{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:16px;color:var(--text);outline:none;background:var(--bg);margin-bottom:0}
 .emi:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(28,56,146,0.1)}
-.ems{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;color:var(--text);outline:none;background:var(--bg);cursor:pointer;margin-bottom:0}
+.ems{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:16px;color:var(--text);outline:none;background:var(--bg);cursor:pointer;margin-bottom:0}
+.ie-panel{border-top:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:12px}
+.ie-fg{display:flex;flex-direction:column;gap:5px}
+.ie-lbl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.ie-inp,.ie-sel{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:16px;font-family:var(--fb);color:var(--text);outline:none;background:var(--bg);box-sizing:border-box;-webkit-appearance:none;appearance:none}
+.ie-inp:focus,.ie-sel:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(28,56,146,.1)}
+.ie-acts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
 .emr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 .ihdr{width:min(calc(100% - var(--portal-gutter)),var(--portal-shell));height:var(--portal-nav-height);margin:0 auto;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:0 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid rgba(226,232,245,.88);border-radius:16px;box-shadow:0 4px 24px rgba(7,16,30,.08);flex-shrink:0;position:fixed;top:var(--portal-nav-top);left:50%;transform:translateX(-50%);z-index:280}
 .itl{font-family:var(--fd);font-size:15px;font-weight:800;color:var(--text);flex:1;letter-spacing:-.02em}
@@ -2351,7 +2357,7 @@ input,select,textarea,button{font-family:var(--fb)}
       + '</div>'
       + '<div id="pa-amt-feedback" style="font-size:11px;min-height:16px;margin-bottom:14px"></div>'
       + '<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">First payment date</div>'
-      + '<input id="pa-start-input" type="date" min="' + todayStr + '" max="' + maxStartStr + '" value="' + todayStr + '" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;outline:none;background:var(--bg);color:var(--text);margin-bottom:14px">'
+      + '<input id="pa-start-input" type="date" min="' + todayStr + '" max="' + maxStartStr + '" value="' + todayStr + '" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:16px;outline:none;background:var(--bg);color:var(--text);margin-bottom:14px">'
       + '<button class="hbtn bm" id="pa-amt-next">Review arrangement</button>'
       + '<button class="hbtn" id="pa-amt-back" style="background:var(--bg);color:var(--muted);border:1.5px solid var(--border);margin-top:8px">Back</button>';
 
@@ -2509,35 +2515,49 @@ input,select,textarea,button{font-family:var(--fb)}
   function openSectionEdit(sectionKey) {
     var def = sectionDefs[sectionKey];
     if (!def) return;
+    // Remove any existing inline panel first
+    var prev = document.getElementById('ie-panel');
+    if (prev) prev.parentNode.removeChild(prev);
     editKey = sectionKey;
-    emTitle.textContent = def.title;
-    var html = '';
+    // Find the trigger button, then locate the nearest .dc card
+    var trigger = document.querySelector('[data-section="' + sectionKey + '"]');
+    if (!trigger) return;
+    var sh = trigger.closest('.sh') || trigger.closest('.iesh');
+    if (!sh) return;
+    var card = sh.nextElementSibling;
+    while (card && !card.classList.contains('dc')) { card = card.nextElementSibling; }
+    if (!card) return;
+    // Build inline fields
+    var html = '<div class="ie-panel" id="ie-panel">';
     for (var i = 0; i < def.fields.length; i++) {
       var f = def.fields[i];
       var valEl = document.getElementById('val-' + f.key);
       var rawTxt = valEl ? valEl.textContent.replace(/&amp;/g,'&') : '';
-      // Strip currency formatting for I&E fields so numeric editing is clean
       var isIEField = ieIncome.indexOf(f.key) > -1 || ieExpense.indexOf(f.key) > -1;
       var current = isIEField ? String(parseFloat(rawTxt.replace(/[^0-9.]/g,''))||0) : rawTxt;
-      html += '<div style="margin-bottom:12px">';
-      html += '<div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em">' + f.label + '</div>';
+      html += '<div class="ie-fg"><div class="ie-lbl">' + f.label + '</div>';
       if (f.type === 'select' && editSelectOpts[f.key]) {
-        html += '<select class="ems" data-field="' + f.key + '" style="margin-bottom:0">';
+        html += '<select class="ie-sel" data-field="' + f.key + '">';
         var opts = editSelectOpts[f.key];
         for (var o = 0; o < opts.length; o++) {
           html += '<option' + (opts[o] === current ? ' selected' : '') + '>' + opts[o] + '</option>';
         }
         html += '</select>';
       } else if (f.type === 'date') {
-        html += '<input class="emi" data-field="' + f.key + '" type="date">';
+        html += '<input class="ie-inp" data-field="' + f.key + '" type="date">';
       } else {
-        html += '<input class="emi" data-field="' + f.key + '" type="text" value="' + current + '">';
+        html += '<input class="ie-inp" data-field="' + f.key + '" type="text" value="' + current.replace(/"/g,'&quot;') + '">';
       }
       html += '</div>';
     }
-    emBody.innerHTML = html;
-    emModal.classList.add('open');
-    var first = emBody.querySelector('input');
+    html += '<div class="ie-acts"><button class="bf bgh" id="ie-cancel" type="button">Cancel</button><button class="bf bbl" id="ie-save" type="button">Save</button></div>';
+    html += '</div>';
+    card.insertAdjacentHTML('beforeend', html);
+    document.getElementById('ie-save').addEventListener('click', function() {
+      doSave(document.querySelectorAll('#ie-panel [data-field]'));
+    });
+    document.getElementById('ie-cancel').addEventListener('click', closeEdit);
+    var first = document.querySelector('#ie-panel input');
     if (first) { setTimeout(function(){ first.focus(); }, 60); }
   }
 
@@ -2550,8 +2570,13 @@ input,select,textarea,button{font-family:var(--fb)}
     }
   });
 
+  // Keep legacy modal wiring in case em-save is ever triggered directly
   document.getElementById('em-save').addEventListener('click', function() {
-    var inputs = emBody.querySelectorAll('[data-field]');
+    doSave(emBody.querySelectorAll('[data-field]'));
+  });
+  document.getElementById('em-cancel').addEventListener('click', closeEdit);
+
+  function doSave(inputs) {
     var ieChanged = false;
     for (var i = 0; i < inputs.length; i++) {
       var inp = inputs[i];
@@ -2572,7 +2597,6 @@ input,select,textarea,button{font-family:var(--fb)}
       for (var b = 0; b < ieExpense.length; b++) { if (ieExpense[b] === key) { ieChanged = true; } }
     }
     if (ieChanged) recalcIE();
-    // ── Persist profile changes via canonical store commands
     if (_store) {
       var idPatch = {}, conPatch = {}, empPatch = {}, pmCard = {}, pmBank = {};
       var cardChanged = false, bankChanged = false;
@@ -2646,9 +2670,14 @@ input,select,textarea,button{font-family:var(--fb)}
     renderProfile();
     renderIE();
     updateAllUI();
-  });
-  document.getElementById('em-cancel').addEventListener('click', closeEdit);
-  function closeEdit() { emModal.classList.remove('open'); editKey = ''; }
+  }
+
+  function closeEdit() {
+    var panel = document.getElementById('ie-panel');
+    if (panel) panel.parentNode.removeChild(panel);
+    emModal.classList.remove('open');
+    editKey = '';
+  }
 
   function recalcIE() {
     var totalInc = 0, totalExp = 0, i, el, v;
