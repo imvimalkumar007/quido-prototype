@@ -496,16 +496,16 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .contact-title { font-family: var(--fd); font-size: clamp(28px, 3vw, 42px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.07; color: var(--ink); margin-bottom: 14px; }
 .contact-sub { font-family: var(--fb); font-size: 15px; color: var(--ink-soft); line-height: 1.7; margin: 0; max-width: 620px; }
 .contact-details { display: block; text-align: left; }
-.contact-call-ribbon { position: relative; width: 100%; display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: 18px; padding: 22px; border: 1px solid rgba(221,226,239,0.95); border-radius: 24px; background: linear-gradient(135deg,#fff 0%,#f8fbff 58%,rgba(0,201,167,0.08) 100%); box-shadow: 0 4px 24px rgba(7,16,30,0.06); overflow: hidden; }
-.contact-call-ribbon::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 5px; background: linear-gradient(180deg,var(--teal-d),var(--navy-l)); }
-.contact-call-ribbon::after { content: ''; position: absolute; right: -44px; top: -54px; width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle,rgba(0,201,167,0.18),transparent 68%); pointer-events: none; }
-.contact-call-icon { position: relative; z-index: 1; width: 48px; height: 48px; border-radius: 16px; flex-shrink: 0; background: linear-gradient(140deg,var(--navy-l),var(--navy)); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(11,29,80,0.18); }
-.contact-call-icon svg { width: 20px; height: 20px; }
+.contact-call-ribbon { position: relative; width: 100%; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 18px; padding: 22px; border: 1px solid rgba(221,226,239,0.95); border-radius: 24px; background: linear-gradient(135deg,#fff 0%,#f8fbff 58%,rgba(0,201,167,0.08) 100%); box-shadow: 0 4px 24px rgba(7,16,30,0.06); }
+.contact-call-ribbon::before { content: none; }
+.contact-call-ribbon::after { content: none; }
 .contact-call-body { position: relative; z-index: 1; min-width: 0; }
 .contact-call-eyebrow { font-family: var(--fb); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .12em; color: var(--teal-d); margin-bottom: 6px; }
 .contact-call-title { font-family: var(--fd); font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 5px; }
 .contact-call-copy { font-family: var(--fb); font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; max-width: 560px; }
-.contact-call-action { position: relative; z-index: 1; display: inline-flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 2px; min-width: 176px; padding: 13px 16px; border-radius: 16px; background: var(--navy); color: #fff; text-decoration: none; box-shadow: 0 10px 24px rgba(11,29,80,0.18); transition: transform .22s cubic-bezier(.22,1,.36,1), box-shadow .22s, background .22s; }
+.contact-call-action { position: relative; z-index: 1; display: inline-flex; flex-direction: row; align-items: center; justify-content: center; gap: 10px; min-width: 176px; padding: 13px 16px; border-radius: 16px; background: var(--navy); color: #fff; text-decoration: none; box-shadow: 0 10px 24px rgba(11,29,80,0.18); transition: transform .22s cubic-bezier(.22,1,.36,1), box-shadow .22s, background .22s; }
+.contact-call-action svg { width: 16px; height: 16px; flex-shrink: 0; }
+.contact-call-action-text { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
 .contact-call-action:hover { transform: translateY(-2px); background: var(--navy-m); box-shadow: 0 14px 30px rgba(11,29,80,0.24); }
 .contact-call-number { font-family: var(--fd); font-size: 15px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.1; }
 .contact-call-hours { font-family: var(--fb); font-size: 11.5px; font-weight: 600; color: rgba(255,255,255,0.72); line-height: 1.2; }
@@ -557,8 +557,8 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 
 @media (max-width: 1020px) { .bc-4 { grid-column: 1 / 3; } .bc-5 { grid-column: 1 / 3; } }
 @media (max-width: 840px) { .bento-grid { grid-template-columns: 1fr 1fr; } .bc-4, .bc-5 { grid-column: 1 / 3; } .contact-copy { max-width: 560px; } }
-@media (max-width: 720px) { .contact { padding: 56px 16px 64px; } .contact-form-wrap { padding: 24px 18px; } .contact-call-ribbon { grid-template-columns: auto 1fr; align-items: start; padding: 20px 18px; } .contact-call-action { grid-column: 1/-1; width: 100%; min-width: 0; align-items: center; text-align: center; } .ft-top { grid-template-columns: 1fr; gap: 24px; } .ft-links { grid-template-columns: 1fr 1fr; gap: 8px 18px; } }
-@media (max-width: 430px) { .contact-call-ribbon { grid-template-columns: 1fr; gap: 14px; } .contact-call-icon { width: 44px; height: 44px; } }
+@media (max-width: 720px) { .contact { padding: 56px 16px 64px; } .contact-form-wrap { padding: 24px 18px; } .contact-call-ribbon { grid-template-columns: 1fr; align-items: start; padding: 20px 18px; } .contact-call-action { width: 100%; min-width: 0; justify-content: center; text-align: center; } .ft-top { grid-template-columns: 1fr; gap: 24px; } .ft-links { grid-template-columns: 1fr 1fr; gap: 8px 18px; } }
+@media (max-width: 430px) { .contact-call-ribbon { grid-template-columns: 1fr; gap: 14px; } }
 @media (max-width: 600px) { .bento { padding: 52px 16px 60px; } .bento-grid { grid-template-columns: 1fr; gap: 10px; } .bc-4, .bc-5 { grid-column: 1; } .bc-stat, .bc-counter { font-size: 42px; } .how { padding: 48px 16px 56px; } .how::before { display: none; } .tl-step { display: block !important; margin-bottom: 0 !important; padding-bottom: 0 !important; } .tl-node, #tl1 .tl-node, #tl2 .tl-node, #tl3 .tl-node, .tl-spacer { display: none !important; } .tl-card, #tl1 .tl-card, #tl2 .tl-card, #tl3 .tl-card { display: block !important; grid-column: unset !important; grid-row: unset !important; padding: 18px 18px 20px !important; margin-bottom: 0 !important; width: 100% !important; border-radius: 14px !important; } .tl-card-num { display: inline-flex !important; align-items: center !important; justify-content: center !important; width: 32px !important; height: 32px !important; border-radius: 50% !important; background: linear-gradient(135deg,var(--teal-d),var(--teal)) !important; margin-bottom: 12px !important; font-size: 0 !important; text-indent: -9999px; } .tl-card-num::before { font-family: var(--fd) !important; font-size: 14px !important; font-weight: 800 !important; color: var(--navy) !important; text-indent: 0; } #tl1 .tl-card-num::before { content: '1' !important; } #tl2 .tl-card-num::before { content: '2' !important; } #tl3 .tl-card-num::before { content: '3' !important; } .tl-step:not(:last-child)::after { content: ''; display: block; width: 2px; height: 24px; background: linear-gradient(to bottom,var(--teal-d),var(--teal)); border-radius: 2px; margin-left: 29px; } .tl-card h3 { font-size: 16px !important; } .tl-card p { font-size: 13.5px !important; } .how-title { font-size: 24px; } .how-sub { font-size: 14px; margin-bottom: 32px; } .how-cta { margin-top: 20px; } .ft { padding: 24px 16px 18px; } }
 @media (max-width: 380px) { .bento { padding: 40px 14px 48px; } .how { padding: 48px 14px 56px; } .contact { padding: 48px 14px 56px; } .ft { padding: 24px 14px 18px; } .ft-links { grid-template-columns: 1fr; } }
 
@@ -1082,15 +1082,17 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
     </div>
     <div class="contact-details reveal" style="transition-delay:0.18s">
       <div class="contact-call-ribbon">
-        <div class="contact-call-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 12a19.79 19.79 0 01-3.07-8.67A2 2 0 012.86 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
         <div class="contact-call-body">
           <div class="contact-call-eyebrow">Phone support</div>
           <div class="contact-call-title">Prefer to speak to us?</div>
-          <div class="contact-call-copy">Our support team can talk through your account, payment options, or anything you need help with.</div>
+          <div class="contact-call-copy">Our team is here to help with any questions about your loan or application.</div>
         </div>
         <a class="contact-call-action" href="tel:08001234567" aria-label="Call Quido on 0800 123 4567">
-          <span class="contact-call-number">0800 123 4567</span>
-          <span class="contact-call-hours">Mon-Fri, 9:00-17:00</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 12a19.79 19.79 0 01-3.07-8.67A2 2 0 012.86 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          <span class="contact-call-action-text">
+            <span class="contact-call-number">0800 123 4567</span>
+            <span class="contact-call-hours">Mon-Fri, 9:00-17:00</span>
+          </span>
         </a>
       </div>
     </div>
