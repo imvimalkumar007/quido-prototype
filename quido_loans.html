@@ -43,7 +43,9 @@ input,select,textarea,button{font-family:var(--fb)}
 .hdr-left,.hdr-actions{display:flex;align-items:center}
 .hdr-left{gap:10px}
 .hdr-actions{gap:8px}
-.brand-link{display:inline-flex;align-items:center;gap:10px;background:none;border:none;padding:0;cursor:pointer;text-align:left}
+.brand-link{display:inline-flex;align-items:center;gap:10px;background:none;border:none;padding:4px 6px 4px 0;border-radius:12px;cursor:pointer;text-align:left;transition:background .18s,color .18s,transform .18s}
+.brand-link:hover{background:rgba(28,56,146,.06)}
+.brand-link:hover .brand-name{color:var(--blue)}
 .brand-lockup{display:flex;align-items:center;gap:10px}
 .brand-mark{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:transparent;box-shadow:none;position:relative;overflow:visible;z-index:1}
 .brand-mark .q-tail{stroke:#ffffff}
@@ -56,13 +58,21 @@ input,select,textarea,button{font-family:var(--fb)}
 .brand-name{font-family:var(--fd);font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.03em;line-height:1}
 .brand-tag{font-family:var(--fb);font-size:9.5px;font-weight:700;color:var(--muted);letter-spacing:.01em;line-height:1.25;max-width:260px}
 .portal-nav-links{display:none}
-.portal-nav-link{font-family:var(--fb);font-size:13.5px;font-weight:500;color:var(--muted);text-decoration:none;background:none;border:none;padding:0;cursor:pointer;transition:color .18s}
-.portal-nav-link:hover{color:var(--text)}
+.portal-nav-link{font-family:var(--fb);font-size:13.5px;font-weight:600;color:var(--muted);text-decoration:none;background:none;border:none;border-radius:100px;padding:8px 12px;cursor:pointer;transition:background .18s,color .18s}
+.portal-nav-link:hover{background:rgba(28,56,146,.08);color:var(--blue)}
 .portal-menu-label{display:none;font-family:var(--fb);font-size:13px;font-weight:600;background:var(--blue-dark);color:#fff;border:none;border-radius:100px;padding:8px 16px;line-height:1;white-space:nowrap}
-.mbtn{width:28px;height:28px;background:none;border:none;border-radius:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;padding:4px}
-.mbtn span{width:20px;height:2px;background:var(--text);border-radius:2px;display:block}
-.mbtn-w{width:28px;height:28px;background:none;border:none;border-radius:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;padding:4px}
-.mbtn-w span{width:20px;height:2px;background:var(--text);border-radius:2px;display:block}
+.mbtn{width:36px;height:36px;background:transparent;border:none;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;padding:6px;transition:background .18s,box-shadow .18s,transform .18s}
+.mbtn span{width:20px;height:2px;background:var(--text);border-radius:2px;display:block;transition:background .18s}
+.mbtn:hover{background:rgba(28,56,146,.08);box-shadow:0 8px 18px rgba(28,56,146,.08)}
+.mbtn:hover span{background:var(--blue)}
+.hdr .hdr-actions .mbtn.m-open:hover,
+.ihdr .mbtn.m-open:hover{background:rgba(28,56,146,.1)!important;box-shadow:0 8px 18px rgba(28,56,146,.1)}
+.hdr .hdr-actions .mbtn.m-open:hover span,
+.ihdr .mbtn.m-open:hover span{background:var(--blue)!important}
+.mbtn-w{width:36px;height:36px;background:transparent;border:none;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;padding:6px;transition:background .18s,box-shadow .18s,transform .18s}
+.mbtn-w span{width:20px;height:2px;background:var(--text);border-radius:2px;display:block;transition:background .18s}
+.mbtn-w:hover{background:rgba(255,255,255,.14);box-shadow:0 8px 18px rgba(15,24,40,.12)}
+.mbtn-w:hover span{background:#fff}
 .bd svg path,.bb svg path{stroke:currentColor!important}
 .hero{background:linear-gradient(160deg,#1c3892 0%,#0b1d50 55%,#050c1a 100%);padding:20px 20px 28px;position:relative;overflow:hidden;flex-shrink:0;margin:0 0 12px;border-radius:var(--r-lg)}
 .hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,0.05)}

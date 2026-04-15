@@ -76,9 +76,7 @@ body {
   flex-shrink: 0;
 }
 .logo-q { font-family: var(--fd); font-size: 15px; font-weight: 800; color: #fff; line-height: 1; }
-.nav-links {
-  display: flex; align-items: center; gap: 24px; list-style: none;
-}
+.nav-links { display: none; align-items: center; gap: 24px; list-style: none; }
 .nav-links a {
   font-family: var(--fb); font-size: 13.5px; font-weight: 500;
   color: var(--ink-soft); text-decoration: none;
@@ -132,7 +130,7 @@ body {
   color: #fff;
 }
 .nav-menu .nav-menu-login:hover { background: var(--navy-m); color: #fff; }
-.nav-menu .mobile-only { display: none; }
+.nav-menu .mobile-only { display: flex; }
 
 /* ════════════════════════════════════════
    HERO
@@ -382,18 +380,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 }
 @media (max-width: 600px) {
   .nav { width: calc(100% - 24px); top: 10px; padding: 0 14px; border-radius: 14px; height: 50px; }
-  .nav-links {
-    display: none; flex-direction: column; gap: 2px;
-    position: absolute; top: 56px; left: 0; right: 0;
-    background: #fff; border: 1px solid var(--border);
-    border-radius: 14px; padding: 8px; z-index: 400;
-    box-shadow: 0 8px 28px rgba(7,16,30,0.1);
-  }
-  .nav-links.open { display: flex; }
-  .nav-links li a { display: block; padding: 10px 12px; border-radius: 10px; font-size: 15px; color: var(--ink); font-weight: 500; }
-  .nav-links li a:hover { background: var(--s2); }
   .nav-menu { top: 56px; left: 0; right: 0; width: auto; border-radius: 14px; }
-  .nav-menu .mobile-only { display: flex; }
   .hero { padding: 72px 0 40px; }
   .hero-inner { padding: 0 16px; gap: 22px; }
   .hero-h1 { font-size: 31px; letter-spacing: -0.03em; line-height: 1.06; }
@@ -713,11 +700,6 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
     <div class="logo-box"><span class="logo-q">Q</span></div>
     Quido
   </a>
-  <ul class="nav-links" id="nav-links">
-    <li><a href="#how">How it works</a></li>
-    <li><a href="#">FAQs</a></li>
-    <li><a href="#">About</a></li>
-  </ul>
   <div class="nav-right">
     <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="home-nav-menu">
       <span></span><span></span><span></span>
