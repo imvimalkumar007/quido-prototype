@@ -86,18 +86,8 @@ body {
 }
 .nav-links a:hover { color: var(--ink); }
 .nav-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-.btn-login {
-  font-family: var(--fb); font-size: 13px; font-weight: 600;
-  background: var(--navy); color: #fff;
-  border: none; cursor: pointer;
-  padding: 8px 18px; border-radius: 100px;
-  text-decoration: none; letter-spacing: -0.01em;
-  transition: background 0.18s, box-shadow 0.18s;
-  white-space: nowrap;
-}
-.btn-login:hover { background: var(--navy-m); box-shadow: 0 4px 14px rgba(11,29,80,0.28); }
 .hamburger {
-  display: none; flex-direction: column; gap: 5px;
+  display: flex; flex-direction: column; gap: 5px;
   background: none; border: none; padding: 4px; cursor: pointer;
 }
 .hamburger span {
@@ -108,6 +98,41 @@ body {
 .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.nav-menu {
+  display: none;
+  position: absolute;
+  top: 64px;
+  right: 18px;
+  width: min(250px, calc(100vw - 48px));
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 18px 42px rgba(7,16,30,0.14);
+  padding: 10px;
+}
+.nav-menu.open { display: block; }
+.nav-menu a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 13px;
+  border-radius: 12px;
+  font-family: var(--fb);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+.nav-menu a:hover { background: var(--s2); color: var(--ink); }
+.nav-menu .nav-menu-login {
+  background: var(--navy);
+  color: #fff;
+}
+.nav-menu .nav-menu-login:hover { background: var(--navy-m); color: #fff; }
+.nav-menu .mobile-only { display: none; }
 
 /* ════════════════════════════════════════
    HERO
@@ -367,8 +392,8 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
   .nav-links.open { display: flex; }
   .nav-links li a { display: block; padding: 10px 12px; border-radius: 10px; font-size: 15px; color: var(--ink); font-weight: 500; }
   .nav-links li a:hover { background: var(--s2); }
-  .hamburger { display: flex; }
-  .btn-login { padding: 7px 13px; font-size: 12px; }
+  .nav-menu { top: 56px; left: 0; right: 0; width: auto; border-radius: 14px; }
+  .nav-menu .mobile-only { display: flex; }
   .hero { padding: 72px 0 40px; }
   .hero-inner { padding: 0 16px; gap: 22px; }
   .hero-h1 { font-size: 31px; letter-spacing: -0.03em; line-height: 1.06; }
@@ -479,12 +504,12 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 /* Modern contact form */
 .contact { background: var(--surface); padding: 96px 24px 104px; border-top: 1px solid var(--border); }
 .contact > .contact-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; align-items: stretch; }
-.contact-copy { text-align: center; }
+.contact-copy { text-align: left; }
 .contact-eyebrow { font-family: var(--fb); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--teal-d); margin-bottom: 10px; }
 .contact-title { font-family: var(--fd); font-size: clamp(28px, 3vw, 42px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.07; color: var(--ink); margin-bottom: 14px; }
-.contact-sub { font-family: var(--fb); font-size: 15px; color: var(--ink-soft); line-height: 1.7; margin: 0 auto 24px; max-width: 620px; }
-.contact-details { display: flex; justify-content: center; gap: 14px; text-align: left; }
-.contact-detail { display: flex; align-items: flex-start; gap: 14px; }
+.contact-sub { font-family: var(--fb); font-size: 15px; color: var(--ink-soft); line-height: 1.7; margin: 0; max-width: 620px; }
+.contact-details { display: flex; gap: 14px; text-align: left; }
+.contact-detail { width: 100%; display: flex; align-items: center; gap: 14px; padding: 16px 18px; border: 1px solid rgba(0,201,167,0.22); border-radius: 18px; background: linear-gradient(135deg,rgba(0,201,167,0.12),rgba(0,201,167,0.04)); }
 .cd-ico { width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0; background: var(--teal-glow); color: var(--teal-d); display: flex; align-items: center; justify-content: center; }
 .cd-ico svg { width: 18px; height: 18px; }
 .cd-label { font-family: var(--fb); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-muted); margin-bottom: 3px; }
@@ -693,10 +718,15 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
     <li><a href="#">About</a></li>
   </ul>
   <div class="nav-right">
-    <a href="/customer" class="btn-login">Log in</a>
-    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="home-nav-menu">
       <span></span><span></span><span></span>
     </button>
+  </div>
+  <div class="nav-menu" id="home-nav-menu" aria-label="Navigation menu">
+    <a class="mobile-only" href="#how">How it works</a>
+    <a class="mobile-only" href="#">FAQs</a>
+    <a class="mobile-only" href="#">About</a>
+    <a class="nav-menu-login" href="/customer">Log in</a>
   </div>
 </nav>
 
@@ -1047,12 +1077,6 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
       <div class="contact-eyebrow">Get in touch</div>
       <h2 class="contact-title">We'd love to hear from you</h2>
       <p class="contact-sub">Send us a secure message. If you would rather speak to us, our team is here to help.</p>
-      <div class="contact-details">
-        <div class="contact-detail">
-          <div class="cd-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 12a19.79 19.79 0 01-3.07-8.67A2 2 0 012.86 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
-          <div><div class="cd-label">Phone</div><div class="cd-value">0800 123 4567</div><div class="cd-sub">Mon-Fri, 9:00-17:00</div></div>
-        </div>
-      </div>
     </div>
     <div class="contact-form-wrap reveal" style="transition-delay:0.12s">
       <form class="contact-form" id="contact-form" novalidate>
@@ -1065,6 +1089,12 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
         <button type="submit" class="cf-submit" id="cf-submit"><span id="cf-submit-label">Send message</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
         <div class="cf-success" id="cf-success" style="display:none"><div class="cf-success-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg></div><div class="cf-success-title">Message sent</div><div class="cf-success-body">Thanks for reaching out. We'll get back to you within 24 hours.</div></div>
       </form>
+    </div>
+    <div class="contact-details reveal" style="transition-delay:0.18s">
+      <div class="contact-detail">
+        <div class="cd-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 12a19.79 19.79 0 01-3.07-8.67A2 2 0 012.86 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+        <div><div class="cd-label">Phone</div><div class="cd-value">0800 123 4567</div><div class="cd-sub">Mon-Fri, 9:00-17:00</div></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1188,10 +1218,11 @@ window.applyQuoteToCalculator=renderCalculatorQuote;
   updateApplicationSummary();
 })();
 
-/* ── Reference: Mobile nav ── */
-const hb=document.getElementById('hamburger'),nl=document.getElementById('nav-links');
-hb.addEventListener('click',()=>{hb.classList.toggle('open');nl.classList.toggle('open');});
-document.addEventListener('click',e=>{if(!document.getElementById('main-nav').contains(e.target)){hb.classList.remove('open');nl.classList.remove('open');}});
+/* Nav menu */
+const hb=document.getElementById('hamburger'),hm=document.getElementById('home-nav-menu');
+hb.addEventListener('click',()=>{const open=hm.classList.toggle('open');hb.classList.toggle('open',open);hb.setAttribute('aria-expanded',open?'true':'false');});
+hm.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{hb.classList.remove('open');hm.classList.remove('open');hb.setAttribute('aria-expanded','false');}));
+document.addEventListener('click',e=>{if(!document.getElementById('main-nav').contains(e.target)){hb.classList.remove('open');hm.classList.remove('open');hb.setAttribute('aria-expanded','false');}});
 
 /* ── Reference: Scroll reveal ── */
 const io=new IntersectionObserver(entries=>{entries.forEach(e=>e.target.classList.toggle('in',e.isIntersecting));},{threshold:0.08,rootMargin:'0px 0px -16px 0px'});
@@ -1217,3 +1248,4 @@ async function sendContactPayload(payload){const res=await fetch('/api/public/co
 </script>
 </body>
 </html>
+
