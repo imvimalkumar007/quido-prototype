@@ -121,7 +121,39 @@ function buildSchedule(principal, apr, termMonths, startDate, paidCount) {
  * @param {Object[]} snapshot
  * @returns {Object[]}
  */
-function deriveOperativeSchedule(snapshot) {
+function _startOfDay(date) {
+  var d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+function _rowRemaining(row) {
+  if (!row || row.ph || row.status === 'paid') return 0;
+  if (row.remainingDue !== undefined && row.remainingDue !== null) {
+    return Math.max(0, +(row.remainingDue || 0));
+  }
+  var interestPaid = Math.max(0, +(row.interestPaid || 0));
+  var principalPaid = Math.max(0, +(row.principalPaid || 0));
+  var interestRemaining = Math.max(0, +((row.interest || 0) - interestPaid).toFixed(2));
+  var principalRemaining = Math.max(0, +((row.principal || 0) - principalPaid).toFixed(2));
+  if (interestPaid || principalPaid) return +(interestRemaining + principalRemaining).toFixed(2);
+  return Math.max(0, +(row.emi || 0));
+}
+
+function _deriveDisplayStatus(row, now) {
+  if (!row) return 'upcoming';
+  if (row.ph) return 'ph';
+  if (row.status === 'paid' || _rowRemaining(row) <= BALANCE_TOLERANCE) return 'paid';
+  if (row.pa) return 'pa';
+
+  var due = new Date(row.dueDate);
+  if (!isNaN(due) && _startOfDay(due) < _startOfDay(now || new Date())) {
+    return 'overdue';
+  }
+  return row.status || 'upcoming';
+}
+
+function deriveOperativeSchedule(snapshot, now) {
   if (!Array.isArray(snapshot)) return [];
   return snapshot.map(function (row) {
     return {
@@ -131,9 +163,14 @@ function deriveOperativeSchedule(snapshot) {
       principal: row.principal || 0,
       interest:  row.interest  || 0,
       balance:   row.balance   || 0,
-      status:    row.status    || 'upcoming',
+      status:    _deriveDisplayStatus(row, now),
       ph:        row.ph        || false,
-      pa:        row.pa        || false
+      pa:        row.pa        || false,
+      interestPaid: row.interestPaid || 0,
+      principalPaid: row.principalPaid || 0,
+      interestRemaining: row.interestRemaining,
+      principalRemaining: row.principalRemaining,
+      remainingDue: row.remainingDue
     };
   });
 }

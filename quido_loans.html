@@ -1233,6 +1233,23 @@ input,select,textarea,button{font-family:var(--fb)}
     if (row.remainingDue !== undefined && row.remainingDue !== null) return row.remainingDue;
     return row.emi || 0;
   }
+  function isScheduleRowOverdue(row) {
+    if (!row || row.ph || row.pa || row.status === 'paid') return false;
+    if (instalmentDueAmount(row) <= 0.01) return false;
+    var due = new Date(row.dueDate);
+    if (isNaN(due)) return false;
+    var today = new Date();
+    due.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    return due < today;
+  }
+  function displayScheduleStatus(row) {
+    if (!row) return 'upcoming';
+    if (row.ph) return 'ph';
+    if (row.status === 'paid' || instalmentDueAmount(row) <= 0.01) return 'paid';
+    if (row.pa) return 'pa';
+    return (row.status === 'overdue' || isScheduleRowOverdue(row)) ? 'overdue' : (row.status || 'upcoming');
+  }
   function nextInstalment() {
     if (LOAN.paidCount < LOAN.schedule.length) {
       for (var i = LOAN.paidCount; i < LOAN.schedule.length; i++) {
@@ -1321,7 +1338,7 @@ input,select,textarea,button{font-family:var(--fb)}
 
     // ── Pay next/full sub-labels
     if (next) {
-      setText('pay-next-sub', 'Due ' + LOAN.shortDate(next.dueDate) + ' · ' + LOAN.fmt(instalmentDueAmount(next)));
+      setText('pay-next-sub', (displayScheduleStatus(next) === 'overdue' ? 'Overdue ' : 'Due ') + LOAN.shortDate(next.dueDate) + ' · ' + LOAN.fmt(instalmentDueAmount(next)));
     }
     setText('pay-full-sub', 'Clear outstanding balance · ' + LOAN.fmt(bal));
     setText('custom-range-label', 'Enter amount (min £1, max ' + LOAN.fmt(bal) + ')');
@@ -1501,13 +1518,15 @@ input,select,textarea,button{font-family:var(--fb)}
     for (var i = 0; i < s.length; i++) {
       var e = s[i];
       var chipCls, chipTxt, iconCls;
-      if (e.ph)                   { chipCls='sc-ph'; chipTxt='Holiday'; iconCls='ii ph'; }
-      else if (e.status === 'paid')    { chipCls='sc-p'; chipTxt='Paid'; iconCls='ii paid'; }
-      else if (e.status === 'current') { chipCls='sc-d'; chipTxt='Due soon'; iconCls='ii warn'; }
-      else                        { chipCls='sc-u'; chipTxt='Upcoming'; iconCls='ii'; }
-      var openCls  = (e.status === 'current' || e.ph) ? 'open' : '';
-      var chevCls  = (e.status === 'current' || e.ph) ? 'chev open' : 'chev';
-      var isCur    = (e.status === 'current' || e.status === 'ph');
+      var rowStatus = displayScheduleStatus(e);
+      if (e.ph || rowStatus === 'ph')       { chipCls='sc-ph'; chipTxt='Holiday'; iconCls='ii ph'; }
+      else if (rowStatus === 'paid')        { chipCls='sc-p'; chipTxt='Paid'; iconCls='ii paid'; }
+      else if (rowStatus === 'overdue')     { chipCls='sc-d'; chipTxt='Overdue'; iconCls='ii warn'; }
+      else if (rowStatus === 'current')     { chipCls='sc-d'; chipTxt='Due soon'; iconCls='ii warn'; }
+      else                                  { chipCls='sc-u'; chipTxt='Upcoming'; iconCls='ii'; }
+      var openCls  = (rowStatus === 'current' || rowStatus === 'overdue' || e.ph) ? 'open' : '';
+      var chevCls  = (rowStatus === 'current' || rowStatus === 'overdue' || e.ph) ? 'chev open' : 'chev';
+      var isCur    = (rowStatus === 'current' || rowStatus === 'overdue' || rowStatus === 'ph');
       var phBadge  = e.ph ? '<span style="display:inline-block;width:7px;height:7px;background:#f59e0b;border-radius:50%;margin-left:7px;vertical-align:middle;flex-shrink:0"></span>' : '';
       var paBadge  = e.pa ? '<span style="font-size:9px;background:#eff6ff;color:#1e40af;border-radius:6px;padding:2px 6px;margin-left:6px;font-weight:600">PA | 0% interest</span>' : '';
       var paidTd   = (e.status === 'paid' && !e.ph)
@@ -1523,7 +1542,7 @@ input,select,textarea,button{font-family:var(--fb)}
       if (e.ph) {
         totalLabel = 'Total EMI';
         totalValue = e.emi;
-      } else if (e.status !== 'paid') {
+      } else if (rowStatus !== 'paid') {
         totalLabel = 'Amount due now';
         totalValue = remainingAmt;
         if (paidSoFar > 0.009) {
@@ -3417,7 +3436,7 @@ input,select,textarea,button{font-family:var(--fb)}
       LOAN.transactions = (al.transactions || []).slice();
       if (al.schedule && al.schedule.length) {
         LOAN.schedule = al.schedule.map(function (r) {
-          return {
+          var row = {
             n: r.n,
             dueDate:   r.dueDate instanceof Date ? r.dueDate : new Date(r.dueDate),
             emi:       r.emi, principal: r.principal, interest: r.interest,
@@ -3426,6 +3445,8 @@ input,select,textarea,button{font-family:var(--fb)}
             interestRemaining: r.interestRemaining, principalRemaining: r.principalRemaining,
             remainingDue: r.remainingDue
           };
+          row.status = displayScheduleStatus(row);
+          return row;
         });
         LOAN.termMonths = LOAN.schedule.length;
       }
@@ -3472,7 +3493,7 @@ input,select,textarea,button{font-family:var(--fb)}
     var snap = loan.scheduleSnapshot;
     if (snap && snap.length) {
       LOAN.schedule = snap.map(function (r) {
-        return {
+        var row = {
           n: r.n,
           dueDate:   r.dueDate instanceof Date ? r.dueDate : new Date(r.dueDate),
           emi:       r.emi, principal: r.principal, interest: r.interest,
@@ -3482,6 +3503,8 @@ input,select,textarea,button{font-family:var(--fb)}
           principalRemaining: r.principalRemaining,
           remainingDue: r.remainingDue
         };
+        row.status = displayScheduleStatus(row);
+        return row;
       });
       LOAN.emi = (loan.loanSummary && loan.loanSummary.emi !== undefined)
         ? loan.loanSummary.emi

@@ -147,6 +147,8 @@ a{text-decoration:none;color:inherit;cursor:pointer}
 .tbl tr.row-paid td{color:var(--muted)}
 .tbl tr.row-current td{background:#eff6ff;font-weight:600}
 .tbl tr.row-current:hover td{background:#dbeafe}
+.tbl tr.row-overdue td{background:#fffbeb;font-weight:600}
+.tbl tr.row-overdue:hover td{background:#fef3c7}
 .tbl tr.row-ph td{background:#fdf4ff;color:var(--purple)}
 .tbl tr.row-pa td{background:#fffbeb}
 
@@ -1442,7 +1444,7 @@ function calcSchedule(P, apr, n, startDate, paidCount) {
 // Normalise a single schedule row - dueDate always as Date, ph/pa defaulted.
 // Used in loadState() Path A and Path B to avoid duplicating the same mapper.
 function _normRow(r) {
-  return {
+  var row = {
     n:         r.n,
     dueDate:   r.dueDate instanceof Date ? r.dueDate : new Date(r.dueDate),
     emi:       r.emi,
@@ -1458,6 +1460,8 @@ function _normRow(r) {
     principalRemaining: r.principalRemaining,
     remainingDue: r.remainingDue
   };
+  row.status = displayOpsRowStatus(row);
+  return row;
 }
 function fmt(n) { return '\u00a3' + (n||0).toFixed(2); }
 function shortDate(d) { return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
@@ -1485,6 +1489,23 @@ function totalRepaid(schedule, paidCount) {
 function rowDueAmount(row) {
   if (!row) return 0;
   return firstDefined(row.remainingDue, row.emi, 0);
+}
+function isOpsRowOverdue(row) {
+  if (!row || row.ph || row.pa || row.status === 'paid') return false;
+  if (rowDueAmount(row) <= 0.01) return false;
+  var due = new Date(row.dueDate);
+  if (isNaN(due)) return false;
+  var today = new Date();
+  due.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+  return due < today;
+}
+function displayOpsRowStatus(row) {
+  if (!row) return 'upcoming';
+  if (row.ph) return 'ph';
+  if (row.status === 'paid' || rowDueAmount(row) <= 0.01) return 'paid';
+  if (row.pa) return 'pa';
+  return (row.status === 'overdue' || isOpsRowOverdue(row)) ? 'overdue' : (row.status || 'upcoming');
 }
 function opsTxnMeta(txn) {
   var instr = txn && txn.instrument || {};
@@ -1981,7 +2002,7 @@ function renderOverview() {
   setText('ov-balance', fmt(outstanding));
   setText('ov-balance-sub', fmt(repaid)+' repaid');
   setText('ov-next-due', next ? shortDate(next.dueDate) : 'Fully repaid');
-  setText('ov-next-emi', next ? fmt(rowDueAmount(next))+' due' : '-');
+  setText('ov-next-emi', next ? fmt(rowDueAmount(next)) + (displayOpsRowStatus(next) === 'overdue' ? ' overdue' : ' due') : '-');
   setText('ov-emi', fmt(OPS.emi));
   setText('ov-emi-sub', '@ '+OPS.apr.toFixed(1)+'% APR');
   setText('ov-remaining', remaining);
@@ -2198,16 +2219,17 @@ function renderLoan() {
 }
 function buildSchedTable() {
   var tbody = document.getElementById('sched-body'); if (!tbody) return;
-  var chips = { paid:'background:#d1fae5;color:#00a888', current:'background:#dbeafe;color:#1c3892', upcoming:'background:#f1f5f9;color:#7880a0', ph:'background:#ede9fe;color:#7c3aed', pa:'background:#fef3c7;color:#b45309' };
-  var labels = { paid:'Paid', current:'Current', upcoming:'Upcoming', ph:'Holiday', pa:'Arrangement' };
+  var chips = { paid:'background:#d1fae5;color:#00a888', current:'background:#dbeafe;color:#1c3892', overdue:'background:#fef3c7;color:#b45309', upcoming:'background:#f1f5f9;color:#7880a0', ph:'background:#ede9fe;color:#7c3aed', pa:'background:#fef3c7;color:#b45309' };
+  var labels = { paid:'Paid', current:'Current', overdue:'Overdue', upcoming:'Upcoming', ph:'Holiday', pa:'Arrangement' };
   tbody.innerHTML = OPS.schedule.map(function(row){
-    var chipKey = row.ph ? 'ph' : (row.pa && row.status !== 'paid') ? 'pa' : row.status;
+    var rowStatus = displayOpsRowStatus(row);
+    var chipKey = row.ph ? 'ph' : (row.pa && rowStatus !== 'paid') ? 'pa' : rowStatus;
     var cs  = chips[chipKey]||'';
     var lbl = labels[chipKey] || row.status;
-    var act = (row.status==='upcoming'||row.status==='current') ? '<button class="btn btn-xs btn-secondary" onclick="markPaid('+row.n+')">Mark Paid</button>' : row.status==='paid' ? '<button class="btn btn-xs btn-ghost" onclick="unmarkPaid('+row.n+')">Undo</button>' : '';
+    var act = (rowStatus==='upcoming'||rowStatus==='current'||rowStatus==='overdue') ? '<button class="btn btn-xs btn-secondary" onclick="markPaid('+row.n+')">Mark Paid</button>' : rowStatus==='paid' ? '<button class="btn btn-xs btn-ghost" onclick="unmarkPaid('+row.n+')">Undo</button>' : '';
     var remainingDue = rowDueAmount(row);
     var paidSoFar = row.ph ? 0 : Math.max(0, (row.emi || 0) - remainingDue);
-    return '<tr class="row-'+row.status+'"><td class="mono">'+row.n+'</td><td>'+shortDate(row.dueDate)+'</td><td class="mono">'+fmt(row.emi)+'</td><td class="mono">'+fmt(remainingDue)+'</td><td class="mono">'+fmt(paidSoFar)+'</td><td class="mono">'+fmt(row.principal)+'</td><td class="mono" style="color:var(--muted)">'+fmt(row.interest)+'</td><td class="mono">'+fmt(row.balance)+'</td><td><span style="'+cs+';padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:600">'+lbl+'</span></td><td>'+act+'</td></tr>';
+    return '<tr class="row-'+rowStatus+'"><td class="mono">'+row.n+'</td><td>'+shortDate(row.dueDate)+'</td><td class="mono">'+fmt(row.emi)+'</td><td class="mono">'+fmt(remainingDue)+'</td><td class="mono">'+fmt(paidSoFar)+'</td><td class="mono">'+fmt(row.principal)+'</td><td class="mono" style="color:var(--muted)">'+fmt(row.interest)+'</td><td class="mono">'+fmt(row.balance)+'</td><td><span style="'+cs+';padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:600">'+lbl+'</span></td><td>'+act+'</td></tr>';
   }).join('');
 }
 
@@ -3010,16 +3032,14 @@ syncBus.subscribe(function(msg) {
   if (!ACCT_KEY || !msg) return;
   if (msg.storageKey && msg.storageKey !== ACCT_KEY) return;
   if (!msg.actor || msg.actor === 'ops_ui') return; // ignore own messages
-  // Reload from localStorage before calling loadState() - the customer app has
-  // already written the updated account there; our cached state is stale.
-  if (_store) { try { _store.reload(); } catch(e) {} }
   // Bump activity badge
   var ab = document.getElementById('sb-activity-badge');
   if (ab) { var n=parseInt(ab.textContent||'0')+1; ab.textContent=n; ab.style.display='flex'; }
   // Mark customer as live
   updateLiveStatus(true);
-  // Reload state from store then refresh active section
-  refreshOpsWorkspace();
+  // Reload backend/local state before refreshing so customer payments and
+  // paid instalments do not render from a stale cached projection.
+  refreshOpsFromAuthoritativeStore();
   if (msg.type === Quido.CommandTypes.UPDATE_PROFILE || msg.type === Quido.CommandTypes.UPDATE_EMPLOYMENT || msg.type === Quido.CommandTypes.UPDATE_AFFORDABILITY) {
     toast('Customer updated their profile','info');
   }
@@ -3051,6 +3071,26 @@ function refreshOpsWorkspace() {
   renderDocuments();
   var active = document.querySelector('.section.active');
   if (active && active.id === 'sec-activity') filterActivity(OPS.activeFilter || 'all');
+}
+function refreshOpsFromAuthoritativeStore() {
+  if (!_store) {
+    refreshOpsWorkspace();
+    return;
+  }
+  var chain = Promise.resolve();
+  try {
+    if (_store.reload) chain = Promise.resolve(_store.reload());
+  } catch (e) {
+    chain = Promise.resolve();
+  }
+  chain.then(function () {
+    if (_store.refreshResolved) return _store.refreshResolved();
+    return null;
+  }).catch(function () {
+    // Keep the UI usable offline by repainting from the local cache.
+  }).finally(function () {
+    refreshOpsWorkspace();
+  });
 }
 function updateTopbar() {
   var el = document.getElementById('tb-status');
@@ -3566,9 +3606,13 @@ function selectCustomer(key) {
 // ── Storage event: cross-tab fallback when BroadcastChannel is unavailable
 window.addEventListener('storage', function(e) {
   if (!ACCT_KEY || e.key !== ACCT_KEY || !e.newValue) return;
-  // Reload store state from updated localStorage, then refresh active section
-  if (_store) { _store.loadLegacy(ACCT_KEY); if (_store.refreshResolved) _store.refreshResolved(); }
-  refreshOpsWorkspace();
+  if (_store) {
+    try {
+      var localStore = _store._localStore || null;
+      if (localStore && localStore.reload) localStore.reload();
+    } catch(err) {}
+  }
+  refreshOpsFromAuthoritativeStore();
 });
 
 // ═══════════════════════════════════════════════════════

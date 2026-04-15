@@ -213,12 +213,13 @@ function buildResolvedAccount(account) {
   var ops  = (activeLoan && activeLoan.ops)                || {};
 
   var snap = (activeLoan && activeLoan.scheduleSnapshot) || [];
+  var resolvedAt = new Date();
 
   // Run status engine to get fresh allowed/blocked actions
   var allowedActions    = [];
   var blockedActions    = [];
   var actionReasons     = {};
-  var operativeSchedule = deriveOperativeSchedule(snap);
+  var operativeSchedule = deriveOperativeSchedule(snap, resolvedAt);
   if (activeLoan) {
     try {
       var seNow   = new Date();
@@ -418,7 +419,7 @@ function buildResolvedAccount(account) {
         lastEvaluatedAt:       se.lastEvaluatedAt       || ''
       },
 
-      schedule:          snap.map(function (row) {
+      schedule:          operativeSchedule.map(function (row) {
         return Object.assign({}, row, paymentBreakdown(row));
       }),
       operativeSchedule: operativeSchedule.map(function (row) {

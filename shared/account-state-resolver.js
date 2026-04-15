@@ -200,6 +200,30 @@
    */
   function buildOperativeSchedule(loan) {
     var snap = loan.scheduleSnapshot || [];
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    function rowRemaining(row) {
+      if (!row || row.ph || row.status === 'paid') return 0;
+      if (row.remainingDue !== undefined && row.remainingDue !== null) {
+        return Math.max(0, +(row.remainingDue || 0));
+      }
+      var interestPaid = Math.max(0, +(row.interestPaid || 0));
+      var principalPaid = Math.max(0, +(row.principalPaid || 0));
+      var interestRemaining = Math.max(0, +((row.interest || 0) - interestPaid).toFixed(2));
+      var principalRemaining = Math.max(0, +((row.principal || 0) - principalPaid).toFixed(2));
+      if (interestPaid || principalPaid) return +(interestRemaining + principalRemaining).toFixed(2);
+      return Math.max(0, +(row.emi || 0));
+    }
+    function displayStatus(row) {
+      if (!row) return 'upcoming';
+      if (row.ph) return 'ph';
+      if (row.status === 'paid' || rowRemaining(row) <= 0.01) return 'paid';
+      if (row.pa) return 'pa';
+      var due = new Date(row.dueDate);
+      due.setHours(0, 0, 0, 0);
+      if (!isNaN(due) && due < today) return 'overdue';
+      return row.status || 'upcoming';
+    }
     return snap.map(function (row) {
       return {
         n:         row.n,
@@ -208,9 +232,14 @@
         principal: row.principal || 0,
         interest:  row.interest  || 0,
         balance:   row.balance   || 0,
-        status:    row.status    || 'upcoming',
+        status:    displayStatus(row),
         ph:        row.ph        || false,
-        pa:        row.pa        || false
+        pa:        row.pa        || false,
+        interestPaid: row.interestPaid || 0,
+        principalPaid: row.principalPaid || 0,
+        interestRemaining: row.interestRemaining,
+        principalRemaining: row.principalRemaining,
+        remainingDue: row.remainingDue
       };
     });
   }
