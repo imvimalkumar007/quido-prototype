@@ -1258,6 +1258,41 @@ input,select,textarea,button{font-family:var(--fb)}
     }
     return null;
   }
+  function amountDueNowSummary() {
+    var overdueAmount = 0;
+    var overdueCount = 0;
+    var overdueDate = null;
+    var next = null;
+    for (var i = 0; i < LOAN.schedule.length; i++) {
+      var row = LOAN.schedule[i];
+      if (!row || row.ph || row.status === 'paid') continue;
+      var amount = instalmentDueAmount(row);
+      if (amount <= 0.01) continue;
+      if (displayScheduleStatus(row) === 'overdue') {
+        overdueAmount += amount;
+        overdueCount++;
+        if (!overdueDate) overdueDate = row.dueDate;
+      } else if (!next) {
+        next = row;
+      }
+    }
+    if (overdueCount > 0) {
+      return {
+        row: null,
+        amount: +overdueAmount.toFixed(2),
+        dueDate: overdueDate,
+        overdueCount: overdueCount,
+        hasOverdue: true
+      };
+    }
+    return {
+      row: next,
+      amount: next ? instalmentDueAmount(next) : 0,
+      dueDate: next ? next.dueDate : null,
+      overdueCount: 0,
+      hasOverdue: false
+    };
+  }
   function currentStatusLabel() {
     var se = LOAN.statusEngineState || {};
     var status = se.resolvedDisplayStatus || se.displayStatus || se.coreStatus || LOAN.accountStatus || 'active';
@@ -1308,6 +1343,7 @@ input,select,textarea,button{font-family:var(--fb)}
     var loanRef = ctx.loanId ? ('#' + ctx.loanId) : '-';
     var bal   = outstandingBalance();
     var next  = nextInstalment();
+    var dueNow = amountDueNowSummary();
     var emi   = LOAN.emi;
     var n     = LOAN.termMonths;
     var total = LOAN.totalRepayable || (emi * n);
@@ -1323,22 +1359,25 @@ input,select,textarea,button{font-family:var(--fb)}
 
     // ── Dashboard hero
     setText('dash-balance',  LOAN.fmt(bal));
-    setText('dash-emi',      next ? LOAN.fmt(instalmentDueAmount(next)) : 'Not scheduled');
-    setText('dash-due-date', next ? LOAN.shortDate(next.dueDate) : 'Fully repaid');
+    setText('dash-emi',      dueNow.amount > 0 ? LOAN.fmt(dueNow.amount) : 'Not scheduled');
+    setText('dash-due-date', dueNow.dueDate ? LOAN.shortDate(dueNow.dueDate) : 'Fully repaid');
     setText('emi-badge', LOAN.schedule.length + ' instalments');
     setText('home-status-label', currentStatusLabel());
     applyStatusBadge('home-status-label');
 
     // ── Options hero
     setText('opts-balance',  LOAN.fmt(bal));
-    setText('opts-emi',      next ? LOAN.fmt(instalmentDueAmount(next)) : 'Not scheduled');
-    setText('opts-due-date', next ? LOAN.shortDate(next.dueDate) : 'Fully repaid');
+    setText('opts-emi',      dueNow.amount > 0 ? LOAN.fmt(dueNow.amount) : 'Not scheduled');
+    setText('opts-due-date', dueNow.dueDate ? LOAN.shortDate(dueNow.dueDate) : 'Fully repaid');
     setText('opts-status-label', currentStatusLabel());
     applyStatusBadge('opts-status-label');
 
     // ── Pay next/full sub-labels
-    if (next) {
-      setText('pay-next-sub', (displayScheduleStatus(next) === 'overdue' ? 'Overdue ' : 'Due ') + LOAN.shortDate(next.dueDate) + ' · ' + LOAN.fmt(instalmentDueAmount(next)));
+    if (dueNow.amount > 0) {
+      var duePrefix = dueNow.hasOverdue
+        ? (dueNow.overdueCount + ' overdue instalment' + (dueNow.overdueCount === 1 ? '' : 's'))
+        : 'Due ' + LOAN.shortDate(dueNow.dueDate);
+      setText('pay-next-sub', duePrefix + ' - ' + LOAN.fmt(dueNow.amount));
     }
     setText('pay-full-sub', 'Clear outstanding balance · ' + LOAN.fmt(bal));
     setText('custom-range-label', 'Enter amount (min £1, max ' + LOAN.fmt(bal) + ')');
@@ -1694,13 +1733,13 @@ input,select,textarea,button{font-family:var(--fb)}
           try { applyLoanOverrides(); } catch(e) {}
           updateAllUI();
           var bal = outstandingBalance();
-          var nx  = nextInstalment();
+          var dueNowAfter = amountDueNowSummary();
           setText('suc-amount',  LOAN.fmt(paid));
           setText('suc-desc',    payCtx.desc);
           setText('suc-ref',     'NP-' + new Date().getFullYear() + '-' + Math.floor(10000 + Math.random()*89999));
           setText('suc-date',    LOAN.fmtDate(new Date()) + ', ' + new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
           setText('suc-balance', LOAN.fmt(bal));
-          setText('suc-next',    nx ? LOAN.shortDate(nx.dueDate) + ' · ' + LOAN.fmt(instalmentDueAmount(nx)) : 'Loan fully repaid');
+          setText('suc-next',    dueNowAfter.amount > 0 ? (dueNowAfter.dueDate ? LOAN.shortDate(dueNowAfter.dueDate) + ' - ' : '') + LOAN.fmt(dueNowAfter.amount) : 'Loan fully repaid');
           go('s-success');
         }
         if (persistPromise && typeof persistPromise.then === 'function') {
@@ -1922,9 +1961,12 @@ input,select,textarea,button{font-family:var(--fb)}
 
   // ── Pay options CTAs
   document.getElementById('pay-next-btn').addEventListener('click', function() {
-    var next = nextInstalment();
-    if (!next) return;
-    setPayContext(instalmentDueAmount(next), 'Instalment ' + next.n + ' · Due ' + LOAN.shortDate(next.dueDate), 'Monthly instalment');
+    var dueNow = amountDueNowSummary();
+    if (!dueNow.amount) return;
+    var desc = dueNow.hasOverdue
+      ? (dueNow.overdueCount + ' overdue instalment' + (dueNow.overdueCount === 1 ? '' : 's'))
+      : ('Due ' + LOAN.shortDate(dueNow.dueDate));
+    setPayContext(dueNow.amount, desc, dueNow.hasOverdue ? 'Amount due' : 'Monthly instalment');
     go('s-pay-method');
   });
   document.getElementById('pay-full-btn').addEventListener('click', function() {
@@ -3040,9 +3082,9 @@ input,select,textarea,button{font-family:var(--fb)}
   function chatReply(msg) {
     var m = msg.toLowerCase();
     var bal = outstandingBalance();
-    var next = nextInstalment();
+    var dueNow = amountDueNowSummary();
     if (m.indexOf('balance') > -1) return 'Your current outstanding balance is ' + LOAN.fmt(bal) + '.';
-    if (m.indexOf('next') > -1 || m.indexOf('due') > -1) return next ? 'Your next payment of ' + LOAN.fmt(instalmentDueAmount(next)) + ' is due on ' + LOAN.shortDate(next.dueDate) + '.' : 'Your loan is fully repaid - well done!';
+    if (m.indexOf('next') > -1 || m.indexOf('due') > -1) return dueNow.amount > 0 ? 'Your amount due is ' + LOAN.fmt(dueNow.amount) + (dueNow.dueDate ? ' due on ' + LOAN.shortDate(dueNow.dueDate) : '') + '.' : 'Your loan is fully repaid - well done!';
     if (m.indexOf('early') > -1 || m.indexOf('repay') > -1) return 'You can repay early with no charges. Your current settlement figure is ' + LOAN.fmt(bal) + '.';
     if (m.indexOf('struggling') > -1 || m.indexOf('payment') > -1) return 'We understand. You can apply for a payment holiday or payment arrangement in Other Options. Or call us on 0800 123 4567.';
     var replies = ['Got it - let me check your account.','Sure, I can help with that.','Thanks for reaching out. One moment please.','Is there anything else I can help you with today?'];
@@ -3297,7 +3339,7 @@ input,select,textarea,button{font-family:var(--fb)}
     return '';
   }
   function _demoStatusLabel(status) {
-    var labels = { active:'Active', arrears:'Arrears', default:'Default', terminated:'Closed',
+    var labels = { active:'Active', arrears:'Arrears', default:'Default', terminated:'Terminated',
       settled:'Settled', closed:'Closed', payment_holiday:'Holiday', holiday:'Holiday',
       payment_arrangement:'Arrangement', arrangement:'Arrangement', forbearance:'Forbearance',
       dmp:'DMP', iva:'IVA', dro:'DRO', bankruptcy:'Bankruptcy', trust_deed:'Trust Deed',
@@ -3863,4 +3905,3 @@ input,select,textarea,button{font-family:var(--fb)}
 </script>
 </body>
 </html>
-

@@ -127,6 +127,44 @@ function paymentBreakdown(row, partialCredit) {
   };
 }
 
+function buildDueSummary(schedule) {
+  var rows = Array.isArray(schedule) ? schedule : [];
+  var overdueAmount = 0;
+  var overdueCount = 0;
+  var overdueDate = null;
+  var next = null;
+
+  for (var i = 0; i < rows.length; i++) {
+    var row = rows[i];
+    if (!row || row.ph || row.status === 'paid') continue;
+    var amount = Math.max(0, +(row.remainingDue != null ? row.remainingDue : row.emi || 0));
+    if (amount <= 0.01) continue;
+    if (row.status === 'overdue') {
+      overdueAmount = +(overdueAmount + amount).toFixed(2);
+      overdueCount += 1;
+      if (!overdueDate) overdueDate = row.dueDate || null;
+    } else if (!next) {
+      next = row;
+    }
+  }
+
+  if (overdueCount > 0) {
+    return {
+      amount: overdueAmount,
+      dueDate: overdueDate,
+      overdueCount: overdueCount,
+      hasOverdue: true
+    };
+  }
+
+  return {
+    amount: next ? Math.max(0, +(next.remainingDue != null ? next.remainingDue : next.emi || 0)) : 0,
+    dueDate: next ? (next.dueDate || null) : null,
+    overdueCount: 0,
+    hasOverdue: false
+  };
+}
+
 function setPaidCount(loan, paidCount, now, actor) {
   var snap = loan.scheduleSnapshot || [];
   var seState = loan.statusEngineState || {};
@@ -396,6 +434,7 @@ function buildResolvedAccount(account) {
   Object.keys(computedSummary).forEach(function (key) {
     if (typeof computedSummary[key] === 'number') computedSummary[key] = +computedSummary[key].toFixed(2);
   });
+  var computedDue = buildDueSummary(resolvedSchedule);
 
   // Loan history summary (all loans)
   var loanHistory = loans.map(function (l) {
@@ -557,6 +596,8 @@ function buildResolvedAccount(account) {
         totalPrincipalPaid:   computedSummary.totalPrincipalPaid,
         instalmentsRemaining: computedSummary.instalmentsRemaining
       },
+
+      due: computedDue,
 
       status: {
         baseStatus:            se.baseStatus            || se.coreStatus    || 'active',
@@ -1737,7 +1778,7 @@ AccountService.prototype.listAccountSummaries = function () {
         dob:              pp.dob      || '',
         address:          pc.address  || '',
         loanId:           a.activeLoanId || '',
-        loanStatus:       (al.status && al.status.resolvedDisplayStatus) || 'active',
+        loanStatus:       (al.status && (al.status.resolvedDisplayStatus || al.status.baseStatus || al.status.coreStatus)) || 'active',
         applicationStage: (a.application && a.application.stage) || '',
         outstanding:      (al.summary && al.summary.outstandingBalance) || 0,
         originatedAt:     al.originatedAt || ''

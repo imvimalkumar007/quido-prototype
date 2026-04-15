@@ -1507,6 +1507,41 @@ function displayOpsRowStatus(row) {
   if (row.pa) return 'pa';
   return (row.status === 'overdue' || isOpsRowOverdue(row)) ? 'overdue' : (row.status || 'upcoming');
 }
+function amountDueNowOpsSummary() {
+  var overdueAmount = 0;
+  var overdueCount = 0;
+  var overdueDate = null;
+  var next = null;
+  for (var i = 0; i < OPS.schedule.length; i++) {
+    var row = OPS.schedule[i];
+    if (!row || row.ph || row.status === 'paid') continue;
+    var amount = rowDueAmount(row);
+    if (amount <= 0.01) continue;
+    if (displayOpsRowStatus(row) === 'overdue') {
+      overdueAmount += amount;
+      overdueCount++;
+      if (!overdueDate) overdueDate = row.dueDate;
+    } else if (!next) {
+      next = row;
+    }
+  }
+  if (overdueCount > 0) {
+    return {
+      row: null,
+      amount: +overdueAmount.toFixed(2),
+      dueDate: overdueDate,
+      overdueCount: overdueCount,
+      hasOverdue: true
+    };
+  }
+  return {
+    row: next,
+    amount: next ? rowDueAmount(next) : 0,
+    dueDate: next ? next.dueDate : null,
+    overdueCount: 0,
+    hasOverdue: false
+  };
+}
 function opsTxnMeta(txn) {
   var instr = txn && txn.instrument || {};
   var parts = [];
@@ -1995,14 +2030,11 @@ function renderOverview() {
   var remaining = currentInstalmentsRemaining();
   var outstanding = currentOutstanding();
   var repaid = currentTotalRepaid();
-  var next = null;
-  for (var ni = OPS.paidCount; ni < OPS.schedule.length; ni++) {
-    if (!OPS.schedule[ni].ph) { next = OPS.schedule[ni]; break; }
-  }
+  var dueNow = amountDueNowOpsSummary();
   setText('ov-balance', fmt(outstanding));
   setText('ov-balance-sub', fmt(repaid)+' repaid');
-  setText('ov-next-due', next ? shortDate(next.dueDate) : 'Fully repaid');
-  setText('ov-next-emi', next ? fmt(rowDueAmount(next)) + (displayOpsRowStatus(next) === 'overdue' ? ' overdue' : ' due') : '-');
+  setText('ov-next-due', dueNow.dueDate ? shortDate(dueNow.dueDate) : 'Fully repaid');
+  setText('ov-next-emi', dueNow.amount > 0 ? fmt(dueNow.amount) + (dueNow.hasOverdue ? ' overdue' : ' due') : '-');
   setText('ov-emi', fmt(OPS.emi));
   setText('ov-emi-sub', '@ '+OPS.apr.toFixed(1)+'% APR');
   setText('ov-remaining', remaining);
