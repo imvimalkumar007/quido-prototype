@@ -151,6 +151,39 @@ input,select,textarea,button{font-family:var(--fb)}
 .abt .tot td{font-size:13px;font-weight:700;color:var(--text)}
 .stab{background:var(--surface);border:none;width:100%;padding:20px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;border-radius:var(--r-lg);margin:0 0 10px;box-shadow:0 1px 4px rgba(15,24,40,0.06),0 4px 16px rgba(15,24,40,0.04)}
 .contact-section{margin:0 16px 16px}.contact-strips{display:grid;grid-template-columns:1fr;gap:12px}.cstrip{display:flex;align-items:center;gap:14px;padding:20px 18px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:var(--r-lg);color:#fff;border:none;width:100%;text-align:left;cursor:pointer;box-shadow:0 6px 20px rgba(28,56,146,.2);text-decoration:none;transition:transform .18s,box-shadow .18s}.cstrip:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(28,56,146,.28)}.cstrip-icon{width:42px;height:42px;border-radius:11px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0}.cstrip-text{display:flex;flex-direction:column;justify-content:center;flex:1;min-width:0;text-align:left}.cstrip-text strong{display:block;font-size:13.5px;font-weight:700;color:#fff}.cstrip-text span{display:block;font-size:12px;color:rgba(255,255,255,.75);margin-top:3px}.loan-contact-wrap{margin-bottom:14px}
+.portal-contact{margin:0 16px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:0 1px 4px rgba(15,24,40,.06),0 4px 16px rgba(15,24,40,.04);overflow:hidden}
+.portal-contact-copy{padding:22px 18px 0}
+.portal-contact-eyebrow{font-family:var(--fb);font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--green-dark);margin-bottom:8px}
+.portal-contact-title{font-family:var(--fd);font-size:24px;font-weight:800;letter-spacing:-.04em;line-height:1.12;color:var(--text);margin-bottom:8px}
+.portal-contact-sub{font-size:13px;line-height:1.65;color:var(--muted);max-width:520px}
+.portal-contact-details{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 18px 0}
+.portal-contact-detail{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--border);border-radius:14px;background:#f8faff}
+.pcd-ico{width:34px;height:34px;border-radius:10px;background:rgba(0,201,167,.12);color:var(--green-dark);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pcd-ico svg{width:16px;height:16px}
+.pcd-label{font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.pcd-value{font-family:var(--fd);font-size:12.5px;font-weight:800;color:var(--text);letter-spacing:-.02em}
+.pcd-sub{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.35}
+.portal-contact-form{display:flex;flex-direction:column;gap:14px;padding:18px}
+.pcf-group{display:flex;flex-direction:column;gap:6px}
+.pcf-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.pcf-req{color:var(--green-dark)}
+.pcf-input,.pcf-select,.pcf-textarea{width:100%;min-width:0;border:1.5px solid var(--border);border-radius:14px;background:var(--surface);color:var(--text);font-size:14px;outline:none;padding:13px 14px}
+.pcf-input:focus,.pcf-select:focus,.pcf-textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,201,167,.12)}
+.pcf-input[readonly]{background:#f8faff;color:var(--muted)}
+.pcf-textarea{resize:vertical;min-height:110px;line-height:1.6}
+.pcf-row{display:grid;grid-template-columns:1fr;gap:14px}
+.pcf-select-wrap{position:relative}
+.pcf-select{appearance:none;-webkit-appearance:none;padding-right:36px;cursor:pointer}
+.pcf-chevron{position:absolute;top:50%;right:13px;transform:translateY(-50%);width:15px;height:15px;color:var(--muted);pointer-events:none}
+.pcf-err{min-height:15px;font-size:11.5px;color:var(--err)}
+.pcf-submit{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;border:none;border-radius:var(--r-lg);padding:14px 18px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;font-family:var(--fd);font-size:14px;font-weight:800;letter-spacing:-.01em;cursor:pointer}
+.pcf-submit:disabled{opacity:.65;cursor:not-allowed}
+.pcf-success{display:none;text-align:center;padding:28px 14px}
+.pcf-success-ico{width:54px;height:54px;border-radius:50%;background:rgba(0,201,167,.12);color:var(--green-dark);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.pcf-success-ico svg{width:25px;height:25px}
+.pcf-success-title{font-family:var(--fd);font-size:19px;font-weight:800;color:var(--text);letter-spacing:-.03em;margin-bottom:7px}
+.pcf-success-body{font-size:13px;color:var(--muted);line-height:1.6}
+@media(max-width:520px){.portal-contact-details{grid-template-columns:1fr}.portal-contact-title{font-size:22px}}
 .stab.bl{background:linear-gradient(135deg,var(--blue),var(--blue-dark));box-shadow:0 6px 20px rgba(28,56,146,0.25)}
 .si-ic{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#eff6ff}
 .bl .si-ic{background:rgba(255,255,255,0.18)}
@@ -543,6 +576,33 @@ input,select,textarea,button{font-family:var(--fb)}
         <div class="card"><div class="ch"><span class="ct">Loan Summary</span><span class="cb" id="emi-badge">- instalments</span></div><div id="emi-list"></div></div>
         </div>
 
+        <section class="portal-contact" id="portal-contact" aria-labelledby="portal-contact-title">
+          <div class="portal-contact-copy">
+            <div class="portal-contact-eyebrow">Contact us</div>
+            <h2 class="portal-contact-title" id="portal-contact-title">We'd love to hear from you</h2>
+            <p class="portal-contact-sub">Use this form for written communication with Quido. It keeps your message secure, trackable, and linked to your loan account.</p>
+          </div>
+          <div class="portal-contact-details">
+            <div class="portal-contact-detail">
+              <div class="pcd-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 12a19.79 19.79 0 01-3.07-8.67A2 2 0 012.86 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+              <div><div class="pcd-label">Phone</div><div class="pcd-value">0800 123 4567</div><div class="pcd-sub">Mon-Fri, 9:00-17:00</div></div>
+            </div>
+            <div class="portal-contact-detail">
+              <div class="pcd-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H8l-5 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+              <div><div class="pcd-label">Written contact</div><div class="pcd-value">Contact Us form</div><div class="pcd-sub">Secure replies within 24 hours</div></div>
+            </div>
+          </div>
+          <form class="portal-contact-form" id="portal-contact-form" novalidate>
+            <div class="pcf-group"><label class="pcf-label" for="pcf-name">Full name <span class="pcf-req">*</span></label><input class="pcf-input" id="pcf-name" type="text" autocomplete="name" required><span class="pcf-err" id="pcf-err-name"></span></div>
+            <div class="pcf-row"><div class="pcf-group"><label class="pcf-label" for="pcf-email">Email address <span class="pcf-req">*</span></label><input class="pcf-input" id="pcf-email" type="email" autocomplete="email" required><span class="pcf-err" id="pcf-err-email"></span></div><div class="pcf-group"><label class="pcf-label" for="pcf-mobile">Mobile number</label><input class="pcf-input" id="pcf-mobile" type="tel" autocomplete="tel"><span class="pcf-err" id="pcf-err-mobile"></span></div></div>
+            <div class="pcf-group"><label class="pcf-label" for="pcf-loanid">Loan ID</label><input class="pcf-input" id="pcf-loanid" type="text" readonly></div>
+            <div class="pcf-group"><label class="pcf-label" for="pcf-reason">Reason for contact <span class="pcf-req">*</span></label><div class="pcf-select-wrap"><select class="pcf-select" id="pcf-reason" required><option value="" disabled selected>Select a reason...</option><option value="existing">Existing loan query</option><option value="payment">Payment or repayment</option><option value="support">Financial support</option><option value="documents">Documents</option><option value="complaint">Make a complaint</option><option value="technical">Technical support</option><option value="other">Other</option></select><svg class="pcf-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,6 8,10 12,6"/></svg></div><span class="pcf-err" id="pcf-err-reason"></span></div>
+            <div class="pcf-group"><label class="pcf-label" for="pcf-message">Your message <span class="pcf-req">*</span></label><textarea class="pcf-textarea" id="pcf-message" rows="4" placeholder="Tell us how we can help..." required></textarea><span class="pcf-err" id="pcf-err-message"></span></div>
+            <button type="submit" class="pcf-submit" id="pcf-submit"><span id="pcf-submit-label">Send message</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+            <div class="pcf-success" id="pcf-success"><div class="pcf-success-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg></div><div class="pcf-success-title">Message sent</div><div class="pcf-success-body">Thanks for reaching out. We'll get back to you within 24 hours.</div></div>
+          </form>
+        </section>
+
         <div class="ft">
           <div class="ft-inner">
           <div class="ft-top">
@@ -564,9 +624,9 @@ input,select,textarea,button{font-family:var(--fb)}
               <a href="#">Careers</a>
               <a href="#">Beware of Loan Sharks</a>
               <a href="#">Terms of Use</a>
-              <a href="#">Contact Us</a>
+              <a href="#portal-contact" class="contact-form-link">Contact Us</a>
               <a href="#">Privacy Policy</a>
-              <a href="#">File a Complaint</a>
+              <a href="#portal-contact" class="contact-form-link" data-contact-reason="complaint">File a Complaint</a>
               <a href="#">Fraud Disclaimer</a>
               <a href="#">Insights</a>
               <a href="#">Cookies Policy</a>
@@ -636,7 +696,7 @@ input,select,textarea,button{font-family:var(--fb)}
                 <div class="hn bn" style="align-items:flex-start;margin-bottom:12px"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#1c3892" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#1c3892" stroke-width="1.2" stroke-linecap="round"/></svg><span>We recommend speaking with us so we can find the best option for your circumstances.</span></div>
                 <button class="hbtn bm" id="ph-chat-btn">Chat with Quido now</button>
                 <button class="hbtn am" style="margin-top:8px">Call us: 0800 123 4567</button>
-                <button class="hbtn" style="background:var(--surface);color:var(--blue);border:1.5px solid var(--blue);margin-top:8px">Write to us: info@quido.co.uk</button>
+                <button class="hbtn contact-form-link" style="background:var(--surface);color:var(--blue);border:1.5px solid var(--blue);margin-top:8px">Use Contact Us form</button>
                 <button class="hbtn" id="ph-back-from-longterm" style="background:var(--bg);color:var(--muted);border:1.5px solid var(--border);margin-top:8px">Back</button>
               </div>
               <!-- confirm -->
@@ -660,7 +720,7 @@ input,select,textarea,button{font-family:var(--fb)}
               <div id="pa-step-review"  style="display:none"></div>
               <div id="pa-step-applied" style="display:none"></div>
             </div></div>
-          <div class="hc"><div class="hct" data-help="eds"><div class="hcic" style="background:rgba(124,58,237,0.1)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1.5L2.25 4.5V9c0 4.05 2.925 7.845 6.75 8.25C12.825 16.845 15.75 13.05 15.75 9V4.5L9 1.5z" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.75 9l1.5 1.5 3-3" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="htx"><div class="htit">Existing debt solution</div><div class="hsu">DMP, IVA, Trust Deed, Bankruptcy and more</div></div><svg class="chev" id="eds-chev" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hbd" id="eds-body"><p class="hde">If you have a formal or informal debt solution in place, please let us know. We will pause collection activity and liaise directly with your insolvency practitioner or debt management firm.</p><div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">This covers</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Debt Management Plan (DMP)</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Individual Voluntary Arrangement (IVA)</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Trust Deed (Scotland)</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Bankruptcy</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Debt Relief Order (DRO)</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Sequestration (Scotland)</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Administration Order</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Breathing Space</span></div><div class="hn bn" style="align-items:flex-start;margin-bottom:14px"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#1c3892" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#1c3892" stroke-width="1.2" stroke-linecap="round"/></svg><span>Once notified, we will pause collection activity and correspond with your insolvency practitioner or debt management firm. You do not need to manage both sides separately.</span></div><button class="hbtn bm" id="eds-chat-btn">Chat with Quido</button><button class="hbtn am" style="margin-top:8px">Call us: 0800 123 4567</button><button class="hbtn" style="background:var(--surface);color:var(--blue);border:1.5px solid var(--blue);margin-top:8px">Write to us: info@quido.co.uk</button></div></div>
+          <div class="hc"><div class="hct" data-help="eds"><div class="hcic" style="background:rgba(124,58,237,0.1)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1.5L2.25 4.5V9c0 4.05 2.925 7.845 6.75 8.25C12.825 16.845 15.75 13.05 15.75 9V4.5L9 1.5z" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.75 9l1.5 1.5 3-3" stroke="#7c3aed" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="htx"><div class="htit">Existing debt solution</div><div class="hsu">DMP, IVA, Trust Deed, Bankruptcy and more</div></div><svg class="chev" id="eds-chev" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hbd" id="eds-body"><p class="hde">If you have a formal or informal debt solution in place, please let us know. We will pause collection activity and liaise directly with your insolvency practitioner or debt management firm.</p><div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">This covers</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Debt Management Plan (DMP)</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Individual Voluntary Arrangement (IVA)</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Trust Deed (Scotland)</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Bankruptcy</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Debt Relief Order (DRO)</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Sequestration (Scotland)</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Administration Order</span><span style="display:inline-flex;align-items:center;background:rgba(124,58,237,0.08);color:#7c3aed;border:1px solid rgba(124,58,237,0.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600">Breathing Space</span></div><div class="hn bn" style="align-items:flex-start;margin-bottom:14px"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="5.5" stroke="#1c3892" stroke-width="1.2"/><path d="M6.5 4v3M6.5 8.5v.5" stroke="#1c3892" stroke-width="1.2" stroke-linecap="round"/></svg><span>Once notified, we will pause collection activity and correspond with your insolvency practitioner or debt management firm. You do not need to manage both sides separately.</span></div><button class="hbtn bm" id="eds-chat-btn">Chat with Quido</button><button class="hbtn am" style="margin-top:8px">Call us: 0800 123 4567</button><button class="hbtn contact-form-link" style="background:var(--surface);color:var(--blue);border:1.5px solid var(--blue);margin-top:8px">Use Contact Us form</button></div></div>
           <div class="hc"><div class="hct" data-help="dh"><div class="hcic" style="background:rgba(16,185,129,0.1)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#00a888" stroke-width="1.4"/><path d="M9 6.5a1.5 1.5 0 011 2.6c-.5.5-.8.9-.8 1.3v.4M9 12v.5" stroke="#00a888" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="htx"><div class="htit">Free debt advice</div><div class="hsu">Independent support from specialist organisations</div></div><svg class="chev" id="dh-chev" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hbd" id="dh-body"><p class="hde">Free and confidential advice from organisations completely independent of Quido. All helplines are free to call.</p><div class="do" style="align-items:flex-start;padding:12px 0"><div class="doi" style="background:#e6f4ea;width:38px;height:38px;border-radius:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="#1a7332" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1;min-width:0"><div class="don">Citizens Advice</div><div class="dos">Confidential advice on debt, benefits and legal matters</div><div style="margin-top:5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#7880a0" stroke-width="1.5"/></svg>0800 144 8848</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="#94a3b8" stroke-width="1.5"/></svg>citizensadvice.org.uk</div></div></div></div><div class="do" style="align-items:flex-start;padding:12px 0"><div class="doi" style="background:#e6eeff;width:38px;height:38px;border-radius:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><polyline points="1 4 1 10 7 10" stroke="#1251a3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="23 20 23 14 17 14" stroke="#1251a3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke="#1251a3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1;min-width:0"><div class="don">StepChange Debt Charity</div><div class="dos">Free debt management plans, IVAs and ongoing support</div><div style="margin-top:5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#7880a0" stroke-width="1.5"/></svg>0800 138 1111</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="#94a3b8" stroke-width="1.5"/></svg>info@stepchange.org</div></div></div></div><div class="do" style="align-items:flex-start;padding:12px 0"><div class="doi" style="background:#fde8eb;width:38px;height:38px;border-radius:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#c0001a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1;min-width:0"><div class="don">National Debtline</div><div class="dos">Free specialist debt advice by phone and webchat</div><div style="margin-top:5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#7880a0" stroke-width="1.5"/></svg>0808 808 4000</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="#94a3b8" stroke-width="1.5"/></svg>nationaldebtline.org</div></div></div></div><div class="do" style="align-items:flex-start;padding:12px 0"><div class="doi" style="background:#e0f4f2;width:38px;height:38px;border-radius:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#00695c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1;min-width:0"><div class="don">MoneyHelper</div><div class="dos">Government-backed guidance on money, debt and pensions</div><div style="margin-top:5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#7880a0" stroke-width="1.5"/></svg>0800 138 7777</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="#94a3b8" stroke-width="1.5"/></svg>moneyhelper.org.uk</div></div></div></div><div class="do" style="align-items:flex-start;padding:12px 0"><div class="doi" style="background:#e0f3ec;width:38px;height:38px;border-radius:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="#007d5b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="14 2 14 8 20 8" stroke="#007d5b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9 15 11 17 15 13" stroke="#007d5b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1;min-width:0"><div class="don">PayPlan</div><div class="dos">Free debt management plans and individual voluntary arrangements</div><div style="margin-top:5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#7880a0" stroke-width="1.5"/></svg>0800 280 2816</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="#94a3b8" stroke-width="1.5"/></svg>help@payplan.com</div></div></div></div><div class="do" style="align-items:flex-start;padding:12px 0"><div class="doi" style="background:#fff4e5;width:38px;height:38px;border-radius:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#cc5500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1;min-width:0"><div class="don">Christians Against Poverty (CAP)</div><div class="dos">Free debt help and practical support in your community</div><div style="margin-top:5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#7880a0" stroke-width="1.5"/></svg>0800 328 0006</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="#94a3b8" stroke-width="1.5"/></svg>capuk.org</div></div></div></div><div class="do" style="align-items:flex-start;padding:12px 0"><div class="doi" style="background:#e8edf4;width:38px;height:38px;border-radius:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" stroke="#1a3559" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" stroke="#1a3559" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1;min-width:0"><div class="don">Debt Advice Foundation</div><div class="dos">Free, impartial debt advice with no referral needed</div><div style="margin-top:5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#7880a0" stroke-width="1.5"/></svg>0800 622 611</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="#94a3b8" stroke-width="1.5"/></svg>advice@debtadvicefoundation.org</div></div></div></div><div class="do" style="align-items:flex-start;padding:12px 0;border-bottom:none"><div class="doi" style="background:#e0f6f3;width:38px;height:38px;border-radius:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#00796b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="#00796b" stroke-width="2"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="#00796b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div style="flex:1;min-width:0"><div class="don">Turn2us</div><div class="dos">Help finding grants, benefits and financial support</div><div style="margin-top:5px;display:flex;flex-direction:column;gap:3px"><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke="#7880a0" stroke-width="1.5"/></svg>0808 802 2000</div><div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="#94a3b8" stroke-width="1.5"/></svg>turn2us.org.uk</div></div></div></div></div></div>
         </div>
       </div>
@@ -1570,6 +1630,126 @@ input,select,textarea,button{font-family:var(--fb)}
       })(els[i]);
     }
   }
+  function setPortalContactError(id, msg) {
+    var err = document.getElementById('pcf-err-' + id);
+    var input = document.getElementById('pcf-' + id);
+    if (err) err.textContent = msg || '';
+    if (input) input.style.borderColor = msg ? 'var(--err)' : '';
+  }
+
+  function getPortalContactProfile() {
+    var st = _store && _store.getState && _store.getState();
+    var profile = st && Quido.selectors && Quido.selectors.selectProfile ? Quido.selectors.selectProfile(st) : null;
+    var contact = (ACTIVE_CUSTOMER && ACTIVE_CUSTOMER.profile && ACTIVE_CUSTOMER.profile.contact) || {};
+    var ctx = typeof getAccountContext === 'function' ? getAccountContext() : null;
+    return {
+      name: (profile && [profile.firstName, profile.lastName].filter(Boolean).join(' ')) || (ACTIVE_CUSTOMER && ACTIVE_CUSTOMER.name) || '',
+      email: (profile && profile.email) || (ACTIVE_CUSTOMER && ACTIVE_CUSTOMER.credentials && ACTIVE_CUSTOMER.credentials.email) || contact.email || '',
+      mobile: (profile && profile.phone) || contact.phone || contact.mobileNumber || '',
+      loanId: (ctx && ctx.loanId) || (ACTIVE_CUSTOMER && ACTIVE_CUSTOMER.loanId) || ''
+    };
+  }
+
+  function populatePortalContactForm() {
+    var form = document.getElementById('portal-contact-form');
+    if (!form) return;
+    var p = getPortalContactProfile();
+    function set(id, val) { var el = document.getElementById(id); if (el && !el.value) el.value = val || ''; }
+    set('pcf-name', p.name);
+    set('pcf-email', p.email);
+    set('pcf-mobile', p.mobile);
+    var loanEl = document.getElementById('pcf-loanid');
+    if (loanEl) loanEl.value = p.loanId || '';
+  }
+
+  function validatePortalContactForm() {
+    var ok = true;
+    var name = (document.getElementById('pcf-name').value || '').trim();
+    if (!name) { setPortalContactError('name', 'Please enter your full name'); ok = false; } else setPortalContactError('name', '');
+    var email = (document.getElementById('pcf-email').value || '').trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setPortalContactError('email', 'Please enter a valid email address'); ok = false; } else setPortalContactError('email', '');
+    var mobile = (document.getElementById('pcf-mobile').value || '').trim();
+    if (mobile && !/^[\d\s\+\-\(\)]{7,24}$/.test(mobile)) { setPortalContactError('mobile', 'Please enter a valid mobile number'); ok = false; } else setPortalContactError('mobile', '');
+    var reason = document.getElementById('pcf-reason').value;
+    if (!reason) { setPortalContactError('reason', 'Please select a reason'); ok = false; } else setPortalContactError('reason', '');
+    var message = (document.getElementById('pcf-message').value || '').trim();
+    if (!message || message.length < 10) { setPortalContactError('message', 'Please enter a message of at least 10 characters'); ok = false; } else setPortalContactError('message', '');
+    return ok;
+  }
+
+  function sendPortalContactPayload(payload) {
+    if (!USE_API || !ACCT_KEY || !window.fetch) {
+      return Promise.reject(new Error('Contact messaging is unavailable. Please try again in a moment.'));
+    }
+    return window.fetch(API_BASE.replace(/\/$/, '') + '/accounts/' + encodeURIComponent(ACCT_KEY) + '/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload || {})
+    }).then(function(res) {
+      return res.json().catch(function() { return {}; }).then(function(data) {
+        if (!res.ok) throw new Error(data.error || 'We could not send your message. Please try again.');
+        return data;
+      });
+    });
+  }
+
+  function scrollToPortalContact(reason) {
+    if (cur !== 's-home') go('s-home');
+    populatePortalContactForm();
+    if (reason) {
+      var reasonEl = document.getElementById('pcf-reason');
+      if (reasonEl) reasonEl.value = reason;
+    }
+    setTimeout(function() {
+      var target = document.getElementById('portal-contact');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      var msg = document.getElementById('pcf-message');
+      if (msg) msg.focus({ preventScroll: true });
+    }, 80);
+  }
+
+  (function wirePortalContactForm() {
+    var form = document.getElementById('portal-contact-form');
+    if (!form) return;
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (!validatePortalContactForm()) return;
+      var submit = document.getElementById('pcf-submit');
+      var label = document.getElementById('pcf-submit-label');
+      if (submit) submit.disabled = true;
+      if (label) label.textContent = 'Sending...';
+      setPortalContactError('message', '');
+      var payload = {
+        reason: document.getElementById('pcf-reason').value,
+        name: (document.getElementById('pcf-name').value || '').trim(),
+        email: (document.getElementById('pcf-email').value || '').trim(),
+        mobile: (document.getElementById('pcf-mobile').value || '').trim(),
+        loanId: (document.getElementById('pcf-loanid').value || '').trim(),
+        message: (document.getElementById('pcf-message').value || '').trim()
+      };
+      sendPortalContactPayload(payload).then(function(result) {
+        if (result && result.account && _repo && _repo.save) {
+          try { _repo.save(result.account); } catch (err) {}
+        }
+        Array.prototype.forEach.call(form.children, function(child) {
+          if (child.id !== 'pcf-success') child.style.display = 'none';
+        });
+        var success = document.getElementById('pcf-success');
+        if (success) success.style.display = 'block';
+      }).catch(function(err) {
+        setPortalContactError('message', err.message || 'We could not send your message. Please try again.');
+        if (submit) submit.disabled = false;
+        if (label) label.textContent = 'Send message';
+      });
+    });
+  })();
+
+  document.addEventListener('click', function(e) {
+    var link = e.target && e.target.closest ? e.target.closest('.contact-form-link') : null;
+    if (!link) return;
+    e.preventDefault();
+    scrollToPortalContact(link.getAttribute('data-contact-reason') || '');
+  });
 
   // ── Menu
   var moverlay = document.getElementById('moverlay');
@@ -2083,7 +2263,7 @@ input,select,textarea,button{font-family:var(--fb)}
       + '<div class="hn wn" style="align-items:flex-start;margin-bottom:12px">' + wSvg + '<span>50% of your disposable income is not enough to clear your balance within 24 months. Our team can discuss the best option for you.</span></div>'
       + '<button class="hbtn bm" id="pa-contact-chat">Chat with Quido</button>'
       + '<button class="hbtn am" style="margin-top:8px">Call us: 0800 123 4567</button>'
-      + '<button class="hbtn" style="background:var(--surface);color:var(--blue);border:1.5px solid var(--blue);margin-top:8px">Write to us: info@quido.co.uk</button>'
+      + '<button class="hbtn contact-form-link" style="background:var(--surface);color:var(--blue);border:1.5px solid var(--blue);margin-top:8px">Use Contact Us form</button>'
       + '<button class="hbtn" id="pa-contact-back" style="background:var(--bg);color:var(--muted);border:1.5px solid var(--border);margin-top:8px">Back</button>';
     document.getElementById('pa-step-contact').innerHTML = html;
     document.getElementById('pa-contact-chat').addEventListener('click', function() { document.getElementById('cfab').click(); });
@@ -2638,7 +2818,7 @@ input,select,textarea,button{font-family:var(--fb)}
     var stmtYear = LOAN.startDate.getFullYear();
     docContent.secci.html = '<h3>Standard European Consumer Credit Information</h3><table class="dtbl"><tr><td>Creditor</td><td>Quido Ltd</td></tr><tr><td>Type of credit</td><td>Fixed-term personal loan</td></tr><tr><td>Total amount of credit</td><td>'+P+'</td></tr><tr><td>Duration</td><td>'+n+' months</td></tr><tr><td>Borrowing rate</td><td>'+apr+'% per annum (fixed)</td></tr><tr><td>APR</td><td>'+apr+'% APR</td></tr><tr><td>Monthly repayment</td><td>'+emi+'</td></tr><tr><td>Total amount repayable</td><td>'+total+'</td></tr><tr><td>Total cost of credit</td><td>'+interest+'</td></tr></table><p>You have the right to withdraw from this agreement within 14 days of signing without giving any reason.</p><p style="font-size:10px;color:var(--dim)">Quido Ltd | FCA Reg. 900001</p>';
     docContent.adequate.html = '<h3>Adequate Explanation of Credit Agreement</h3><p>Quido is required under CONC 4.2 to provide you with an adequate explanation of this loan.</p><p>We explained the key features including the total amount of credit of '+P+', the duration of '+n+' months, the fixed interest rate of '+apr+'% APR, and the monthly repayment of '+emi+'.</p><p>We explained the cost implications of missing payments, including potential damage to your credit file and additional charges.</p><p style="font-size:10px;color:var(--dim)">Date: '+sd+' | Quido Ltd | FCA Reg. 900001</p>';
-    docContent.notice.html = '<h3>Your Right to Cancel</h3><p>You have the right to cancel this credit agreement within 14 days of the day after you receive this notice.</p><p>To cancel, notify Quido in writing: info@quido.co.uk or Quido Ltd, Unit 15, Clacton Enterprise Centre.</p><p>If you cancel, you must repay the capital advanced plus interest accrued within 30 days.</p><p style="font-size:10px;color:var(--dim)">Issued: '+sd+' | Loan '+loanRef+' | FCA Reg. 900001</p>';
+    docContent.notice.html = '<h3>Your Right to Cancel</h3><p>You have the right to cancel this credit agreement within 14 days of the day after you receive this notice.</p><p>To cancel, notify Quido in writing through the Contact Us form or by post to Quido Ltd, Unit 15, Clacton Enterprise Centre.</p><p>If you cancel, you must repay the capital advanced plus interest accrued within 30 days.</p><p style="font-size:10px;color:var(--dim)">Issued: '+sd+' | Loan '+loanRef+' | FCA Reg. 900001</p>';
     docContent.agreement.html = '<h3>Consumer Credit Agreement</h3><table class="dtbl"><tr><td>Agreement number</td><td>'+loanRef+'</td></tr><tr><td>Borrower</td><td>'+ctx.fullName+'</td></tr><tr><td>Address</td><td>'+(ctx.address || 'Not on file')+'</td></tr><tr><td>Loan amount</td><td>'+P+'</td></tr><tr><td>APR</td><td>'+apr+'%</td></tr><tr><td>Term</td><td>'+n+' months</td></tr><tr><td>Monthly payment</td><td>'+emi+'</td></tr><tr><td>Start date</td><td>'+sd+'</td></tr><tr><td>Total repayable</td><td>'+total+'</td></tr></table><p>Regulated by the Consumer Credit Act 1974. Quido Ltd authorised and regulated by the FCA (Reg. 900001).</p><p style="font-size:10px;color:var(--dim)">Electronically signed by '+ctx.fullName+' on '+sd+' at 14:32 GMT.</p>';
     docContent.annualStatement.html = '<h3>Annual Statement</h3><table class="dtbl"><tr><td>Statement year</td><td>'+stmtYear+'</td></tr><tr><td>Borrower</td><td>'+ctx.fullName+'</td></tr><tr><td>Loan number</td><td>'+loanRef+'</td></tr><tr><td>Loan amount</td><td>'+P+'</td></tr><tr><td>Total repaid to date</td><td>'+LOAN.fmt(totalRepaid())+'</td></tr><tr><td>Outstanding balance</td><td>'+LOAN.fmt(outstandingBalance())+'</td></tr><tr><td>Principal paid</td><td>'+LOAN.fmt(principalPaid())+'</td></tr><tr><td>Interest paid</td><td>'+LOAN.fmt(interestPaid())+'</td></tr></table><p>This statement summarises your account activity and balance at the time of download.</p>';
   }
@@ -2729,7 +2909,7 @@ input,select,textarea,button{font-family:var(--fb)}
   // ═══════════════════════════════════════════════
   // Shared footer injected into sub-screens
   (function() {
-    var footer = `<div class="ft"><div class="ft-inner"><div class="ft-top"><div class="ft-brand"><button class="brand-link" type="button" data-goto="s-home" aria-label="Go to homepage"><span class="brand-lockup"><div class="logo-box" style="width:30px;height:30px"><span class="logo-q" style="font-size:15px">Q</span></div><span class="brand-word"><span class="brand-name" style="color:#fff">Quido</span></span></span></button><div class="ft-copy">Clear repayment journeys, flexible support, and fair treatment when life changes.</div></div><div class="ft-links"><a href="#">Loan</a><a href="#">About Us</a><a href="#">FAQs</a><a href="#">Careers</a><a href="#">Beware of Loan Sharks</a><a href="#">Terms of Use</a><a href="#">Contact Us</a><a href="#">Privacy Policy</a><a href="#">File a Complaint</a><a href="#">Fraud Disclaimer</a><a href="#">Insights</a><a href="#">Cookies Policy</a></div></div><div class="fleg">We are a lender and may pay commissions to credit brokers or other intermediaries. This commission does not affect the total cost of your loan.<br><br><strong>Responsible lending:</strong> Take a moment to decide if Quido is right for you. Short term loans are an expensive form of borrowing.<br><br>Quido Ltd. Authorised and regulated by the Financial Conduct Authority. Registration number 900001.</div></div></div>`;
+    var footer = `<div class="ft"><div class="ft-inner"><div class="ft-top"><div class="ft-brand"><button class="brand-link" type="button" data-goto="s-home" aria-label="Go to homepage"><span class="brand-lockup"><div class="logo-box" style="width:30px;height:30px"><span class="logo-q" style="font-size:15px">Q</span></div><span class="brand-word"><span class="brand-name" style="color:#fff">Quido</span></span></span></button><div class="ft-copy">Clear repayment journeys, flexible support, and fair treatment when life changes.</div></div><div class="ft-links"><a href="#">Loan</a><a href="#">About Us</a><a href="#">FAQs</a><a href="#">Careers</a><a href="#">Beware of Loan Sharks</a><a href="#">Terms of Use</a><a href="#portal-contact" class="contact-form-link">Contact Us</a><a href="#">Privacy Policy</a><a href="#portal-contact" class="contact-form-link" data-contact-reason="complaint">File a Complaint</a><a href="#">Fraud Disclaimer</a><a href="#">Insights</a><a href="#">Cookies Policy</a></div></div><div class="fleg">We are a lender and may pay commissions to credit brokers or other intermediaries. This commission does not affect the total cost of your loan.<br><br><strong>Responsible lending:</strong> Take a moment to decide if Quido is right for you. Short term loans are an expensive form of borrowing.<br><br>Quido Ltd. Authorised and regulated by the Financial Conduct Authority. Registration number 900001.</div></div></div>`;
     var full  = footer;
     var noFaq = footer;
     var screens = [
@@ -3457,6 +3637,7 @@ input,select,textarea,button{font-family:var(--fb)}
     try { renderPaymentDetails(); } catch(e) {}
     try { renderIE();             } catch(e) {}
     try { updateAllUI();          } catch(e) {}
+    try { populatePortalContactForm(); } catch(e) {}
     try { previewEngine();        } catch(e) {}
 
     // When the resolved (backend-authoritative) state arrives, re-render everything.
@@ -3468,6 +3649,7 @@ input,select,textarea,button{font-family:var(--fb)}
         try { renderPaymentDetails(); } catch(e) {}
         try { renderIE();             } catch(e) {}
         try { updateAllUI();          } catch(e) {}
+        try { populatePortalContactForm(); } catch(e) {}
       });
     }
   }

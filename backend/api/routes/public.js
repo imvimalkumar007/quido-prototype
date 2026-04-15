@@ -26,6 +26,14 @@ router.post('/quote', function (req, res, next) {
   }
 });
 
+router.post('/contact', function (req, res, next) {
+  try {
+    res.json(svc(req).submitContactMessage(null, req.body || {}, 'public_site'));
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get('/postcodes/:postcode', async function (req, res, next) {
   try {
     res.json(await lookupPostcode(req.params.postcode));

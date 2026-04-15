@@ -126,6 +126,14 @@ router.get('/:key/documents/:type', function (req, res, next) {
   }
 });
 
+router.post('/:key/contact', function (req, res, next) {
+  try {
+    res.json(svc(req).submitContactMessage(req.params.key, req.body || {}, 'customer_ui'));
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post('/:key/commands', function (req, res, next) {
   try {
     var command = req.body || {};

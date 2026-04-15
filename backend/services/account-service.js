@@ -472,6 +472,7 @@ function buildResolvedAccount(account) {
  */
 function AccountService(store) {
   this.store = store;
+  this.publicContactMessages = [];
 }
 
 // ── Read operations ───────────────────────────────────────────────────────
@@ -681,6 +682,109 @@ AccountService.prototype.createPublicProfile = function (payload) {
 
 AccountService.prototype.calculatePublicQuote = function (payload) {
   return decisionService.evaluateApplication(payload);
+};
+
+function cleanContactField(value, maxLength) {
+  return String(value || '').trim().slice(0, maxLength || 500);
+}
+
+function buildContactMessage(payload, source) {
+  payload = payload || {};
+  var name = cleanContactField(payload.name || payload.contactName, 120);
+  var email = cleanContactField(payload.email || payload.contactEmail, 160).toLowerCase();
+  var reason = cleanContactField(payload.reason, 80);
+  var message = cleanContactField(payload.message, 5000);
+  if (!name) {
+    var nameErr = new Error('Full name is required.');
+    nameErr.status = 400;
+    throw nameErr;
+  }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    var emailErr = new Error('A valid email address is required.');
+    emailErr.status = 400;
+    throw emailErr;
+  }
+  if (!reason) {
+    var reasonErr = new Error('Reason for contact is required.');
+    reasonErr.status = 400;
+    throw reasonErr;
+  }
+  if (!message || message.length < 10) {
+    var messageErr = new Error('Message must be at least 10 characters.');
+    messageErr.status = 400;
+    throw messageErr;
+  }
+  return {
+    id: 'contact-' + Date.now(),
+    createdAt: nowIso(),
+    source: source || 'public_site',
+    status: 'received',
+    customerType: cleanContactField(payload.customerType || payload.customer, 30),
+    reason: reason,
+    name: name,
+    email: email,
+    mobile: cleanContactField(payload.mobile || payload.contactMobile, 40),
+    loanId: cleanContactField(payload.loanId, 60),
+    message: message
+  };
+}
+
+AccountService.prototype.submitContactMessage = function (storageKey, payload, actor) {
+  var source = storageKey ? 'customer_portal' : 'public_site';
+  var contact = buildContactMessage(payload, source);
+  var now = contact.createdAt;
+
+  if (!storageKey) {
+    this.publicContactMessages.push(contact);
+    return { contact: contact };
+  }
+
+  var account = this.store.findByKey(storageKey);
+  if (!account) {
+    var err = new Error('Account not found: ' + storageKey);
+    err.status = 404;
+    throw err;
+  }
+  account = normalizeAccount(account);
+  account.storageKey = storageKey;
+
+  if (!Array.isArray(account.contactMessages)) account.contactMessages = [];
+  account.contactMessages.push(contact);
+
+  var loan = getActiveLoan(account);
+  if (loan) {
+    if (!loan.ops) loan.ops = { notes: [], contactLog: [], collectionsFlagged: false };
+    if (!Array.isArray(loan.ops.contactLog)) loan.ops.contactLog = [];
+    loan.ops.contactLog.push({
+      type: 'contact_form',
+      reason: contact.reason,
+      name: contact.name,
+      email: contact.email,
+      mobile: contact.mobile,
+      loanId: contact.loanId,
+      message: contact.message,
+      agent: actor || 'customer_ui',
+      timestamp: now
+    });
+    if (!Array.isArray(loan.auditTrail)) loan.auditTrail = [];
+    loan.auditTrail.push({
+      id: 'evt-' + Date.now(),
+      action: 'CONTACT_FORM_SUBMITTED',
+      payload: {
+        contactId: contact.id,
+        reason: contact.reason,
+        loanId: contact.loanId,
+        message: contact.message
+      },
+      source: actor || 'customer_ui',
+      timestamp: now
+    });
+  }
+
+  account.version = (account.version || 0) + 1;
+  account.updatedAt = now;
+  this.store.save(account);
+  return { contact: contact, account: account };
 };
 
 AccountService.prototype.submitApplication = function (storageKey, payload) {
