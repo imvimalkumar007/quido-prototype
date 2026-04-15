@@ -26,6 +26,7 @@ input,select,textarea,button{font-family:var(--fb)}
 #s-login button,.brand-name,.ha,.dbv,.ct,.ait,.sl,.pt,.bf,.bp,.hbtn,.ob,.itl,.bd,.sec-edit-btn,.smv,.doct{font-family:var(--fd)}
 #s-login [style*="font-weight:700"][style*="text-transform:uppercase"]{font-family:var(--fb)!important;font-size:11px!important;font-weight:800!important;color:var(--muted)!important;letter-spacing:.08em!important}
 #s-login input{font-family:var(--fb)!important;color:var(--text)!important;border-radius:14px!important}
+#s-login input:focus{border-color:var(--green)!important;box-shadow:0 0 0 3px rgba(0,201,167,.12)!important}
 #s-login button{font-size:14px!important;font-weight:800!important;letter-spacing:-.01em!important}
 #s-login .scroll{width:min(calc(100% - var(--portal-gutter)),560px)!important;max-width:560px;margin-left:auto;margin-right:auto;padding:40px 0 36px!important}
 #app{height:100%;position:relative}
@@ -236,7 +237,7 @@ input,select,textarea,button{font-family:var(--fb)}
 .pb{padding:16px}
 .fl{font-family:var(--fb);font-size:11px;font-weight:800;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em}
 .fi{width:100%;padding:13px 14px;min-height:50px;border:1.5px solid var(--border);border-radius:14px;font-size:16px;color:var(--text);outline:none;background:var(--surface);margin-bottom:14px}
-.fi:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(28,56,146,0.1)}
+.fi:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,201,167,.12)}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .ca{background:linear-gradient(135deg,#1c3892,#5b21b6);border-radius:18px;padding:22px;color:#fff;margin-bottom:18px;position:relative;overflow:hidden;min-height:120px}
 .ca::after{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.07)}
@@ -335,13 +336,13 @@ input,select,textarea,button{font-family:var(--fb)}
 .emb{background:var(--surface);border-radius:var(--r-xl) var(--r-xl) 0 0;padding:20px;width:100%;max-width:600px;margin:0 auto;max-height:80%;overflow-y:auto}
 .emt{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px}
 .emi{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:16px;color:var(--text);outline:none;background:var(--bg);margin-bottom:0}
-.emi:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(28,56,146,0.1)}
+.emi:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,201,167,.12)}
 .ems{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:16px;color:var(--text);outline:none;background:var(--bg);cursor:pointer;margin-bottom:0}
 .ie-panel{border-top:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:12px}
 .ie-fg{display:flex;flex-direction:column;gap:5px}
 .ie-lbl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
 .ie-inp,.ie-sel{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:16px;font-family:var(--fb);color:var(--text);outline:none;background:var(--bg);box-sizing:border-box;-webkit-appearance:none;appearance:none}
-.ie-inp:focus,.ie-sel:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(28,56,146,.1)}
+.ie-inp:focus,.ie-sel:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,201,167,.12)}
 .ie-acts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
 .emr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 .ihdr{width:min(calc(100% - var(--portal-gutter)),var(--portal-shell));height:var(--portal-nav-height);margin:0 auto;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:0 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid rgba(226,232,245,.88);border-radius:16px;box-shadow:0 4px 24px rgba(7,16,30,.08);flex-shrink:0;position:fixed;top:var(--portal-nav-top);left:50%;transform:translateX(-50%);z-index:280}
@@ -358,6 +359,13 @@ input,select,textarea,button{font-family:var(--fb)}
 .dv{font-size:13px;font-weight:600;color:var(--text)}
 .sec-edit-btn{background:#eff6ff;border:1px solid #dbeafe;border-radius:8px;padding:4px 10px;font-family:var(--fd);font-size:11px;font-weight:800;letter-spacing:-.01em;color:var(--blue);cursor:pointer;display:flex;align-items:center;gap:4px;flex-shrink:0}
 .sec-edit-btn:hover{background:#dbeafe}
+.sec-act-btns{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.sec-save-btn{width:28px;height:28px;border-radius:8px;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;padding:0;flex-shrink:0}
+.sec-save-btn:hover{background:#d1fae5}
+.sec-cancel-btn{width:28px;height:28px;border-radius:8px;background:#f8fafc;border:1px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;padding:0;flex-shrink:0}
+.sec-cancel-btn:hover{background:#f1f5f9}
+.dv-edit{display:block;width:100%;padding:4px 8px;font-size:13px;font-weight:500;color:var(--text);background:var(--bg);border:1.5px solid var(--border);border-radius:8px;outline:none;font-family:var(--fb);box-sizing:border-box;-webkit-appearance:none;appearance:none;margin-top:2px}
+.dv-edit:focus{background:#fff;border-color:var(--green);box-shadow:0 0 0 3px rgba(0,201,167,.12)}
 .pcv{background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:16px;padding:18px;color:#fff;margin:0 0 6px;position:relative;overflow:hidden}
 .pcv::after{content:'';position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.07)}
 .bac{background:var(--surface);margin:0 0 12px;border-radius:var(--r-lg);box-shadow:0 1px 4px rgba(15,24,40,0.06);overflow:hidden}
@@ -421,7 +429,7 @@ input,select,textarea,button{font-family:var(--fb)}
 .qp{flex-shrink:0;padding:5px 9px;background:#eff6ff;border:1px solid #dbeafe;border-radius:20px;font-size:10px;color:var(--blue);font-weight:500;cursor:pointer;white-space:nowrap}
 .cir{display:flex;gap:7px;padding:8px 10px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0}
 .cinp{flex:1;padding:8px 11px;border:1.5px solid var(--border);border-radius:20px;font-size:16px;outline:none;background:var(--bg);color:var(--text)}
-.cinp:focus{border-color:var(--blue)}
+.cinp:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,201,167,.12)}
 .csend{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .iesh{padding:0 16px 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;justify-content:space-between}
 .inc-h{color:var(--ok-text)}
@@ -2488,6 +2496,7 @@ input,select,textarea,button{font-family:var(--fb)}
   var emTitle = document.getElementById('em-title');
   var emBody  = document.getElementById('em-body');
   var editKey = '';
+  var activeEditState = null;
 
   var editSelectOpts = {
     'title':      ['Mr','Ms','Mrs','Miss','Dr','Prof'],
@@ -2513,51 +2522,65 @@ input,select,textarea,button{font-family:var(--fb)}
   var ieExpense = ['exp-rent','exp-council','exp-utilities','exp-food','exp-transport','exp-childcare','exp-mobile','exp-loans','exp-cards','exp-bnpl','exp-insurance','exp-subs'];
 
   function openSectionEdit(sectionKey) {
+    if (activeEditState) closeEdit();
     var def = sectionDefs[sectionKey];
     if (!def) return;
-    // Remove any existing inline panel first
-    var prev = document.getElementById('ie-panel');
-    if (prev) prev.parentNode.removeChild(prev);
     editKey = sectionKey;
-    // Find the trigger button, then locate the nearest .dc card
     var trigger = document.querySelector('[data-section="' + sectionKey + '"]');
     if (!trigger) return;
     var sh = trigger.closest('.sh') || trigger.closest('.iesh');
     if (!sh) return;
-    var card = sh.nextElementSibling;
-    while (card && !card.classList.contains('dc')) { card = card.nextElementSibling; }
-    if (!card) return;
-    // Build inline fields
-    var html = '<div class="ie-panel" id="ie-panel">';
+    // Swap Edit button for Save/Cancel icons
+    var origBtnHTML = trigger.outerHTML;
+    var actBtns = document.createElement('div');
+    actBtns.className = 'sec-act-btns';
+    actBtns.innerHTML =
+      '<button class="sec-save-btn" id="ie-save-btn" title="Save" type="button">' +
+        '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l4 4 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+      '</button>' +
+      '<button class="sec-cancel-btn" id="ie-cancel-btn" title="Cancel" type="button">' +
+        '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>' +
+      '</button>';
+    trigger.parentNode.replaceChild(actBtns, trigger);
+    // Convert each editable .dv to an inline input
+    var fieldStates = [];
     for (var i = 0; i < def.fields.length; i++) {
       var f = def.fields[i];
-      var valEl = document.getElementById('val-' + f.key);
-      var rawTxt = valEl ? valEl.textContent.replace(/&amp;/g,'&') : '';
+      var dvEl = document.getElementById('val-' + f.key);
+      if (!dvEl) continue;
+      var origHTML = dvEl.innerHTML;
+      var rawTxt = dvEl.textContent.replace(/^\s+|\s+$/g,'');
       var isIEField = ieIncome.indexOf(f.key) > -1 || ieExpense.indexOf(f.key) > -1;
       var current = isIEField ? String(parseFloat(rawTxt.replace(/[^0-9.]/g,''))||0) : rawTxt;
-      html += '<div class="ie-fg"><div class="ie-lbl">' + f.label + '</div>';
+      dvEl.innerHTML = '';
       if (f.type === 'select' && editSelectOpts[f.key]) {
-        html += '<select class="ie-sel" data-field="' + f.key + '">';
+        var sel = document.createElement('select');
+        sel.className = 'dv-edit';
+        sel.setAttribute('data-field', f.key);
         var opts = editSelectOpts[f.key];
         for (var o = 0; o < opts.length; o++) {
-          html += '<option' + (opts[o] === current ? ' selected' : '') + '>' + opts[o] + '</option>';
+          var opt = document.createElement('option');
+          opt.textContent = opts[o];
+          if (opts[o] === current) opt.selected = true;
+          sel.appendChild(opt);
         }
-        html += '</select>';
-      } else if (f.type === 'date') {
-        html += '<input class="ie-inp" data-field="' + f.key + '" type="date">';
+        dvEl.appendChild(sel);
       } else {
-        html += '<input class="ie-inp" data-field="' + f.key + '" type="text" value="' + current.replace(/"/g,'&quot;') + '">';
+        var inp = document.createElement('input');
+        inp.className = 'dv-edit';
+        inp.setAttribute('data-field', f.key);
+        inp.type = f.type === 'date' ? 'date' : 'text';
+        inp.value = current;
+        dvEl.appendChild(inp);
       }
-      html += '</div>';
+      fieldStates.push({ key: f.key, el: dvEl, origHTML: origHTML });
     }
-    html += '<div class="ie-acts"><button class="bf bgh" id="ie-cancel" type="button">Cancel</button><button class="bf bbl" id="ie-save" type="button">Save</button></div>';
-    html += '</div>';
-    card.insertAdjacentHTML('beforeend', html);
-    document.getElementById('ie-save').addEventListener('click', function() {
-      doSave(document.querySelectorAll('#ie-panel [data-field]'));
+    activeEditState = { sectionKey: sectionKey, sh: sh, origBtnHTML: origBtnHTML, fields: fieldStates };
+    document.getElementById('ie-save-btn').addEventListener('click', function() {
+      doSave(document.querySelectorAll('.dv-edit[data-field]'));
     });
-    document.getElementById('ie-cancel').addEventListener('click', closeEdit);
-    var first = document.querySelector('#ie-panel input');
+    document.getElementById('ie-cancel-btn').addEventListener('click', closeEdit);
+    var first = document.querySelector('.dv-edit');
     if (first) { setTimeout(function(){ first.focus(); }, 60); }
   }
 
@@ -2665,14 +2688,33 @@ input,select,textarea,button{font-family:var(--fb)}
       }
     }
     logAction('profile_edit', { section:editKey });
-    closeEdit();
+    closeEdit(true);
     refreshCustomerIdentity();
     renderProfile();
     renderIE();
     updateAllUI();
   }
 
-  function closeEdit() {
+  function closeEdit(afterSave) {
+    if (activeEditState) {
+      if (!afterSave) {
+        // Cancel: restore original .dv HTML
+        for (var i = 0; i < activeEditState.fields.length; i++) {
+          activeEditState.fields[i].el.innerHTML = activeEditState.fields[i].origHTML;
+        }
+      }
+      // Restore the Edit button in the section header
+      var saveBtn = document.getElementById('ie-save-btn');
+      if (saveBtn) {
+        var actBtnsEl = saveBtn.closest('.sec-act-btns');
+        if (actBtnsEl) {
+          var tmp = document.createElement('div');
+          tmp.innerHTML = activeEditState.origBtnHTML;
+          actBtnsEl.parentNode.replaceChild(tmp.firstChild, actBtnsEl);
+        }
+      }
+      activeEditState = null;
+    }
     var panel = document.getElementById('ie-panel');
     if (panel) panel.parentNode.removeChild(panel);
     emModal.classList.remove('open');
