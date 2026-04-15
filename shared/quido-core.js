@@ -1148,7 +1148,7 @@
                 loan.loanCore.paidCount = (loan.loanCore.paidCount || 0) + 1;
               }
               loan.transactions.push({
-                id:         'pmt-' + Date.now(),
+                id:         payload.transactionId || payload.id || ('pmt-' + Date.now()),
                 type:       'payment',
                 amount:     payload.amount || 0,
                 date:       payload.date   || nowIso(),

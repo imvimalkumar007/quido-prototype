@@ -105,8 +105,21 @@ function _recomputePaidCount(loan) {
   return idx;
 }
 
+function _findTransactionById(loan, id) {
+  if (!Array.isArray(loan.transactions)) loan.transactions = [];
+  if (!id) return null;
+  for (var i = 0; i < loan.transactions.length; i++) {
+    if (loan.transactions[i] && loan.transactions[i].id === id) return loan.transactions[i];
+  }
+  return null;
+}
+
 function _appendTransaction(loan, txn) {
   if (!Array.isArray(loan.transactions)) loan.transactions = [];
+  if (txn && txn.id) {
+    var existing = _findTransactionById(loan, txn.id);
+    if (existing) return existing;
+  }
   loan.transactions.push(txn);
   return txn;
 }
@@ -292,10 +305,15 @@ function rebuildSummary(loan) {
  * @param {Date}   [now]      — evaluation reference time
  * @returns {{ ok: boolean, loan: Object, error?: string }}
  */
-function applyRepayment(loan, amount, date, actor, now, instrument) {
+function applyRepayment(loan, amount, date, actor, now, instrument, transactionId) {
   now   = now   || new Date();
   actor = actor || 'customer';
   date  = date  || now.toISOString();
+  transactionId = transactionId || null;
+
+  if (transactionId && _findTransactionById(loan, transactionId)) {
+    return { ok: true, loan: loan, duplicate: true };
+  }
 
   var seResult = evaluateCoreStatus(loan, now);
   if (seResult.coreStatus === CS.SETTLED || seResult.coreStatus === CS.CLOSED) {
@@ -309,7 +327,7 @@ function applyRepayment(loan, amount, date, actor, now, instrument) {
   var txnType = amount >= emiAmt - BALANCE_TOLERANCE ? 'payment' : 'partial_payment';
 
   var txn = _appendTransaction(loan, {
-    id:         'pmt-' + Date.now(),
+    id:         transactionId || ('pmt-' + Date.now()),
     type:       txnType,
     amount:     amount,
     date:       date,

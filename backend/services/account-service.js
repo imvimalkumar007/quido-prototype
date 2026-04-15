@@ -92,7 +92,7 @@ function createApplicationLoanId() {
   return 'APP-' + String(Date.now()).slice(-6);
 }
 
-function paymentBreakdown(row) {
+function paymentBreakdown(row, partialCredit) {
   if (row && row.ph) {
     return {
       interestPaid: 0,
@@ -107,6 +107,14 @@ function paymentBreakdown(row) {
   if (row && row.status === 'paid') {
     interestPaid = Math.max(interestPaid, +(row.interest || 0));
     principalPaid = Math.max(principalPaid, +(row.principal || 0));
+  }
+  var credit = Math.max(0, +(partialCredit || 0));
+  if (row && row.status !== 'paid' && credit > 0) {
+    var interestCredit = Math.min(credit, Math.max(0, +(row.interest || 0) - interestPaid));
+    interestPaid += interestCredit;
+    credit = Math.max(0, +(credit - interestCredit).toFixed(2));
+    var principalCredit = Math.min(credit, Math.max(0, +(row.principal || 0) - principalPaid));
+    principalPaid += principalCredit;
   }
   var interestRemaining = Math.max(0, +(((row && row.interest) || 0) - interestPaid).toFixed(2));
   var principalRemaining = Math.max(0, +(((row && row.principal) || 0) - principalPaid).toFixed(2));
@@ -158,6 +166,110 @@ function setPaidCount(loan, paidCount, now, actor) {
   });
 
   return { ok: true, loan: loan };
+}
+
+function getLoanByIdOrActive(account, loanId) {
+  var loans = (account && account.loans) || [];
+  if (loanId) {
+    for (var i = 0; i < loans.length; i++) {
+      if (loans[i] && loans[i].loanId === loanId) return loans[i];
+    }
+  }
+  return getActiveLoan(account);
+}
+
+function hasTransaction(loan, txnId) {
+  var txns = (loan && loan.transactions) || [];
+  if (!txnId) return false;
+  for (var i = 0; i < txns.length; i++) {
+    if (txns[i] && txns[i].id === txnId) return true;
+  }
+  return false;
+}
+
+function replayClientOnlyPayments(backendAccount, clientAccount, now) {
+  if (!backendAccount || !clientAccount) return 0;
+  var clientLoan = getLoanByIdOrActive(clientAccount, clientAccount.activeLoanId);
+  if (!clientLoan || !Array.isArray(clientLoan.transactions)) return 0;
+  var backendLoan = getLoanByIdOrActive(backendAccount, clientLoan.loanId || backendAccount.activeLoanId);
+  if (!backendLoan) return 0;
+
+  var replayable = clientLoan.transactions.filter(function (txn) {
+    if (!txn || !txn.id || hasTransaction(backendLoan, txn.id)) return false;
+    if (txn.successful === false || txn.refundedAt || txn.refundTxnId) return false;
+    if (['payment', 'partial_payment'].indexOf(txn.type) === -1) return false;
+    return +(txn.amount || 0) > 0;
+  }).sort(function (a, b) {
+    return new Date(a.date || 0).getTime() - new Date(b.date || 0).getTime();
+  });
+
+  var applied = 0;
+  for (var i = 0; i < replayable.length; i++) {
+    var txn = replayable[i];
+    var date = txn.date || (now || new Date()).toISOString();
+    applyLegacyPartialCreditToSchedule(backendLoan, now);
+    var result = applyRepayment(
+      backendLoan,
+      +(txn.amount || 0),
+      date,
+      txn.actor || 'customer_ui',
+      new Date(date),
+      txn.instrument || null,
+      txn.id
+    );
+    if (result && result.ok) applied++;
+  }
+  if (applied > 0) {
+    backendAccount.version = (backendAccount.version || 0) + applied;
+    backendAccount.updatedAt = nowIso();
+  }
+  return applied;
+}
+
+function applyLegacyPartialCreditToSchedule(loan, now) {
+  var credit = Math.max(0, +(loan && loan.partialCredit || 0));
+  if (!loan || credit <= 0) return 0;
+  var snap = loan.scheduleSnapshot || [];
+  var paidIdx = (loan.loanCore && loan.loanCore.paidCount) || 0;
+  var applied = 0;
+
+  for (var i = paidIdx; i < snap.length; i++) {
+    var row = snap[i];
+    if (!row || row.status === 'paid' || row.ph) continue;
+    row.interestPaid = Math.max(0, +(row.interestPaid || 0));
+    row.principalPaid = Math.max(0, +(row.principalPaid || 0));
+
+    var interestDue = Math.max(0, +((row.interest || 0) - row.interestPaid).toFixed(2));
+    if (interestDue > 0 && credit > 0) {
+      var interestPay = Math.min(credit, interestDue);
+      row.interestPaid = +((row.interestPaid || 0) + interestPay).toFixed(2);
+      credit = +(credit - interestPay).toFixed(2);
+      applied = +(applied + interestPay).toFixed(2);
+    }
+
+    var principalDue = Math.max(0, +((row.principal || 0) - row.principalPaid).toFixed(2));
+    if (principalDue > 0 && credit > 0) {
+      var principalPay = Math.min(credit, principalDue);
+      row.principalPaid = +((row.principalPaid || 0) + principalPay).toFixed(2);
+      credit = +(credit - principalPay).toFixed(2);
+      applied = +(applied + principalPay).toFixed(2);
+    }
+
+    var remaining = Math.max(0, +((row.interest || 0) + (row.principal || 0) - row.interestPaid - row.principalPaid).toFixed(2));
+    if (remaining <= 0.01) row.status = 'paid';
+    if (credit <= 0.01) break;
+  }
+
+  loan.partialCredit = credit > 0.01 ? credit : 0;
+  var paidCount = 0;
+  for (var pc = 0; pc < snap.length; pc++) {
+    if (snap[pc] && snap[pc].status === 'paid') paidCount++;
+    else break;
+  }
+  if (loan.loanCore) loan.loanCore.paidCount = Math.max(loan.loanCore.paidCount || 0, paidCount);
+  rebuildSummary(loan);
+  runStatusEngine(loan, now || new Date());
+  return applied;
 }
 
 function pickValue() {
@@ -214,6 +326,8 @@ function buildResolvedAccount(account) {
 
   var snap = (activeLoan && activeLoan.scheduleSnapshot) || [];
   var resolvedAt = new Date();
+  var legacyPartialCredit = activeLoan ? Math.max(0, +(activeLoan.partialCredit || 0)) : 0;
+  var partialCreditApplied = false;
 
   // Run status engine to get fresh allowed/blocked actions
   var allowedActions    = [];
@@ -247,6 +361,41 @@ function buildResolvedAccount(account) {
       if (!snap[j].ph) { emi = snap[j].emi; break; }
     }
   }
+
+  var resolvedSchedule = [];
+  for (var rs = 0; rs < operativeSchedule.length; rs++) {
+    var row = operativeSchedule[rs];
+    var creditForRow = (!partialCreditApplied && row.status !== 'paid' && !row.ph)
+      ? legacyPartialCredit
+      : 0;
+    if (creditForRow > 0) partialCreditApplied = true;
+    resolvedSchedule.push(Object.assign({}, row, paymentBreakdown(row, creditForRow)));
+  }
+
+  var computedSummary = {
+    emi: emi,
+    totalRepayable: 0,
+    totalInterest: 0,
+    outstandingBalance: 0,
+    totalRepaid: 0,
+    totalInterestPaid: 0,
+    totalPrincipalPaid: 0,
+    instalmentsRemaining: 0
+  };
+  for (var cs = 0; cs < resolvedSchedule.length; cs++) {
+    var sr = resolvedSchedule[cs];
+    if (sr.ph) continue;
+    computedSummary.totalRepayable += sr.emi || 0;
+    computedSummary.totalInterest += sr.interest || 0;
+    computedSummary.totalInterestPaid += sr.interestPaid || 0;
+    computedSummary.totalPrincipalPaid += sr.principalPaid || 0;
+    computedSummary.outstandingBalance += sr.remainingDue || 0;
+    if ((sr.remainingDue || 0) > 0.01) computedSummary.instalmentsRemaining += 1;
+  }
+  computedSummary.totalRepaid = computedSummary.totalInterestPaid + computedSummary.totalPrincipalPaid;
+  Object.keys(computedSummary).forEach(function (key) {
+    if (typeof computedSummary[key] === 'number') computedSummary[key] = +computedSummary[key].toFixed(2);
+  });
 
   // Loan history summary (all loans)
   var loanHistory = loans.map(function (l) {
@@ -399,14 +548,14 @@ function buildResolvedAccount(account) {
       emi: emi,
 
       summary: {
-        emi:                  ls.emi                  || emi,
-        totalRepayable:       ls.totalRepayable        || 0,
-        totalInterest:        ls.totalInterest         || 0,
-        outstandingBalance:   ls.outstandingBalance    || 0,
-        totalRepaid:          ls.totalRepaid           || 0,
-        totalInterestPaid:    ls.totalInterestPaid     || 0,
-        totalPrincipalPaid:   ls.totalPrincipalPaid    || 0,
-        instalmentsRemaining: ls.instalmentsRemaining  || 0
+        emi:                  computedSummary.emi,
+        totalRepayable:       computedSummary.totalRepayable,
+        totalInterest:        computedSummary.totalInterest,
+        outstandingBalance:   computedSummary.outstandingBalance,
+        totalRepaid:          computedSummary.totalRepaid,
+        totalInterestPaid:    computedSummary.totalInterestPaid,
+        totalPrincipalPaid:   computedSummary.totalPrincipalPaid,
+        instalmentsRemaining: computedSummary.instalmentsRemaining
       },
 
       status: {
@@ -419,9 +568,7 @@ function buildResolvedAccount(account) {
         lastEvaluatedAt:       se.lastEvaluatedAt       || ''
       },
 
-      schedule:          operativeSchedule.map(function (row) {
-        return Object.assign({}, row, paymentBreakdown(row));
-      }),
+      schedule:          resolvedSchedule,
       operativeSchedule: operativeSchedule.map(function (row) {
         return Object.assign({}, row, paymentBreakdown(row));
       }),
@@ -1162,22 +1309,12 @@ AccountService.prototype.syncAccount = function (storageKey, clientAccount, seed
       source = 'seed';
     }
   } else {
-    // Case 2: backend has a newer or equal version
-    var backendVer = backendAccount.version || 0;
-    var clientVer  = clientAccount ? (clientAccount.version || 0) : -1;
-
-    if (backendVer >= clientVer) {
-      winner = backendAccount;
-      source = 'backend';
-    } else if (clientAccount && clientAccount.storageKey) {
-      // Case 3: client is newer — accept client
-      winner = normalizeAccount(clientAccount, seed);
-      winner.storageKey = storageKey;
-      source = 'client';
-    } else {
-      winner = backendAccount;
-      source = 'backend';
-    }
+    // Existing accounts are backend-authoritative. Browser localStorage can be
+    // stale or device-specific, so it must never win a sync just because its
+    // local version number is higher.
+    replayClientOnlyPayments(backendAccount, clientAccount, now);
+    winner = backendAccount;
+    source = 'backend';
   }
 
   // Always refresh status engine on every loan so the stored state is never stale.
@@ -1228,7 +1365,8 @@ AccountService.prototype.applyCommand = function (storageKey, command) {
 
     case 'RECORD_PAYMENT':
       if (loan) {
-        engineResult = applyRepayment(loan, payload.amount || 0, payload.date, actor, now, payload.instrument);
+        applyLegacyPartialCreditToSchedule(loan, now);
+        engineResult = applyRepayment(loan, payload.amount || 0, payload.date, actor, now, payload.instrument, payload.transactionId || payload.id);
         if (!engineResult.ok) {
           var pmtErr = new Error(engineResult.error || 'Payment could not be applied.');
           pmtErr.status = 422;

@@ -111,6 +111,73 @@
       } catch (e) {}
     }
 
+    function pendingCommandKey(key) {
+      return 'quido_pending_commands_' + key;
+    }
+
+    function readPendingCommands(key) {
+      if (!key) return [];
+      try {
+        var raw = window.localStorage.getItem(pendingCommandKey(key));
+        var parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function writePendingCommands(key, commands) {
+      if (!key) return;
+      try {
+        if (commands && commands.length) {
+          window.localStorage.setItem(pendingCommandKey(key), JSON.stringify(commands));
+        } else {
+          window.localStorage.removeItem(pendingCommandKey(key));
+        }
+      } catch (e) {}
+    }
+
+    function queuePendingCommand(key, command) {
+      if (!key || !command) return;
+      var pending = readPendingCommands(key);
+      pending.push(command);
+      writePendingCommands(key, pending);
+    }
+
+    function applyBackendAccountToLocal(backendAccount, key, seed) {
+      if (!backendAccount || !key) return;
+      var toStore = (Quido && Quido.normalizeAccount)
+        ? Quido.normalizeAccount(backendAccount, seed || null)
+        : backendAccount;
+      try {
+        window.localStorage.setItem(key, JSON.stringify(toStore));
+      } catch (e) {}
+      if (localStore) localStore.reload();
+    }
+
+    function flushPendingCommands(key) {
+      var pending = readPendingCommands(key);
+      if (!pending.length) return Promise.resolve(null);
+
+      var chain = Promise.resolve(null);
+      pending.forEach(function (command, idx) {
+        chain = chain.then(function () {
+          return apiPost(apiBase, '/accounts/' + key + '/commands', command)
+            .then(function (result) {
+              apiOnline = true;
+              var backendAccount = result && result.account;
+              if (backendAccount) applyBackendAccountToLocal(backendAccount, key, null);
+              writePendingCommands(key, pending.slice(idx + 1));
+              return result;
+            });
+        });
+      });
+      return chain.then(function (result) {
+        fetchResolved(key);
+        return result;
+      });
+    }
+
     // ── Background sync helpers ───────────────────────────────────────────
 
     /**
@@ -142,30 +209,23 @@
      * If backend has a newer version, update localStorage and refresh inner store.
      */
     function syncWithBackend(key, seed) {
-      var clientState = localStore ? localStore.getState() : null;
-      apiPost(apiBase, '/accounts/sync', {
-        storageKey: key,
-        account:    clientState,
-        seed:       seed || null
+      flushPendingCommands(key).catch(function (err) {
+        warn('Pending commands could not be flushed yet. (' + err.message + ')');
+      }).then(function () {
+        var clientState = localStore ? localStore.getState() : null;
+        return apiPost(apiBase, '/accounts/sync', {
+          storageKey: key,
+          account:    clientState,
+          seed:       seed || null
+        });
       }).then(function (result) {
         apiOnline = true;
         var backendAccount = result.account;
         var source         = result.source;
 
-        // Backend returned a newer account — normalize (runs migrations) then patch localStorage
+        // Backend is authoritative for existing accounts, even if localStorage has a higher version.
         if (source === 'backend' && backendAccount) {
-          var localVer   = clientState ? (clientState.version || 0) : 0;
-          var backendVer = backendAccount.version || 0;
-          if (backendVer > localVer) {
-            // Run migrations so client-only fields (e.g. granular I&E) are always present
-            var toStore = (Quido && Quido.normalizeAccount)
-              ? Quido.normalizeAccount(backendAccount, seed)
-              : backendAccount;
-            try {
-              window.localStorage.setItem(key, JSON.stringify(toStore));
-            } catch (e) {}
-            if (localStore) localStore.reload();
-          }
+          applyBackendAccountToLocal(backendAccount, key, seed);
         }
 
         // After sync completes, fetch the resolved view so both apps get
@@ -174,7 +234,7 @@
       }).catch(function (err) {
         if (apiOnline) {
           apiOnline = false;
-          warn('Backend unavailable — running offline on localStorage. (' + err.message + ')');
+          warn('Backend unavailable - running offline on localStorage. (' + err.message + ')');
         }
       });
     }
@@ -192,13 +252,7 @@
           apiOnline = true;
           var backendAccount = result && result.account;
           if (backendAccount) {
-            var toStore = (Quido && Quido.normalizeAccount)
-              ? Quido.normalizeAccount(backendAccount, null)
-              : backendAccount;
-            try {
-              window.localStorage.setItem(storageKey, JSON.stringify(toStore));
-            } catch (e) {}
-            if (localStore) localStore.reload();
+            applyBackendAccountToLocal(backendAccount, storageKey, null);
             rebroadcast(command);
           }
           // Refresh resolved view after every successful command
@@ -209,6 +263,7 @@
             apiOnline = false;
             warn('Command not persisted to backend — mutation is local only. (' + err.message + ')');
           }
+          queuePendingCommand(storageKey, command);
           throw err;
         });
     }
@@ -251,6 +306,12 @@
        * 2. Fires async POST to backend (persists to canonical source of truth).
        */
       dispatch: function (command) {
+        if (command && command.type === 'RECORD_PAYMENT') {
+          command.payload = command.payload || {};
+          if (!command.payload.transactionId && !command.payload.id) {
+            command.payload.transactionId = 'pmt-' + Date.now();
+          }
+        }
         // Local-first for responsiveness
         if (localStore) localStore.dispatch(command);
         // Async persistence to backend
@@ -282,18 +343,12 @@
             var backendAccount = data && data.account;
             if (!backendAccount) return localStore ? localStore.getState() : null;
 
-            var localState = localStore ? localStore.getState() : null;
-            var localVer   = localState ? (localState.version || 0) : 0;
-            var backendVer = backendAccount.version || 0;
-
-            if (backendVer > localVer) {
-              var toStoreR = (Quido && Quido.normalizeAccount)
-                ? Quido.normalizeAccount(backendAccount, null)
-                : backendAccount;
-              try {
-                window.localStorage.setItem(storageKey, JSON.stringify(toStoreR));
-              } catch (e) {}
-            }
+            var toStoreR = (Quido && Quido.normalizeAccount)
+              ? Quido.normalizeAccount(backendAccount, null)
+              : backendAccount;
+            try {
+              window.localStorage.setItem(storageKey, JSON.stringify(toStoreR));
+            } catch (e) {}
             // Always reload inner store from localStorage after update
             return localStore ? localStore.reload() : backendAccount;
           })

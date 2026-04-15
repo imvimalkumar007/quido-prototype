@@ -1671,9 +1671,11 @@ input,select,textarea,button{font-family:var(--fb)}
         }
         var persistPromise = null;
         if (_store) {
+          var paymentTransactionId = 'pmt-' + Date.now();
           persistPromise = _store.dispatch({
             type: Quido.CommandTypes.RECORD_PAYMENT,
             payload: {
+              transactionId: paymentTransactionId,
               paidCount: LOAN.paidCount,
               amount:    paid,
               date:      new Date().toISOString(),
