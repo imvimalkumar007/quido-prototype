@@ -235,53 +235,67 @@ body {
 
 /* ── Quote Card ── */
 .qcard {
-  background: var(--navy); border-radius: 24px; padding: 28px 24px;
+  background: linear-gradient(160deg, #0e1f4d 0%, #091533 100%);
+  border-radius: 24px; padding: 26px 22px 22px;
   position: relative; overflow: hidden;
-  box-shadow: 0 24px 64px rgba(7,16,30,0.22), 0 0 0 1px rgba(255,255,255,0.05) inset;
+  box-shadow: 0 28px 72px rgba(7,16,30,0.28), 0 0 0 1px rgba(255,255,255,0.06) inset;
   width: 100%;
 }
-.qcard-head { margin-bottom: 18px; position: relative; z-index: 1; }
-.qcard-head h2 { font-family: var(--fd); font-size: 19px; font-weight: 800; color: var(--od-1); letter-spacing: -0.02em; margin-bottom: 3px; }
-.qcard-head p { font-family: var(--fb); font-size: 12px; color: var(--od-3); }
-.qstats { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; margin-bottom: 18px; position: relative; z-index: 1; }
-.qs { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.09); border-radius: 12px; padding: 10px 7px; text-align: center; }
-.qs-lbl { font-family: var(--fb); font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.09em; font-weight: 600; color: var(--od-3); margin-bottom: 4px; }
-.qs-val { font-family: var(--fd); font-size: 15px; font-weight: 700; color: var(--od-1); letter-spacing: -0.02em; }
+.qcard::after {
+  content: ''; position: absolute; top: -60px; right: -40px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,201,167,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.qcard-head { margin-bottom: 16px; position: relative; z-index: 1; }
+.qcard-head h2 { font-family: var(--fd); font-size: 18px; font-weight: 800; color: var(--od-1); letter-spacing: -0.02em; margin-bottom: 3px; }
+.qcard-head p { font-family: var(--fb); font-size: 11.5px; color: var(--od-3); line-height: 1.5; }
+.qstats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 20px; position: relative; z-index: 1; }
+.qs {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px; padding: 12px 8px 10px; text-align: center;
+  transition: background 0.2s;
+}
+.qs:first-child { border-color: rgba(0,201,167,0.25); background: rgba(0,201,167,0.07); }
+.qs-lbl { font-family: var(--fb); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--od-3); margin-bottom: 5px; }
+.qs-val { font-family: var(--fd); font-size: 18px; font-weight: 800; color: var(--od-1); letter-spacing: -0.03em; line-height: 1; }
+.qs:first-child .qs-val { color: var(--teal); }
 .qs-val.bump { animation: bump 0.17s cubic-bezier(0.22,1,0.36,1); }
-@keyframes bump { 0%{transform:scale(1)} 50%{transform:scale(1.1)} 100%{transform:scale(1)} }
-.qs-sub { font-family: var(--fb); font-size: 9px; color: var(--od-4); margin-top: 2px; }
-.sl { margin-bottom: 16px; position: relative; z-index: 1; }
-.sl-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
-.sl-lbl { font-family: var(--fb); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.09em; font-weight: 600; color: var(--od-3); }
-.sl-val { font-family: var(--fd); font-size: 21px; font-weight: 700; color: var(--od-1); letter-spacing: -0.03em; }
-.sl-track { position: relative; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-bottom: 5px; }
-.sl-fill { position: absolute; left: 0; top: 0; height: 100%; background: linear-gradient(90deg, var(--teal-d), var(--teal)); border-radius: 3px; pointer-events: none; }
+@keyframes bump { 0%{transform:scale(1)} 50%{transform:scale(1.08)} 100%{transform:scale(1)} }
+.qs-sub { font-family: var(--fb); font-size: 9px; color: var(--od-4); margin-top: 3px; }
+.sl { margin-bottom: 18px; position: relative; z-index: 1; }
+.sl-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.sl-lbl { font-family: var(--fb); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--od-3); }
+.sl-val { font-family: var(--fd); font-size: 22px; font-weight: 800; color: var(--od-1); letter-spacing: -0.03em; }
+.sl-track { position: relative; height: 6px; background: rgba(255,255,255,0.1); border-radius: 4px; margin-bottom: 6px; }
+.sl-fill { position: absolute; left: 0; top: 0; height: 100%; background: linear-gradient(90deg, var(--teal-d), var(--teal)); border-radius: 4px; pointer-events: none; }
 input[type="range"] {
   -webkit-appearance: none; appearance: none;
   position: absolute; top: 50%; left: 0;
-  width: 100%; height: 22px; transform: translateY(-50%);
+  width: 100%; height: 24px; transform: translateY(-50%);
   background: transparent; cursor: pointer; outline: none;
 }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 18px; height: 18px; border-radius: 50%;
+  width: 20px; height: 20px; border-radius: 50%;
   background: #fff; border: 2.5px solid var(--teal);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25), 0 0 0 4px rgba(0,201,167,0.15);
   transition: transform 0.15s, box-shadow 0.15s;
 }
-input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.12); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
-input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #fff; border: 2.5px solid var(--teal); cursor: pointer; }
-.sl-range { display: flex; justify-content: space-between; font-family: var(--fb); font-size: 9.5px; color: var(--od-4); }
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.1); box-shadow: 0 2px 8px rgba(0,0,0,0.25), 0 0 0 6px rgba(0,201,167,0.2); }
+input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 2.5px solid var(--teal); cursor: pointer; }
+.sl-range { display: flex; justify-content: space-between; font-family: var(--fb); font-size: 9.5px; color: rgba(255,255,255,0.28); }
 .btn-apply {
   width: 100%; background: linear-gradient(135deg, var(--teal-d), var(--teal));
-  color: var(--navy); border: none; padding: 13px 20px; border-radius: 12px;
+  color: var(--navy); border: none; padding: 14px 20px; border-radius: 14px;
   font-family: var(--fd); font-size: 14px; font-weight: 800; cursor: pointer;
   letter-spacing: -0.01em; margin-bottom: 12px; position: relative; z-index: 1;
   transition: transform 0.22s cubic-bezier(0.22,1,0.36,1), box-shadow 0.22s, filter 0.22s;
+  box-shadow: 0 6px 20px rgba(0,201,167,0.3);
 }
-.btn-apply:hover { transform: translateY(-2px); filter: brightness(1.04); }
-.btn-apply:active { transform: translateY(0); }
-.qcard-disc { font-family: var(--fb); font-size: 10px; color: var(--od-4); text-align: center; line-height: 1.55; position: relative; z-index: 1; }
+.btn-apply:hover { transform: translateY(-2px); filter: brightness(1.05); box-shadow: 0 10px 28px rgba(0,201,167,0.4); }
+.btn-apply:active { transform: translateY(0); box-shadow: 0 4px 12px rgba(0,201,167,0.25); }
+.qcard-disc { font-family: var(--fb); font-size: 10px; color: rgba(255,255,255,0.28); text-align: center; line-height: 1.6; position: relative; z-index: 1; }
 
 /* ════════════════════════════════════════
    TRUST
@@ -459,20 +473,22 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 
 /* Modern vertical timeline */
 .how { padding: 96px 24px 104px; background: var(--s2); position: relative; overflow: hidden; }
-.how::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 1px; height: 100%; background: linear-gradient(to bottom, transparent 0%, var(--border) 12%, var(--border) 88%, transparent 100%); pointer-events: none; }
+.how::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 2px; height: 100%; background: linear-gradient(to bottom, transparent 0%, rgba(0,201,167,0.2) 10%, rgba(0,201,167,0.2) 90%, transparent 100%); pointer-events: none; }
 .how-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
 .how-eyebrow { font-family: var(--fb); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--teal-d); margin-bottom: 10px; }
 .how-title { font-family: var(--fd); font-size: clamp(28px, 3vw, 42px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.07; color: var(--ink); margin-bottom: 8px; }
 .how-sub { font-family: var(--fb); font-size: 15px; color: var(--ink-soft); margin-bottom: 64px; line-height: 1.6; }
 .timeline { display: flex; flex-direction: column; gap: 0; }
-.tl-step { display: grid; grid-template-columns: minmax(0, 1fr) 80px minmax(0, 1fr); align-items: start; }
+.tl-step { display: grid; grid-template-columns: minmax(0, 1fr) 80px minmax(0, 1fr); align-items: stretch; }
 #tl1 .tl-node, #tl3 .tl-node { grid-column: 2; grid-row: 1; }
-#tl1 .tl-card, #tl3 .tl-card { grid-column: 1; grid-row: 1; padding-right: 32px; }
+#tl1 .tl-col, #tl3 .tl-col { grid-column: 1; grid-row: 1; padding-right: 32px; }
 #tl1 .tl-spacer, #tl3 .tl-spacer { grid-column: 3; grid-row: 1; }
 #tl2 .tl-node { grid-column: 2; grid-row: 1; }
-#tl2 .tl-card { grid-column: 3; grid-row: 1; padding-left: 32px; }
+#tl2 .tl-col { grid-column: 3; grid-row: 1; padding-left: 32px; }
 #tl2 .tl-spacer { grid-column: 1; grid-row: 1; }
-.tl-card { background: #fff; border: 1px solid var(--border); border-radius: 18px; padding: 22px 22px 24px; box-shadow: 0 2px 12px rgba(7,16,30,0.05); margin-bottom: 40px; }
+.tl-card { background: #fff; border: 1px solid var(--border); border-radius: 18px; padding: 22px 22px 24px; box-shadow: 0 2px 12px rgba(7,16,30,0.05); margin-bottom: 0; }
+.tl-col { display: flex; flex-direction: column; padding-bottom: 44px; }
+.tl-step:last-child .tl-col { padding-bottom: 0; }
 .tl-card-num { font-family: var(--fb); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal-d); margin-bottom: 10px; }
 .tl-card h3 { font-family: var(--fd); font-size: 17px; font-weight: 800; color: var(--ink); margin-bottom: 7px; letter-spacing: -0.02em; }
 .tl-card p { font-family: var(--fb); font-size: 13.5px; color: var(--ink-soft); line-height: 1.65; }
@@ -570,6 +586,8 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 ════════════════════════════════════════ */
 .app-shell { background: var(--surface); border: 1px solid var(--border); border-radius: 28px; box-shadow: 0 20px 50px rgba(7,16,30,.08); padding: 28px; }
 .app-head { margin-bottom: 22px; }
+.app-back-btn { display: inline-flex; align-items: center; gap: 5px; background: none; border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px 5px 8px; font-family: var(--fb); font-size: 12px; font-weight: 600; color: var(--ink-muted); cursor: pointer; margin-bottom: 14px; transition: border-color 0.15s, color 0.15s, background 0.15s; }
+.app-back-btn:hover { border-color: var(--teal); color: var(--teal-d); background: rgba(0,201,167,0.05); }
 .app-head h3 { margin: 0 0 6px; font-size: 26px; font-weight: 800; letter-spacing: -.04em; font-family: var(--fd); color: var(--ink); }
 .app-head > p { margin: 0 0 16px; color: var(--ink-muted); line-height: 1.65; font-size: 14px; }
 .pane { display: none; }
@@ -720,6 +738,9 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
   </div>
 </nav>
 
+<!-- HOME PAGE (hidden when application is open) -->
+<div id="home-page">
+
 <!-- HERO -->
 <section class="hero">
   <div class="orb orb-a"></div>
@@ -844,17 +865,17 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
     <div class="timeline">
       <div class="tl-step" id="tl1">
         <div class="tl-node"><div class="tl-num">1</div><div class="tl-line"><div class="tl-line-fill" id="lf1"></div></div></div>
-        <div class="tl-card reveal" style="transition-delay:0.05s"><div class="tl-card-num">Step 01</div><h3>Get your quote</h3><p>Set your amount and term. No credit check at this stage.</p></div>
+        <div class="tl-col"><div class="tl-card reveal" style="transition-delay:0.05s"><div class="tl-card-num">Step 01</div><h3>Get your quote</h3><p>Set your amount and term. No credit check at this stage.</p></div></div>
         <div class="tl-spacer"></div>
       </div>
       <div class="tl-step" id="tl2">
         <div class="tl-node"><div class="tl-num">2</div><div class="tl-line"><div class="tl-line-fill" id="lf2"></div></div></div>
-        <div class="tl-card reveal" style="transition-delay:0.18s"><div class="tl-card-num">Step 02</div><h3>Apply and get a decision</h3><p>Complete your profile and receive an instant affordability decision.</p></div>
+        <div class="tl-col"><div class="tl-card reveal" style="transition-delay:0.18s"><div class="tl-card-num">Step 02</div><h3>Apply and get a decision</h3><p>Complete your profile and receive an instant affordability decision.</p></div></div>
         <div class="tl-spacer"></div>
       </div>
       <div class="tl-step" id="tl3">
         <div class="tl-node"><div class="tl-num">3</div></div>
-        <div class="tl-card reveal" style="transition-delay:0.31s"><div class="tl-card-num">Step 03</div><h3>Sign and receive funds</h3><p>Sign your offer online. Funds transferred the same day.</p></div>
+        <div class="tl-col"><div class="tl-card reveal" style="transition-delay:0.31s"><div class="tl-card-num">Step 03</div><h3>Sign and receive funds</h3><p>Sign your offer online. Funds transferred the same day.</p></div></div>
         <div class="tl-spacer"></div>
       </div>
     </div>
@@ -864,12 +885,15 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
   </div>
 </section>
 
+</div><!-- /#home-page -->
+
 <!-- APPLICATION SHELL -->
 <div id="application-shell" style="display:none">
   <div class="app-section-wrap">
     <div class="app-section-inner">
       <div class="app-shell">
         <div class="app-head">
+          <button class="app-back-btn" type="button" onclick="backToHome()"><svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back to homepage</button>
           <h3>Apply online</h3>
           <p>Complete your application in four simple steps. Your information is held securely and used only to assess your loan.</p>
         </div>
@@ -1175,7 +1199,8 @@ window.applyQuoteToCalculator=renderCalculatorQuote;
   function setMessage(id,kind,text){var el=document.getElementById(id);if(!el)return;el.className='message'+(kind?' '+kind:'');el.textContent=text;}
   function setActive(name){['step1','step2','step3','application','decision','sign','card'].forEach(function(key){var pane=document.getElementById('pane-'+key);if(pane)pane.classList.toggle('active',key===name);});if(name==='decision'||name==='sign'||name==='card')refreshDisbursalEta();}
   window.goToPane=function(name){setActive(name);document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'});};
-  window.startApplication=function(){var shell=document.getElementById('application-shell');shell.style.display='block';hydrateApplicationFromQuote();setActive(state.account?'application':'step1');shell.scrollIntoView({behavior:'smooth',block:'start'});};
+  window.startApplication=function(){var shell=document.getElementById('application-shell');var hp=document.getElementById('home-page');if(hp)hp.style.display='none';shell.style.display='block';hydrateApplicationFromQuote();setActive(state.account?'application':'step1');window.scrollTo({top:0,behavior:'smooth'});};
+  window.backToHome=function(){var shell=document.getElementById('application-shell');var hp=document.getElementById('home-page');shell.style.display='none';if(hp)hp.style.display='';window.scrollTo({top:0,behavior:'smooth'});};
   function hydrateApplicationFromQuote(){document.getElementById('app-amount').value=document.getElementById('a-sl').value;document.getElementById('app-term').value=document.getElementById('t-sl').value;requestApplicationQuote(true);}
   async function runCalculator(){var P=Number(document.getElementById('a-sl').value||0),n=Number(document.getElementById('t-sl').value||0),requestId=++calcRequestId;try{var result=await postJson('/api/public/quote',{amount:P,termMonths:n});if(requestId!==calcRequestId)return;var d=result.decision||result;state.quote=d;if(window.applyQuoteToCalculator)window.applyQuoteToCalculator(d.quote||d);hydrateApplicationFromQuote();updateApplicationSummary();}catch(err){}}
   function updateApplicationSummary(){var q=null;if(state.appQuote&&state.appQuote.quote)q=state.appQuote.quote;else if(state.appQuote&&state.appQuote.amount)q=state.appQuote;else if(state.quote&&state.quote.quote)q=state.quote.quote;else if(state.quote&&state.quote.amount)q=state.quote;var amtEl=document.getElementById('app-summary-amount'),intEl=document.getElementById('app-summary-interest'),emiEl=document.getElementById('app-summary-emi'),totalEl=document.getElementById('app-summary-total'),repayEl=document.getElementById('app-summary-repay');if(q){if(amtEl)amtEl.textContent=money(q.amount);if(intEl)intEl.textContent=money(q.totalInterest);if(emiEl)emiEl.textContent=money(q.emi)+'/mo';if(totalEl)totalEl.textContent=money(q.totalRepayable);if(repayEl){var d=new Date();d.setMonth(d.getMonth()+1);repayEl.textContent=d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear();}}else{if(amtEl)amtEl.textContent='-';if(intEl)intEl.textContent='-';if(emiEl)emiEl.textContent='-';if(totalEl)totalEl.textContent='-';if(repayEl)repayEl.textContent='-';}}
