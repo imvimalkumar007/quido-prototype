@@ -158,6 +158,7 @@ body {
   align-items: center;
 }
 .hero-copy { min-width: 0; }
+.hero-line { display: inline-block; white-space: nowrap; }
 .hero-h1 {
   font-family: var(--fd);
   font-size: clamp(54px, 5.6vw, 82px);
@@ -366,13 +367,14 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
    RESPONSIVE
 ════════════════════════════════════════ */
 @media (max-width: 1020px) {
-  .hero-inner { grid-template-columns: 1fr 360px; gap: 36px; }
+  .hero-inner { grid-template-columns: minmax(0,1fr) 340px; gap: 32px; }
+  .hero-h1 { font-size: clamp(46px, 5vw, 58px); }
   .ft { grid-template-columns: 1fr 1fr; gap: 28px; }
   .ft .fb { grid-column: 1/-1; }
   .steps { grid-template-columns: 1fr; gap: 32px; }
   .conn { display: none; }
 }
-@media (max-width: 840px) {
+@media (max-width: 900px) {
   .hero-inner { grid-template-columns: 1fr; gap: 28px; padding: 0 20px; }
   .hero-h1 { font-size: clamp(46px, 7.4vw, 64px); }
   .trust-grid { grid-template-columns: 1fr 1fr; }
@@ -724,7 +726,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
   <div class="orb orb-b"></div>
   <div class="hero-inner">
     <div class="hero-copy">
-      <h1 class="hero-h1">Personal loans,<br><em>done right.</em></h1>
+      <h1 class="hero-h1"><span class="hero-line">Personal loans,</span><br><em>done right.</em></h1>
       <p class="hero-p">Transparent lending from £300 to £10,000.<br>Same-day decisions. No credit footprint.</p>
       <div class="hero-trust">
         <div class="ht-card">
