@@ -489,6 +489,30 @@ button{font-family:var(--fb)}
   .ft-top{grid-template-columns:1fr;gap:18px}
   .ft-links{grid-template-columns:1fr 1fr;gap:6px 16px}
 }
+
+/* Mobile Safari zoom guard: focused form controls must compute to at least 16px. */
+@media (max-width: 768px) {
+  input,
+  select,
+  textarea,
+  #s-login input,
+  .pcf-input,
+  .pcf-select,
+  .pcf-textarea,
+  .fi,
+  .emi,
+  .ems,
+  .ie-inp,
+  .ie-sel,
+  .cinp,
+  #s-options input,
+  #s-options select,
+  #s-options textarea,
+  #pa-step-iae input[type="number"],
+  #pa-step-amount input {
+    font-size: 16px !important;
+  }
+}
 </style>
 </head>
 <body>
