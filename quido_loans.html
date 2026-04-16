@@ -38,6 +38,7 @@ input,select,textarea,button{font-family:var(--fb)}
 .scroll.fullbleed-scroll{max-width:none !important;margin-left:0 !important;margin-right:0 !important;width:100%}
 .screen:not(#s-login)>.si>.scroll:not(.fullbleed-scroll){width:min(calc(100% - var(--portal-gutter)),var(--portal-shell));max-width:var(--portal-shell);margin-left:auto;margin-right:auto;align-self:center}
 .content-stack{width:min(calc(100% - var(--portal-gutter)),var(--portal-shell));max-width:var(--portal-shell);margin:0 auto}
+.options-stack{padding:16px 0 0}
 .hdr + .scroll,.ihdr + .scroll{padding-top:var(--portal-nav-offset)!important}
 #s-home .scroll.fullbleed-scroll{padding-top:var(--portal-nav-offset)!important}
 #s-home .content-stack>.hero:first-child{margin-top:0;padding-top:20px}
@@ -729,7 +730,7 @@ input,select,textarea,button{font-family:var(--fb)}
           <div class="ha" id="opts-balance">£0.00</div>
           <div class="dr"><div class="db"><div class="dbl">Next Due Amount</div><div class="dbv" id="opts-emi">£0.00</div></div><div class="db"><div class="dbl">Next Due Date</div><div class="dbv" id="opts-due-date">-</div></div></div>
         </div>
-        <div style="padding:16px">
+        <div class="options-stack">
           <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Payment options</div>
           <button class="ob go" id="pay-next-btn"><div style="display:flex;justify-content:space-between;width:100%;align-items:center"><span>Pay next instalment</span><span>→</span></div><div style="font-size:11px;font-weight:400;opacity:.85" id="pay-next-sub">-</div></button>
           <button class="ob blo" id="pay-full-btn"><div style="display:flex;justify-content:space-between;width:100%;align-items:center"><span>Pay in full</span><span>→</span></div><div style="font-size:11px;font-weight:400;opacity:.85" id="pay-full-sub">-</div></button>
