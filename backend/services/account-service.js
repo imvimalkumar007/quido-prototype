@@ -1148,6 +1148,13 @@ AccountService.prototype.signApplication = function (storageKey, payload) {
     nameErr.status = 422;
     throw nameErr;
   }
+  var bank = account.paymentDetails && account.paymentDetails.bank;
+  var card = account.paymentDetails && account.paymentDetails.card;
+  if (!bank || !bank.accountNumber || !card || !card.last4) {
+    var paymentErr = new Error('Card and bank details are required before signing.');
+    paymentErr.status = 422;
+    throw paymentErr;
+  }
   account.application.reviewedAt = nowIso();
   account.application.signedAt = nowIso();
   account.application.signature = {
@@ -1170,10 +1177,10 @@ AccountService.prototype.signApplication = function (storageKey, payload) {
       fundedToDate:        null
     });
   }
-  account.application.stage = 'signed_awaiting_payment_details';
-  account.application.disbursal.status = 'awaiting_payment_details';
+  account.application.stage = 'signed_pending_disbursal';
+  account.application.disbursal.status = 'pending_ops_approval';
   account.application.statusHistory = account.application.statusHistory || [];
-  account.application.statusHistory.push({ stage: 'signed_awaiting_payment_details', at: nowIso(), by: 'customer' });
+  account.application.statusHistory.push({ stage: 'signed_pending_disbursal', at: nowIso(), by: 'customer' });
   this.store.save(account);
   return { account: account };
 };
@@ -1183,6 +1190,14 @@ AccountService.prototype.saveCardDetails = function (storageKey, card) {
   if (!account) { var e = new Error('Account not found.'); e.status = 404; throw e; }
   var raw = String(card.cardNumber || '').replace(/\s/g, '');
   if (!raw || raw.length < 13) { var e2 = new Error('A valid card number is required.'); e2.status = 400; throw e2; }
+  var bank = card.bank || {};
+  var bankAccountNumber = String(bank.accountNumber || '').replace(/\D/g, '');
+  var sortCode = String(bank.sortCode || '').trim();
+  if (!String(bank.accountHolder || '').trim() || !String(bank.bankName || '').trim() || !sortCode || bankAccountNumber.length !== 8) {
+    var bankErr = new Error('Valid bank details are required.');
+    bankErr.status = 400;
+    throw bankErr;
+  }
   account.paymentDetails = account.paymentDetails || {};
   account.paymentDetails.card = {
     type:                card.cardType || 'Debit',
@@ -1193,13 +1208,22 @@ AccountService.prototype.saveCardDetails = function (storageKey, card) {
     collectionDayOfMonth: 1,
     active:              true
   };
+  account.paymentDetails.bank = Object.assign(account.paymentDetails.bank || {}, {
+    accountHolder:       String(bank.accountHolder || '').trim(),
+    bankName:            String(bank.bankName || '').trim(),
+    sortCode:            sortCode,
+    accountNumber:       bankAccountNumber,
+    accountNumberMasked: 'Â·Â·Â·Â·' + bankAccountNumber.slice(-4),
+    sortCodeMasked:      sortCode.replace(/\d(?=\d{2})/g, 'Â·'),
+    fundedToDate:        null
+  });
   if (account.application && account.application.decision && account.application.decision.approved) {
-    account.application.stage = 'signed_pending_disbursal';
+    account.application.stage = 'payment_details_awaiting_signature';
     account.application.disbursal = account.application.disbursal || {};
-    account.application.disbursal.status = 'pending_ops_approval';
+    account.application.disbursal.status = 'awaiting_signature';
     account.application.paymentDetailsCompletedAt = nowIso();
     account.application.statusHistory = account.application.statusHistory || [];
-    account.application.statusHistory.push({ stage: 'signed_pending_disbursal', at: nowIso(), by: 'customer' });
+    account.application.statusHistory.push({ stage: 'payment_details_awaiting_signature', at: nowIso(), by: 'customer' });
   }
   this.store.save(account);
   return { account: account };
