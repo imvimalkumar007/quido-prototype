@@ -711,7 +711,8 @@ AccountService.prototype.findByAuth = function (email, credential) {
 
 AccountService.prototype.createPublicProfile = function (payload) {
   var email = String(payload.email || '').trim().toLowerCase();
-  // Accept either password (new 3-step form) or legacy pin
+  // Public applications use the same 4-digit PIN as the customer portal.
+  // Keep password support only so old prototype records remain readable.
   var password = String(payload.password || '').trim();
   var pin      = String(payload.pin || '').trim();
 
@@ -721,7 +722,7 @@ AccountService.prototype.createPublicProfile = function (payload) {
     throw err;
   }
   if (!password && !pin) {
-    var credErr = new Error('A password or PIN is required.');
+    var credErr = new Error('A 4-digit PIN is required.');
     credErr.status = 400;
     throw credErr;
   }
@@ -732,7 +733,7 @@ AccountService.prototype.createPublicProfile = function (payload) {
       throw pwErr;
     }
   } else {
-    if (pin.length !== 4) {
+    if (!/^\d{4}$/.test(pin)) {
       var pinErr = new Error('PIN must be 4 digits.');
       pinErr.status = 400;
       throw pinErr;
@@ -747,7 +748,7 @@ AccountService.prototype.createPublicProfile = function (payload) {
     var storedEmail = String(auth.email || '').trim().toLowerCase();
     if (storedEmail !== email) continue;
     var credMatch = password
-      ? (String(auth.passwordHash || '') === password || String(auth.pin || '') === password)
+      ? (hashPassword(password) === String(auth.passwordHash || '') || String(auth.pin || '') === password)
       : (String(auth.pin || '') === pin);
     if (credMatch) return { account: norm, created: false };
     var dupErr2 = new Error('An account with this email already exists.');
