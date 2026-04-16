@@ -22,10 +22,11 @@
 }
 html,body{height:100%;margin:0;padding:0}
 body{background:var(--bg);font-family:var(--fb);color:var(--text);-webkit-font-smoothing:antialiased}
-input,select,textarea,button{font-family:var(--fb)}
+input,select,textarea{font-family:var(--fb);font-size:12px;line-height:1.35;text-transform:none;letter-spacing:normal}
+button{font-family:var(--fb)}
 #s-login button,.brand-name,.ha,.dbv,.ct,.ait,.sl,.pt,.bf,.bp,.hbtn,.ob,.itl,.bd,.sec-edit-btn,.smv,.doct{font-family:var(--fd)}
 #s-login [style*="font-weight:700"][style*="text-transform:uppercase"]{font-family:var(--fb)!important;font-size:11px!important;font-weight:800!important;color:var(--muted)!important;letter-spacing:.08em!important}
-#s-login input{font-family:var(--fb)!important;color:var(--text)!important;border-radius:14px!important}
+#s-login input{font-family:var(--fb)!important;font-size:12px!important;color:var(--text)!important;border-radius:14px!important}
 #s-login input:focus{border-color:var(--green)!important;box-shadow:0 0 0 3px rgba(0,201,167,.12)!important}
 #s-login button{font-size:14px!important;font-weight:800!important;letter-spacing:-.01em!important}
 #s-login .scroll{width:min(calc(100% - var(--portal-gutter)),560px)!important;max-width:560px;margin-left:auto;margin-right:auto;padding:40px 0 36px!important}
@@ -199,7 +200,7 @@ input,select,textarea,button{font-family:var(--fb)}
 .pcf-group{display:flex;flex-direction:column;gap:6px}
 .pcf-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 .pcf-req{color:var(--green-dark)}
-.pcf-input,.pcf-select,.pcf-textarea{width:100%;min-width:0;border:1.5px solid var(--border);border-radius:14px;background:var(--surface);color:var(--text);font-size:16px;outline:none;padding:13px 14px}
+.pcf-input,.pcf-select,.pcf-textarea{width:100%;min-width:0;border:1.5px solid var(--border);border-radius:14px;background:var(--surface);color:var(--text);font-size:12px;outline:none;padding:13px 14px;text-transform:none;letter-spacing:normal}
 .pcf-input:focus,.pcf-select:focus,.pcf-textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,201,167,.12)}
 .pcf-input[readonly]{background:#f8faff;color:var(--muted)}
 .pcf-textarea{resize:vertical;min-height:110px;line-height:1.6}
@@ -237,7 +238,7 @@ input,select,textarea,button{font-family:var(--fb)}
 .sline{flex:1;height:1px;background:var(--border);margin:0 6px}
 .pb{padding:16px}
 .fl{font-family:var(--fb);font-size:11px;font-weight:800;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em}
-.fi{width:100%;padding:13px 14px;min-height:50px;border:1.5px solid var(--border);border-radius:14px;font-size:16px;color:var(--text);outline:none;background:var(--surface);margin-bottom:14px}
+.fi{width:100%;padding:13px 14px;min-height:50px;border:1.5px solid var(--border);border-radius:14px;font-size:12px;color:var(--text);outline:none;background:var(--surface);margin-bottom:14px;text-transform:none;letter-spacing:normal}
 .fi:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,201,167,.12)}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .ca{background:linear-gradient(135deg,#1c3892,#5b21b6);border-radius:18px;padding:22px;color:#fff;margin-bottom:18px;position:relative;overflow:hidden;min-height:120px}
@@ -336,13 +337,13 @@ input,select,textarea,button{font-family:var(--fb)}
 .em.open{display:flex}
 .emb{background:var(--surface);border-radius:var(--r-xl) var(--r-xl) 0 0;padding:20px;width:100%;max-width:600px;margin:0 auto;max-height:80%;overflow-y:auto}
 .emt{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px}
-.emi{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:16px;color:var(--text);outline:none;background:var(--bg);margin-bottom:0}
+.emi{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:12px;color:var(--text);outline:none;background:var(--bg);margin-bottom:0}
 .emi:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,201,167,.12)}
-.ems{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:16px;color:var(--text);outline:none;background:var(--bg);cursor:pointer;margin-bottom:0}
+.ems{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:12px;color:var(--text);outline:none;background:var(--bg);cursor:pointer;margin-bottom:0}
 .ie-panel{border-top:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:12px}
 .ie-fg{display:flex;flex-direction:column;gap:5px}
 .ie-lbl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-.ie-inp,.ie-sel{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:16px;font-family:var(--fb);color:var(--text);outline:none;background:var(--bg);box-sizing:border-box;-webkit-appearance:none;appearance:none}
+.ie-inp,.ie-sel{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:12px;font-family:var(--fb);color:var(--text);outline:none;background:var(--bg);box-sizing:border-box;-webkit-appearance:none;appearance:none}
 .ie-inp:focus,.ie-sel:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,201,167,.12)}
 .ie-acts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
 .emr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
@@ -420,7 +421,7 @@ input,select,textarea,button{font-family:var(--fb)}
 .ccl{margin-left:auto;background:rgba(255,255,255,0.15);border:none;border-radius:8px;padding:5px 8px;color:#fff;cursor:pointer;font-size:11px}
 .cmsgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px;background:#f8faff}
 .cmsgs::-webkit-scrollbar{display:none}
-.msg{max-width:84%;padding:8px 11px;border-radius:11px;font-size:11.5px;line-height:1.55}
+.msg{max-width:84%;padding:8px 11px;border-radius:11px;font-family:var(--fb);font-size:12px;line-height:1.55}
 .msg.agent{background:#fff;border:1px solid var(--border);color:var(--text);align-self:flex-start;border-bottom-left-radius:3px}
 .msg.user{background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
 .mtime{font-size:9px;color:var(--dim);margin-top:2px}
@@ -429,8 +430,12 @@ input,select,textarea,button{font-family:var(--fb)}
 .cqk::-webkit-scrollbar{display:none}
 .qp{flex-shrink:0;padding:5px 9px;background:#eff6ff;border:1px solid #dbeafe;border-radius:20px;font-size:10px;color:var(--blue);font-weight:500;cursor:pointer;white-space:nowrap}
 .cir{display:flex;gap:7px;padding:8px 10px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0}
-.cinp{flex:1;padding:8px 11px;border:1.5px solid var(--border);border-radius:20px;font-size:16px;outline:none;background:var(--bg);color:var(--text)}
+.cinp{flex:1;padding:8px 11px;border:1.5px solid var(--border);border-radius:20px;font-size:12px;outline:none;background:var(--bg);color:var(--text)}
 .cinp:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,201,167,.12)}
+.pcf-input,.pcf-select,.pcf-textarea,.fi,.cinp,#s-login input,#s-options input,#s-options select,#s-options textarea{font-family:var(--fb)!important;font-size:12px!important;text-transform:none!important;letter-spacing:normal!important}
+#s-options input,#s-options select,#s-options textarea{color:var(--text)!important;line-height:1.35!important}
+#pa-step-iae input[type="number"],#pa-step-amount input{min-height:50px!important;padding:13px 14px!important;border:1.5px solid var(--border)!important;border-radius:14px!important;background:var(--surface)!important}
+#pa-step-iae input[type="number"]{width:96px!important}
 .csend{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-dark));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .iesh{padding:0 16px 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;justify-content:space-between}
 .inc-h{color:var(--ok-text)}
@@ -547,14 +552,14 @@ input,select,textarea,button{font-family:var(--fb)}
           <div style="margin-bottom:14px">
             <div style="font-size:10px;font-weight:700;color:#7880a0;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">Email address</div>
             <input id="ln-email" type="email" placeholder="your@email.co.uk" autocomplete="email"
-              style="width:100%;padding:11px 13px;border:1.5px solid #e2e8f5;border-radius:10px;font-size:16px;background:#f8fafc;color:#07101e;outline:none;transition:border-color .15s;-webkit-appearance:none"
+              style="width:100%;padding:11px 13px;border:1.5px solid #e2e8f5;border-radius:10px;font-size:12px;background:#f8fafc;color:#07101e;outline:none;transition:border-color .15s;-webkit-appearance:none"
               onfocus="this.style.borderColor='#1c3892';this.style.background='#fff'" onblur="this.style.borderColor='#e2e8f5';this.style.background='#f8fafc'"
               onkeydown="if(event.key==='Enter')document.getElementById('ln-pin').focus()">
           </div>
           <div style="margin-bottom:20px">
             <div style="font-size:10px;font-weight:700;color:#7880a0;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">4-digit PIN</div>
             <input id="ln-pin" type="password" placeholder="••••" maxlength="4" inputmode="numeric"
-              style="width:100%;padding:11px 13px;border:1.5px solid #e2e8f5;border-radius:10px;font-size:20px;letter-spacing:.4em;background:#f8fafc;color:#07101e;outline:none;transition:border-color .15s;-webkit-appearance:none"
+              style="width:100%;padding:11px 13px;border:1.5px solid #e2e8f5;border-radius:10px;font-size:12px;letter-spacing:.4em;background:#f8fafc;color:#07101e;outline:none;transition:border-color .15s;-webkit-appearance:none"
               onfocus="this.style.borderColor='#1c3892';this.style.background='#fff'" onblur="this.style.borderColor='#e2e8f5';this.style.background='#f8fafc'"
               onkeydown="if(event.key==='Enter')attemptLogin()">
           </div>
@@ -738,7 +743,7 @@ input,select,textarea,button{font-family:var(--fb)}
             <button class="ob" id="custom-amt-toggle"><div style="display:flex;justify-content:space-between;width:100%;align-items:center"><span style="color:var(--text)">Custom amount</span><span style="color:var(--muted)" id="custom-arrow">↓</span></div><div style="font-size:11px;font-weight:400;color:var(--muted)">Enter any amount you'd like to pay</div></button>
             <div id="custom-amt-input" style="display:none;background:var(--surface);border:1.5px solid var(--blue);border-top:none;border-radius:0 0 var(--r-lg) var(--r-lg);padding:14px">
               <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em" id="custom-range-label">Enter amount</div>
-              <div style="display:flex;gap:8px;align-items:center"><div style="font-size:18px;font-weight:700;color:var(--text)">£</div><input id="custom-amt-val" type="number" min="1" step="0.01" placeholder="0.00" style="flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:16px;font-weight:600;color:var(--text);outline:none;background:var(--bg)"></div>
+              <div style="display:flex;gap:8px;align-items:center"><div style="font-size:18px;font-weight:700;color:var(--text)">£</div><input id="custom-amt-val" type="number" min="1" step="0.01" placeholder="0.00" style="flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:12px;font-weight:600;color:var(--text);outline:none;background:var(--bg)"></div>
               <button class="bf bbl" id="custom-amt-pay" style="margin-top:12px;margin-bottom:0">Continue with this amount →</button>
             </div>
           </div>
@@ -2425,11 +2430,11 @@ input,select,textarea,button{font-family:var(--fb)}
       + '<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Monthly payment</div>'
       + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">'
       + '<span style="font-size:18px;font-weight:700;color:var(--text)">£</span>'
-      + '<input id="pa-amt-input" type="number" min="' + minPA.toFixed(2) + '" max="' + maxPA.toFixed(2) + '" step="0.01" value="' + suggested.toFixed(2) + '" style="flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:16px;font-weight:600;outline:none;background:var(--bg);color:var(--text)">'
+      + '<input id="pa-amt-input" type="number" min="' + minPA.toFixed(2) + '" max="' + maxPA.toFixed(2) + '" step="0.01" value="' + suggested.toFixed(2) + '" style="flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:12px;font-weight:600;outline:none;background:var(--bg);color:var(--text)">'
       + '</div>'
       + '<div id="pa-amt-feedback" style="font-size:11px;min-height:16px;margin-bottom:14px"></div>'
       + '<div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">First payment date</div>'
-      + '<input id="pa-start-input" type="date" min="' + todayStr + '" max="' + maxStartStr + '" value="' + todayStr + '" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:16px;outline:none;background:var(--bg);color:var(--text);margin-bottom:14px">'
+      + '<input id="pa-start-input" type="date" min="' + todayStr + '" max="' + maxStartStr + '" value="' + todayStr + '" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:12px;outline:none;background:var(--bg);color:var(--text);margin-bottom:14px">'
       + '<button class="hbtn bm" id="pa-amt-next">Review arrangement</button>'
       + '<button class="hbtn" id="pa-amt-back" style="background:var(--bg);color:var(--muted);border:1.5px solid var(--border);margin-top:8px">Back</button>';
 

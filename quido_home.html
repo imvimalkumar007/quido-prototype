@@ -532,7 +532,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .cf-group { display: flex; flex-direction: column; gap: 6px; }
 .cf-label { font-family: var(--fb); font-size: 13px; font-weight: 600; color: var(--ink-soft); letter-spacing: -0.01em; }
 .cf-req { color: var(--teal-d); }
-.cf-input, .cf-select, .cf-textarea { font-family: var(--fb); font-size: 16px; color: var(--ink); background: #fff; border: 1.5px solid var(--border); border-radius: 10px; padding: 11px 14px; outline: none; transition: border-color .18s, box-shadow .18s; width: 100%; min-width: 0; }
+.cf-input, .cf-select, .cf-textarea { font-family: var(--fb); font-size: 12px; color: var(--ink); background: #fff; border: 1.5px solid var(--border); border-radius: 10px; padding: 11px 14px; outline: none; transition: border-color .18s, box-shadow .18s; width: 100%; min-width: 0; text-transform: none; letter-spacing: normal; }
 .cf-input::placeholder, .cf-textarea::placeholder { color: var(--ink-muted); }
 .cf-input:focus, .cf-select:focus, .cf-textarea:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(0,201,167,0.12); }
 .cf-input.error, .cf-select.error, .cf-textarea.error { border-color: #e03050; box-shadow: 0 0 0 3px rgba(224,48,80,0.1); }
@@ -621,8 +621,8 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .field { display: grid; gap: 6px; }
 .field.full { grid-column: 1/-1; }
 .field label { font-size: 11px; font-weight: 800; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .08em; font-family: var(--fb); }
-.field input,.field select { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; padding: 13px 14px; min-height: 50px; border: 1.5px solid var(--border); border-radius: 14px; background: var(--surface); outline: none; font-family: var(--fb); color: var(--ink); font-size: 16px; }
-.field input[type="date"],.field input[type="month"] { -webkit-appearance: none; appearance: none; font-size: 16px; padding: 13px 14px; }
+.field input,.field select { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; padding: 13px 14px; min-height: 50px; border: 1.5px solid var(--border); border-radius: 14px; background: var(--surface); outline: none; font-family: var(--fb); color: var(--ink); font-size: 12px; text-transform: none !important; letter-spacing: normal; }
+.field input[type="date"],.field input[type="month"] { -webkit-appearance: none; appearance: none; font-size: 12px; padding: 13px 14px; }
 .field input:focus,.field select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(0,201,167,.12); }
 .message { padding: 13px 14px; border-radius: 14px; font-size: 13px; line-height: 1.6; font-family: var(--fb); }
 .message:empty { display: none; }
@@ -671,7 +671,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .ccl { margin-left: auto; background: rgba(255,255,255,.15); border: none; border-radius: 8px; padding: 5px 8px; color: #fff; cursor: pointer; font-size: 11px; }
 .cmsgs { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 7px; background: var(--s2); }
 .cmsgs::-webkit-scrollbar { display: none; }
-.msg { max-width: 84%; padding: 8px 11px; border-radius: 11px; font-size: 11.5px; line-height: 1.55; font-family: var(--fb); }
+.msg { max-width: 84%; padding: 8px 11px; border-radius: 11px; font-size: 12px; line-height: 1.55; font-family: var(--fb); }
 .msg.agent { background: #fff; border: 1px solid var(--border); color: var(--ink); align-self: flex-start; border-bottom-left-radius: 3px; }
 .msg.user { background: linear-gradient(135deg,var(--navy-l),var(--navy)); color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; }
 .mtime { font-size: 9px; color: var(--ink-muted); margin-top: 2px; }
@@ -680,7 +680,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .cqk::-webkit-scrollbar { display: none; }
 .qp { flex-shrink: 0; padding: 5px 9px; background: #eff6ff; border: 1px solid #dbeafe; border-radius: 20px; font-size: 10px; color: var(--navy-l); font-weight: 500; cursor: pointer; white-space: nowrap; }
 .cir { display: flex; gap: 7px; padding: 8px 10px; border-top: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
-.cinp { flex: 1; padding: 8px 11px; border: 1.5px solid var(--border); border-radius: 20px; font-size: 16px; outline: none; background: var(--s2); color: var(--ink); font-family: var(--fb); }
+.cinp { flex: 1; padding: 8px 11px; border: 1.5px solid var(--border); border-radius: 20px; font-size: 12px; outline: none; background: var(--s2); color: var(--ink); font-family: var(--fb); }
 .cinp:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(0,201,167,.12); }
 .csend { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg,var(--navy-l),var(--navy)); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
