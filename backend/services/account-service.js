@@ -751,6 +751,13 @@ AccountService.prototype.createPublicProfile = function (payload) {
       ? (hashPassword(password) === String(auth.passwordHash || '') || String(auth.pin || '') === password)
       : (String(auth.pin || '') === pin);
     if (credMatch) return { account: norm, created: false };
+    if (pin && !auth.pin) {
+      auth.pin = pin;
+      auth.lastLoginAt = null;
+      norm.auth = auth;
+      this.store.save(norm);
+      return { account: norm, created: false, pinCreated: true };
+    }
     var dupErr2 = new Error('An account with this email already exists.');
     dupErr2.status = 409;
     throw dupErr2;
