@@ -501,7 +501,6 @@ function buildResolvedAccount(account) {
     employment: {
       status:                pe.status                || '',
       employer:              pe.employer              || '',
-      employerPhone:         pe.employerPhone         || '',
       jobTitle:              pe.jobTitle              || '',
       lengthOfService:       pe.lengthOfService       || '',
       employmentStart:       pe.employmentStart       || '',
@@ -804,7 +803,6 @@ AccountService.prototype.createPublicProfile = function (payload) {
   account.profile.employment = {
     status:           payload.employmentStatus || '',
     employer:         payload.employer         || '',
-    employerPhone:    payload.employerPhone     || '',
     jobTitle:         payload.jobTitle          || '',
     lengthOfService:  payload.lengthOfService   || '',
     employmentStart:  payload.employmentStart   || '',
@@ -1195,7 +1193,7 @@ AccountService.prototype.saveCardDetails = function (storageKey, card) {
     collectionDayOfMonth: 1,
     active:              true
   };
-  if (account.application && account.application.signedAt && account.paymentDetails.bank && account.paymentDetails.bank.accountNumber) {
+  if (account.application && account.application.decision && account.application.decision.approved) {
     account.application.stage = 'signed_pending_disbursal';
     account.application.disbursal = account.application.disbursal || {};
     account.application.disbursal.status = 'pending_ops_approval';

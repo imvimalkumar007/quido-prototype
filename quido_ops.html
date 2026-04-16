@@ -426,7 +426,7 @@ a{text-decoration:none;color:inherit;cursor:pointer}
       <!-- ══ PENDING APPLICATIONS ══ -->
       <section id="sec-pending" class="section">
         <div class="sec-hdr">
-          <div class="sec-hdr-left"><h2>Pending Applications</h2><p>Customer-signed applications with bank and card details awaiting disbursal approval</p></div>
+          <div class="sec-hdr-left"><h2>Pending Applications</h2><p>Customer-submitted applications with card details awaiting funding approval</p></div>
         </div>
         <div class="card">
           <div class="card-hdr"><span class="card-title">Application Queue</span><span id="pending-sec-count" style="font-size:11px;color:var(--muted)">Loading…</span></div>
@@ -547,7 +547,6 @@ a{text-decoration:none;color:inherit;cursor:pointer}
                 </div>
                 <div class="field-row" style="margin-bottom:10px">
                   <div class="field"><label>Employer</label><input type="text" id="cust-employer"></div>
-                  <div class="field"><label>Employer Phone</label><input type="tel" id="cust-employer-phone" style="background:var(--bg)" readonly></div>
                 </div>
                 <div class="field-row" style="margin-bottom:10px">
                   <div class="field"><label>Job Title</label><input type="text" id="cust-jobtitle"></div>
@@ -1310,7 +1309,7 @@ var CUSTOMER_REGISTRY = [
                     address:'42 Elm Grove, Brighton, BN2 3FB', residentSince:'January 2020',
                     homeOwnerStatus:'HOME_OWNER', houseNumber:'42', flatNumber:null, street:'Elm Grove',
                     city:'Brighton', county:'East Sussex', postCode:'BN2 3FB', timeAtAddress:'OVER_5Y', previousAddress:null },
-      employment: { status:'FULL_TIME', employer:'Mitchell & Co Ltd', employerPhone:'01273 882200',
+      employment: { status:'FULL_TIME', employer:'Mitchell & Co Ltd',
                     jobTitle:'Senior Analyst', lengthOfService:'2_4Y', employmentStart:'March 2019',
                     netMonthlyIncome:2900, totalNetMonthlyIncome:3200, annualIncome:38400,
                     howOftenGetPaid:'MONTHLY', whenGetPaid:'28', payFrequency:'Monthly', nextPayDate:'28 Apr 2026' }
@@ -1334,7 +1333,7 @@ var CUSTOMER_REGISTRY = [
                     address:'17 Birchwood Drive, Manchester, M14 6PQ', residentSince:'March 2018',
                     homeOwnerStatus:'RENT', houseNumber:'17', flatNumber:null, street:'Birchwood Drive',
                     city:'Manchester', county:'Greater Manchester', postCode:'M14 6PQ', timeAtAddress:'OVER_5Y', previousAddress:null },
-      employment: { status:'SELF_EMPLOYED', employer:'Okafor Consulting Ltd', employerPhone:null,
+      employment: { status:'SELF_EMPLOYED', employer:'Okafor Consulting Ltd',
                     jobTitle:'IT Consultant', lengthOfService:'OVER_4Y', employmentStart:'January 2015',
                     netMonthlyIncome:3167, totalNetMonthlyIncome:3167, annualIncome:38000,
                     howOftenGetPaid:'MONTHLY', whenGetPaid:'15', payFrequency:'Monthly', nextPayDate:'15 Apr 2026' }
@@ -1358,7 +1357,7 @@ var CUSTOMER_REGISTRY = [
                     address:'9 Rosewood Close, Birmingham, B15 2TG', residentSince:'June 2021',
                     homeOwnerStatus:'RENT', houseNumber:'9', flatNumber:null, street:'Rosewood Close',
                     city:'Birmingham', county:'West Midlands', postCode:'B15 2TG', timeAtAddress:'3_5Y', previousAddress:null },
-      employment: { status:'FULL_TIME', employer:'Midlands NHS Trust', employerPhone:'0121 333 4444',
+      employment: { status:'FULL_TIME', employer:'Midlands NHS Trust',
                     jobTitle:'Staff Nurse', lengthOfService:'2_4Y', employmentStart:'September 2019',
                     netMonthlyIncome:2188, totalNetMonthlyIncome:2625, annualIncome:31500,
                     howOftenGetPaid:'MONTHLY', whenGetPaid:'01', payFrequency:'Monthly', nextPayDate:'01 Apr 2026' }
@@ -1382,7 +1381,7 @@ var CUSTOMER_REGISTRY = [
                     address:'31 Harbour View, Liverpool, L1 0AX', residentSince:'November 2015',
                     homeOwnerStatus:'RENT', houseNumber:'31', flatNumber:null, street:'Harbour View',
                     city:'Liverpool', county:'Merseyside', postCode:'L1 0AX', timeAtAddress:'OVER_5Y', previousAddress:null },
-      employment: { status:'PART_TIME', employer:'City Catering Ltd', employerPhone:'0151 771 9900',
+      employment: { status:'PART_TIME', employer:'City Catering Ltd',
                     jobTitle:'Catering Manager', lengthOfService:'1_2Y', employmentStart:'July 2021',
                     netMonthlyIncome:1542, totalNetMonthlyIncome:1833, annualIncome:22000,
                     howOftenGetPaid:'MONTHLY', whenGetPaid:'10', payFrequency:'Monthly', nextPayDate:'10 Apr 2026' }
@@ -1406,7 +1405,7 @@ var CUSTOMER_REGISTRY = [
                     address:'5 Oak Street, Leeds, LS1 5DT', residentSince:'February 2019',
                     homeOwnerStatus:'JOINT_OWNER', houseNumber:'5', flatNumber:null, street:'Oak Street',
                     city:'Leeds', county:'West Yorkshire', postCode:'LS1 5DT', timeAtAddress:'3_5Y', previousAddress:null },
-      employment: { status:'FULL_TIME', employer:'Northern Finance Ltd', employerPhone:'0113 445 6789',
+      employment: { status:'FULL_TIME', employer:'Northern Finance Ltd',
                     jobTitle:'Finance Analyst', lengthOfService:'OVER_4Y', employmentStart:'May 2017',
                     netMonthlyIncome:3000, totalNetMonthlyIncome:3000, annualIncome:36000,
                     howOftenGetPaid:'MONTHLY', whenGetPaid:'20', payFrequency:'Monthly', nextPayDate:'N/A (loan closed)' }
@@ -1680,7 +1679,6 @@ function loadState() {
       employment: {
         status:                resolved.employment.status,
         employer:              resolved.employment.employer,
-        employerPhone:         resolved.employment.employerPhone         || '',
         jobTitle:              resolved.employment.jobTitle,
         lengthOfService:       resolved.employment.lengthOfService       || '',
         employmentStart:       resolved.employment.employmentStart,
@@ -1812,7 +1810,6 @@ function loadState() {
     },
     employment: {
       status: prof.employmentStatus, employer: prof.employer,
-      employerPhone:         profEm.employerPhone         || '',
       jobTitle:              prof.jobTitle, employmentStart: prof.employmentStart,
       lengthOfService:       profEm.lengthOfService       || '',
       netMonthlyIncome:      profEm.netMonthlyIncome      || 0,
@@ -1981,7 +1978,7 @@ function fetchPendingApplications() {
 
 function _buildPendingAppHtml(app) {
   var submitted = app.submittedAt ? fmtTs(app.submittedAt) : 'Not submitted';
-  var signed = app.signedAt ? fmtTs(app.signedAt) : 'Awaiting signature';
+  var paymentDetails = app.paymentDetailsCompletedAt ? fmtTs(app.paymentDetailsCompletedAt) : 'Completed';
   var quote = app.quote || {};
   var statusLabel = 'Ready for Ops approval';
   return '<div style="padding:14px 0;border-bottom:1px solid #eef2f7">'
@@ -1990,7 +1987,7 @@ function _buildPendingAppHtml(app) {
     + '<div style="font-size:13px;font-weight:700;color:var(--text)">' + escHtml(app.name || app.email || app.storageKey) + '</div>'
     + '<div style="display:inline-flex;margin-top:6px;padding:3px 8px;border-radius:999px;background:rgba(16,185,129,.12);color:#047857;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em">' + statusLabel + '</div>'
     + '<div style="font-size:11px;color:var(--muted);margin-top:3px">' + escHtml(app.email || '') + ' - Submitted: ' + submitted + '</div>'
-    + '<div style="font-size:11px;color:var(--muted);margin-top:2px">Signed: ' + signed + '</div>'
+    + '<div style="font-size:11px;color:var(--muted);margin-top:2px">Card verification: ' + paymentDetails + '</div>'
     + '<div style="font-size:11.5px;color:var(--text);margin-top:6px;font-weight:600">' + fmt(quote.amount || 0) + ' over ' + (quote.termMonths || '-') + ' months - ' + fmt(quote.emi || 0) + '/month</div>'
     + '</div>'
     + '<button class="btn btn-primary btn-xs" onclick="approvePublicDisbursal(\'' + app.storageKey + '\')">Approve disbursal</button>'
@@ -1999,7 +1996,7 @@ function _buildPendingAppHtml(app) {
 }
 function renderPendingApplications() {
   var n = OPS.pendingApplications.length;
-  var emptyHtml = '<div style="padding:10px 0;color:var(--muted);font-size:12px">No signed applications with completed payment details are waiting right now.</div>';
+  var emptyHtml = '<div style="padding:10px 0;color:var(--muted);font-size:12px">No submitted applications with completed card details are waiting right now.</div>';
   var listHtml = n ? OPS.pendingApplications.map(_buildPendingAppHtml).join('') : emptyHtml;
   var countText = n ? (n + ' ready') : 'None waiting';
   // Overview card
@@ -2152,7 +2149,6 @@ function renderCustomer() {
   // Employment
   setVal('cust-empstatus',        emp.status              || '');
   setVal('cust-employer',         emp.employer            || '');
-  setVal('cust-employer-phone',   emp.employerPhone       || '');
   setVal('cust-jobtitle',         emp.jobTitle            || '');
   setVal('cust-length-service',   emp.lengthOfService     || '');
   setVal('cust-empstart',         emp.employmentStart     || '');

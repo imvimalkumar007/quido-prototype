@@ -87,6 +87,7 @@ router.get('/applications', function (req, res, next) {
         stage: account.application.stage,
         quote: account.application.quote,
         submittedAt: account.application.submittedAt,
+        paymentDetailsCompletedAt: account.application.paymentDetailsCompletedAt || null,
         signedAt: account.application.signedAt,
         decision: account.application.decision
       };
