@@ -471,7 +471,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .how-title { font-family: var(--fd); font-size: clamp(28px, 3vw, 42px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.07; color: var(--ink); margin-bottom: 8px; }
 .how-sub { font-family: var(--fb); font-size: 15px; color: var(--ink-soft); margin-bottom: 64px; line-height: 1.6; }
 .timeline { display: flex; flex-direction: column; gap: 0; position: relative; }
-.timeline::before { content: ''; position: absolute; left: calc(50% - 1px); top: 44px; bottom: 44px; width: 2px; background: linear-gradient(to bottom, var(--teal) 0%, rgba(0,201,167,0.25) 50%, var(--border) 100%); z-index: 0; border-radius: 2px; pointer-events: none; }
+.timeline::before { display: none; }
 .tl-step { display: grid; grid-template-columns: minmax(0, 1fr) 80px minmax(0, 1fr); align-items: stretch; }
 #tl1 .tl-node, #tl3 .tl-node { grid-column: 2; grid-row: 1; }
 #tl1 .tl-col, #tl3 .tl-col { grid-column: 1; grid-row: 1; padding-right: 32px; }
