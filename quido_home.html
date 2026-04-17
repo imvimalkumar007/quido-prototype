@@ -250,19 +250,12 @@ body {
 .qcard-head { margin-bottom: 16px; position: relative; z-index: 1; }
 .qcard-head h2 { font-family: var(--fd); font-size: 18px; font-weight: 800; color: var(--od-1); letter-spacing: -0.02em; margin-bottom: 3px; }
 .qcard-head p { font-family: var(--fb); font-size: 11.5px; color: var(--od-3); line-height: 1.5; }
-.qstats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 20px; position: relative; z-index: 1; }
-.qs {
-  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 14px; padding: 12px 8px 10px; text-align: center;
-  transition: background 0.2s;
-}
-.qs:first-child { border-color: rgba(0,201,167,0.25); background: rgba(0,201,167,0.07); }
-.qs-lbl { font-family: var(--fb); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--od-3); margin-bottom: 5px; }
-.qs-val { font-family: var(--fd); font-size: 18px; font-weight: 800; color: var(--od-1); letter-spacing: -0.03em; line-height: 1; }
-.qs:first-child .qs-val { color: var(--teal); }
-.qs-val.bump { animation: bump 0.17s cubic-bezier(0.22,1,0.36,1); }
+.qhero { background: rgba(0,201,167,0.07); border: 1px solid rgba(0,201,167,0.18); border-radius: 20px; padding: 20px 16px 16px; text-align: center; margin-bottom: 20px; position: relative; z-index: 1; }
+.qhero-lbl { font-family: var(--fb); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--teal); margin-bottom: 6px; }
+.qhero-val { font-family: var(--fd); font-size: 48px; font-weight: 800; color: #fff; letter-spacing: -0.05em; line-height: 1; margin-bottom: 7px; }
+.qhero-val.bump { animation: bump 0.17s cubic-bezier(0.22,1,0.36,1); }
 @keyframes bump { 0%{transform:scale(1)} 50%{transform:scale(1.08)} 100%{transform:scale(1)} }
-.qs-sub { font-family: var(--fb); font-size: 9px; color: var(--od-4); margin-top: 3px; }
+.qhero-sub { font-family: var(--fb); font-size: 11.5px; color: rgba(255,255,255,0.42); line-height: 1.5; }
 .sl { margin-bottom: 18px; position: relative; z-index: 1; }
 .sl-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .sl-lbl { font-family: var(--fb); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--od-3); }
@@ -404,10 +397,8 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
   .hero-trust { gap: 9px; }
   .qcard { padding: 20px 16px; border-radius: 20px; }
   .qcard-head h2 { font-size: 17px; }
-  .qstats { gap: 6px; margin-bottom: 14px; }
-  .qs { padding: 10px 6px; border-radius: 10px; }
-  .qs-val { font-size: 14px; }
-  .qs-lbl { font-size: 8px; }
+  .qhero { padding: 16px 14px 14px; border-radius: 16px; margin-bottom: 16px; }
+  .qhero-val { font-size: 40px; }
   .sl-val { font-size: 19px; }
   .trust { padding: 36px 16px 52px; }
   .trust-grid { grid-template-columns: 1fr; gap: 10px; }
@@ -430,7 +421,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
   .ht-val { font-size: 12.5px; }
   .ht-lbl { font-size: 10px; }
   .qcard { padding: 16px 13px; }
-  .qs-val { font-size: 13px; }
+  .qhero-val { font-size: 34px; }
   .trust { padding: 28px 14px 44px; }
   .how { padding: 48px 14px 56px; }
   footer { padding: 36px 14px 24px; }
@@ -474,12 +465,13 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 
 /* Modern vertical timeline */
 .how { padding: 96px 24px 104px; background: var(--s2); position: relative; overflow: hidden; scroll-margin-top: 88px; }
-.how::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 2px; height: 100%; background: linear-gradient(to bottom, transparent 0%, rgba(0,201,167,0.2) 10%, rgba(0,201,167,0.2) 90%, transparent 100%); pointer-events: none; }
+.how::before { display: none; }
 .how-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
 .how-eyebrow { font-family: var(--fb); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--teal-d); margin-bottom: 10px; }
 .how-title { font-family: var(--fd); font-size: clamp(28px, 3vw, 42px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.07; color: var(--ink); margin-bottom: 8px; }
 .how-sub { font-family: var(--fb); font-size: 15px; color: var(--ink-soft); margin-bottom: 64px; line-height: 1.6; }
-.timeline { display: flex; flex-direction: column; gap: 0; }
+.timeline { display: flex; flex-direction: column; gap: 0; position: relative; }
+.timeline::before { content: ''; position: absolute; left: calc(50% - 1px); top: 44px; bottom: 44px; width: 2px; background: linear-gradient(to bottom, var(--teal) 0%, rgba(0,201,167,0.25) 50%, var(--border) 100%); z-index: 0; border-radius: 2px; pointer-events: none; }
 .tl-step { display: grid; grid-template-columns: minmax(0, 1fr) 80px minmax(0, 1fr); align-items: stretch; }
 #tl1 .tl-node, #tl3 .tl-node { grid-column: 2; grid-row: 1; }
 #tl1 .tl-col, #tl3 .tl-col { grid-column: 1; grid-row: 1; padding-right: 32px; }
@@ -496,9 +488,7 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 .tl-node { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; padding-top: 20px; }
 .tl-num { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--border); background: var(--surface); font-family: var(--fd); font-size: 17px; font-weight: 800; color: var(--ink-muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .45s cubic-bezier(.22,1,.36,1); }
 .tl-step.lit .tl-num { background: linear-gradient(135deg, var(--teal-d), var(--teal)); border-color: transparent; color: var(--navy); box-shadow: 0 0 0 6px rgba(0,201,167,0.15); animation: npop .5s cubic-bezier(.22,1,.36,1) forwards; }
-.tl-line { width: 2px; flex: 1; min-height: 52px; background: var(--border); position: relative; overflow: hidden; margin: 3px 0; }
-.tl-line-fill { position: absolute; top: 0; left: 0; width: 100%; height: 0%; background: linear-gradient(to bottom, var(--teal-d), var(--teal)); transition: height .75s cubic-bezier(.22,1,.36,1); }
-.tl-step.lit .tl-line-fill { height: 100%; }
+.tl-line { display: none; }
 .how-cta { display: flex; justify-content: center; text-align: center; margin-top: 36px; }
 .btn-lg { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--teal-d), var(--teal)); color: var(--navy); border: none; padding: 14px 32px; border-radius: 100px; font-family: var(--fd); font-size: 14px; font-weight: 800; cursor: pointer; text-decoration: none; letter-spacing: -0.01em; transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s, filter .25s; }
 .btn-lg:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,201,167,0.36); filter: brightness(1.05); }
@@ -581,18 +571,36 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
 
 .app-section-wrap { background: var(--s2); padding: 90px 24px 64px; }
 .app-section-inner { max-width: 1100px; margin: 0 auto; }
+/* Step progress bar */
+.app-step-bar { display: flex; align-items: flex-start; gap: 0; margin-bottom: 40px; }
+.asb-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 7px; position: relative; }
+.asb-item:not(:last-child)::after { content: ''; position: absolute; top: 14px; left: 50%; width: 100%; height: 2px; background: var(--border); z-index: 0; transition: background 0.45s cubic-bezier(.22,1,.36,1); }
+.asb-item.done:not(:last-child)::after { background: var(--teal); }
+.asb-dot { width: 28px; height: 28px; border-radius: 50%; background: var(--surface); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: var(--fd); font-size: 11px; font-weight: 800; color: var(--ink-muted); position: relative; z-index: 1; transition: background .35s cubic-bezier(.22,1,.36,1), border-color .35s, color .35s, box-shadow .35s; flex-shrink: 0; }
+.asb-item.active .asb-dot { background: linear-gradient(135deg, var(--teal-d), var(--teal)); border-color: transparent; color: var(--navy); box-shadow: 0 0 0 5px rgba(0,201,167,0.15); }
+.asb-item.done .asb-dot { background: var(--navy); border-color: var(--navy); color: #fff; }
+.asb-label { font-family: var(--fb); font-size: 10px; font-weight: 600; color: var(--ink-muted); text-align: center; white-space: nowrap; }
+.asb-item.active .asb-label { color: var(--teal-d); font-weight: 700; }
+.asb-item.done .asb-label { color: var(--ink); }
 
 /* ════════════════════════════════════════
    APP SHELL + FORMS
 ════════════════════════════════════════ */
-.app-shell { background: var(--surface); border: 1px solid var(--border); border-radius: 28px; box-shadow: 0 20px 50px rgba(7,16,30,.08); padding: 28px; }
-.app-head { margin-bottom: 22px; }
+.app-shell { background: none; border: none; box-shadow: none; border-radius: 0; padding: 0; }
+.app-head { margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
 .app-back-btn { display: inline-flex; align-items: center; gap: 5px; background: none; border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px 5px 8px; font-family: var(--fb); font-size: 12px; font-weight: 600; color: var(--ink-muted); cursor: pointer; margin-bottom: 14px; transition: border-color 0.15s, color 0.15s, background 0.15s; }
 .app-back-btn:hover { border-color: var(--teal); color: var(--teal-d); background: rgba(0,201,167,0.05); }
 .app-head h3 { margin: 0 0 6px; font-size: 26px; font-weight: 800; letter-spacing: -.04em; font-family: var(--fd); color: var(--ink); }
 .app-head > p { margin: 0 0 16px; color: var(--ink-muted); line-height: 1.65; font-size: 14px; }
 .pane { display: none; }
 .pane.active { display: block; }
+.pane form { padding-bottom: 12px; }
+.pane form > .field.full:last-child,
+.pane form > .inline:last-child { margin-top: 18px; padding-top: 10px; }
+.pane form > .field.full:last-child { padding-bottom: 6px; }
+.pane form > .field.full:last-child .inline,
+.pane form > .inline:last-child { padding-bottom: 6px; }
+.pane form > .field.full:last-child > .btn { margin-top: 8px; }
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .stack { display: grid; gap: 12px; }
 .summary-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 16px; }
@@ -749,8 +757,9 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
   .summary-grid { grid-template-columns: 1fr 1fr; }
   .quote-workspace, .decision-offer-top { grid-template-columns: 1fr; }
   .quote-card { min-height: 320px; }
-  .app-shell { border-radius: 20px; }
   .app-section-wrap { padding: 76px 16px 48px; }
+  .app-step-bar { gap: 0; }
+  .asb-label { font-size: 9px; }
   .contact-outer { padding: 0 16px 48px; }
 }
 @media (max-width: 480px) {
@@ -857,10 +866,10 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
           <h2>Get your quote</h2>
           <p>Adjust the sliders and your repayment updates instantly</p>
         </div>
-        <div class="qstats">
-          <div class="qs"><div class="qs-lbl">Borrowing</div><div class="qs-val" id="s-borrow">£1,500</div><div class="qs-sub" id="s-sub">12 payments</div></div>
-          <div class="qs"><div class="qs-lbl">Monthly</div><div class="qs-val" id="s-monthly">£146</div><div class="qs-sub">per month</div></div>
-          <div class="qs"><div class="qs-lbl">Total</div><div class="qs-val" id="s-total">£1,754</div><div class="qs-sub">29.9% APR</div></div>
+        <div class="qhero">
+          <div class="qhero-lbl">Monthly repayment</div>
+          <div class="qhero-val" id="s-monthly">£146</div>
+          <div class="qhero-sub" id="s-sub">Borrowing £1,500 over 12 months &middot; Total £1,754</div>
         </div>
         <div class="sl">
           <div class="sl-head"><span class="sl-lbl">Amount</span><span class="sl-val" id="a-disp">£1,500</span></div>
@@ -937,12 +946,12 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
     <p class="how-sub reveal" style="transition-delay:0.16s">Online, start to finish. No paperwork.</p>
     <div class="timeline">
       <div class="tl-step" id="tl1">
-        <div class="tl-node"><div class="tl-num">1</div><div class="tl-line"><div class="tl-line-fill" id="lf1"></div></div></div>
+        <div class="tl-node"><div class="tl-num">1</div></div>
         <div class="tl-col"><div class="tl-card reveal" style="transition-delay:0.05s"><div class="tl-card-num">Step 01</div><h3>Get your quote</h3><p>Set your amount and term. No credit check at this stage.</p></div></div>
         <div class="tl-spacer"></div>
       </div>
       <div class="tl-step" id="tl2">
-        <div class="tl-node"><div class="tl-num">2</div><div class="tl-line"><div class="tl-line-fill" id="lf2"></div></div></div>
+        <div class="tl-node"><div class="tl-num">2</div></div>
         <div class="tl-col"><div class="tl-card reveal" style="transition-delay:0.18s"><div class="tl-card-num">Step 02</div><h3>Apply and get a decision</h3><p>Complete your profile and receive an instant affordability decision.</p></div></div>
         <div class="tl-spacer"></div>
       </div>
@@ -969,6 +978,26 @@ footer { background: #050c1a; padding: 56px 24px 32px; }
           <button class="app-back-btn" type="button" onclick="backToHome()"><svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M8 10L4 6l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Back to homepage</button>
           <h3>Apply online</h3>
           <p>Complete your application online. Your information is held securely and used only to assess your loan.</p>
+        </div>
+
+        <!-- Step progress bar -->
+        <div class="app-step-bar" id="app-step-bar">
+          <div class="asb-item active" id="asb-1">
+            <div class="asb-dot">1</div>
+            <div class="asb-label">Your profile</div>
+          </div>
+          <div class="asb-item" id="asb-2">
+            <div class="asb-dot">2</div>
+            <div class="asb-label">Loan details</div>
+          </div>
+          <div class="asb-item" id="asb-3">
+            <div class="asb-dot">3</div>
+            <div class="asb-label">Payment</div>
+          </div>
+          <div class="asb-item" id="asb-4">
+            <div class="asb-dot">4</div>
+            <div class="asb-label">Sign &amp; submit</div>
+          </div>
         </div>
 
         <section class="pane active" id="pane-step1">
@@ -1257,15 +1286,13 @@ function renderCalculatorQuote(q){
   window.quidoRepresentativeApr=apr;
   document.getElementById('a-disp').textContent=gbp(a);
   document.getElementById('t-disp').textContent=n+' months';
-  document.getElementById('s-borrow').textContent=gbp(a);
   document.getElementById('s-monthly').textContent=gbp(m);
-  document.getElementById('s-total').textContent=gbp(t);
-  document.getElementById('s-sub').textContent=n+' payments';
+  document.getElementById('s-sub').textContent='Borrowing '+gbp(a)+' over '+n+' months \u00b7 Total '+gbp(t,2);
   document.querySelectorAll('#apr-counter').forEach(el=>{el.textContent=apr.toFixed(1)+'%';});
   document.getElementById('disc').textContent='Representative example: '+gbp(a)+' over '+n+' months at '+apr.toFixed(1)+'% APR. Monthly repayment '+gbp(m,2)+'. Total repayable '+gbp(t,2)+'. Total interest '+gbp(interest,2)+'.';
   document.getElementById('a-fill').style.width=((a-300)/(10000-300)*100)+'%';
   document.getElementById('t-fill').style.width=((n-6)/(24-6)*100)+'%';
-  ['s-borrow','s-monthly','s-total'].forEach(bmp);
+  ['s-monthly'].forEach(bmp);
 }
 function calc(){
   const a=+document.getElementById('a-sl').value;
@@ -1284,7 +1311,8 @@ window.applyQuoteToCalculator=renderCalculatorQuote;
   var appQuoteTimer=null;
   function money(v){return new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP'}).format(Number(v||0));}
   function setMessage(id,kind,text){var el=document.getElementById(id);if(!el)return;el.className='message'+(kind?' '+kind:'');el.textContent=text;}
-  function setActive(name){['step1','step2','step3','application','decision','card','sign'].forEach(function(key){var pane=document.getElementById('pane-'+key);if(pane)pane.classList.toggle('active',key===name);});if(name==='decision'||name==='card'||name==='sign')refreshDisbursalEta();}
+  function updateStepBar(name){var map={step1:0,step2:0,step3:0,application:1,card:2,sign:3,decision:3};var idx=map[name]!==undefined?map[name]:-1;for(var i=1;i<=4;i++){var el=document.getElementById('asb-'+i);if(!el)continue;el.className='asb-item';if((i-1)<idx)el.classList.add('done');else if((i-1)===idx)el.classList.add('active');}}
+  function setActive(name){['step1','step2','step3','application','decision','card','sign'].forEach(function(key){var pane=document.getElementById('pane-'+key);if(pane)pane.classList.toggle('active',key===name);});updateStepBar(name);if(name==='decision'||name==='card'||name==='sign')refreshDisbursalEta();}
   window.goToPane=function(name){setActive(name);document.getElementById('application-shell').scrollIntoView({behavior:'smooth',block:'start'});};
   window.startApplication=function(){var shell=document.getElementById('application-shell');var hp=document.getElementById('home-page');if(hp)hp.style.display='none';shell.style.display='block';hydrateApplicationFromQuote();setActive(state.account?'application':'step1');window.scrollTo({top:0,behavior:'smooth'});};
   window.backToHome=function(){var shell=document.getElementById('application-shell');var hp=document.getElementById('home-page');shell.style.display='none';if(hp)hp.style.display='';window.scrollTo({top:0,behavior:'smooth'});};
