@@ -250,6 +250,25 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;hei
 .full{width:100%}
 .divider{height:1px;background:var(--border);margin:14px 0}
 
+/* ── Timeline interactive rows */
+.tl-row-paid td{background:#f0fdf4;color:#166534}
+.tl-row-missed td{background:#fef2f2;color:#7f1d1d}
+.tl-row-ph td{background:#ecfdf5;color:#065f46}
+.tl-row-pa td{background:#fefce8;color:#713f12}
+.tl-row-current td{font-weight:600}
+.tl-action-set{display:flex;gap:3px}
+.tl-btn{border:none;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--fb);transition:opacity .14s}
+.tl-btn:hover{opacity:.8}
+.tl-btn-paid{background:#d1fae5;color:#065f46}
+.tl-btn-missed{background:#fee2e2;color:#7f1d1d}
+.tl-btn-ph{background:#ccfbf1;color:#134e4a}
+.tl-btn-pa{background:#fef3c7;color:#78350f}
+.tl-btn-reset{background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+.step-health{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;margin-left:auto}
+.step-health.ok{background:#d1fae5;color:#065f46}
+.step-health.warn{background:#fee2e2;color:#7f1d1d}
+.step-health.na{background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+
 /* ── Scrollable panel */
 .split-layout{display:grid;grid-template-columns:340px 1fr;gap:16px;align-items:start}
 .sticky-panel{position:sticky;top:0}
@@ -274,6 +293,15 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;hei
     </div>
   </div>
   <div class="sb-scroll">
+    <div class="sb-group">Customers</div>
+    <div class="sb-item" data-pane="profile" onclick="nav(this,'profile')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile Builder
+    </div>
+    <div class="sb-item" data-pane="appsim" onclick="nav(this,'appsim')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Application Simulator
+    </div>
     <div class="sb-group">Sandbox</div>
     <div class="sb-item active" data-pane="decision" onclick="nav(this,'decision')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
@@ -290,6 +318,11 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;hei
     <div class="sb-item" data-pane="risk" onclick="nav(this,'risk')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2"/></svg>
       Risk Scoring
+    </div>
+    <div class="sb-group">Lifecycle</div>
+    <div class="sb-item" data-pane="timeline" onclick="nav(this,'timeline')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      Loan Timeline
     </div>
     <div class="sb-group">Tools</div>
     <div class="sb-item" data-pane="emi" onclick="nav(this,'emi')">
@@ -741,6 +774,397 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;hei
       <div class="param-group">
         <div class="param-group-title">Servicing Policy</div>
         <div class="param-grid" id="cfg-servicing"></div>
+      </div>
+    </div>
+
+
+    <!-- ════════════════════════════════
+         PANE: Profile Builder
+    ════════════════════════════════ -->
+    <div class="pane" id="pane-profile">
+      <div class="split-layout">
+        <div>
+          <div class="card mb-10">
+            <div class="card-title">Personal</div>
+            <div class="field-row">
+              <div class="field"><label>First name</label><input class="fi" id="pb-first" type="text" value="Sarah" oninput="runProfile()"></div>
+              <div class="field"><label>Last name</label><input class="fi" id="pb-last" type="text" value="Mitchell" oninput="runProfile()"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Date of birth</label><input class="fi" id="pb-dob" type="date" value="1992-04-15" oninput="runProfile()"></div>
+              <div class="field"><label>Nationality</label>
+                <select class="fi" id="pb-nationality" onchange="runProfile()">
+                  <option value="british">British</option>
+                  <option value="eea">EEA National</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Contact phone</label><input class="fi" id="pb-phone" type="tel" value="07700 900 123" oninput="runProfile()"></div>
+              <div class="field"><label>Email</label><input class="fi" id="pb-email" type="email" value="sarah@example.com" oninput="runProfile()"></div>
+            </div>
+          </div>
+
+          <div class="card mb-10">
+            <div class="card-title">Address</div>
+            <div class="field-row single">
+              <div class="field"><label>Address line 1</label><input class="fi" id="pb-addr1" type="text" value="42 Maple Avenue" oninput="runProfile()"></div>
+            </div>
+            <div class="field-row single">
+              <div class="field"><label>Address line 2 (optional)</label><input class="fi" id="pb-addr2" type="text" value="" oninput="runProfile()"></div>
+            </div>
+            <div class="field-row three">
+              <div class="field"><label>City</label><input class="fi" id="pb-city" type="text" value="London" oninput="runProfile()"></div>
+              <div class="field"><label>Postcode</label><input class="fi" id="pb-postcode" type="text" value="SW1A 1AA" oninput="runProfile()"></div>
+              <div class="field"><label>Months at address</label><input class="fi" id="pb-addr-months" type="number" value="36" min="0" oninput="runProfile()"></div>
+            </div>
+            <div class="toggle-row">
+              <span class="toggle-label">UK resident</span>
+              <label class="toggle"><input type="checkbox" id="pb-uk" checked onchange="runProfile()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <span class="toggle-label">On electoral roll</span>
+              <label class="toggle"><input type="checkbox" id="pb-electoral" checked onchange="runProfile()"><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+
+          <div class="card mb-10">
+            <div class="card-title">Employment</div>
+            <div class="field-row single">
+              <div class="field"><label>Employment status</label>
+                <select class="fi" id="pb-emp-status" onchange="runProfile()">
+                  <option value="FULL_TIME">Full-time employed</option>
+                  <option value="PART_TIME">Part-time employed</option>
+                  <option value="SELF_EMPLOYED">Self-employed</option>
+                  <option value="CONTRACTOR">Contractor</option>
+                  <option value="TEMPORARY">Temporary</option>
+                  <option value="STUDENT">Student</option>
+                  <option value="UNEMPLOYED">Unemployed</option>
+                  <option value="PENSION">Pension</option>
+                </select>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Employer</label><input class="fi" id="pb-employer" type="text" value="Acme Ltd" oninput="runProfile()"></div>
+              <div class="field"><label>Employment start</label><input class="fi" id="pb-emp-start" type="month" value="2021-03" oninput="runProfile()"></div>
+            </div>
+            <div class="field-row single">
+              <div class="field"><label>Job title</label><input class="fi" id="pb-job-title" type="text" value="Senior Analyst" oninput="runProfile()"></div>
+            </div>
+            <div class="toggle-row">
+              <span class="toggle-label">Gainfully employed</span>
+              <label class="toggle"><input type="checkbox" id="pb-employed" checked onchange="runProfile()"><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+
+          <div class="card mb-10">
+            <div class="card-title">Income &amp; Expenditure (£/month)</div>
+            <div class="field-row">
+              <div class="field"><label>Net monthly income</label><input class="fi" id="pb-income" type="number" value="3200" oninput="runProfile()"></div>
+              <div class="field"><label>Housing / rent</label><input class="fi" id="pb-housing" type="number" value="900" oninput="runProfile()"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Living costs</label><input class="fi" id="pb-living" type="number" value="450" oninput="runProfile()"></div>
+              <div class="field"><label>Transport</label><input class="fi" id="pb-transport" type="number" value="120" oninput="runProfile()"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Debt commitments</label><input class="fi" id="pb-debts" type="number" value="150" oninput="runProfile()"></div>
+              <div class="field"><label>Childcare / dependants</label><input class="fi" id="pb-dependants" type="number" value="0" oninput="runProfile()"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Credit Proxy Data</div>
+            <div class="toggle-row">
+              <span class="toggle-label">Recent defaults (last 6 years)</span>
+              <label class="toggle"><input type="checkbox" id="pb-defaults" onchange="runProfile()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="sep"></div>
+            <div class="field-row">
+              <div class="field"><label>Missed payments (last 6m)</label><input class="fi" id="pb-missed" type="number" value="0" min="0" max="10" oninput="runProfile()"></div>
+              <div class="field"><label>Active CCJs</label><input class="fi" id="pb-ccj" type="number" value="0" min="0" oninput="runProfile()"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sticky-panel">
+          <div class="card mb-10">
+            <div class="flex items-center gap-8" style="margin-bottom:10px">
+              <div class="card-title big" style="margin-bottom:0">Profile Health</div>
+              <div id="pb-badge"></div>
+            </div>
+            <div id="pb-health" class="ko-list"></div>
+          </div>
+
+          <div class="card mb-10">
+            <div class="card-title">Affordability Snapshot</div>
+            <div id="pb-aff"></div>
+          </div>
+
+          <div class="card mb-10">
+            <div class="flex items-center gap-8" style="margin-bottom:10px">
+              <div class="card-title" style="margin-bottom:0">Risk Score</div>
+              <div id="pb-risk-badge"></div>
+            </div>
+            <div id="pb-risk-factors" class="ko-list"></div>
+          </div>
+
+          <div class="card">
+            <div class="flex items-center gap-8" style="margin-bottom:8px">
+              <div class="card-title" style="margin-bottom:0">v3 Schema JSON</div>
+              <button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="copyProfileJson()">Copy</button>
+              <button class="btn btn-primary btn-sm" onclick="profileToDecision()">→ Decision Engine</button>
+            </div>
+            <pre id="pb-json" style="font-size:9.5px;line-height:1.55;color:var(--muted);white-space:pre-wrap;max-height:340px;overflow-y:auto;margin-top:4px"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         PANE: Application Simulator
+    ════════════════════════════════ -->
+    <div class="pane" id="pane-appsim">
+      <div class="split-layout" style="grid-template-columns:400px 1fr">
+        <div>
+          <!-- Step 1 -->
+          <div class="card mb-10">
+            <div class="flex items-center gap-8" style="margin-bottom:12px">
+              <div class="card-title big" style="margin-bottom:0">Step 1 — Your Profile</div>
+              <span class="step-health na" id="as-h1">—</span>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>First name</label><input class="fi" id="as-first" type="text" value="Sarah" oninput="runAppSim()"></div>
+              <div class="field"><label>Last name</label><input class="fi" id="as-last" type="text" value="Mitchell" oninput="runAppSim()"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Date of birth</label><input class="fi" id="as-dob" type="date" value="1992-04-15" oninput="runAppSim()"></div>
+              <div class="field"><label>Employment status</label>
+                <select class="fi" id="as-emp-status" onchange="runAppSim()">
+                  <option value="FULL_TIME">Full-time employed</option>
+                  <option value="PART_TIME">Part-time</option>
+                  <option value="SELF_EMPLOYED">Self-employed</option>
+                  <option value="CONTRACTOR">Contractor</option>
+                  <option value="TEMPORARY">Temporary</option>
+                  <option value="STUDENT">Student</option>
+                  <option value="UNEMPLOYED">Unemployed</option>
+                  <option value="PENSION">Pension</option>
+                </select>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Employment start</label><input class="fi" id="as-emp-start" type="month" value="2021-03" oninput="runAppSim()"></div>
+              <div class="field"><label>Months at address</label><input class="fi" id="as-addr-months" type="number" value="36" min="0" oninput="runAppSim()"></div>
+            </div>
+            <div class="toggle-row">
+              <span class="toggle-label">UK resident</span>
+              <label class="toggle"><input type="checkbox" id="as-uk" checked onchange="runAppSim()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <span class="toggle-label">Gainfully employed</span>
+              <label class="toggle"><input type="checkbox" id="as-employed" checked onchange="runAppSim()"><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="card mb-10">
+            <div class="flex items-center gap-8" style="margin-bottom:12px">
+              <div class="card-title big" style="margin-bottom:0">Step 2 — Loan Details</div>
+              <span class="step-health na" id="as-h2">—</span>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Amount (£)</label><input class="fi" id="as-amount" type="number" value="1500" min="0" oninput="runAppSim()"></div>
+              <div class="field"><label>Term (months)</label><input class="fi" id="as-term" type="number" value="12" min="1" oninput="runAppSim()"></div>
+            </div>
+            <div class="field-row single">
+              <div class="field"><label>Loan purpose</label>
+                <select class="fi" id="as-purpose" onchange="runAppSim()">
+                  <option value="home_improvement">Home improvement</option>
+                  <option value="car">Car purchase</option>
+                  <option value="debt_consolidation">Debt consolidation</option>
+                  <option value="holiday">Holiday</option>
+                  <option value="wedding">Wedding</option>
+                  <option value="medical">Medical</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="sep"></div>
+            <div class="card-title" style="margin-bottom:10px">Income &amp; Expenditure (£/month)</div>
+            <div class="field-row">
+              <div class="field"><label>Net monthly income</label><input class="fi" id="as-income" type="number" value="3200" oninput="runAppSim()"></div>
+              <div class="field"><label>Housing / rent</label><input class="fi" id="as-housing" type="number" value="900" oninput="runAppSim()"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Living costs</label><input class="fi" id="as-living" type="number" value="450" oninput="runAppSim()"></div>
+              <div class="field"><label>Transport</label><input class="fi" id="as-transport" type="number" value="120" oninput="runAppSim()"></div>
+            </div>
+            <div class="field-row single">
+              <div class="field"><label>Other debt commitments</label><input class="fi" id="as-debts" type="number" value="150" oninput="runAppSim()"></div>
+            </div>
+            <div class="sep"></div>
+            <div class="card-title" style="margin-bottom:10px">Credit Proxy</div>
+            <div class="toggle-row">
+              <span class="toggle-label">On electoral roll</span>
+              <label class="toggle"><input type="checkbox" id="as-electoral" checked onchange="runAppSim()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <span class="toggle-label">Recent defaults</span>
+              <label class="toggle"><input type="checkbox" id="as-defaults" onchange="runAppSim()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Missed payments (6m)</label><input class="fi" id="as-missed" type="number" value="0" min="0" max="10" oninput="runAppSim()"></div>
+              <div class="field"><label>Active CCJs</label><input class="fi" id="as-ccj" type="number" value="0" min="0" oninput="runAppSim()"></div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="card mb-10">
+            <div class="flex items-center gap-8" style="margin-bottom:12px">
+              <div class="card-title big" style="margin-bottom:0">Step 3 — Payment Setup</div>
+              <span class="step-health na" id="as-h3">—</span>
+            </div>
+            <div class="card-title" style="margin-bottom:8px">Card Details</div>
+            <div class="field-row single">
+              <div class="field"><label>Card number (16 digits)</label><input class="fi" id="as-card-num" type="text" value="4532 1234 5678 9012" maxlength="19" oninput="runAppSim()"></div>
+            </div>
+            <div class="field-row three">
+              <div class="field"><label>Expiry (MM/YY)</label><input class="fi" id="as-card-exp" type="text" value="12/27" maxlength="5" oninput="runAppSim()"></div>
+              <div class="field"><label>CVV</label><input class="fi" id="as-card-cvv" type="text" value="123" maxlength="4" oninput="runAppSim()"></div>
+              <div class="field"><label>Cardholder name</label><input class="fi" id="as-card-name" type="text" value="Sarah Mitchell" oninput="runAppSim()"></div>
+            </div>
+            <div class="sep"></div>
+            <div class="card-title" style="margin-bottom:8px">Bank Account (for repayments)</div>
+            <div class="field-row">
+              <div class="field"><label>Sort code (XX-XX-XX)</label><input class="fi" id="as-sort" type="text" value="20-00-00" maxlength="8" oninput="runAppSim()"></div>
+              <div class="field"><label>Account number (8 digits)</label><input class="fi" id="as-account" type="text" value="12345678" maxlength="8" oninput="runAppSim()"></div>
+            </div>
+            <div class="field-row single">
+              <div class="field"><label>Account holder name</label><input class="fi" id="as-acc-name" type="text" value="Sarah Mitchell" oninput="runAppSim()"></div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="card">
+            <div class="flex items-center gap-8" style="margin-bottom:12px">
+              <div class="card-title big" style="margin-bottom:0">Step 4 — Review &amp; Submit</div>
+              <span class="step-health na" id="as-h4">—</span>
+            </div>
+            <div class="toggle-row">
+              <span class="toggle-label">I confirm all information is accurate</span>
+              <label class="toggle"><input type="checkbox" id="as-confirm" onchange="runAppSim()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <span class="toggle-label">I have read and accept the credit agreement</span>
+              <label class="toggle"><input type="checkbox" id="as-terms" onchange="runAppSim()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <span class="toggle-label">I consent to credit and fraud checks</span>
+              <label class="toggle"><input type="checkbox" id="as-consent" checked onchange="runAppSim()"><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Live output -->
+        <div class="sticky-panel">
+          <div class="card mb-10" id="as-banner-card">
+            <div id="as-decision-banner"></div>
+          </div>
+
+          <div class="card mb-10">
+            <div class="card-title">Knockout Rules</div>
+            <div id="as-ko" class="ko-list"></div>
+          </div>
+
+          <div class="card mb-10">
+            <div class="card-title">Affordability Waterfall</div>
+            <div id="as-aff"></div>
+          </div>
+
+          <div class="card mb-10">
+            <div class="card-title">Risk Score</div>
+            <div style="display:flex;align-items:flex-start;gap:14px">
+              <div class="score-ring">
+                <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="34" fill="none" stroke="#e5e1f0" stroke-width="8"/><circle id="as-arc" cx="40" cy="40" r="34" fill="none" stroke="#7c3aed" stroke-width="8" stroke-dasharray="213.6" stroke-dashoffset="213.6" stroke-linecap="round"/></svg>
+                <div class="score-ring-val"><div class="score-num" id="as-score-num">—</div><div class="score-lbl">/ 100</div></div>
+              </div>
+              <div style="flex:1"><table class="score-table"><thead><tr><th>Factor</th><th>Points</th></tr></thead><tbody id="as-score-tbody"></tbody></table></div>
+            </div>
+          </div>
+
+          <div class="card mb-10">
+            <div class="card-title">Quote</div>
+            <div id="as-quote" class="grid-3" style="gap:8px"></div>
+          </div>
+
+          <div class="card">
+            <div class="flex items-center gap-8" style="margin-bottom:8px">
+              <div class="card-title" style="margin-bottom:0">Step Validation Summary</div>
+            </div>
+            <div id="as-step-summary"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         PANE: Loan Timeline
+    ════════════════════════════════ -->
+    <div class="pane" id="pane-timeline">
+      <div class="split-layout" style="grid-template-columns:320px 1fr">
+        <div>
+          <div class="card mb-10">
+            <div class="card-title">Loan Configuration</div>
+            <div class="field-row">
+              <div class="field"><label>Principal (£)</label><input class="fi" id="tl-principal" type="number" value="2500" oninput="buildTimeline()"></div>
+              <div class="field"><label>APR (%)</label><input class="fi" id="tl-apr" type="number" value="29.9" step="0.1" oninput="buildTimeline()"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Term (months)</label><input class="fi" id="tl-term" type="number" value="12" oninput="buildTimeline()"></div>
+              <div class="field"><label>Start date</label><input class="fi" id="tl-start" type="date" oninput="buildTimeline()"></div>
+            </div>
+            <div style="margin-top:10px">
+              <button class="btn btn-ghost btn-sm full" onclick="tlReset()">Reset all rows to Upcoming</button>
+            </div>
+          </div>
+
+          <div id="tl-status-card" class="status-big active mb-10">
+            <div class="status-word" id="tl-status-word">ACTIVE</div>
+            <div class="reason-codes" id="tl-reason-codes"></div>
+          </div>
+
+          <div class="grid-3 mb-10" style="gap:8px" id="tl-flags"></div>
+
+          <div class="card">
+            <div class="card-title">Event Log</div>
+            <div id="tl-log" style="font-size:11px;line-height:1.7;color:var(--muted);max-height:200px;overflow-y:auto"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <div class="card-title">Interactive Amortisation Schedule</div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Click row actions to override each instalment's outcome. Status derives from the resulting payment history.</div>
+            <div class="sched-wrap">
+              <table class="sched-table">
+                <thead>
+                  <tr>
+                    <th style="text-align:center">#</th>
+                    <th style="text-align:left">Due Date</th>
+                    <th>Opening Bal</th>
+                    <th>EMI</th>
+                    <th>Principal</th>
+                    <th>Interest</th>
+                    <th>Closing Bal</th>
+                    <th style="text-align:left">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="tl-sched"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1402,9 +1826,508 @@ function exportCfg(){
 }
 
 /* ══════════════════════════════════════════════════════════════
+   PROFILE BUILDER
+══════════════════════════════════════════════════════════════ */
+function getProfileData(){
+  return {
+    firstName:    el('pb-first').value.trim(),
+    lastName:     el('pb-last').value.trim(),
+    dob:          el('pb-dob').value,
+    nationality:  el('pb-nationality').value,
+    phone:        el('pb-phone').value.trim(),
+    email:        el('pb-email').value.trim(),
+    addr1:        el('pb-addr1').value.trim(),
+    addr2:        el('pb-addr2').value.trim(),
+    city:         el('pb-city').value.trim(),
+    postcode:     el('pb-postcode').value.trim(),
+    addrMonths:   parseInt(el('pb-addr-months').value)||0,
+    ukResident:   el('pb-uk').checked,
+    onElectoral:  el('pb-electoral').checked,
+    empStatus:    el('pb-emp-status').value,
+    employer:     el('pb-employer').value.trim(),
+    empStart:     el('pb-emp-start').value,
+    jobTitle:     el('pb-job-title').value.trim(),
+    employed:     el('pb-employed').checked,
+    income:       toNum(el('pb-income').value),
+    housing:      toNum(el('pb-housing').value),
+    living:       toNum(el('pb-living').value),
+    transport:    toNum(el('pb-transport').value),
+    debts:        toNum(el('pb-debts').value),
+    dependants:   toNum(el('pb-dependants').value),
+    defaults:     el('pb-defaults').checked,
+    missed:       parseInt(el('pb-missed').value)||0,
+    ccj:          parseInt(el('pb-ccj').value)||0,
+  };
+}
+
+function runProfile(){
+  var p=getProfileData();
+  var now=new Date();
+  var age=ageFromDob(p.dob,now);
+  var empMonths=monthsEmployed(p.empStart,now);
+  var expenditure=p.housing+p.living+p.transport+p.debts+p.dependants;
+  var disposable=p.income-expenditure;
+
+  // Health checks
+  var checks=[
+    { label:'First & last name provided',    pass:p.firstName.length>0&&p.lastName.length>0,   detail:p.firstName+' '+p.lastName||'Missing' },
+    { label:'Valid date of birth',           pass:age>=18,                                      detail:age>0?'Age: '+age+' years':'Not provided or under 18' },
+    { label:'UK resident',                   pass:p.ukResident,                                 detail:p.ukResident?'Yes':'Not declared' },
+    { label:'On electoral roll',             pass:p.onElectoral,                                detail:p.onElectoral?'Registered':'Not registered — risk deduction' },
+    { label:'Address provided',              pass:p.addr1.length>0&&p.city.length>0,            detail:p.addr1||'Missing' },
+    { label:'Postcode provided',             pass:p.postcode.length>=5,                         detail:p.postcode||'Missing' },
+    { label:'Months at address',             pass:p.addrMonths>=0,                              detail:p.addrMonths+' months' },
+    { label:'Gainfully employed',            pass:p.employed,                                   detail:p.employed?p.empStatus:'Not employed' },
+    { label:'Employment tenure ≥ '+cfg.MIN_EMPLOYMENT_MONTHS+'m', pass:empMonths===null||empMonths>=cfg.MIN_EMPLOYMENT_MONTHS, detail:empMonths!==null?empMonths+' months':'No start date' },
+    { label:'Income ≥ £'+cfg.MIN_MONTHLY_INCOME+'/mo',           pass:p.income>=cfg.MIN_MONTHLY_INCOME, detail:'£'+p.income.toLocaleString()+'/mo' },
+    { label:'Positive disposable income',   pass:disposable>0,                                 detail:'Disposable: £'+disposable.toFixed(2) },
+    { label:'No recent defaults',           pass:!p.defaults,                                  detail:p.defaults?'Defaults recorded':'Clean' },
+    { label:'No active CCJs',               pass:p.ccj===0,                                    detail:p.ccj>0?p.ccj+' CCJ(s)':'None' },
+    { label:'Missed payments < 3',          pass:p.missed<3,                                   detail:'Missed: '+p.missed+' in last 6m' },
+    { label:'Contact phone provided',       pass:p.phone.length>=10,                           detail:p.phone||'Missing' },
+    { label:'Email provided',               pass:p.email.indexOf('@')>0,                       detail:p.email||'Missing' },
+  ];
+
+  var failures=checks.filter(function(c){return !c.pass;}).length;
+  var badge=el('pb-badge');
+  badge.innerHTML='<span class="badge '+(failures===0?'badge-green':'badge-red')+'">'+(failures===0?'All clear':failures+' issue'+(failures>1?'s':''))+'</span>';
+
+  var health=el('pb-health'); health.innerHTML='';
+  checks.forEach(function(c){
+    health.innerHTML+='<div class="ko-item '+(c.pass?'pass':'fail')+'">'
+      +'<div class="ko-dot"></div>'
+      +'<div><div style="font-weight:600">'+(c.pass?'✓ ':'✗ ')+c.label+'</div>'
+      +'<div style="font-size:10.5px;opacity:.8;margin-top:1px">'+c.detail+'</div></div></div>';
+  });
+
+  // Affordability snapshot
+  var aff=el('pb-aff');
+  var expPct=p.income>0?Math.round(expenditure/p.income*100):0;
+  var dispPct=p.income>0?Math.max(0,Math.round(disposable/p.income*100)):0;
+  aff.innerHTML=''
+    +'<div class="aff-row"><div class="aff-label">Net monthly income</div><div class="aff-value">'+£(p.income)+'</div></div>'
+    +'<div class="aff-row"><div class="aff-label indent">Housing &amp; rent</div><div class="aff-value">− '+£(p.housing)+'</div></div>'
+    +'<div class="aff-row"><div class="aff-label indent">Living costs</div><div class="aff-value">− '+£(p.living)+'</div></div>'
+    +'<div class="aff-row"><div class="aff-label indent">Transport</div><div class="aff-value">− '+£(p.transport)+'</div></div>'
+    +'<div class="aff-row"><div class="aff-label indent">Debt commitments</div><div class="aff-value">− '+£(p.debts)+'</div></div>'
+    +(p.dependants>0?'<div class="aff-row"><div class="aff-label indent">Dependants / childcare</div><div class="aff-value">− '+£(p.dependants)+'</div></div>':'')
+    +'<div class="aff-bar-wrap"><div class="aff-bar" style="width:'+dispPct+'%;background:'+(disposable>=0?'#059669':'#dc2626')+'"></div></div>'
+    +'<div class="aff-row"><div class="aff-label">Disposable income</div><div class="aff-value '+(disposable>=0?'pos':'neg')+'">'+£(disposable)+'</div></div>'
+    +'<div class="aff-row"><div class="aff-label">Expenditure ratio</div><div class="aff-value '+(expPct<=70?'pos':'neg')+'">'+expPct+'% of income</div></div>';
+
+  // Risk score snapshot
+  var riskInput={
+    onElectoralRoll:p.onElectoral, missedPaymentsLast6m:p.missed, monthsAtAddress:p.addrMonths,
+    monthsEmployed:empMonths, employmentStatus:p.empStatus,
+    emiToDisposable:0, postEmiResidual:disposable
+  };
+  var rs=computeRiskScore(riskInput);
+  var rb=el('pb-risk-badge');
+  rb.innerHTML='<span class="badge '+(rs.score>=70?'badge-green':rs.score>=50?'badge-amber':'badge-red')+'">'
+    +rs.score+' / 100 — '+(rs.score>=70?'Low Risk':rs.score>=50?'Moderate Risk':'High Risk')+'</span>';
+  var rfEl=el('pb-risk-factors'); rfEl.innerHTML='';
+  if(rs.breakdown.length===0){
+    rfEl.innerHTML='<div class="ko-item pass"><div class="ko-dot"></div><div>No deductions — clean risk profile</div></div>';
+  } else {
+    rs.breakdown.forEach(function(b){
+      rfEl.innerHTML+='<div class="ko-item fail"><div class="ko-dot"></div>'
+        +'<div><span style="font-weight:600">'+b.factor+'</span> <span style="margin-left:4px;color:var(--red);font-weight:700">'+b.impact+' pts</span></div></div>';
+    });
+  }
+
+  // JSON preview
+  var schema={
+    schemaVersion:3, migrationVersion:3,
+    profile:{
+      personal:{ firstName:p.firstName, lastName:p.lastName, dateOfBirth:p.dob, nationality:p.nationality, nationalInsuranceNumber:'' },
+      employment:{ status:p.empStatus, employer:p.employer, jobTitle:p.jobTitle, startDate:p.empStart, gainfullyEmployed:p.employed },
+      contact:{ phone:p.phone, email:p.email }
+    },
+    address:{ line1:p.addr1, line2:p.addr2, city:p.city, postcode:p.postcode, monthsAtAddress:p.addrMonths, ukResident:p.ukResident, onElectoralRoll:p.onElectoral },
+    affordability:{
+      incomeExpenditure:{
+        raw:{ netMonthlyIncome:p.income, housing:p.housing, livingCosts:p.living, transport:p.transport, debtCommitments:p.debts, dependants:p.dependants },
+        derived:{ expenditure:expenditure, disposableIncome:disposable }
+      }
+    },
+    creditProxy:{ recentDefaults:p.defaults, missedPaymentsLast6m:p.missed, activeCCJs:p.ccj }
+  };
+  el('pb-json').textContent=JSON.stringify(schema,null,2);
+}
+
+function copyProfileJson(){
+  var txt=el('pb-json').textContent;
+  navigator.clipboard.writeText(txt).then(function(){ toast('JSON copied to clipboard'); });
+}
+
+function profileToDecision(){
+  var p=getProfileData();
+  el('d-dob').value=p.dob;
+  el('d-emp-start').value=p.empStart;
+  el('d-emp-status').value=p.empStatus;
+  el('d-uk').checked=p.ukResident;
+  el('d-employed').checked=p.employed;
+  el('d-income').value=p.income;
+  el('d-housing').value=p.housing;
+  el('d-living').value=p.living;
+  el('d-transport').value=p.transport;
+  el('d-debts').value=p.debts;
+  el('d-electoral').checked=p.onElectoral;
+  el('d-defaults').checked=p.defaults;
+  el('d-missed').value=p.missed;
+  el('d-ccj').value=p.ccj;
+  el('d-addr-months').value=p.addrMonths;
+  var decItem=document.querySelector('[data-pane="decision"]');
+  if(decItem) nav(decItem,'decision');
+  runDecision();
+  toast('Profile loaded into Decision Engine');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   APPLICATION SIMULATOR
+══════════════════════════════════════════════════════════════ */
+function runAppSim(){
+  var now=new Date();
+  // Step 1 inputs
+  var first    =el('as-first').value.trim();
+  var last     =el('as-last').value.trim();
+  var dob      =el('as-dob').value;
+  var empStatus=el('as-emp-status').value;
+  var empStart =el('as-emp-start').value;
+  var addrMonths=parseInt(el('as-addr-months').value)||0;
+  var ukRes    =el('as-uk').checked;
+  var employed =el('as-employed').checked;
+  // Step 2 inputs
+  var amount   =toNum(el('as-amount').value);
+  var term     =parseInt(el('as-term').value)||0;
+  var income   =toNum(el('as-income').value);
+  var housing  =toNum(el('as-housing').value);
+  var living   =toNum(el('as-living').value);
+  var transport=toNum(el('as-transport').value);
+  var debts    =toNum(el('as-debts').value);
+  var electoral=el('as-electoral').checked;
+  var defaults =el('as-defaults').checked;
+  var missed   =parseInt(el('as-missed').value)||0;
+  var ccj      =parseInt(el('as-ccj').value)||0;
+  // Step 3 inputs
+  var cardNum  =el('as-card-num').value.replace(/\s/g,'');
+  var cardExp  =el('as-card-exp').value.trim();
+  var cardCvv  =el('as-card-cvv').value.trim();
+  var cardName =el('as-card-name').value.trim();
+  var sort     =el('as-sort').value.trim();
+  var acct     =el('as-account').value.trim();
+  var acctName =el('as-acc-name').value.trim();
+  // Step 4 inputs
+  var confirm  =el('as-confirm').checked;
+  var terms    =el('as-terms').checked;
+  var consent  =el('as-consent').checked;
+
+  var age=ageFromDob(dob,now);
+  var empMonths=monthsEmployed(empStart,now);
+  var expenditure=housing+living+transport+debts;
+  var disposable=income-expenditure;
+  var useApr=cfg.REP_APR;
+  var refQ=(amount>0&&term>0)?buildSchedule(amount,useApr,term,null,0).summary:{emi:0};
+  var emiRatio=disposable>0?refQ.emi/disposable:1;
+  var postResidual=disposable-refQ.emi;
+
+  // Step 1 validation rules
+  var s1rules=[
+    { label:'First and last name',       pass:first.length>0&&last.length>0,      detail:first||last?first+' '+last:'Missing' },
+    { label:'Applicant ≥ 18 years',      pass:age>=18,                            detail:age>0?'Age: '+age+' years':'DOB required' },
+    { label:'Age at term end ≤ '+cfg.MAX_AGE_AT_TERM_END,
+                                         pass:age===0||(age+term/12)<=cfg.MAX_AGE_AT_TERM_END,
+      detail:'Age at end: '+(age>0?(age+term/12).toFixed(1)+' yrs':'—') },
+    { label:'UK resident',               pass:ukRes,                              detail:ukRes?'Yes':'Not declared' },
+    { label:'Gainfully employed',        pass:employed,                           detail:employed?empStatus:'Not employed' },
+    { label:'Employment ≥ '+cfg.MIN_EMPLOYMENT_MONTHS+'m', pass:empMonths===null||empMonths>=cfg.MIN_EMPLOYMENT_MONTHS,
+      detail:empMonths!==null?empMonths+' months in role':'No start date' },
+  ];
+
+  // Step 2 validation rules
+  var s2rules=[
+    { label:'Amount in range',           pass:amount>=cfg.MIN_AMOUNT&&amount<=cfg.MAX_AMOUNT,
+      detail:'£'+cfg.MIN_AMOUNT+'–£'+cfg.MAX_AMOUNT+' · requested £'+amount.toLocaleString() },
+    { label:'Term in range',             pass:term>=cfg.MIN_TERM&&term<=cfg.MAX_TERM,
+      detail:cfg.MIN_TERM+'–'+cfg.MAX_TERM+' months · requested '+term },
+    { label:'Income ≥ £'+cfg.MIN_MONTHLY_INCOME+'/mo', pass:income>=cfg.MIN_MONTHLY_INCOME,
+      detail:'Declared: £'+income.toLocaleString()+'/mo' },
+    { label:'Amount ≤ '+cfg.MAX_LOAN_INCOME_RATIO+'× income', pass:income===0||amount<=income*cfg.MAX_LOAN_INCOME_RATIO,
+      detail:'Ratio: '+(income>0?(amount/income).toFixed(2):'—')+'× (max '+cfg.MAX_LOAN_INCOME_RATIO+'×)' },
+    { label:'Positive disposable income', pass:disposable>0,
+      detail:'Disposable: £'+disposable.toFixed(2)+'/mo' },
+    { label:'EMI ≤ '+(cfg.MAX_EMI_TO_DISPOSABLE*100)+'% of disposable', pass:refQ.emi===0||emiRatio<=cfg.MAX_EMI_TO_DISPOSABLE,
+      detail:'EMI ratio: '+(emiRatio*100).toFixed(1)+'% (cap '+(cfg.MAX_EMI_TO_DISPOSABLE*100)+'%)' },
+    { label:'Post-EMI residual ≥ £'+cfg.MIN_POST_EMI_RESIDUAL, pass:refQ.emi===0||postResidual>=cfg.MIN_POST_EMI_RESIDUAL,
+      detail:'Post-EMI: £'+postResidual.toFixed(2)+'/mo' },
+    { label:'No recent defaults',        pass:!defaults,       detail:defaults?'Defaults recorded':'None' },
+    { label:'No active CCJs',            pass:ccj===0,         detail:ccj>0?ccj+' CCJ(s)':'None' },
+    { label:'Missed payments < 3',       pass:missed<3,        detail:'Missed: '+missed+' in last 6m' },
+    { label:'On electoral roll',         pass:electoral,       detail:electoral?'Registered':'Not registered' },
+  ];
+
+  // Step 3 validation rules
+  function validExpiry(exp){
+    if(!/^\d{2}\/\d{2}$/.test(exp))return false;
+    var parts=exp.split('/'); var m=parseInt(parts[0]); var y=parseInt(parts[1])+2000;
+    if(m<1||m>12)return false;
+    var expDate=new Date(y,m,1); return expDate>now;
+  }
+  var s3rules=[
+    { label:'Card number (16 digits)',   pass:/^\d{16}$/.test(cardNum),           detail:cardNum.length>0?cardNum.length+' digits entered':'Required' },
+    { label:'Valid expiry (MM/YY)',      pass:validExpiry(cardExp),               detail:cardExp||'Required' },
+    { label:'CVV (3–4 digits)',          pass:/^\d{3,4}$/.test(cardCvv),         detail:cardCvv||'Required' },
+    { label:'Cardholder name',           pass:cardName.length>2,                  detail:cardName||'Required' },
+    { label:'Sort code (XX-XX-XX)',      pass:/^\d{2}-\d{2}-\d{2}$/.test(sort),  detail:sort||'Required' },
+    { label:'Account number (8 digits)', pass:/^\d{8}$/.test(acct),              detail:acct||'Required' },
+    { label:'Account holder name',       pass:acctName.length>2,                 detail:acctName||'Required' },
+  ];
+
+  // Step 4 validation rules
+  var s4rules=[
+    { label:'Information accuracy confirmed', pass:confirm, detail:confirm?'Checked':'Must be checked' },
+    { label:'Credit agreement accepted',      pass:terms,   detail:terms?'Accepted':'Must be accepted' },
+    { label:'Consent to checks given',        pass:consent, detail:consent?'Given':'Required' },
+  ];
+
+  function stepHealth(rules, elId){
+    var fails=rules.filter(function(r){return !r.pass;}).length;
+    var el2=el(elId);
+    if(fails===0){ el2.className='step-health ok'; el2.textContent='✓ All pass'; }
+    else { el2.className='step-health warn'; el2.textContent='✗ '+fails+' issue'+(fails>1?'s':''); }
+    return fails;
+  }
+  var f1=stepHealth(s1rules,'as-h1');
+  var f2=stepHealth(s2rules,'as-h2');
+  var f3=stepHealth(s3rules,'as-h3');
+  var f4=stepHealth(s4rules,'as-h4');
+
+  // Decision banner
+  var allRules=s1rules.concat(s2rules);
+  var approved=allRules.every(function(r){return r.pass;})&&f3===0&&f4===0;
+  var totalFails=f1+f2+f3+f4;
+  var banner=el('as-decision-banner');
+  banner.innerHTML='<div class="decision-header '+(approved?'approved':'declined')+'">'
+    +'<div class="decision-icon '+(approved?'approved':'declined')+'">'+(approved?'✓':'✗')+'</div>'
+    +'<div><div class="decision-title '+(approved?'approved':'declined')+'">'+(approved?'Application Approved':'Application Declined')+'</div>'
+    +'<div class="decision-sub">'+(approved?'All rules pass at '+useApr+'% APR':totalFails+' issue'+(totalFails>1?'s':'')+' across '+[f1?'step 1':'',f2?'step 2':'',f3?'step 3':'',f4?'step 4':''].filter(Boolean).join(', '))+'</div></div></div>';
+
+  // KO rules (steps 1+2)
+  var ko=el('as-ko'); ko.innerHTML='';
+  allRules.forEach(function(r){
+    ko.innerHTML+='<div class="ko-item '+(r.pass?'pass':'fail')+'">'
+      +'<div class="ko-dot"></div>'
+      +'<div><div style="font-weight:600">'+(r.pass?'✓ ':'✗ ')+r.label+'</div>'
+      +'<div style="font-size:10.5px;opacity:.8;margin-top:1px">'+r.detail+'</div></div></div>';
+  });
+
+  // Affordability waterfall
+  var affEl=el('as-aff'); affEl.innerHTML=''
+    +'<div class="aff-row"><div class="aff-label">Net monthly income</div><div class="aff-value">'+£(income)+'</div></div>'
+    +'<div class="aff-row"><div class="aff-label indent">Housing &amp; rent</div><div class="aff-value">− '+£(housing)+'</div></div>'
+    +'<div class="aff-row"><div class="aff-label indent">Living costs</div><div class="aff-value">− '+£(living)+'</div></div>'
+    +'<div class="aff-row"><div class="aff-label indent">Transport</div><div class="aff-value">− '+£(transport)+'</div></div>'
+    +'<div class="aff-row"><div class="aff-label indent">Debt commitments</div><div class="aff-value">− '+£(debts)+'</div></div>'
+    +'<div class="aff-bar-wrap"><div class="aff-bar" style="width:'+Math.max(0,disposable/income*100)+'%;background:'+(disposable>=0?'#059669':'#dc2626')+'"></div></div>'
+    +'<div class="aff-row"><div class="aff-label">Disposable income</div><div class="aff-value '+(disposable>=0?'pos':'neg')+'">'+£(disposable)+'</div></div>'
+    +'<div class="aff-row"><div class="aff-label indent">Monthly EMI ('+useApr+'% APR)</div><div class="aff-value">− '+£(refQ.emi)+'</div></div>'
+    +'<div class="aff-row"><div class="aff-label">Post-EMI residual</div><div class="aff-value '+(postResidual>=cfg.MIN_POST_EMI_RESIDUAL?'pos':'neg')+'">'+£(postResidual)+'</div></div>'
+    +'<div class="aff-row"><div class="aff-label">EMI / disposable</div><div class="aff-value '+(emiRatio<=cfg.MAX_EMI_TO_DISPOSABLE?'pos':'neg')+'">'+(emiRatio*100).toFixed(1)+'%</div></div>';
+
+  // Risk score
+  var riskInput={ onElectoralRoll:electoral, missedPaymentsLast6m:missed, monthsAtAddress:addrMonths,
+    monthsEmployed:empMonths, employmentStatus:empStatus, emiToDisposable:emiRatio, postEmiResidual:postResidual };
+  var rs=computeRiskScore(riskInput);
+  setArc('as-arc',rs.score);
+  el('as-score-num').textContent=rs.score;
+  var tb=el('as-score-tbody'); tb.innerHTML='';
+  if(rs.breakdown.length===0){
+    tb.innerHTML='<tr><td colspan="2" style="text-align:center;color:var(--green);font-weight:600;padding:10px">No deductions</td></tr>';
+  } else {
+    rs.breakdown.forEach(function(b){ tb.innerHTML+='<tr><td>'+b.factor+'</td><td class="score-neg">'+b.impact+'</td></tr>'; });
+  }
+  tb.innerHTML+='<tr style="font-weight:700"><td>Total</td><td class="'+(rs.score>=70?'score-pos':'score-neg')+'">'+rs.score+'/100</td></tr>';
+
+  // Quote
+  var qEl=el('as-quote'); qEl.innerHTML='';
+  if(amount>0&&term>0){
+    var quote=buildSchedule(amount,useApr,term,null,0).summary;
+    [{lbl:'Monthly EMI',val:£(quote.emi),sub:useApr+'% APR'},
+     {lbl:'Total repayable',val:£(quote.totalRepayable),sub:term+' payments'},
+     {lbl:'Total interest',val:£(quote.totalInterest),sub:((quote.totalInterest/amount)*100).toFixed(1)+'% of principal'}
+    ].forEach(function(i){
+      qEl.innerHTML+='<div class="stat-card"><div class="stat-lbl">'+i.lbl+'</div><div class="stat-val">'+i.val+'</div><div class="stat-sub">'+i.sub+'</div></div>';
+    });
+  }
+
+  // Step summary
+  var ss=el('as-step-summary'); ss.innerHTML='';
+  var steps=[
+    {label:'Step 1 — Profile',  rules:s1rules},
+    {label:'Step 2 — Loan',     rules:s2rules},
+    {label:'Step 3 — Payment',  rules:s3rules},
+    {label:'Step 4 — Review',   rules:s4rules},
+  ];
+  steps.forEach(function(step){
+    var fails=step.rules.filter(function(r){return !r.pass;});
+    ss.innerHTML+='<div style="margin-bottom:10px">'
+      +'<div class="flex items-center gap-8" style="margin-bottom:4px">'
+      +'<span style="font-size:11px;font-weight:700;color:var(--text)">'+step.label+'</span>'
+      +(fails.length===0?'<span class="badge badge-green badge-sm" style="font-size:9.5px;padding:1px 7px">All pass</span>':'<span class="badge badge-red badge-sm" style="font-size:9.5px;padding:1px 7px">'+fails.length+' fail</span>')
+      +'</div>'
+      +fails.map(function(r){ return '<div style="font-size:10.5px;color:var(--red-text);padding-left:8px">✗ '+r.label+' — '+r.detail+'</div>'; }).join('')
+      +'</div>';
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LOAN TIMELINE
+══════════════════════════════════════════════════════════════ */
+var tlState={};   // key = row index, value = 'paid'|'missed'|'ph'|'pa'|'upcoming'
+var tlLog=[];
+
+function buildTimeline(){
+  tlState={};
+  tlLog=[];
+  renderTimeline();
+}
+
+function tlSetRow(idx, status){
+  var prev=tlState[idx]||'upcoming';
+  tlState[idx]=status;
+  var row=_getTlSched()[idx];
+  if(row){
+    var verb={paid:'Marked PAID',missed:'Marked MISSED',ph:'Applied PAYMENT HOLIDAY',pa:'Applied PAYMENT ARRANGEMENT',upcoming:'Reset to UPCOMING'};
+    tlLog.unshift('[#'+(idx+1)+'] '+fdate(row.dueDate)+' — '+(verb[status]||status));
+    if(tlLog.length>30) tlLog.pop();
+  }
+  renderTimeline();
+}
+
+function tlReset(){
+  tlState={};
+  tlLog.unshift('[ALL] Reset — all rows set to Upcoming');
+  renderTimeline();
+}
+
+function _getTlSched(){
+  var P=toNum(el('tl-principal').value);
+  var apr=toNum(el('tl-apr').value);
+  var n=parseInt(el('tl-term').value)||0;
+  var start=el('tl-start').value;
+  if(P<=0||n<=0) return [];
+  return buildSchedule(P,apr,n,start,0).sched;
+}
+
+function renderTimeline(){
+  var sched=_getTlSched();
+  if(sched.length===0){ el('tl-sched').innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">Configure loan above to generate schedule.</td></tr>'; return; }
+
+  var now=new Date();
+  var tbody=el('tl-sched'); tbody.innerHTML='';
+
+  // Count paid and missed from tlState
+  var paidCount=0;
+  var missedCount=0;
+  var phActive=false;
+  var paActive=false;
+  var daysNoPmt=0;
+  var lastPmtDate=null;
+
+  sched.forEach(function(row,i){
+    var rowState=tlState[i]||'upcoming';
+    if(rowState==='paid'){ paidCount=i+1; missedCount=0; lastPmtDate=row.dueDate; }
+    else if(rowState==='missed'){ missedCount++; }
+    else if(rowState==='ph'){ phActive=true; }
+    else if(rowState==='pa'){ paActive=true; }
+  });
+
+  // Compute missed streak from last paid + 1 forward
+  var missedStreak=0;
+  for(var i=0;i<sched.length;i++){
+    var rs=tlState[i]||'upcoming';
+    if(rs==='paid'){ missedStreak=0; }
+    else if(rs==='missed'){ missedStreak++; }
+  }
+
+  if(lastPmtDate) daysNoPmt=Math.max(0,Math.floor((now-new Date(lastPmtDate))/86400000));
+
+  // Derive core status
+  var coreStatus='active'; var reasonCodes=[];
+  var outBal=sched.slice(0).reduce(function(a,r,i){ return (tlState[i]||'upcoming')==='paid'?a:a+r.principal; },0);
+  if(outBal<=cfg.BALANCE_TOLERANCE){ coreStatus='closed'; reasonCodes=['balance_cleared']; }
+  else if(daysNoPmt>=cfg.TERMINATION_DAYS){ coreStatus='terminated'; reasonCodes=['no_payment_'+daysNoPmt+'_days']; }
+  else if(missedStreak>=cfg.CONSEC_DEFAULT){ coreStatus='default'; reasonCodes=['consecutive_missed_'+missedStreak]; }
+  else if(missedStreak>=cfg.CONSEC_ARREARS){ coreStatus='arrears'; reasonCodes=['missed_'+missedStreak+'_instalment']; }
+
+  var displayStatus=coreStatus;
+  if(phActive&&coreStatus!=='default'&&coreStatus!=='terminated'&&coreStatus!=='settled'&&coreStatus!=='closed') displayStatus='holiday';
+  if(paActive&&coreStatus!=='settled'&&coreStatus!=='closed') displayStatus='arrangement';
+
+  // Status card
+  var statusClasses=['active','arrears','default','terminated','settled','closed','holiday','arrangement'];
+  var sc=el('tl-status-card'); sc.className='status-big mb-10';
+  sc.classList.add(statusClasses.indexOf(displayStatus)>-1?displayStatus:'active');
+  el('tl-status-word').textContent=displayStatus.replace(/_/g,' ').toUpperCase();
+  var rc=el('tl-reason-codes'); rc.innerHTML='';
+  (reasonCodes.length?reasonCodes:['no_reason_code']).forEach(function(c){ rc.innerHTML+='<span class="reason-chip">'+c+'</span>'; });
+
+  // Flags
+  var fl=el('tl-flags'); fl.innerHTML='';
+  var fItems=[
+    {lbl:'Paid Instalments',    val:paidCount+'/ '+sched.length,              warn:false},
+    {lbl:'Missed Streak',       val:missedStreak,                             warn:missedStreak>0},
+    {lbl:'Outstanding Balance', val:£(Math.max(0,outBal)),                   warn:outBal<=0},
+    {lbl:'Days Since Payment',  val:daysNoPmt+' days',                       warn:daysNoPmt>30},
+    {lbl:'Core Status',         val:coreStatus.toUpperCase(),                 warn:coreStatus!=='active'},
+    {lbl:'Display Status',      val:displayStatus.toUpperCase(),              warn:false},
+  ];
+  fItems.forEach(function(f){
+    fl.innerHTML+='<div class="stat-card" style="'+(f.warn?'border-color:#fca5a5;background:#fef2f2;':'')+'">'
+      +'<div class="stat-lbl">'+f.lbl+'</div><div class="stat-val" style="font-size:12px">'+f.val+'</div></div>';
+  });
+
+  // Log
+  var logEl=el('tl-log');
+  logEl.innerHTML=tlLog.length?tlLog.map(function(l){ return '<div>'+l+'</div>'; }).join(''):'<span style="color:var(--dim)">No events yet — use row actions below.</span>';
+
+  // Schedule rows
+  sched.forEach(function(row,i){
+    var rowState=tlState[i]||'upcoming';
+    var isOverdue=new Date(row.dueDate)<now&&rowState==='upcoming';
+    var rowCls='tl-row-'+rowState+(isOverdue&&rowState==='upcoming'?' overdue':'');
+    var stateTxt={paid:'PAID',missed:'MISSED',ph:'PAYMENT HOLIDAY',pa:'ARRANGEMENT',upcoming:isOverdue?'OVERDUE':'UPCOMING'};
+    var stateColor={paid:'background:#d1fae5;color:#065f46',missed:'background:#fee2e2;color:#7f1d1d',
+      ph:'background:#ccfbf1;color:#134e4a',pa:'background:#fef3c7;color:#78350f',
+      upcoming:isOverdue?'background:#fee2e2;color:#7f1d1d':'background:#f3f4f6;color:#6b7280'};
+    tbody.innerHTML+='<tr class="'+rowCls+'">'
+      +'<td style="text-align:center;font-weight:700">'+(i+1)+'</td>'
+      +'<td style="text-align:left">'+fdate(row.dueDate)+'</td>'
+      +'<td>'+£(row.openingBal)+'</td>'
+      +'<td>'+£(row.emi)+'</td>'
+      +'<td>'+£(row.principal)+'</td>'
+      +'<td>'+£(row.interest)+'</td>'
+      +'<td>'+£(row.balance)+'</td>'
+      +'<td style="text-align:left">'
+        +'<div class="tl-action-set">'
+        +'<button class="tl-btn tl-btn-paid" onclick="tlSetRow('+i+',\'paid\')">✓ Paid</button>'
+        +'<button class="tl-btn tl-btn-missed" onclick="tlSetRow('+i+',\'missed\')">✗ Missed</button>'
+        +'<button class="tl-btn tl-btn-ph" onclick="tlSetRow('+i+',\'ph\')">PH</button>'
+        +'<button class="tl-btn tl-btn-pa" onclick="tlSetRow('+i+',\'pa\')">PA</button>'
+        +'<button class="tl-btn tl-btn-reset" onclick="tlSetRow('+i+',\'upcoming\')">↺</button>'
+        +'</div>'
+        +'<span class="row-status" style="margin-top:3px;display:inline-flex;'+stateColor[rowState]+'">'+stateTxt[rowState]+'</span>'
+      +'</td></tr>';
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
    NAVIGATION
 ══════════════════════════════════════════════════════════════ */
 var TITLES={
+  profile: {title:'Profile Builder',               sub:'Build a full customer profile — field-by-field health checks, affordability snapshot, v3 schema preview'},
+  appsim:  {title:'Application Simulator',         sub:'Test every step of the application form — granular validation, KO rules, risk score, and decision output'},
+  timeline:{title:'Loan Timeline',                 sub:'Interactive instalment-by-instalment lifecycle — mark payments, apply overlays, see status transitions'},
   decision:{title:'Decision Engine Sandbox',       sub:'Live-evaluate any application against editable policy parameters'},
   status:  {title:'Status Engine Simulator',       sub:'Time-travel through a loan lifecycle and see every status transition'},
   servicing:{title:'Servicing Policy Checker',     sub:'Check PH / PA / Forbearance eligibility against current policy rules'},
@@ -1447,6 +2370,12 @@ function toast(msg){
   runServicing();
   runRiskOnly();
   runEmi();
+  runProfile();
+  runAppSim();
+  // Timeline needs a default start date
+  var sixMoAgo=new Date(); sixMoAgo.setMonth(sixMoAgo.getMonth()-3);
+  el('tl-start').value=sixMoAgo.toISOString().split('T')[0];
+  renderTimeline();
 })();
 </script>
 </body>
