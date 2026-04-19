@@ -137,7 +137,7 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;hei
 
 /* ── Score breakdown */
 .score-ring{width:80px;height:80px;flex-shrink:0;position:relative}
-.score-ring svg{width:80px;height:80px;transform:rotate(-90deg)}
+.score-ring svg{width:80px;height:80px;-webkit-transform:rotate(-90deg);transform:rotate(-90deg)}
 .score-ring-val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .score-num{font-family:var(--fd);font-size:20px;font-weight:800;letter-spacing:-.03em;line-height:1}
 .score-lbl{font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
@@ -388,6 +388,7 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;hei
                   <option value="CONTRACTOR">Contractor</option>
                   <option value="TEMPORARY">Temporary</option>
                   <option value="STUDENT">Student</option>
+                  <option value="DISABILITY">Disability / incapacity</option>
                   <option value="UNEMPLOYED">Unemployed</option>
                   <option value="PENSION">Pension</option>
                 </select>
@@ -487,7 +488,7 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;hei
               <div class="field"><label>APR (%)</label><input class="fi" id="s-apr" type="number" value="29.9" step="0.1" oninput="runStatus()"></div>
             </div>
             <div class="field-row">
-              <div class="field"><label>Term (months)</label><input class="fi" id="s-term" type="number" value="12" oninput="runStatus()"></div>
+              <div class="field"><label>Term (months)</label><input class="fi" id="s-term" type="number" value="12" min="1" oninput="runStatus()"></div>
               <div class="field"><label>Start date</label><input class="fi" id="s-start" type="date" oninput="runStatus()"></div>
             </div>
             <div class="field-row single">
@@ -727,7 +728,7 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;hei
         <div class="field-row three">
           <div class="field"><label>Principal (£)</label><input class="fi" id="e-principal" type="number" value="3000" oninput="runEmi()"></div>
           <div class="field"><label>APR (%)</label><input class="fi" id="e-apr" type="number" value="29.9" step="0.1" oninput="runEmi()"></div>
-          <div class="field"><label>Term (months)</label><input class="fi" id="e-term" type="number" value="18" oninput="runEmi()"></div>
+          <div class="field"><label>Term (months)</label><input class="fi" id="e-term" type="number" value="18" min="1" oninput="runEmi()"></div>
         </div>
         <div class="field-row">
           <div class="field"><label>Start date</label><input class="fi" id="e-start" type="date" oninput="runEmi()"></div>
@@ -1229,6 +1230,7 @@ var riskFactors = RISK_DEFAULTS.map(function(f){ return Object.assign({},f); });
    UTILITIES
 ══════════════════════════════════════════════════════════════ */
 function £(n){ return '£'+parseFloat(n||0).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function esc(s){ var d=document.createElement('div'); d.textContent=String(s==null?'':s); return d.innerHTML; }
 function pct(n){ return (parseFloat(n||0)*100).toFixed(1)+'%'; }
 function fdate(d){ if(!d) return '—'; var dt=new Date(d); if(isNaN(dt))return d; var m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return dt.getDate()+' '+m[dt.getMonth()]+' '+dt.getFullYear(); }
 function toNum(v){ return Number(String(v||'0').replace(/[^0-9.]/g,''))||0; }
@@ -1345,7 +1347,7 @@ function runDecision(){
   var electoral=el('d-electoral').checked;
   var defaults=el('d-defaults').checked;
   var missed  =parseInt(el('d-missed').value)||0;
-  var ccj     =parseInt(el('d-ccj').value)||0;
+  var ccj     =Math.max(0,parseInt(el('d-ccj').value)||0);
   var addrMonths=parseInt(el('d-addr-months').value)||0;
   var aprOverride=toNum(el('d-apr-override').value);
   var useApr  =aprOverride>0?aprOverride:cfg.REP_APR;
@@ -1388,7 +1390,7 @@ function runDecision(){
                                      pass:referenceEMI===0||emiRatio<=cfg.MAX_EMI_TO_DISPOSABLE,
       detail:'Ratio: '+(emiRatio*100).toFixed(1)+'% (cap '+(cfg.MAX_EMI_TO_DISPOSABLE*100)+'%)' },
     { label:'Post-EMI residual ≥ £'+cfg.MIN_POST_EMI_RESIDUAL,
-                                     pass:referenceEMI===0||postResidual>=cfg.MIN_POST_EMI_RESIDUAL,
+                                     pass:referenceEMI===0||(postResidual>=0&&postResidual>=cfg.MIN_POST_EMI_RESIDUAL),
       detail:'Post-EMI: £'+postResidual.toFixed(2)+'/mo' },
     { label:'No recent defaults',    pass:!defaults,        detail:defaults?'Recent defaults recorded':'None recorded' },
     { label:'No active CCJs',        pass:ccj===0,          detail:ccj>0?ccj+' active CCJ(s)':'None recorded' },
@@ -1403,20 +1405,22 @@ function runDecision(){
 
   // Banner
   var banner=el('decision-banner');
+  var aprSafe=parseFloat(useApr).toFixed(1);
   banner.innerHTML='<div class="decision-header '+(approved?'approved':'declined')+'">'
     +'<div class="decision-icon '+(approved?'approved':'declined')+'">'+(approved?'✓':'✗')+'</div>'
     +'<div><div class="decision-title '+(approved?'approved':'declined')+'">'+(approved?'Application Approved':'Application Declined')+'</div>'
-    +'<div class="decision-sub">'+(approved?'All policy rules satisfied at '+useApr+'% APR':rules.filter(function(r){return!r.pass;}).length+' rule(s) failed')+'</div></div>'
+    +'<div class="decision-sub">'+(approved?'All policy rules satisfied at '+aprSafe+'% APR':rules.filter(function(r){return!r.pass;}).length+' rule(s) failed')+'</div></div>'
     +'</div>';
 
   // KO list
-  var ko=el('ko-list'); ko.innerHTML='';
+  var ko=el('ko-list'); var koRows=[];
   rules.forEach(function(r){
-    ko.innerHTML+='<div class="ko-item '+(r.pass?'pass':'fail')+'">'
+    koRows.push('<div class="ko-item '+(r.pass?'pass':'fail')+'">'
       +'<div class="ko-dot"></div>'
-      +'<div><div style="font-weight:600">'+(r.pass?'✓ ':'✗ ')+r.label+'</div>'
-      +'<div style="font-size:10.5px;opacity:.8;margin-top:1px">'+r.detail+'</div></div></div>';
+      +'<div><div style="font-weight:600">'+(r.pass?'✓ ':'✗ ')+esc(r.label)+'</div>'
+      +'<div style="font-size:10.5px;opacity:.8;margin-top:1px">'+esc(r.detail)+'</div></div></div>');
   });
+  ko.innerHTML=koRows.join('');
 
   // Affordability waterfall
   var wf=el('aff-waterfall');
@@ -1430,8 +1434,8 @@ function runDecision(){
     +'<div class="aff-row"><div class="aff-label indent">Debt commitments</div><div class="aff-value">− '+£(debts)+'</div></div>'
     +'<div class="aff-bar-wrap"><div class="aff-bar" style="width:'+disposPct+'%;background:'+(disposable>=0?'#059669':'#dc2626')+'"></div></div>'
     +'<div class="aff-row"><div class="aff-label">Disposable income</div><div class="aff-value '+(disposable>=0?'pos':'neg')+'">'+£(disposable)+'</div></div>'
-    +'<div class="aff-row"><div class="aff-label indent">Monthly EMI ('+useApr+'% APR)</div><div class="aff-value">− '+£(referenceEMI)+'</div></div>'
-    +'<div class="aff-row"><div class="aff-label">Post-EMI residual</div><div class="aff-value '+(postResidual>=cfg.MIN_POST_EMI_RESIDUAL?'pos':'neg')+'">'+£(postResidual)+'</div></div>'
+    +'<div class="aff-row"><div class="aff-label indent">Monthly EMI ('+aprSafe+'% APR)</div><div class="aff-value">− '+£(referenceEMI)+'</div></div>'
+    +'<div class="aff-row"><div class="aff-label">Post-EMI residual</div><div class="aff-value '+(postResidual>=cfg.MIN_POST_EMI_RESIDUAL&&postResidual>=0?'pos':'neg')+'">'+£(postResidual)+'</div></div>'
     +'<div class="aff-row"><div class="aff-label">EMI / disposable</div><div class="aff-value '+(emiRatio<=cfg.MAX_EMI_TO_DISPOSABLE?'pos':'neg')+'">'+pct(emiRatio)+'</div></div>';
 
   // Risk score
@@ -1442,29 +1446,27 @@ function runDecision(){
   var rs=computeRiskScore(riskInput);
   setArc('score-arc',rs.score);
   el('score-num').textContent=rs.score;
-  var tbody=el('score-tbody'); tbody.innerHTML='';
+  var tbody=el('score-tbody'); var scoreRows=[];
   if(rs.breakdown.length===0){
-    tbody.innerHTML='<tr><td colspan="2" style="text-align:center;color:var(--green);font-weight:600;padding:10px">No deductions — clean profile</td></tr>';
+    scoreRows.push('<tr><td colspan="2" style="text-align:center;color:var(--green);font-weight:600;padding:10px">No deductions — clean profile</td></tr>');
   } else {
     rs.breakdown.forEach(function(b){
-      tbody.innerHTML+='<tr><td>'+b.factor+'</td><td class="score-neg">'+b.impact+'</td></tr>';
+      scoreRows.push('<tr><td>'+esc(b.factor)+'</td><td class="score-neg">'+b.impact+'</td></tr>');
     });
   }
-  tbody.innerHTML+='<tr style="font-weight:700"><td>Total score</td><td class="'+(rs.score>=70?'score-pos':'score-neg')+'">'+rs.score+'/100</td></tr>';
+  scoreRows.push('<tr style="font-weight:700"><td>Total score</td><td class="'+(rs.score>=70?'score-pos':'score-neg')+'">'+rs.score+'/100</td></tr>');
+  tbody.innerHTML=scoreRows.join('');
 
   // Quote
-  var q=el('quote-grid'); q.innerHTML='';
+  var q=el('quote-grid');
   if(amount>0&&term>0){
     var quote=buildSchedule(amount,useApr,term,null,0).summary;
-    var qitems=[
-      {lbl:'Monthly EMI',val:£(quote.emi),sub:useApr+'% APR'},
+    q.innerHTML=[
+      {lbl:'Monthly EMI',val:£(quote.emi),sub:aprSafe+'% APR'},
       {lbl:'Total repayable',val:£(quote.totalRepayable),sub:term+' payments'},
       {lbl:'Total interest',val:£(quote.totalInterest),sub:((quote.totalInterest/amount)*100).toFixed(1)+'% of principal'},
-    ];
-    qitems.forEach(function(i){
-      q.innerHTML+='<div class="stat-card"><div class="stat-lbl">'+i.lbl+'</div><div class="stat-val">'+i.val+'</div><div class="stat-sub">'+i.sub+'</div></div>';
-    });
-  }
+    ].map(function(i){ return '<div class="stat-card"><div class="stat-lbl">'+i.lbl+'</div><div class="stat-val">'+i.val+'</div><div class="stat-sub">'+i.sub+'</div></div>'; }).join('');
+  } else { q.innerHTML=''; }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1486,6 +1488,7 @@ function runStatus(){
   var fovActive=el('s-fov').checked;
   var fovType=el('s-fov-type').value;
   var lastPmtStr=el('s-last-pmt').value;
+  if(lastPmtStr&&new Date(lastPmtStr)>asof){el('s-last-pmt').value=asofStr||new Date().toISOString().split('T')[0];lastPmtStr=el('s-last-pmt').value;}
 
   var note=el('s-asof-note');
   if(asofStr){
@@ -1545,27 +1548,23 @@ function runStatus(){
   var dc=statusClasses.indexOf(displayStatus)>-1?displayStatus:'active';
   bigCard.classList.add(dc);
   el('status-word').textContent=displayStatus.replace(/_/g,' ').toUpperCase();
-  var rc=el('reason-codes'); rc.innerHTML='';
-  reasonCodes.forEach(function(code){
-    rc.innerHTML+='<span class="reason-chip">'+code+'</span>';
-  });
-  if(reasonCodes.length===0) rc.innerHTML='<span class="reason-chip">no_reason_code</span>';
+  var rc=el('reason-codes');
+  rc.innerHTML=(reasonCodes.length?reasonCodes:['no_reason_code']).map(function(code){ return '<span class="reason-chip">'+code+'</span>'; }).join('');
 
   // Flags
-  var flags=el('status-flags'); flags.innerHTML='';
-  var flagItems=[
+  var flags=el('status-flags');
+  flags.innerHTML=[
     {lbl:'Outstanding Balance', val:£(derivedFlags.outstandingBalance), warn:derivedFlags.outstandingBalance<=0},
     {lbl:'Days Since Payment',  val:derivedFlags.daysSinceLastPayment+' days', warn:derivedFlags.daysSinceLastPayment>30},
     {lbl:'Missed Instalments',  val:derivedFlags.missedInstalments, warn:derivedFlags.missedInstalments>0},
     {lbl:'Core Status',         val:coreStatus, warn:coreStatus!=='active'},
     {lbl:'Display Status',      val:displayStatus, warn:false},
     {lbl:'Termination in',      val:daysNoPmt>=cfg.TERMINATION_DAYS?'—':(cfg.TERMINATION_DAYS-daysNoPmt)+' days', warn:false},
-  ];
-  flagItems.forEach(function(f){
-    flags.innerHTML+='<div class="stat-card" style="'+(f.warn?'border-color:#fca5a5;background:#fef2f2;':'')+'">'
+  ].map(function(f){
+    return '<div class="stat-card" style="'+(f.warn?'border-color:#fca5a5;background:#fef2f2;':'')+'">'
       +'<div class="stat-lbl">'+f.lbl+'</div>'
       +'<div class="stat-val" style="font-size:13px">'+f.val+'</div></div>';
-  });
+  }).join('');
 
   // Overlay output
   var ov=el('overlay-output');
@@ -1585,21 +1584,22 @@ function runStatus(){
   }
 
   // Schedule table
-  var tbody=el('sched-body'); tbody.innerHTML='';
+  var tbody=el('sched-body'); var schedRows=[];
   sched.forEach(function(row){
     var isOverdue=new Date(row.dueDate)<asof&&row.status!=='paid';
     var rowCls=row.status==='paid'?'paid':row.status==='current'?'current':isOverdue?'overdue':'';
     var statusHtml='<span class="row-status" style="'+(row.status==='paid'?'background:#d1fae5;color:#065f46':row.status==='current'?'background:#bfdbfe;color:#1e3a8a':isOverdue?'background:#fee2e2;color:#7f1d1d':'background:#f3f4f6;color:#6b7280')+'">'
       +(isOverdue&&row.status!=='paid'?'OVERDUE':row.status.toUpperCase())+'</span>';
-    tbody.innerHTML+='<tr class="'+rowCls+'">'
+    schedRows.push('<tr class="'+rowCls+'">'
       +'<td style="text-align:center">'+row.n+'</td>'
       +'<td style="text-align:left">'+fdate(row.dueDate)+'</td>'
       +'<td>'+£(row.emi)+'</td>'
       +'<td>'+£(row.principal)+'</td>'
       +'<td>'+£(row.interest)+'</td>'
       +'<td>'+£(row.balance)+'</td>'
-      +'<td>'+statusHtml+'</td></tr>';
+      +'<td>'+statusHtml+'</td></tr>');
   });
+  tbody.innerHTML=schedRows.join('');
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1655,11 +1655,10 @@ function runServicing(){
 
   function renderEligCard(badgeId, reasonsId, elig, reasons){
     el(badgeId).innerHTML='<span class="badge '+(elig?'badge-green':'badge-red')+'">'+(elig?'Eligible':'Not Eligible')+'</span>';
-    var r=el(reasonsId); r.innerHTML='';
-    reasons.forEach(function(item){
-      r.innerHTML+='<div class="ko-item '+(item.pass?'pass':'fail')+'">'
-        +'<div class="ko-dot"></div><div>'+item.msg+'</div></div>';
-    });
+    el(reasonsId).innerHTML=reasons.map(function(item){
+      return '<div class="ko-item '+(item.pass?'pass':'fail')+'">'
+        +'<div class="ko-dot"></div><div>'+esc(item.msg)+'</div></div>';
+    }).join('');
   }
   renderEligCard('sv-ph-badge','sv-ph-reasons',phElig,phReasons);
   renderEligCard('sv-pa-badge','sv-pa-reasons',paElig,paReasons);
@@ -1670,14 +1669,14 @@ function runServicing(){
    RISK SCORE EDITOR
 ══════════════════════════════════════════════════════════════ */
 function buildRiskFactorUI(){
-  var wrap=el('rk-factors');
-  wrap.innerHTML='';
+  var wrap=el('rk-factors'); var rfRows=[];
   riskFactors.forEach(function(f,i){
-    wrap.innerHTML+='<div class="risk-factor" id="rf-'+i+'">'
-      +'<div class="risk-factor-name">'+f.label+'</div>'
+    rfRows.push('<div class="risk-factor" id="rf-'+i+'">'
+      +'<div class="risk-factor-name">'+esc(f.label)+'</div>'
       +'<input type="number" class="risk-pts-input" id="rf-pts-'+i+'" value="'+f.pts+'" min="0" max="100" oninput="updateRiskPts('+i+',this.value)">'
-      +'<span class="trigger-badge off" id="rf-trig-'+i+'">—</span></div>';
+      +'<span class="trigger-badge off" id="rf-trig-'+i+'">—</span></div>');
   });
+  wrap.innerHTML=rfRows.join('');
 }
 
 function updateRiskPts(idx,val){
@@ -1743,10 +1742,10 @@ function runEmi(){
     return '<div class="stat-card"><div class="stat-lbl">'+s.lbl+'</div><div class="stat-val" style="font-size:14px">'+s.val+'</div><div class="stat-sub">'+s.sub+'</div></div>';
   }).join('');
 
-  var tbody=el('emi-sched'); tbody.innerHTML='';
+  var tbody=el('emi-sched'); var emiRows=[];
   result.sched.forEach(function(row){
     var statusHtml='<span class="row-status" style="'+(row.status==='paid'?'background:#d1fae5;color:#065f46':row.status==='current'?'background:#bfdbfe;color:#1e3a8a':'background:#f3f4f6;color:#6b7280')+'">'+row.status.toUpperCase()+'</span>';
-    tbody.innerHTML+='<tr class="'+row.status+'">'
+    emiRows.push('<tr class="'+row.status+'">'
       +'<td style="text-align:center">'+row.n+'</td>'
       +'<td style="text-align:left">'+fdate(row.dueDate)+'</td>'
       +'<td>'+£(row.openingBal)+'</td>'
@@ -1754,8 +1753,9 @@ function runEmi(){
       +'<td>'+£(row.principal)+'</td>'
       +'<td>'+£(row.interest)+'</td>'
       +'<td>'+£(row.balance)+'</td>'
-      +'<td>'+statusHtml+'</td></tr>';
+      +'<td>'+statusHtml+'</td></tr>');
   });
+  tbody.innerHTML=emiRows.join('');
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1892,13 +1892,14 @@ function runProfile(){
   var badge=el('pb-badge');
   badge.innerHTML='<span class="badge '+(failures===0?'badge-green':'badge-red')+'">'+(failures===0?'All clear':failures+' issue'+(failures>1?'s':''))+'</span>';
 
-  var health=el('pb-health'); health.innerHTML='';
+  var health=el('pb-health'); var healthRows=[];
   checks.forEach(function(c){
-    health.innerHTML+='<div class="ko-item '+(c.pass?'pass':'fail')+'">'
+    healthRows.push('<div class="ko-item '+(c.pass?'pass':'fail')+'">'
       +'<div class="ko-dot"></div>'
-      +'<div><div style="font-weight:600">'+(c.pass?'✓ ':'✗ ')+c.label+'</div>'
-      +'<div style="font-size:10.5px;opacity:.8;margin-top:1px">'+c.detail+'</div></div></div>';
+      +'<div><div style="font-weight:600">'+(c.pass?'✓ ':'✗ ')+esc(c.label)+'</div>'
+      +'<div style="font-size:10.5px;opacity:.8;margin-top:1px">'+esc(c.detail)+'</div></div></div>');
   });
+  health.innerHTML=healthRows.join('');
 
   // Affordability snapshot
   var aff=el('pb-aff');
@@ -1925,15 +1926,16 @@ function runProfile(){
   var rb=el('pb-risk-badge');
   rb.innerHTML='<span class="badge '+(rs.score>=70?'badge-green':rs.score>=50?'badge-amber':'badge-red')+'">'
     +rs.score+' / 100 — '+(rs.score>=70?'Low Risk':rs.score>=50?'Moderate Risk':'High Risk')+'</span>';
-  var rfEl=el('pb-risk-factors'); rfEl.innerHTML='';
+  var rfEl=el('pb-risk-factors'); var pbRfRows=[];
   if(rs.breakdown.length===0){
-    rfEl.innerHTML='<div class="ko-item pass"><div class="ko-dot"></div><div>No deductions — clean risk profile</div></div>';
+    pbRfRows.push('<div class="ko-item pass"><div class="ko-dot"></div><div>No deductions — clean risk profile</div></div>');
   } else {
     rs.breakdown.forEach(function(b){
-      rfEl.innerHTML+='<div class="ko-item fail"><div class="ko-dot"></div>'
-        +'<div><span style="font-weight:600">'+b.factor+'</span> <span style="margin-left:4px;color:var(--red);font-weight:700">'+b.impact+' pts</span></div></div>';
+      pbRfRows.push('<div class="ko-item fail"><div class="ko-dot"></div>'
+        +'<div><span style="font-weight:600">'+esc(b.factor)+'</span> <span style="margin-left:4px;color:var(--red);font-weight:700">'+b.impact+' pts</span></div></div>');
     });
   }
+  rfEl.innerHTML=pbRfRows.join('');
 
   // JSON preview
   var schema={
@@ -2008,7 +2010,7 @@ function runAppSim(){
   var electoral=el('as-electoral').checked;
   var defaults =el('as-defaults').checked;
   var missed   =parseInt(el('as-missed').value)||0;
-  var ccj      =parseInt(el('as-ccj').value)||0;
+  var ccj      =Math.max(0,parseInt(el('as-ccj').value)||0);
   // Step 3 inputs
   var cardNum  =el('as-card-num').value.replace(/\s/g,'');
   var cardExp  =el('as-card-exp').value.trim();
@@ -2107,19 +2109,21 @@ function runAppSim(){
   var approved=allRules.every(function(r){return r.pass;})&&f3===0&&f4===0;
   var totalFails=f1+f2+f3+f4;
   var banner=el('as-decision-banner');
+  var asAprSafe=parseFloat(useApr).toFixed(1);
   banner.innerHTML='<div class="decision-header '+(approved?'approved':'declined')+'">'
     +'<div class="decision-icon '+(approved?'approved':'declined')+'">'+(approved?'✓':'✗')+'</div>'
     +'<div><div class="decision-title '+(approved?'approved':'declined')+'">'+(approved?'Application Approved':'Application Declined')+'</div>'
-    +'<div class="decision-sub">'+(approved?'All rules pass at '+useApr+'% APR':totalFails+' issue'+(totalFails>1?'s':'')+' across '+[f1?'step 1':'',f2?'step 2':'',f3?'step 3':'',f4?'step 4':''].filter(Boolean).join(', '))+'</div></div></div>';
+    +'<div class="decision-sub">'+(approved?'All rules pass at '+asAprSafe+'% APR':totalFails+' issue'+(totalFails>1?'s':'')+' across '+[f1?'step 1':'',f2?'step 2':'',f3?'step 3':'',f4?'step 4':''].filter(Boolean).join(', '))+'</div></div></div>';
 
   // KO rules (steps 1+2)
-  var ko=el('as-ko'); ko.innerHTML='';
+  var ko=el('as-ko'); var asKoRows=[];
   allRules.forEach(function(r){
-    ko.innerHTML+='<div class="ko-item '+(r.pass?'pass':'fail')+'">'
+    asKoRows.push('<div class="ko-item '+(r.pass?'pass':'fail')+'">'
       +'<div class="ko-dot"></div>'
-      +'<div><div style="font-weight:600">'+(r.pass?'✓ ':'✗ ')+r.label+'</div>'
-      +'<div style="font-size:10.5px;opacity:.8;margin-top:1px">'+r.detail+'</div></div></div>';
+      +'<div><div style="font-weight:600">'+(r.pass?'✓ ':'✗ ')+esc(r.label)+'</div>'
+      +'<div style="font-size:10.5px;opacity:.8;margin-top:1px">'+esc(r.detail)+'</div></div></div>');
   });
+  ko.innerHTML=asKoRows.join('');
 
   // Affordability waterfall
   var affEl=el('as-aff'); affEl.innerHTML=''
@@ -2128,7 +2132,7 @@ function runAppSim(){
     +'<div class="aff-row"><div class="aff-label indent">Living costs</div><div class="aff-value">− '+£(living)+'</div></div>'
     +'<div class="aff-row"><div class="aff-label indent">Transport</div><div class="aff-value">− '+£(transport)+'</div></div>'
     +'<div class="aff-row"><div class="aff-label indent">Debt commitments</div><div class="aff-value">− '+£(debts)+'</div></div>'
-    +'<div class="aff-bar-wrap"><div class="aff-bar" style="width:'+Math.max(0,disposable/income*100)+'%;background:'+(disposable>=0?'#059669':'#dc2626')+'"></div></div>'
+    +'<div class="aff-bar-wrap"><div class="aff-bar" style="width:'+(income>0?Math.max(0,disposable/income*100):0)+'%;background:'+(disposable>=0?'#059669':'#dc2626')+'"></div></div>'
     +'<div class="aff-row"><div class="aff-label">Disposable income</div><div class="aff-value '+(disposable>=0?'pos':'neg')+'">'+£(disposable)+'</div></div>'
     +'<div class="aff-row"><div class="aff-label indent">Monthly EMI ('+useApr+'% APR)</div><div class="aff-value">− '+£(refQ.emi)+'</div></div>'
     +'<div class="aff-row"><div class="aff-label">Post-EMI residual</div><div class="aff-value '+(postResidual>=cfg.MIN_POST_EMI_RESIDUAL?'pos':'neg')+'">'+£(postResidual)+'</div></div>'
@@ -2140,13 +2144,14 @@ function runAppSim(){
   var rs=computeRiskScore(riskInput);
   setArc('as-arc',rs.score);
   el('as-score-num').textContent=rs.score;
-  var tb=el('as-score-tbody'); tb.innerHTML='';
+  var tb=el('as-score-tbody'); var asTbRows=[];
   if(rs.breakdown.length===0){
-    tb.innerHTML='<tr><td colspan="2" style="text-align:center;color:var(--green);font-weight:600;padding:10px">No deductions</td></tr>';
+    asTbRows.push('<tr><td colspan="2" style="text-align:center;color:var(--green);font-weight:600;padding:10px">No deductions</td></tr>');
   } else {
-    rs.breakdown.forEach(function(b){ tb.innerHTML+='<tr><td>'+b.factor+'</td><td class="score-neg">'+b.impact+'</td></tr>'; });
+    rs.breakdown.forEach(function(b){ asTbRows.push('<tr><td>'+esc(b.factor)+'</td><td class="score-neg">'+b.impact+'</td></tr>'); });
   }
-  tb.innerHTML+='<tr style="font-weight:700"><td>Total</td><td class="'+(rs.score>=70?'score-pos':'score-neg')+'">'+rs.score+'/100</td></tr>';
+  asTbRows.push('<tr style="font-weight:700"><td>Total</td><td class="'+(rs.score>=70?'score-pos':'score-neg')+'">'+rs.score+'/100</td></tr>');
+  tb.innerHTML=asTbRows.join('');
 
   // Quote
   var qEl=el('as-quote'); qEl.innerHTML='';
@@ -2168,16 +2173,18 @@ function runAppSim(){
     {label:'Step 3 — Payment',  rules:s3rules},
     {label:'Step 4 — Review',   rules:s4rules},
   ];
+  var ssRows=[];
   steps.forEach(function(step){
     var fails=step.rules.filter(function(r){return !r.pass;});
-    ss.innerHTML+='<div style="margin-bottom:10px">'
+    ssRows.push('<div style="margin-bottom:10px">'
       +'<div class="flex items-center gap-8" style="margin-bottom:4px">'
-      +'<span style="font-size:11px;font-weight:700;color:var(--text)">'+step.label+'</span>'
+      +'<span style="font-size:11px;font-weight:700;color:var(--text)">'+esc(step.label)+'</span>'
       +(fails.length===0?'<span class="badge badge-green badge-sm" style="font-size:9.5px;padding:1px 7px">All pass</span>':'<span class="badge badge-red badge-sm" style="font-size:9.5px;padding:1px 7px">'+fails.length+' fail</span>')
       +'</div>'
-      +fails.map(function(r){ return '<div style="font-size:10.5px;color:var(--red-text);padding-left:8px">✗ '+r.label+' — '+r.detail+'</div>'; }).join('')
-      +'</div>';
+      +fails.map(function(r){ return '<div style="font-size:10.5px;color:var(--red-text);padding-left:8px">✗ '+esc(r.label)+' — '+esc(r.detail)+'</div>'; }).join('')
+      +'</div>');
   });
+  ss.innerHTML=ssRows.join('');
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -2269,29 +2276,29 @@ function renderTimeline(){
   var sc=el('tl-status-card'); sc.className='status-big mb-10';
   sc.classList.add(statusClasses.indexOf(displayStatus)>-1?displayStatus:'active');
   el('tl-status-word').textContent=displayStatus.replace(/_/g,' ').toUpperCase();
-  var rc=el('tl-reason-codes'); rc.innerHTML='';
-  (reasonCodes.length?reasonCodes:['no_reason_code']).forEach(function(c){ rc.innerHTML+='<span class="reason-chip">'+c+'</span>'; });
+  var rc=el('tl-reason-codes');
+  rc.innerHTML=(reasonCodes.length?reasonCodes:['no_reason_code']).map(function(c){ return '<span class="reason-chip">'+c+'</span>'; }).join('');
 
   // Flags
-  var fl=el('tl-flags'); fl.innerHTML='';
-  var fItems=[
+  var fl=el('tl-flags');
+  fl.innerHTML=[
     {lbl:'Paid Instalments',    val:paidCount+'/ '+sched.length,              warn:false},
     {lbl:'Missed Streak',       val:missedStreak,                             warn:missedStreak>0},
     {lbl:'Outstanding Balance', val:£(Math.max(0,outBal)),                   warn:outBal<=0},
     {lbl:'Days Since Payment',  val:daysNoPmt+' days',                       warn:daysNoPmt>30},
     {lbl:'Core Status',         val:coreStatus.toUpperCase(),                 warn:coreStatus!=='active'},
     {lbl:'Display Status',      val:displayStatus.toUpperCase(),              warn:false},
-  ];
-  fItems.forEach(function(f){
-    fl.innerHTML+='<div class="stat-card" style="'+(f.warn?'border-color:#fca5a5;background:#fef2f2;':'')+'">'
+  ].map(function(f){
+    return '<div class="stat-card" style="'+(f.warn?'border-color:#fca5a5;background:#fef2f2;':'')+'">'
       +'<div class="stat-lbl">'+f.lbl+'</div><div class="stat-val" style="font-size:12px">'+f.val+'</div></div>';
-  });
+  }).join('');
 
   // Log
   var logEl=el('tl-log');
   logEl.innerHTML=tlLog.length?tlLog.map(function(l){ return '<div>'+l+'</div>'; }).join(''):'<span style="color:var(--dim)">No events yet — use row actions below.</span>';
 
   // Schedule rows
+  var tlRows=[];
   sched.forEach(function(row,i){
     var rowState=tlState[i]||'upcoming';
     var isOverdue=new Date(row.dueDate)<now&&rowState==='upcoming';
@@ -2300,7 +2307,7 @@ function renderTimeline(){
     var stateColor={paid:'background:#d1fae5;color:#065f46',missed:'background:#fee2e2;color:#7f1d1d',
       ph:'background:#ccfbf1;color:#134e4a',pa:'background:#fef3c7;color:#78350f',
       upcoming:isOverdue?'background:#fee2e2;color:#7f1d1d':'background:#f3f4f6;color:#6b7280'};
-    tbody.innerHTML+='<tr class="'+rowCls+'">'
+    tlRows.push('<tr class="'+rowCls+'">'
       +'<td style="text-align:center;font-weight:700">'+(i+1)+'</td>'
       +'<td style="text-align:left">'+fdate(row.dueDate)+'</td>'
       +'<td>'+£(row.openingBal)+'</td>'
@@ -2317,8 +2324,9 @@ function renderTimeline(){
         +'<button class="tl-btn tl-btn-reset" onclick="tlSetRow('+i+',\'upcoming\')">↺</button>'
         +'</div>'
         +'<span class="row-status" style="margin-top:3px;display:inline-flex;'+stateColor[rowState]+'">'+stateTxt[rowState]+'</span>'
-      +'</td></tr>';
+      +'</td></tr>');
   });
+  tbody.innerHTML=tlRows.join('');
 }
 
 /* ══════════════════════════════════════════════════════════════
